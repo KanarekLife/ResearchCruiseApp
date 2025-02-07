@@ -9,7 +9,7 @@ type Props = {
   expandedByDefault?: true | undefined;
 };
 
-export function FormAAccordion({ title, children, expandedByDefault = undefined }: Props) {
+export function AppAccordion({ title, children, expandedByDefault = undefined }: Props) {
   const [expanded, setExpanded] = React.useState<boolean>(!!expandedByDefault);
 
   return (
@@ -25,17 +25,17 @@ export function FormAAccordion({ title, children, expandedByDefault = undefined 
         </button>
       </h2>
       <AnimatePresence>
-        {expanded ? (
+        {expanded && (
           <motion.div
             initial={{ opacity: 0, y: '-10%', z: -50 }}
             animate={{ opacity: 1, y: 0, z: 0 }}
             exit={{ opacity: 0 }}
             transition={{ ease: 'easeOut', y: '-10%', z: -50 }}
-            className="px-4 py-4"
+            className="px-4"
           >
             {children}
           </motion.div>
-        ) : null}
+        )}
       </AnimatePresence>
     </>
   );

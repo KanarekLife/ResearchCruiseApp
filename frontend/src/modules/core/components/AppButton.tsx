@@ -6,7 +6,7 @@ import { cn } from '@/core/lib/utils';
 type Props = {
   children: React.ReactNode;
 
-  variant?: keyof typeof variants;
+  variant?: AppButtonVariant;
   size?: keyof typeof sizes;
   className?: string;
   disabled?: boolean;
@@ -15,6 +15,7 @@ type Props = {
   | { type?: React.ButtonHTMLAttributes<HTMLButtonElement>['type']; onClick?: (evt: React.MouseEvent) => void }
   | ({ type: 'link' } & Omit<AppLinkProps, 'variant'>)
 );
+export type AppButtonVariant = keyof typeof variants;
 export function AppButton(props: Props) {
   const { children, className, disabled, role, variant = 'primary', size = 'md' } = props;
 
@@ -26,7 +27,7 @@ export function AppButton(props: Props) {
         variants[variant],
         sizes[size],
         props.type === 'link' ? 'w-full h-full' : className,
-        variant != 'plain' ? 'flex items-center justify-center ' : ''
+        variant != 'plain' ? 'flex items-center justify-around ' : ''
       )}
       onClick={props.type === 'link' ? undefined : props.onClick}
       disabled={disabled}
