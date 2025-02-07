@@ -1,6 +1,7 @@
 import { useForm } from '@tanstack/react-form';
 import { Suspense } from 'react';
 
+import { AppButton } from '@/core/components/AppButton';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { FormACruiseGoalSection } from '@/formA/components/sections/FormACruiseGoalSection';
@@ -32,18 +33,30 @@ export function FormAPage() {
       cruiseGoalDescription: '',
       researchTasks: [],
     },
+    onSubmit: (values) => {
+      console.log(values);
+    },
   });
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    event.stopPropagation();
+    form.handleSubmit();
+  }
 
   return (
     <AppLayout title="Formularz A" variant="defaultWithoutCentering">
       <Suspense fallback={<AppLoader />}>
-        <form className="space-y-8">
+        <form className="space-y-8" onSubmit={handleSubmit}>
           <FormACruiseManagerInfoSection form={form} initialStateQuery={initialStateQuery} />
           <FormACruiseLengthSection form={form} initialStateQuery={initialStateQuery} />
           <FormAPermissionsSection form={form} />
           <FormAResearchAreaSection form={form} initialStateQuery={initialStateQuery} />
           <FormACruiseGoalSection form={form} initialStateQuery={initialStateQuery} />
           <FormAResearchTasksSection form={form} initialStateQuery={initialStateQuery} />
+          <AppButton type="submit" className="w-full">
+            Submit
+          </AppButton>
         </form>
       </Suspense>
     </AppLayout>

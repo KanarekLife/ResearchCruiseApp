@@ -10,7 +10,7 @@ import { cn } from '@/core/lib/utils';
 
 type Props = {
   children: React.ReactNode;
-  modal: React.ReactNode;
+  modal: (setExpanded: (value: boolean) => void) => React.ReactNode;
 
   className?: string;
   variant?: AppButtonVariant;
@@ -45,7 +45,7 @@ export function AppPopover({ children, modal, className, variant = 'plain' }: Pr
       <AnimatePresence>
         {expanded && (
           <Modal anchorRef={anchorRef} dropdownRef={dropdownRef}>
-            {modal}
+            {modal(setExpanded)}
           </Modal>
         )}
       </AnimatePresence>

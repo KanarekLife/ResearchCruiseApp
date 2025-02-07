@@ -110,7 +110,10 @@ export function AppDropdownInput<T extends string | number>({
         <input type="hidden" name={name} value={selectedValue.value} required={required} disabled={disabled} />
         <AppButton
           variant="plain"
-          onClick={() => setExpanded(!expanded)}
+          onClick={() => {
+            if (disabled) return;
+            setExpanded(!expanded);
+          }}
           className={cn(
             'cursor-pointer w-full text-sm',
             'ring-2 ring-transparent focus:ring-blue-500 focus:border-blue-500 focus:rounded-lg focus:shadow focus:outline-none',
@@ -169,8 +172,6 @@ function Modal({ dropdownRef, inputRef, children }: ModalProps) {
     dropdownRef,
     dropdownPosition: 'left',
   });
-
-  console.log(direction);
 
   return (
     <motion.div

@@ -1,18 +1,37 @@
 import { ReactFormExtendedApi } from '@tanstack/react-form';
 import { UseSuspenseQueryResult } from '@tanstack/react-query';
+import { Row } from '@tanstack/react-table';
 
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppButton } from '@/core/components/AppButton';
 import { AppPopover } from '@/core/components/AppPopover';
-import { AppDropdownInput } from '@/core/components/inputs/AppDropdownInput';
 import { AppTable } from '@/core/components/table/AppTable';
-import { mapValidationErrors } from '@/core/lib/utils';
-import { FormADto, FormAInitialState, getEmptyTask, taskTypes } from '@/formA/lib/types';
+import { FormAAuthorTitleTaskDetails } from '@/formA/components/research-task-details/FormAAuthorTitleTaskDetails';
+import { FormATitleDateFinancingApprovedTaskDetails } from '@/formA/components/research-task-details/FormATitleDateFinancingApprovedTaskDetails';
+import { FormATitleFinancingAmountSecuredAmountWithDatesTaskDetails } from '@/formA/components/research-task-details/FormATitleFinancingAmountSecuredAmountWithDatesTaskDetails';
+import { FormADto, FormAInitialState, FormAResearchTask, getEmptyTask, taskTypes } from '@/formA/lib/types';
 
 type Props = {
   initialStateQuery: UseSuspenseQueryResult<FormAInitialState, Error>;
   form: ReactFormExtendedApi<FormADto, undefined>;
 };
+
+function getTaskDetailsComponent(
+  type: string,
+  form: ReactFormExtendedApi<FormADto, undefined>,
+  row: Row<FormAResearchTask>
+) {
+  if (['0', '1', '2'].includes(type)) {
+    return <FormAAuthorTitleTaskDetails form={form} row={row} />;
+  }
+  if (type === '3') {
+    return <FormATitleDateFinancingApprovedTaskDetails form={form} row={row} />;
+  }
+  if (['4', '5', '6', '7', '8'].includes(type)) {
+    return <FormATitleFinancingAmountSecuredAmountWithDatesTaskDetails form={form} row={row} />;
+  }
+  return null;
+}
 
 export function FormAResearchTasksSection({ form }: Props) {
   return (
@@ -36,34 +55,16 @@ export function FormAResearchTasksSection({ form }: Props) {
                     <form.Field
                       key={row.index}
                       name={`researchTasks[${row.index}].type`}
-                      children={(field) => (
-                        <AppDropdownInput
-                          name={field.name}
-                          value={field.state.value}
-                          onChange={field.handleChange}
-                          onBlur={field.handleBlur}
-                          errors={mapValidationErrors(field.state.meta.errors)}
-                          allOptions={taskTypes.map((type, i) => ({ value: i.toString(), inlineLabel: type }))}
-                          showEmptyOption={false}
-                        />
-                      )}
+                      children={(field) => taskTypes.at(parseInt(field.state.value)) ?? 'Nieznany typ'}
                     />
                   ),
                 },
-                // {
-                //   header: 'Opis',
-                //   cell: ({ row }) => (
-                //     <form.Field
-                //       key={row.index}
-                //       name={`researchTasks[${row.index}].description`}
-                //       children={(field) => (
-                //         <div>
-                //           <AppInput />
-                //         </div>
-                //       )}
-                //     />
-                //   ),
-                // },
+                {
+                  header: 'Szczegóły',
+                  cell: ({ row }) => {
+                    return getTaskDetailsComponent(row.original.type, form, row);
+                  },
+                },
                 {
                   header: 'Akcje',
                   cell: ({ row }) => (
@@ -78,12 +79,15 @@ export function FormAResearchTasksSection({ form }: Props) {
               buttons={() => [
                 <AppPopover
                   key="0"
-                  modal={
+                  modal={(setExpanded) => (
                     <div className="h-96 overflow-y-auto" tabIndex={-1}>
                       {taskTypes.map((type) => (
                         <AppButton
                           key={type}
-                          onClick={() => field.pushValue(getEmptyTask(type))}
+                          onClick={() => {
+                            field.pushValue(getEmptyTask(type));
+                            setExpanded(false);
+                          }}
                           variant="plain"
                           className="w-full px-4 rounded-lg hover:bg-gray-100 focus:inset-ring-2 inset-ring-blue-500"
                         >
@@ -91,7 +95,7 @@ export function FormAResearchTasksSection({ form }: Props) {
                         </AppButton>
                       ))}
                     </div>
-                  }
+                  )}
                   variant="primary"
                   className="w-56"
                 >
