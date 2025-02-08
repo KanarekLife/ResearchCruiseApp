@@ -38,7 +38,7 @@ export function AppFloatingLabelInput({
         id={name}
         className={cn(
           'block py-2.5 px-0 w-full bg-transparent border-0 border-b-2 appearance-none border-gray-600 focus:border-primary focus:outline-none focus:ring-0 peer',
-          errors ? 'border-danger text-danger focus:border-danger' : ''
+          (errors && errors.length > 0) ? 'border-danger text-danger focus:border-danger' : ''
         )}
         placeholder={''}
         required={required}
@@ -52,7 +52,7 @@ export function AppFloatingLabelInput({
         htmlFor={name}
         className={cn(
           'peer-focus:font-medium absolute text-gray-800 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-primary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6',
-          errors ? 'text-danger peer-focus:text-danger' : ''
+          (errors && errors.length > 0) ? 'text-danger peer-focus:text-danger' : ''
         )}
       >
         {label}

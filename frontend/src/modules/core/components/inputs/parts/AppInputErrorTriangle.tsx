@@ -4,7 +4,7 @@ type Props = {
   errors: string[] | undefined;
 };
 export function AppInputErrorTriangle({ errors }: Props) {
-  if (!errors) {
+  if (!errors || errors.length === 0) {
     return null;
   }
 

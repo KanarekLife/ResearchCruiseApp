@@ -55,7 +55,7 @@ export function AppInput({
             'transition duration-300 ease-in-out resize-none',
             'focus:ring-blue-500 focus:border-blue-500 focus:shadow focus:outline-none',
             disabled ? 'bg-gray-200' : '',
-            errors ? 'border-danger ring-danger text-danger focus:text-gray-900' : ''
+            (errors && errors.length > 0) ? 'border-danger ring-danger text-danger focus:text-gray-900' : ''
           )}
         />
         <AppInputErrorTriangle errors={errors} />
