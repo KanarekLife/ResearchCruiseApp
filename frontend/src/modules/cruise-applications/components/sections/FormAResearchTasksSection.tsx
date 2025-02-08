@@ -1,16 +1,12 @@
 import { ReactFormExtendedApi } from '@tanstack/react-form';
 import { UseSuspenseQueryResult } from '@tanstack/react-query';
-import { Row } from '@tanstack/react-table';
 
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppButton } from '@/core/components/AppButton';
 import { AppPopover } from '@/core/components/AppPopover';
 import { AppTable } from '@/core/components/table/AppTable';
-import { FormAAuthorTitleTaskDetails } from '@/cruise-applications/components/research-task-details/FormAAuthorTitleTaskDetails';
-import { FormADescriptionTaskDetails } from '@/cruise-applications/components/research-task-details/FormADescriptionTaskDetails';
-import { FormAMinistrialPointsTaskDetails } from '@/cruise-applications/components/research-task-details/FormAMinistrialPointsTaskDetails';
-import { FormATitleDateFinancingApprovedTaskDetails } from '@/cruise-applications/components/research-task-details/FormATitleDateFinancingApprovedTaskDetails';
-import { FormATitleFinancingAmountSecuredAmountWithDatesTaskDetails } from '@/cruise-applications/components/research-task-details/FormATitleFinancingAmountSecuredAmountWithDatesTaskDetails';
+import { FormAResearchTaskThumbnail } from '@/cruise-applications/components/FormAResearchTaskThumbnail';
+import { FormAResearchTaskDetails } from '@/cruise-applications/components/research-task-details/FormAResearchTaskDetails';
 import {
   FormADto,
   FormAInitialState,
@@ -24,30 +20,9 @@ type Props = {
   form: ReactFormExtendedApi<FormADto, undefined>;
 };
 
-function getTaskDetailsComponent(
-  type: string,
-  form: ReactFormExtendedApi<FormADto, undefined>,
-  row: Row<FormAResearchTask>
-) {
-  if (['0', '1', '2'].includes(type)) {
-    return <FormAAuthorTitleTaskDetails form={form} row={row} />;
-  }
-  if (type === '3') {
-    return <FormATitleDateFinancingApprovedTaskDetails form={form} row={row} />;
-  }
-  if (['4', '5', '6', '7', '8'].includes(type)) {
-    return <FormATitleFinancingAmountSecuredAmountWithDatesTaskDetails form={form} row={row} />;
-  }
-  if (['9', '11'].includes(type)) {
-    return <FormADescriptionTaskDetails form={form} row={row} />;
-  }
-  if (type === '10') {
-    return <FormAMinistrialPointsTaskDetails form={form} row={row} />;
-  }
-  return null;
-}
+export function FormAResearchTasksSection({ initialStateQuery, form }: Props) {
+  console.log(initialStateQuery.data.historicalResearchTasks);
 
-export function FormAResearchTasksSection({ form }: Props) {
   return (
     <AppAccordion title="6. Zadania do zrealizowania w trakcie rejsu" expandedByDefault>
       <div>
@@ -77,9 +52,7 @@ export function FormAResearchTasksSection({ form }: Props) {
                 },
                 {
                   header: 'Szczegóły',
-                  cell: ({ row }) => {
-                    return getTaskDetailsComponent(row.original.type, form, row);
-                  },
+                  cell: ({ row }) => <FormAResearchTaskDetails type={row.original.type} form={form} row={row} />,
                   size: 600,
                 },
                 {
@@ -115,9 +88,47 @@ export function FormAResearchTasksSection({ form }: Props) {
                     </div>
                   )}
                   variant="primary"
-                  className="w-56"
+                  className="w-80"
                 >
-                  Dodaj zadanie
+                  Dodaj nowe zadanie
+                </AppPopover>,
+                <AppPopover
+                  key="1"
+                  modal={(setExpanded) => (
+                    <div className="h-96 px-4 py-2 overflow-y-auto" tabIndex={-1}>
+                      {Object.entries(
+                        initialStateQuery.data.historicalResearchTasks.reduce(
+                          (acc, task) => {
+                            if (!acc[task.type]) acc[task.type] = [];
+                            acc[task.type].push(task);
+                            return acc;
+                          },
+                          {} as Record<string, FormAResearchTask[]>
+                        )
+                      ).map(([type, tasks]) => (
+                        <div key={type}>
+                          <h3 className="text-center text-gray-500 text-sm">{taskTypes[parseInt(type)]}</h3>
+                          {tasks.map((task) => (
+                            <AppButton
+                              key={`${task.type}-${JSON.stringify(task)}`}
+                              onClick={() => {
+                                field.pushValue(task);
+                                setExpanded(false);
+                              }}
+                              variant="plain"
+                              className="w-full px-4 rounded-lg hover:bg-gray-100 focus:inset-ring-2 inset-ring-blue-500"
+                            >
+                              <FormAResearchTaskThumbnail task={task} />
+                            </AppButton>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  variant="primaryOutline"
+                  className="w-80"
+                >
+                  Dodaj z historii
                 </AppPopover>,
               ]}
             />

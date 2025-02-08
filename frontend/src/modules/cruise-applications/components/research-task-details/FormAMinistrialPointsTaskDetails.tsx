@@ -11,7 +11,7 @@ type Props = {
   form: ReactFormExtendedApi<FormADto, undefined>;
   row: Row<FormAResearchTask>;
 };
-export function FormAMinistrialPointsTaskDetails({ form, row }: Props) {
+export function FormAMinisterialPointsTaskDetails({ form, row }: Props) {
   return (
     <div>
       <div className="grid grid-cols-2 gap-4">
@@ -64,7 +64,7 @@ export function FormAMinistrialPointsTaskDetails({ form, row }: Props) {
         />
 
         <form.Field
-          name={`researchTasks[${row.index}].ministrialPoints`}
+          name={`researchTasks[${row.index}].MinisterialPoints`}
           children={(field) => (
             <AppNumberInput
               name={field.name}

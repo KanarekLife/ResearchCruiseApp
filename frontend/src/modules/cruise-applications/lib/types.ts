@@ -13,7 +13,7 @@ export type FormAResearchTask = {
   financingApproved?: string;
   description?: string;
   securedAmount?: string;
-  ministrialPoints?: string;
+  MinisterialPoints?: string;
 };
 export type FormAHistoricalContract = {
   category: string;
@@ -44,7 +44,7 @@ export type FormAPublicationDto = {
   title: string;
   magazine: string;
   year: string;
-  ministrialPoints: string;
+  MinisterialPoints: string;
 };
 export type FormAInitialState = {
   cruiseManagers: FormAPerson[];
@@ -134,19 +134,19 @@ export type FormADescriptionTaskDto = {
   type: '9' | '11';
   description: string;
 };
-export type FormAMinistrialPointsTaskDto = {
+export type FormAMinisterialPointsTaskDto = {
   type: '10';
   title: string;
   date: string;
   magazine: string;
-  ministrialPoints: string;
+  ministerialPoints: string;
 };
 export type FormATaskDto =
   | FormAAuthorTitleTaskDto
   | FormATitleDateFinancingApprovedTaskDto
   | FormATitleFinancingAmountSecuredAmountWithDatesTaskDto
   | FormADescriptionTaskDto
-  | FormAMinistrialPointsTaskDto;
+  | FormAMinisterialPointsTaskDto;
 export const getEmptyTask = (type: FormATaskType): FormAResearchTask => {
   switch (type) {
     case 'Praca licencjacka':
@@ -205,7 +205,7 @@ export const getEmptyTask = (type: FormATaskType): FormAResearchTask => {
     case 'Dydaktyka':
       return { type: '9', description: '' } as FormADescriptionTaskDto;
     case 'Realizacja własnego zadania badawczego':
-      return { type: '10', title: '', date: '', magazine: '', ministrialPoints: '0' } as FormAMinistrialPointsTaskDto;
+      return { type: '10', title: '', date: '', magazine: '', ministerialPoints: '0' } as FormAMinisterialPointsTaskDto;
     case 'Inne zadanie':
       return { type: '11', description: '' } as FormADescriptionTaskDto;
     default:

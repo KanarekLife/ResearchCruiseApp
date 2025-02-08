@@ -196,8 +196,7 @@ function getDateFromValue(value: string | undefined): Date | undefined {
     return undefined;
   }
 
-  const parts = value.split('/');
-  return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+  return new Date(value);
 }
 
 function getValueFromDate(date: Date | undefined): string | undefined {
@@ -205,7 +204,7 @@ function getValueFromDate(date: Date | undefined): string | undefined {
     return undefined;
   }
 
-  return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+  return date.toISOString();
 }
 
 function getDaysInMonth({ month, year }: { month: number; year: number }): Date[] {

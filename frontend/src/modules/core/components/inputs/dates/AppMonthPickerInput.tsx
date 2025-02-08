@@ -128,8 +128,7 @@ function getDateFromValue(value: string | undefined): Date | undefined {
     return undefined;
   }
 
-  const parts = value.split('/');
-  return new Date(parseInt(parts[1]), parseInt(parts[0]) - 1);
+  return new Date(value);
 }
 
 function getValueFromDate(date: Date | undefined): string | undefined {
@@ -137,7 +136,7 @@ function getValueFromDate(date: Date | undefined): string | undefined {
     return undefined;
   }
 
-  return `${date.getMonth() + 1}/${date.getFullYear()}`;
+  return date.toISOString();
 }
 
 type ModalProps = {
