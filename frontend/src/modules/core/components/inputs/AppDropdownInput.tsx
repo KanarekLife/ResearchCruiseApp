@@ -12,28 +12,29 @@ import { useDropdown } from '@/core/hooks/DropdownHook';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
 import { cn } from '@/core/lib/utils';
 
-type AppDropdownInputOption<T> = {
-  value: T;
+type AppDropdownInputOption = {
+  value: string;
   inlineLabel: React.ReactNode;
   richLabel?: React.ReactNode;
 };
 
-type Props<T> = {
+type Props = {
   name: string;
-  value: T;
-  allOptions: AppDropdownInputOption<T>[];
+  value: string;
+  allOptions: AppDropdownInputOption[];
 
-  onChange: (value: T) => void;
+  onChange: (value: string) => void;
   onBlur: () => void;
   errors?: string[];
   label: React.ReactNode;
   required?: boolean;
   disabled?: boolean;
   helper?: React.ReactNode;
-  showEmptyOption?: boolean;
+  allowEmptyOption?: boolean;
   placeholder?: string;
+  defaultValue?: string;
 };
-export function AppDropdownInput<T extends string | number>({
+export function AppDropdownInput({
   name,
   value,
   allOptions,
@@ -44,21 +45,23 @@ export function AppDropdownInput<T extends string | number>({
   required,
   disabled,
   helper,
-  showEmptyOption = true,
+  allowEmptyOption = false,
   placeholder = 'Wybierz',
-}: Props<T>) {
+  defaultValue = '',
+}: Props) {
   const inputRef = React.useRef<HTMLDivElement>(null);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState<AppDropdownInputOption<T>>(() =>
-    showEmptyOption ? { value: value, inlineLabel: placeholder } : allOptions[0]
+  const selectedOptionIndex = allOptions.findIndex((option) => option.value === value);
+  const [selectedValue, setSelectedValue] = React.useState<AppDropdownInputOption>(() =>
+    (selectedOptionIndex < 0) ? { value: defaultValue, inlineLabel: placeholder } : allOptions[selectedOptionIndex]
   );
-  const allPossibleOptions = showEmptyOption
+  const allPossibleOptions = allowEmptyOption
     ? [
         {
-          value: value,
-          inlineLabel: selectedValue.value ? placeholder : undefined,
-          richLabel: selectedValue.value ? <span className="text-red-500">Usuń aktualny wybór</span> : undefined,
+          value: defaultValue,
+          inlineLabel: (selectedValue.value != defaultValue) ? placeholder : undefined,
+          richLabel: (selectedValue.value != defaultValue) ? <span className="text-red-500">Usuń aktualny wybór</span> : undefined,
         },
         ...allOptions,
       ]
@@ -72,7 +75,7 @@ export function AppDropdownInput<T extends string | number>({
     },
   });
 
-  function selectOption(option: AppDropdownInputOption<T>) {
+  function selectOption(option: AppDropdownInputOption) {
     setSelectedValue(option);
     setExpanded(false);
     onChange(option.value);
@@ -88,7 +91,7 @@ export function AppDropdownInput<T extends string | number>({
           'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full',
           'transition duration-300 ease-in-out',
           disabled ? 'bg-gray-200' : '',
-          errors ? 'border-danger ring-danger text-danger focus:text-gray-900' : ''
+          (errors && errors.length > 0) ? 'border-danger ring-danger text-danger focus:text-gray-900' : ''
         )}
         ref={inputRef}
       >
@@ -129,23 +132,23 @@ export function AppDropdownInput<T extends string | number>({
   );
 }
 
-type ModalProps<T> = {
+type ModalProps = {
   dropdownRef: React.RefObject<HTMLDivElement | null>;
   inputRef: React.RefObject<HTMLDivElement | null>;
 
-  allPossibleOptions: AppDropdownInputOption<T>[];
+  allPossibleOptions: AppDropdownInputOption[];
 
   disabled?: boolean;
-  selectOption: (option: AppDropdownInputOption<T>) => void;
+  selectOption: (option: AppDropdownInputOption) => void;
 };
 
-function Modal<T extends string | number>({
+function Modal({
   dropdownRef,
   inputRef,
   allPossibleOptions,
   disabled,
   selectOption,
-}: ModalProps<T>) {
+}: ModalProps) {
   const { top, left, width } = useDropdown({ openingItemRef: inputRef, dropdownRef, dropdownPosition: 'left' });
 
   return (

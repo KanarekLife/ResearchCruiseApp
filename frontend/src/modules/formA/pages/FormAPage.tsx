@@ -76,7 +76,6 @@ export function FormAPage() {
                     errors={mapValidationErrors(field.state.meta.errors)}
                     label="Rok"
                     allOptions={initialStateQuery.data?.years.map((year) => ({ value: year, inlineLabel: year }))}
-                    showEmptyOption={false}
                   />
                 )}
               />
