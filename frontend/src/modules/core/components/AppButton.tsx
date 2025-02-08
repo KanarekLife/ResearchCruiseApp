@@ -77,7 +77,7 @@ const variants = {
   dangerOutline:
     'rounded-lg bg-white hover:bg-danger active:bg-danger text-danger hover:text-white border border-danger transition-all duration-300 disabled:border-danger-300 disabled:text-danger-400 disabled:hover:bg-white',
   warningOutline:
-    'rounded-lg bg-white hover:bg-warning active:bg-warning text-warning hover:text-white border border-warning transition-all duration-300 disabled:border-warning-300 disabled:text-warning-400 disabled:hover:bg-white',
+    'rounded-lg bg-white hover:bg-warning active:bg-warning text-warning-600 hover:text-black border border-warning transition-all duration-300 disabled:border-warning-300 disabled:text-warning-500 disabled:hover:bg-white',
   infoOutline:
     'rounded-lg bg-white hover:bg-info active:bg-info text-info hover:text-white border border-info transition-all duration-300 disabled:border-info-200 disabled:text-info-300 disabled:hover:bg-white',
 };
