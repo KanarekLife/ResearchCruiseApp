@@ -205,7 +205,7 @@ export const getEmptyTask = (type: FormATaskType): FormAResearchTask => {
     case 'Dydaktyka':
       return { type: '9', description: '' } as FormADescriptionTaskDto;
     case 'Realizacja własnego zadania badawczego':
-      return { type: '10', title: '', date: '', magazine: '', ministrialPoints: '' } as FormAMinistrialPointsTaskDto;
+      return { type: '10', title: '', date: '', magazine: '', ministrialPoints: '0' } as FormAMinistrialPointsTaskDto;
     case 'Inne zadanie':
       return { type: '11', description: '' } as FormADescriptionTaskDto;
     default:

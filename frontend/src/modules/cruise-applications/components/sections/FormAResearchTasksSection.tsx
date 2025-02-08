@@ -7,6 +7,8 @@ import { AppButton } from '@/core/components/AppButton';
 import { AppPopover } from '@/core/components/AppPopover';
 import { AppTable } from '@/core/components/table/AppTable';
 import { FormAAuthorTitleTaskDetails } from '@/cruise-applications/components/research-task-details/FormAAuthorTitleTaskDetails';
+import { FormADescriptionTaskDetails } from '@/cruise-applications/components/research-task-details/FormADescriptionTaskDetails';
+import { FormAMinistrialPointsTaskDetails } from '@/cruise-applications/components/research-task-details/FormAMinistrialPointsTaskDetails';
 import { FormATitleDateFinancingApprovedTaskDetails } from '@/cruise-applications/components/research-task-details/FormATitleDateFinancingApprovedTaskDetails';
 import { FormATitleFinancingAmountSecuredAmountWithDatesTaskDetails } from '@/cruise-applications/components/research-task-details/FormATitleFinancingAmountSecuredAmountWithDatesTaskDetails';
 import {
@@ -36,6 +38,12 @@ function getTaskDetailsComponent(
   if (['4', '5', '6', '7', '8'].includes(type)) {
     return <FormATitleFinancingAmountSecuredAmountWithDatesTaskDetails form={form} row={row} />;
   }
+  if (['9', '11'].includes(type)) {
+    return <FormADescriptionTaskDetails form={form} row={row} />;
+  }
+  if (type === '10') {
+    return <FormAMinistrialPointsTaskDetails form={form} row={row} />;
+  }
   return null;
 }
 
@@ -53,6 +61,7 @@ export function FormAResearchTasksSection({ form }: Props) {
                 {
                   header: 'Lp.',
                   accessorFn: (_, index) => `${index + 1}. `,
+                  size: 100,
                 },
                 {
                   header: 'Zadanie',
@@ -64,12 +73,14 @@ export function FormAResearchTasksSection({ form }: Props) {
                       children={(field) => taskTypes.at(parseInt(field.state.value)) ?? 'Nieznany typ'}
                     />
                   ),
+                  size: 200,
                 },
                 {
                   header: 'Szczegóły',
                   cell: ({ row }) => {
                     return getTaskDetailsComponent(row.original.type, form, row);
                   },
+                  size: 600,
                 },
                 {
                   header: 'Akcje',
@@ -80,6 +91,7 @@ export function FormAResearchTasksSection({ form }: Props) {
                       </AppButton>
                     </div>
                   ),
+                  size: 200,
                 },
               ]}
               buttons={() => [
