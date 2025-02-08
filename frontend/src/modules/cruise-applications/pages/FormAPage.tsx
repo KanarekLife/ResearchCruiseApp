@@ -4,14 +4,14 @@ import { Suspense } from 'react';
 import { AppButton } from '@/core/components/AppButton';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
-import { FormACruiseGoalSection } from '@/formA/components/sections/FormACruiseGoalSection';
-import { FormACruiseLengthSection } from '@/formA/components/sections/FormACruiseLengthSection';
-import { FormACruiseManagerInfoSection } from '@/formA/components/sections/FormACruiseManagerInfoSection';
-import { FormAPermissionsSection } from '@/formA/components/sections/FormAPermissionsSection';
-import { FormAResearchAreaSection } from '@/formA/components/sections/FormAResearchAreaSection';
-import { FormAResearchTasksSection } from '@/formA/components/sections/FormAResearchTasksSection';
-import { useFormAInitialStateQuery } from '@/formA/hooks/FormAApiHooks';
-import { FormADto } from '@/formA/lib/types';
+import { FormACruiseGoalSection } from '@/cruise-applications/components/sections/FormACruiseGoalSection';
+import { FormACruiseLengthSection } from '@/cruise-applications/components/sections/FormACruiseLengthSection';
+import { FormACruiseManagerInfoSection } from '@/cruise-applications/components/sections/FormACruiseManagerInfoSection';
+import { FormAPermissionsSection } from '@/cruise-applications/components/sections/FormAPermissionsSection';
+import { FormAResearchAreaSection } from '@/cruise-applications/components/sections/FormAResearchAreaSection';
+import { FormAResearchTasksSection } from '@/cruise-applications/components/sections/FormAResearchTasksSection';
+import { useFormAInitialStateQuery } from '@/cruise-applications/hooks/FormAApiHooks';
+import { FormADto } from '@/cruise-applications/lib/types';
 
 export function FormAPage() {
   const initialStateQuery = useFormAInitialStateQuery();

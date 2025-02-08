@@ -7,8 +7,8 @@ import { AppDropdownInput } from '@/core/components/inputs/AppDropdownInput';
 import { AppInput } from '@/core/components/inputs/AppInput';
 import { AppNumberInput } from '@/core/components/inputs/AppNumberInput';
 import { mapValidationErrors } from '@/core/lib/utils';
-import { FormAPeriodInput } from '@/formA/components/FormAPeriodInput';
-import { FormADto, FormAInitialState } from '@/formA/lib/types';
+import { FormAPeriodInput } from '@/cruise-applications/components/FormAPeriodInput';
+import { FormADto, FormAInitialState } from '@/cruise-applications/lib/types';
 
 type Props = {
   initialStateQuery: UseSuspenseQueryResult<FormAInitialState, Error>;

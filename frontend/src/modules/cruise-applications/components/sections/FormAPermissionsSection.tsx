@@ -5,7 +5,7 @@ import { AppButton } from '@/core/components/AppButton';
 import { AppInput } from '@/core/components/inputs/AppInput';
 import { AppTable } from '@/core/components/table/AppTable';
 import { mapValidationErrors } from '@/core/lib/utils';
-import { FormADto } from '@/formA/lib/types';
+import { FormADto } from '@/cruise-applications/lib/types';
 
 type Props = {
   form: ReactFormExtendedApi<FormADto, undefined>;

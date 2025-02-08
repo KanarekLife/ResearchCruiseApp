@@ -3,7 +3,7 @@ import { Row } from '@tanstack/react-table';
 
 import { AppInput } from '@/core/components/inputs/AppInput';
 import { mapValidationErrors } from '@/core/lib/utils';
-import { FormADto, FormAResearchTask } from '@/formA/lib/types';
+import { FormADto, FormAResearchTask } from '@/cruise-applications/lib/types';
 
 type Props = {
   form: ReactFormExtendedApi<FormADto, undefined>;

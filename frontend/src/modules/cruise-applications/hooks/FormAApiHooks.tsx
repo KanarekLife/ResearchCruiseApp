@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { client } from '@/core/lib/api';
-import { FormAInitialState } from '@/formA/lib/types';
+import { FormAInitialState } from '@/cruise-applications/lib/types';
 
 export function useFormAInitialStateQuery() {
   return useSuspenseQuery({

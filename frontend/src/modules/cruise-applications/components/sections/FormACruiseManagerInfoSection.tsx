@@ -5,7 +5,7 @@ import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppAvatar } from '@/core/components/AppAvatar';
 import { AppDropdownInput } from '@/core/components/inputs/AppDropdownInput';
 import { mapValidationErrors } from '@/core/lib/utils';
-import { FormADto, FormAInitialState, FormAPerson } from '@/formA/lib/types';
+import { FormADto, FormAInitialState, FormAPerson } from '@/cruise-applications/lib/types';
 
 type Props = {
   initialStateQuery: UseSuspenseQueryResult<FormAInitialState, Error>;

@@ -6,10 +6,16 @@ import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppButton } from '@/core/components/AppButton';
 import { AppPopover } from '@/core/components/AppPopover';
 import { AppTable } from '@/core/components/table/AppTable';
-import { FormAAuthorTitleTaskDetails } from '@/formA/components/research-task-details/FormAAuthorTitleTaskDetails';
-import { FormATitleDateFinancingApprovedTaskDetails } from '@/formA/components/research-task-details/FormATitleDateFinancingApprovedTaskDetails';
-import { FormATitleFinancingAmountSecuredAmountWithDatesTaskDetails } from '@/formA/components/research-task-details/FormATitleFinancingAmountSecuredAmountWithDatesTaskDetails';
-import { FormADto, FormAInitialState, FormAResearchTask, getEmptyTask, taskTypes } from '@/formA/lib/types';
+import { FormAAuthorTitleTaskDetails } from '@/cruise-applications/components/research-task-details/FormAAuthorTitleTaskDetails';
+import { FormATitleDateFinancingApprovedTaskDetails } from '@/cruise-applications/components/research-task-details/FormATitleDateFinancingApprovedTaskDetails';
+import { FormATitleFinancingAmountSecuredAmountWithDatesTaskDetails } from '@/cruise-applications/components/research-task-details/FormATitleFinancingAmountSecuredAmountWithDatesTaskDetails';
+import {
+  FormADto,
+  FormAInitialState,
+  FormAResearchTask,
+  getEmptyTask,
+  taskTypes,
+} from '@/cruise-applications/lib/types';
 
 type Props = {
   initialStateQuery: UseSuspenseQueryResult<FormAInitialState, Error>;
