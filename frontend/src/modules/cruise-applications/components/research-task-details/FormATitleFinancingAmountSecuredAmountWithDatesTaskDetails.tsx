@@ -3,6 +3,7 @@ import { Row } from '@tanstack/react-table';
 
 import { AppInput } from '@/core/components/inputs/AppInput';
 import { AppNumberInput } from '@/core/components/inputs/AppNumberInput';
+import { AppMonthPickerInput } from '@/core/components/inputs/dates/AppMonthPickerInput';
 import { mapValidationErrors } from '@/core/lib/utils';
 import { FormADto, FormAResearchTask } from '@/cruise-applications/lib/types';
 
@@ -63,6 +64,36 @@ export function FormATitleFinancingAmountSecuredAmountWithDatesTaskDetails({ for
               errors={mapValidationErrors(field.state.meta.errors)}
               onIncrement={() => field.handleChange((parseInt(field.state.value!) + 1).toString())}
               onDecrement={() => field.handleChange((parseInt(field.state.value!) - 1).toString())}
+              required
+            />
+          )}
+        />
+
+        <form.Field
+          name={`researchTasks[${row.index}].startDate`}
+          children={(field) => (
+            <AppMonthPickerInput
+              name={field.name}
+              label="Od"
+              value={field.state.value}
+              onChange={field.handleChange}
+              onBlur={field.handleBlur}
+              errors={mapValidationErrors(field.state.meta.errors)}
+              required
+            />
+          )}
+        />
+
+        <form.Field
+          name={`researchTasks[${row.index}].endDate`}
+          children={(field) => (
+            <AppMonthPickerInput
+              name={field.name}
+              label="Do"
+              value={field.state.value}
+              onChange={field.handleChange}
+              onBlur={field.handleBlur}
+              errors={mapValidationErrors(field.state.meta.errors)}
               required
             />
           )}

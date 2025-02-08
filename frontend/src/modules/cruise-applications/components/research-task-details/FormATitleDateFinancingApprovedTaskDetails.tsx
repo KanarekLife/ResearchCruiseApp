@@ -30,7 +30,6 @@ export function FormATitleDateFinancingApprovedTaskDetails({ form, row }: Props)
           )}
         />
 
-        {/* TODO: Add date component */}
         <form.Field
           name={`researchTasks[${row.index}].date`}
           children={(field) => (
