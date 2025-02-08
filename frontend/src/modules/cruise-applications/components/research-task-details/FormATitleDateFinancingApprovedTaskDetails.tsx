@@ -3,6 +3,7 @@ import { Row } from '@tanstack/react-table';
 
 import { AppDropdownInput } from '@/core/components/inputs/AppDropdownInput';
 import { AppInput } from '@/core/components/inputs/AppInput';
+import { AppDatePickerInput } from '@/core/components/inputs/dates/AppDatePickerInput';
 import { mapValidationErrors } from '@/core/lib/utils';
 import { FormADto, FormAResearchTask } from '@/cruise-applications/lib/types';
 
@@ -33,7 +34,7 @@ export function FormATitleDateFinancingApprovedTaskDetails({ form, row }: Props)
         <form.Field
           name={`researchTasks[${row.index}].date`}
           children={(field) => (
-            <AppInput
+            <AppDatePickerInput
               name={field.name}
               label="Data"
               value={field.state.value!}

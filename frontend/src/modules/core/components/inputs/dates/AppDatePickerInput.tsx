@@ -1,10 +1,12 @@
 import CalendarEventIcon from 'bootstrap-icons/icons/calendar-event.svg?react';
+import ChevronLeftIcon from 'bootstrap-icons/icons/chevron-left.svg?react';
+import ChevronRightIcon from 'bootstrap-icons/icons/chevron-right.svg?react';
 import XLgIcon from 'bootstrap-icons/icons/x-lg.svg?react';
 import { AnimatePresence, motion } from 'motion/react';
 import React from 'react';
 
 import { AppButton } from '@/core/components/AppButton';
-import { AppMonthPicker } from '@/core/components/inputs/dates/AppMonthPicker';
+import { AppMonthPickerPopover } from '@/core/components/inputs/dates/AppMonthPickerPopover';
 import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputErrorsList';
 import { AppInputErrorTriangle } from '@/core/components/inputs/parts/AppInputErrorTriangle';
 import { AppInputHelper } from '@/core/components/inputs/parts/AppInputHelper';
@@ -12,6 +14,8 @@ import { AppInputLabel } from '@/core/components/inputs/parts/AppInputLabel';
 import { useDropdown } from '@/core/hooks/DropdownHook';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
 import { cn } from '@/core/lib/utils';
+
+const weekDays = ['Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'So', 'Nd'];
 
 type Props = {
   name: string;
@@ -26,7 +30,7 @@ type Props = {
   helper?: React.ReactNode;
   placeholder?: string;
 };
-export function AppMonthPickerInput({
+export function AppDatePickerInput({
   name,
   value,
   onChange,
@@ -36,10 +40,14 @@ export function AppMonthPickerInput({
   required,
   disabled,
   helper,
-  placeholder = 'Wybierz miesiąc',
+  placeholder = 'Wybierz datę',
 }: Props) {
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(() => getDateFromValue(value));
   const [expanded, setExpanded] = React.useState(false);
+  const [visibleMonth, setVisibleMonth] = React.useState({
+    month: new Date().getMonth(),
+    year: new Date().getFullYear(),
+  });
 
   const inputRef = React.useRef<HTMLDivElement>(null);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
@@ -60,18 +68,37 @@ export function AppMonthPickerInput({
     setExpanded(!expanded);
   }
 
-  function handleSelectMonth(newDate: Date) {
-    setSelectedDate(newDate);
-    onChange(getValueFromDate(newDate));
-    setExpanded(false);
-  }
-
   function handleResetSelection(evt: React.MouseEvent) {
     setSelectedDate(undefined);
     onChange(undefined);
     setExpanded(false);
     evt.stopPropagation();
     evt.preventDefault();
+  }
+
+  function handleMonthChange(delta: 1 | -1) {
+    const newYear = visibleMonth.year;
+    const newMonth = visibleMonth.month + delta;
+    if (newMonth < 0) {
+      setVisibleMonth({ month: 11, year: newYear - 1 });
+      return;
+    }
+    if (newMonth > 11) {
+      setVisibleMonth({ month: 0, year: newYear + 1 });
+      return;
+    }
+    setVisibleMonth({ month: newMonth, year: newYear });
+  }
+
+  function handleDateSelection(newDate: Date) {
+    if (newDate.getMonth() !== visibleMonth.month) {
+      handleMonthChange(newDate.getMonth() > visibleMonth.month ? 1 : -1);
+      return;
+    }
+
+    setSelectedDate(newDate);
+    onChange(getValueFromDate(newDate));
+    setExpanded(false);
   }
 
   return (
@@ -90,7 +117,7 @@ export function AppMonthPickerInput({
             )}
           >
             {selectedDate
-              ? selectedDate.toLocaleDateString('pl-PL', { month: '2-digit', year: 'numeric' })
+              ? selectedDate.toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit', year: 'numeric' })
               : placeholder}
             <span className="flex gap-2 items-center">
               <AppInputErrorTriangle errors={errors} />
@@ -115,7 +142,48 @@ export function AppMonthPickerInput({
       <AnimatePresence>
         {expanded && (
           <Modal dropdownRef={dropdownRef} inputRef={inputRef}>
-            <AppMonthPicker selectedDate={selectedDate} onSelectMonth={handleSelectMonth} />
+            <div className="grid grid-cols-5 items-center px-2 py-2">
+              <AppButton
+                variant="plain"
+                onClick={() => handleMonthChange(-1)}
+                className="w-full rounded-lg grid place-items-center hover:bg-gray-100"
+              >
+                <ChevronLeftIcon className="h-5 w-5" />
+              </AppButton>
+
+              <span className="font-bold col-span-3 inline-flex gap-2 justify-center items-center">
+                <AppMonthPickerPopover value={visibleMonth} onChange={setVisibleMonth} />
+              </span>
+
+              <AppButton
+                variant="plain"
+                onClick={() => handleMonthChange(1)}
+                className="w-full rounded-lg grid place-items-center hover:bg-gray-100"
+              >
+                <ChevronRightIcon className="h-5 w-5" />
+              </AppButton>
+            </div>
+            <div className="grid grid-cols-7 p-2">
+              {weekDays.map((day) => (
+                <div key={day} className="font-semibold pb-2">
+                  {day}
+                </div>
+              ))}
+              {getDaysInMonth(visibleMonth).map((date) => (
+                <AppButton
+                  key={date.getTime()}
+                  variant="plain"
+                  onClick={() => handleDateSelection(date)}
+                  className={cn(
+                    selectedDate?.getTime() === date.getTime() ? 'bg-primary-500 text-white' : '',
+                    'w-full text-center py-2 hover:bg-gray-100',
+                    date.getMonth() !== visibleMonth.month ? 'text-gray-400' : ''
+                  )}
+                >
+                  {date.getDate()}
+                </AppButton>
+              ))}
+            </div>
           </Modal>
         )}
       </AnimatePresence>
@@ -129,7 +197,7 @@ function getDateFromValue(value: string | undefined): Date | undefined {
   }
 
   const parts = value.split('/');
-  return new Date(parseInt(parts[1]), parseInt(parts[0]) - 1);
+  return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
 }
 
 function getValueFromDate(date: Date | undefined): string | undefined {
@@ -137,7 +205,31 @@ function getValueFromDate(date: Date | undefined): string | undefined {
     return undefined;
   }
 
-  return `${date.getMonth() + 1}/${date.getFullYear()}`;
+  return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+}
+
+function getDaysInMonth({ month, year }: { month: number; year: number }): Date[] {
+  const date = findClosestMondayBefore(new Date(year, month, 1));
+  const days = [];
+  while (
+    month > 0
+      ? date.getFullYear() <= year && date.getMonth() <= month
+      : date.getFullYear() < year || date.getMonth() < 1
+  ) {
+    days.push(new Date(date));
+    date.setDate(date.getDate() + 1);
+  }
+  while (date.getDay() > 1 || date.getDay() < 1) {
+    days.push(new Date(date));
+    date.setDate(date.getDate() + 1);
+  }
+  return days;
+}
+
+function findClosestMondayBefore(date: Date): Date {
+  const day = date.getDay();
+  const diff = day === 0 ? 6 : day - 1;
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() - diff);
 }
 
 type ModalProps = {
