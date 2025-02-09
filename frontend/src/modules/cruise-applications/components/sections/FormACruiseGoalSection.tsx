@@ -11,7 +11,6 @@ type Props = {
   initialStateQuery: UseSuspenseQueryResult<FormAInitialState, Error>;
   form: ReactFormExtendedApi<FormADto, undefined>;
 };
-
 export function FormACruiseGoalSection({ initialStateQuery, form }: Props) {
   return (
     <AppAccordion title="5. Cel rejsu" expandedByDefault>

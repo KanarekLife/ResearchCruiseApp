@@ -15,8 +15,8 @@ export type FormAResearchTask = {
   securedAmount?: string;
   MinisterialPoints?: string;
 };
-export type FormAHistoricalContract = {
-  category: string;
+export type FormAContract = {
+  category: 'domestic' | 'international';
   institutionName: string;
   institutionUnit: string;
   institutionLocalization: string;
@@ -54,9 +54,9 @@ export type FormAInitialState = {
   researchAreas: FormAResearchArea[];
   cruiseGoals: string[];
   historicalResearchTasks: FormAResearchTask[];
-  historicalContracts: FormAHistoricalContract[];
-  unitGroups: FormAUGUnit[];
-  historicalGuestInstructions: string[];
+  historicalContracts: FormAContract[];
+  ugUnits: FormAUGUnit[];
+  historicalGuestInstitutions: string[];
   historicalSpubTasks: FormASpubTask[];
   historicalPublications: FormAPublicationDto[];
 };
@@ -64,6 +64,15 @@ export type FormAPermissionDto = {
   description: string;
   executive: string;
   scan?: FormAFile;
+};
+export type FormAUGTeamDto = {
+  ugUnitId: string;
+  noOfEmployees: string;
+  noOfStudents: string;
+};
+export type FormAGuestTeamDto = {
+  name: string;
+  noOfPersons: string;
 };
 export type FormADto = {
   id?: string;
@@ -82,6 +91,9 @@ export type FormADto = {
   cruiseGoal: string;
   cruiseGoalDescription: string;
   researchTasks: FormAResearchTask[];
+  contracts: FormAContract[];
+  ugTeams: FormAUGTeamDto[];
+  guestTeams: FormAGuestTeamDto[];
 };
 
 export type FormATaskType =

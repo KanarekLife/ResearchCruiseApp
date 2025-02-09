@@ -21,8 +21,6 @@ type Props = {
 };
 
 export function FormAResearchTasksSection({ initialStateQuery, form }: Props) {
-  console.log(initialStateQuery.data.historicalResearchTasks);
-
   return (
     <AppAccordion title="6. Zadania do zrealizowania w trakcie rejsu" expandedByDefault>
       <div>
@@ -131,6 +129,7 @@ export function FormAResearchTasksSection({ initialStateQuery, form }: Props) {
                   Dodaj z historii
                 </AppPopover>,
               ]}
+              childForEmpty={<div className="text-center bg-gray-100 py-3">Nie dodano żadnego zadania</div>}
             />
           )}
         />
