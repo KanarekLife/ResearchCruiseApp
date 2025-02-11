@@ -239,7 +239,7 @@ export function FormAPeriodInput({
       </div>
 
       <p className="text-center">Wybrano okres: {getExplanationForPeriod(values[0], values[1])}</p>
-      <div className="flex flex-row justify-between mt-2 text-sm">
+      <div className="flex flex-col justify-between mt-2 text-sm">
         <AppInputHelper helper={helper} />
         <AppInputErrorsList errors={errors} />
       </div>
