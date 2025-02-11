@@ -23,12 +23,14 @@ type Props = {
   | {
       allowMultiple: true;
       value: FileDto[];
-      onChange: (value: FileDto[]) => void;
+
+      onChange?: (value: FileDto[]) => void;
     }
   | {
       allowMultiple: false;
       value: FileDto;
-      onChange: (value: FileDto) => void;
+
+      onChange?: (value: FileDto) => void;
     }
 );
 
@@ -63,14 +65,21 @@ export function AppFileInput({
     }
   }, [allowMultiple, files, onBlur, onChange]);
 
-  async function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const rawFiles = event.target.files;
-    if (!rawFiles) {
-      return;
-    }
+  async function handleDrop(event: React.DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    event.stopPropagation();
 
-    const newFiles = await Promise.all(Array.from(rawFiles).map(async (file) => await convertFile(file)));
-    setFiles(newFiles);
+    const filesList = event.dataTransfer.files;
+    if (filesList) {
+      setFiles(await loadFileList(filesList));
+    }
+  }
+
+  async function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const filesList = event.target.files;
+    if (filesList) {
+      setFiles(await loadFileList(filesList));
+    }
   }
 
   function removeFile(file: FileDto) {
@@ -81,7 +90,12 @@ export function AppFileInput({
     <div>
       <AppInputLabel name={name} label={label} />
 
-      <div className="flex items-center justify-center w-full" onClick={() => inputRef.current?.click()}>
+      <div
+        className="flex items-center justify-center w-full"
+        onClick={() => inputRef.current?.click()}
+        onDrop={handleDrop}
+        onDragOver={(e) => e.preventDefault()}
+      >
         <label
           className={cn(
             'flex flex-col items-center justify-center w-full border-2 border-gray-300 text-gray-500',
@@ -117,7 +131,11 @@ export function AppFileInput({
   );
 }
 
-async function convertFile(file: File): Promise<FileDto> {
+async function loadFileList(files: FileList): Promise<FileDto[]> {
+  return Promise.all(Array.from(files).map(async (file) => await loadFile(file)));
+}
+
+async function loadFile(file: File): Promise<FileDto> {
   return new Promise((resolve) => {
     const reader = new FileReader();
     reader.onload = () => {
