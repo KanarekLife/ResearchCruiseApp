@@ -9,6 +9,7 @@ import { FormACruiseGoalSection } from '@/cruise-applications/components/section
 import { FormACruiseLengthSection } from '@/cruise-applications/components/sections/FormACruiseLengthSection';
 import { FormACruiseManagerInfoSection } from '@/cruise-applications/components/sections/FormACruiseManagerInfoSection';
 import { FormAPermissionsSection } from '@/cruise-applications/components/sections/FormAPermissionsSection';
+import { FormAPublicationsSection } from '@/cruise-applications/components/sections/FormAPublicationsSection';
 import { FormAResearchAreaSection } from '@/cruise-applications/components/sections/FormAResearchAreaSection';
 import { FormAResearchTasksSection } from '@/cruise-applications/components/sections/FormAResearchTasksSection';
 import { FormAUGUnitsSection } from '@/cruise-applications/components/sections/FormAUGUnitsSection';
@@ -37,6 +38,7 @@ export function FormAPage() {
       contracts: [],
       ugTeams: [],
       guestTeams: [],
+      publications: [],
     },
     onSubmit: (values) => {
       console.log(values);
@@ -61,6 +63,7 @@ export function FormAPage() {
           <FormAResearchTasksSection form={form} initialStateQuery={initialStateQuery} />
           <FormAContractsSection form={form} initialStateQuery={initialStateQuery} />
           <FormAUGUnitsSection form={form} initialStateQuery={initialStateQuery} />
+          <FormAPublicationsSection form={form} initialStateQuery={initialStateQuery} />
           <AppButton type="submit" className="w-full">
             Submit
           </AppButton>

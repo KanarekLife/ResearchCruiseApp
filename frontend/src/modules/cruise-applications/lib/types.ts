@@ -37,8 +37,8 @@ export type FormASpubTask = {
   yearTo: string;
 };
 export type FormAPublicationDto = {
-  id: string;
-  category: string;
+  id?: string;
+  category: 'subject' | 'postscript';
   doi: string;
   authors: string;
   title: string;
@@ -94,6 +94,7 @@ export type FormADto = {
   contracts: FormAContract[];
   ugTeams: FormAUGTeamDto[];
   guestTeams: FormAGuestTeamDto[];
+  publications: FormAPublicationDto[];
 };
 
 export type FormATaskType =

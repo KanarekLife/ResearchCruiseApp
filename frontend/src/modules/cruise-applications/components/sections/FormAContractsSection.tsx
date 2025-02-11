@@ -13,7 +13,6 @@ type Props = {
   initialStateQuery: UseSuspenseQueryResult<FormAInitialState, Error>;
   form: ReactFormExtendedApi<FormADto, undefined>;
 };
-
 export function FormAContractsSection({ initialStateQuery, form }: Props) {
   return (
     <AppAccordion
