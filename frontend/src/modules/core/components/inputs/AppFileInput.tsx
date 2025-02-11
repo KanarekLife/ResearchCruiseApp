@@ -19,6 +19,9 @@ type Props = {
   disabled?: boolean;
   helper?: React.ReactNode;
   uploadMessage?: string;
+  maxSize?: number;
+  acceptedMimeTypes?: string[];
+  allowMultiple?: boolean;
 } & (
   | {
       allowMultiple: true;
@@ -27,9 +30,8 @@ type Props = {
       onChange?: (value: FileDto[]) => void;
     }
   | {
-      allowMultiple: false;
-      value: FileDto;
-
+      allowMultiple?: false;
+      value?: FileDto;
       onChange?: (value: FileDto) => void;
     }
 );
@@ -47,22 +49,20 @@ export function AppFileInput({
   disabled,
   helper,
   uploadMessage = 'Kliknij lub przeciągnij plik',
+  maxSize,
+  acceptedMimeTypes,
 }: Props) {
   const [files, setFiles] = React.useState<FileDto[]>(allowMultiple ? value : value ? [value] : []);
+  const [notifications, setNotifications] = React.useState<string[]>([]);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
-    if (onChange) {
-      if (allowMultiple) {
-        onChange(files);
-      } else {
-        onChange(files[0]);
-      }
+    if (allowMultiple) {
+      onChange?.(files);
+    } else {
+      onChange?.(files[0]);
     }
-
-    if (onBlur) {
-      onBlur();
-    }
+    onBlur?.();
   }, [allowMultiple, files, onBlur, onChange]);
 
   async function handleDrop(event: React.DragEvent<HTMLDivElement>) {
@@ -80,6 +80,30 @@ export function AppFileInput({
     if (filesList) {
       setFiles(await loadFileList(filesList));
     }
+  }
+
+  async function loadFileList(files: FileList): Promise<FileDto[]> {
+    const newNotifications: string[] = [];
+    const promises = Array.from(files)
+      .filter((file) => {
+        if (maxSize && file.size > maxSize) {
+          newNotifications.push(`Plik ${file.name} jest zbyt duży (max. ${maxSize / 1024 / 1024} MB)`);
+          return false;
+        }
+
+        if (acceptedMimeTypes && !acceptedMimeTypes.includes(file.type)) {
+          newNotifications.push(
+            `Plik ${file.name} ma nieprawidłowy format. Dozwolone są pliki typu: ${acceptedMimeTypes.join(', ')}`
+          );
+          return false;
+        }
+
+        return true;
+      })
+      .map(async (file) => await loadFile(file));
+
+    setNotifications(newNotifications);
+    return await Promise.all(promises);
   }
 
   function removeFile(file: FileDto) {
@@ -108,6 +132,15 @@ export function AppFileInput({
           <div className="flex flex-col items-center justify-center pt-5 pb-6 text-sm">
             <CloudUploadIcon className="w-8 h-8 mb-4" />
             {uploadMessage}
+            {notifications && notifications.length > 0 && (
+              <div className="bg-danger-100 text-danger-900 rounded mx-2 p-1 mt-1">
+                <ul className="list-disc list-inside">
+                  {notifications.map((notification) => (
+                    <li key={notification}>{notification}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
           {files.length > 0 && <AppFileList files={files} onRemove={removeFile} disabled={disabled} />}
         </label>
@@ -122,6 +155,7 @@ export function AppFileInput({
         disabled={disabled}
         className="hidden"
         onChange={handleChange}
+        accept={acceptedMimeTypes?.join(',')}
       />
       <div className={cn('flex flex-col justify-between text-sm', errors || helper ? 'mt-2' : '')}>
         <AppInputHelper helper={helper} />
@@ -129,10 +163,6 @@ export function AppFileInput({
       </div>
     </div>
   );
-}
-
-async function loadFileList(files: FileList): Promise<FileDto[]> {
-  return Promise.all(Array.from(files).map(async (file) => await loadFile(file)));
 }
 
 async function loadFile(file: File): Promise<FileDto> {

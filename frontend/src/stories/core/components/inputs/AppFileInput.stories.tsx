@@ -74,3 +74,19 @@ export const WithUploadMessage: Story = {
     uploadMessage: 'Upload message',
   },
 };
+
+export const WithMaxSize: Story = {
+  args: {
+    maxSize: 2 * 1024 * 1024,
+    allowMultiple: true,
+    value: [],
+  },
+};
+
+export const WithAcceptedMimeTypes: Story = {
+  args: {
+    acceptedMimeTypes: ['application/pdf'],
+    allowMultiple: true,
+    value: [],
+  },
+};
