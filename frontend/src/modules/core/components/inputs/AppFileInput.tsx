@@ -46,7 +46,7 @@ export function AppFileInput({
   helper,
   uploadMessage = 'Kliknij lub przeciągnij plik',
 }: Props) {
-  const [files, setFiles] = React.useState<FileDto[]>(allowMultiple ? value : [value]);
+  const [files, setFiles] = React.useState<FileDto[]>(allowMultiple ? value : value ? [value] : []);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
