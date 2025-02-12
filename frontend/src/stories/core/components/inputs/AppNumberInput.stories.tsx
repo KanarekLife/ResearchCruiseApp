@@ -13,8 +13,6 @@ const meta = {
     helper: undefined,
     onChange: fn(),
     onBlur: fn(),
-    onDecrement: fn(),
-    onIncrement: fn(),
   },
 } satisfies Meta<typeof AppNumberInput>;
 

@@ -13,43 +13,115 @@ type Props = {
   name: string;
   value: number;
 
-  onBlur?: (evt: React.FocusEvent<HTMLInputElement>) => void;
-  onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
-  onIncrement?: () => void;
-  onDecrement?: () => void;
+  onBlur?: () => void;
+  onChange?: (value: number) => void;
   errors?: string[];
   label?: React.ReactNode;
   required?: boolean;
   className?: string;
   disabled?: boolean;
   helper?: React.ReactNode;
-};
+  minimum?: number;
+  maximum?: number;
+  step?: number;
+} & (
+  | {
+      type?: 'integer';
+      precision?: never;
+    }
+  | {
+      type: 'float';
+      precision?: number;
+    }
+);
 export function AppNumberInput({
   name,
   value,
   onBlur,
   onChange,
-  onIncrement,
-  onDecrement,
   errors,
   label,
   required,
   className,
   disabled,
   helper,
+  minimum,
+  maximum,
+  step = 1,
+  type = 'integer',
+  precision = 2,
 }: Props) {
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const [stringValue, setStringValue] = React.useState(value.toString());
+
+  React.useEffect(() => {
+    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect -- we need to sync the input value with the prop value
+    setStringValue(roundNumber(value, precision ?? 2).toString());
+  }, [precision, type, value]);
+
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const stringInput = event.target.value.replace(',', '.'); // float input require dot as the decimal separator
+
+    if (stringInput === '') {
+      updateValue(0);
+      return;
+    }
+
+    if ((minimum === undefined || minimum < 0) && (stringInput === '-' || stringInput === '0-')) {
+      onChange?.(0);
+      // Allow to input negative zero to ease the input of negative numbers
+      setStringValue('-0');
+      return;
+    }
+
+    if (stringInput.endsWith('-')) {
+      updateValue(-1 * value);
+      return;
+    }
+
+    const parsedValue = type === 'integer' ? parseInt(stringInput) : parseFloat(stringInput);
+
+    // If the input contains a number followed by a dot, we don't want to set the value to the parsed number
+    const numberWithDotRegex = /^-{0,1}\d*\.$/;
+    if (type === 'float' && numberWithDotRegex.test(stringInput)) {
+      setStringValue(stringInput);
+      return;
+    }
+    if (isNaN(parsedValue)) {
+      return;
+    }
+
+    updateValue(parsedValue);
+  }
+
+  function updateValue(newValue: number) {
+    newValue = roundNumber(newValue, type === 'float' ? precision! : 0);
+
+    if (minimum !== undefined && newValue < minimum) {
+      newValue = minimum;
+    } else if (maximum !== undefined && newValue > maximum) {
+      newValue = maximum;
+    }
+
+    onChange?.(newValue);
+    onBlur?.();
+  }
 
   return (
     <div className="flex flex-col">
       <AppInputLabel name={name} label={label} />
       <div className="relative flex items-center">
-        <AppNumberInputButton onClick={onDecrement} side="left" disabled={disabled} inputToFocus={inputRef} />
+        <AppNumberInputButton
+          onClick={() => updateValue(value - step)}
+          side="left"
+          disabled={disabled}
+          inputToFocus={inputRef}
+        />
         <input
           name={name}
-          value={value}
+          value={stringValue}
+          onChange={handleInputChange}
           onBlur={onBlur}
-          onChange={onChange}
           required={required}
           disabled={disabled}
           className={cn(
@@ -62,7 +134,12 @@ export function AppNumberInput({
           )}
           ref={inputRef}
         />
-        <AppNumberInputButton onClick={onIncrement} side="right" disabled={disabled} inputToFocus={inputRef} />
+        <AppNumberInputButton
+          onClick={() => updateValue(value + step)}
+          side="right"
+          disabled={disabled}
+          inputToFocus={inputRef}
+        />
         <AppInputErrorTriangle errors={errors} />
       </div>
       <div className="flex flex-col justify-between mt-2 text-sm">
@@ -106,4 +183,9 @@ function AppNumberInputButton({ side, inputToFocus, onClick, disabled }: ButtonP
       {side === 'left' ? <DashLgIcon /> : <PlusLgIcon />}
     </AppButton>
   );
+}
+
+function roundNumber(value: number, precision: number) {
+  const factor = 10 ** precision;
+  return Math.round(value * factor) / factor;
 }
