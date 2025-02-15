@@ -58,6 +58,7 @@ const sizes = {
   md: 'px-5 py-2.5 text-md',
   lg: 'px-5 py-3 text-lg',
   xl: 'px-6 py-3.5 text-xl',
+  square: 'p-2.5',
 };
 
 const variants = {

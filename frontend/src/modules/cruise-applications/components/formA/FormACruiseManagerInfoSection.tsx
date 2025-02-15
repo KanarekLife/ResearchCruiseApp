@@ -1,22 +1,11 @@
-import { ReactFormExtendedApi } from '@tanstack/react-form';
-import { UseSuspenseQueryResult } from '@tanstack/react-query';
-
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppAvatar } from '@/core/components/AppAvatar';
-import { AppDropdownInput } from '@/core/components/inputs/AppDropdownInput';
+import { AppDropdownInput, AppDropdownInputOption } from '@/core/components/inputs/AppDropdownInput';
 import { mapValidationErrors } from '@/core/lib/utils';
-import { FormADto, FormAInitialState, FormAPerson } from '@/cruise-applications/lib/types';
+import { FormASectionProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { FormUserDto } from '@/cruise-applications/models/FormUserDto';
 
-type Props = {
-  initialStateQuery: UseSuspenseQueryResult<FormAInitialState, Error>;
-  form: ReactFormExtendedApi<FormADto, undefined>;
-};
-
-function mapPersonToLabel(person: FormAPerson): {
-  value: string;
-  inlineLabel: React.ReactNode;
-  richLabel?: React.ReactNode;
-} {
+function mapPersonToLabel(person: FormUserDto): AppDropdownInputOption<string> {
   return {
     value: person.id,
     inlineLabel: `${person.firstName} ${person.lastName} (${person.email})`,
@@ -34,50 +23,59 @@ function mapPersonToLabel(person: FormAPerson): {
   };
 }
 
-export function FormACruiseManagerInfoSection({ initialStateQuery, form }: Props) {
+export function FormACruiseManagerInfoSection({ initValues, form }: FormASectionProps) {
   return (
     <AppAccordion title="1. Kierownik zgłaszanego rejsu" expandedByDefault>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <form.Field
           name="cruiseManagerId"
           children={(field) => (
             <AppDropdownInput
-              name="cruiseManagerId"
+              name={field.name}
               value={field.state.value}
-              onChange={(e) => field.handleChange(e as string)}
+              onChange={field.handleChange}
               onBlur={field.handleBlur}
               errors={mapValidationErrors(field.state.meta.errors)}
               label="Kierownik rejsu"
-              allOptions={initialStateQuery.data?.cruiseManagers.map(mapPersonToLabel)}
+              required
+              placeholder="Wybierz kierownika rejsu"
+              allOptions={initValues.data.cruiseManagers.map(mapPersonToLabel)}
             />
           )}
         />
+
         <form.Field
           name="deputyManagerId"
           children={(field) => (
             <AppDropdownInput
-              name="deputyManagerId"
+              name={field.name}
               value={field.state.value}
-              onChange={(e) => field.handleChange(e as string)}
+              onChange={field.handleChange}
               onBlur={field.handleBlur}
               errors={mapValidationErrors(field.state.meta.errors)}
-              label="Kierownik rejsu"
-              allOptions={initialStateQuery.data?.cruiseManagers.map(mapPersonToLabel)}
+              label="Zastępca kierownika rejsu"
+              placeholder="Wybierz zastępcę kierownika rejsu"
+              allOptions={initValues.data.deputyManagers.map(mapPersonToLabel)}
             />
           )}
         />
+
         <form.Field
           name="year"
           children={(field) => (
             <AppDropdownInput
-              name="year"
+              name={field.name}
               value={field.state.value}
-              onChange={(e) => field.handleChange(e as string)}
+              onChange={field.handleChange}
               onBlur={field.handleBlur}
               errors={mapValidationErrors(field.state.meta.errors)}
               label="Rok"
-              allOptions={initialStateQuery.data?.years.map((year) => ({ value: year, inlineLabel: year }))}
-              showEmptyOption={false}
+              required
+              placeholder="Wybierz rok"
+              allOptions={initValues.data.years.map((year) => ({
+                value: year,
+                inlineLabel: year,
+              }))}
             />
           )}
         />

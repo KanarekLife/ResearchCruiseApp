@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputErrorsList';
 import { AppInputErrorTriangle } from '@/core/components/inputs/parts/AppInputErrorTriangle';
 import { AppInputHelper } from '@/core/components/inputs/parts/AppInputHelper';
@@ -18,6 +20,8 @@ type Props = {
   className?: string;
   disabled?: boolean;
   helper?: React.ReactNode;
+  autoFocus?: boolean;
+  containerClassName?: string;
 };
 export function AppInput({
   name,
@@ -32,11 +36,22 @@ export function AppInput({
   className,
   disabled,
   helper,
+  autoFocus,
+  containerClassName,
 }: Props) {
   const InputElement = type === 'textarea' ? 'textarea' : 'input';
+  const elementRef = React.useRef<HTMLInputElement & HTMLTextAreaElement>(null);
+
+  React.useEffect(() => {
+    if (autoFocus && elementRef.current) {
+      elementRef.current.focus({
+        preventScroll: true,
+      });
+    }
+  }, [autoFocus, elementRef]);
 
   return (
-    <div className="flex flex-col">
+    <div className={cn('flex flex-col', containerClassName)}>
       <AppInputLabel name={name} label={label} />
 
       <div className="flex relative">
@@ -57,6 +72,7 @@ export function AppInput({
             disabled ? 'bg-gray-200' : '',
             errors ? 'border-danger ring-danger text-danger focus:text-gray-900' : ''
           )}
+          ref={elementRef}
         />
         <AppInputErrorTriangle errors={errors} mode="absolute" />
       </div>

@@ -1,14 +1,14 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { client } from '@/core/lib/api';
-import { FormAInitialState } from '@/cruise-applications/lib/types';
+import { FormAInitValuesDto } from '@/cruise-applications/models/FormAInitValuesDto';
 
-export function useFormAInitialStateQuery() {
+export function useFormAInitValues() {
   return useSuspenseQuery({
-    queryKey: ['formAInitialState'],
+    queryKey: ['formAInitValues'],
     queryFn: async () => {
       return client.get('/forms/InitValues/A');
     },
-    select: (res) => res.data as FormAInitialState,
+    select: (res) => res.data as FormAInitValuesDto,
   });
 }

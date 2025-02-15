@@ -16,10 +16,10 @@ type Props<T> = {
   data: T[];
   columns: ColumnDef<T>[];
   buttons?: (predefinedButtons: React.ReactNode[]) => React.ReactNode[];
-  childForEmpty?: React.ReactNode;
+  emptyTableMessage?: string;
 };
 
-export function AppTable<T>({ data, columns, buttons, childForEmpty }: Props<T>) {
+export function AppTable<T>({ data, columns, buttons, emptyTableMessage }: Props<T>) {
   const table = useReactTable<T>({
     columns,
     data,
@@ -53,7 +53,7 @@ export function AppTable<T>({ data, columns, buttons, childForEmpty }: Props<T>)
   return (
     <div className="overflow-x-auto">
       <div className="flex justify-end flex-wrap w-full gap-4 my-4">{...allButtons}</div>
-      <table className="w-full">
+      <table className="w-full table-fixed">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => {
             return (
@@ -69,12 +69,12 @@ export function AppTable<T>({ data, columns, buttons, childForEmpty }: Props<T>)
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className=" odd:bg-gray-100 text-gray-800">
+            <tr key={row.id} className="odd:bg-gray-100 text-gray-800">
               {row.getVisibleCells().map((cell) => {
                 return (
                   <td
                     key={cell.id}
-                    className="text-center pt-2 pb-2 last:pr-4"
+                    className="text-center py-2 first:pl-4 pr-4"
                     style={{ width: `${cell.column.getSize()}px` }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -83,10 +83,10 @@ export function AppTable<T>({ data, columns, buttons, childForEmpty }: Props<T>)
               })}
             </tr>
           ))}
-          {!!childForEmpty && table.getRowModel().rows.length === 0 && (
+          {!!emptyTableMessage && table.getRowModel().rows.length === 0 && (
             <tr>
-              <td colSpan={table.getAllColumns().length} className="text-center pt-4 pb-4">
-                {childForEmpty}
+              <td colSpan={table.getAllColumns().length} className="pb-4 text-center bg-gray-100 py-3 rounded-lg">
+                {emptyTableMessage}
               </td>
             </tr>
           )}

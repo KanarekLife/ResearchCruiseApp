@@ -12,7 +12,7 @@ import { useDropdown } from '@/core/hooks/DropdownHook';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
 import { cn } from '@/core/lib/utils';
 
-type AppDropdownInputOption<T> = {
+export type AppDropdownInputOption<T> = {
   value: T;
   inlineLabel: React.ReactNode;
   richLabel?: React.ReactNode;

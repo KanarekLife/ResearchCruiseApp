@@ -5,6 +5,7 @@ import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputError
 import { AppInputHelper } from '@/core/components/inputs/parts/AppInputHelper';
 import { AppInputLabel } from '@/core/components/inputs/parts/AppInputLabel';
 import { cn } from '@/core/lib/utils';
+import { CruisePeriodType } from '@/cruise-applications/models/FormADto';
 
 const months = [
   'Styczeń',
@@ -23,10 +24,10 @@ const months = [
 
 type Props = {
   name: string;
-  value: number[];
-  maxValues?: number[];
+  value: CruisePeriodType;
+  maxValues?: CruisePeriodType;
 
-  onChange: (value: number[]) => void;
+  onChange: (value: CruisePeriodType) => void;
   onBlur: () => void;
   errors?: string[];
   label: React.ReactNode;
@@ -50,11 +51,11 @@ export function FormAPeriodInput({
   const rangerRef = React.useRef<HTMLDivElement>(null);
   const [values, setValues] = React.useState<ReadonlyArray<number>>(() => {
     if (value.length === 2) {
-      return value;
+      return [parseInt(value[0]), parseInt(value[1])];
     }
 
     if (maxValues?.length === 2) {
-      return maxValues;
+      return [parseInt(maxValues[0]), parseInt(maxValues[1])];
     }
 
     return [0, 23];
@@ -65,7 +66,7 @@ export function FormAPeriodInput({
       return;
     }
 
-    const intMaxValues = maxValues.sort((a, b) => a - b);
+    const intMaxValues = maxValues.map(parseInt).sort((a, b) => a - b);
     const tmpValues = [...values].sort((a, b) => a - b);
     let changed = false;
 
@@ -94,16 +95,16 @@ export function FormAPeriodInput({
       if (values[0] === values[1]) {
         return;
       }
-      if (maxValues) {
-        if (values[0] < maxValues[0]) {
-          values[0] = maxValues[0];
+      if (maxValues && maxValues.length === 2) {
+        if (values[0] < parseInt(maxValues[0])) {
+          values[0] = parseInt(maxValues[0]);
         }
-        if (values[1] > maxValues[1]) {
-          values[1] = maxValues[1];
+        if (values[1] > parseInt(maxValues[1])) {
+          values[1] = parseInt(maxValues[1]);
         }
       }
       setValues(values);
-      onChange(values);
+      onChange(values.map((v) => v.toString()) as CruisePeriodType);
     },
   });
 

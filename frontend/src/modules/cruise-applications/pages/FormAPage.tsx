@@ -1,45 +1,23 @@
 import { useForm } from '@tanstack/react-form';
 import { Suspense } from 'react';
 
-import { AppButton } from '@/core/components/AppButton';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
-import { FormAContractsSection } from '@/cruise-applications/components/sections/FormAContractsSection';
-import { FormACruiseGoalSection } from '@/cruise-applications/components/sections/FormACruiseGoalSection';
-import { FormACruiseLengthSection } from '@/cruise-applications/components/sections/FormACruiseLengthSection';
-import { FormACruiseManagerInfoSection } from '@/cruise-applications/components/sections/FormACruiseManagerInfoSection';
-import { FormAPermissionsSection } from '@/cruise-applications/components/sections/FormAPermissionsSection';
-import { FormAPublicationsSection } from '@/cruise-applications/components/sections/FormAPublicationsSection';
-import { FormAResearchAreaSection } from '@/cruise-applications/components/sections/FormAResearchAreaSection';
-import { FormAResearchTasksSection } from '@/cruise-applications/components/sections/FormAResearchTasksSection';
-import { FormAUGUnitsSection } from '@/cruise-applications/components/sections/FormAUGUnitsSection';
-import { useFormAInitialStateQuery } from '@/cruise-applications/hooks/FormAApiHooks';
-import { FormADto } from '@/cruise-applications/lib/types';
+import { FormAContractsSection } from '@/cruise-applications/components/formA/FormAContractsSection';
+import { FormACruiseGoalSection } from '@/cruise-applications/components/formA/FormACruiseGoalSection';
+import { FormACruiseLengthSection } from '@/cruise-applications/components/formA/FormACruiseLengthSection';
+import { FormACruiseManagerInfoSection } from '@/cruise-applications/components/formA/FormACruiseManagerInfoSection';
+import { FormAMembersSection } from '@/cruise-applications/components/formA/FormAMembersSection';
+import { FormAPermissionsSection } from '@/cruise-applications/components/formA/FormAPermissionsSection';
+import { FormAResearchAreaSection } from '@/cruise-applications/components/formA/FormAResearchAreaSection';
+import { FormAResearchTasksSection } from '@/cruise-applications/components/formA/FormAResearchTasksSection';
+import { useFormAInitValues } from '@/cruise-applications/hooks/useFormAInitValues';
+import { emptyFormADto, FormADto } from '@/cruise-applications/models/FormADto';
 
 export function FormAPage() {
-  const initialStateQuery = useFormAInitialStateQuery();
+  const initialStateQuery = useFormAInitValues();
   const form = useForm<FormADto>({
-    defaultValues: {
-      cruiseManagerId: '',
-      deputyManagerId: '',
-      year: '',
-      acceptablePeriod: [],
-      optimalPeriod: [],
-      cruiseHours: 0,
-      periodNotes: '',
-      shipUsage: 0,
-      differentShipUsage: '',
-      permissions: [],
-      researchAreaId: '',
-      researchAreaInfo: '',
-      cruiseGoal: '',
-      cruiseGoalDescription: '',
-      researchTasks: [],
-      contracts: [],
-      ugTeams: [],
-      guestTeams: [],
-      publications: [],
-    },
+    defaultValues: emptyFormADto,
     onSubmit: (values) => {
       console.log(values);
     },
@@ -55,18 +33,14 @@ export function FormAPage() {
     <AppLayout title="Formularz A" variant="defaultWithoutCentering">
       <Suspense fallback={<AppLoader />}>
         <form className="space-y-8" onSubmit={handleSubmit}>
-          <FormACruiseManagerInfoSection form={form} initialStateQuery={initialStateQuery} />
-          <FormACruiseLengthSection form={form} initialStateQuery={initialStateQuery} />
-          <FormAPermissionsSection form={form} />
-          <FormAResearchAreaSection form={form} initialStateQuery={initialStateQuery} />
-          <FormACruiseGoalSection form={form} initialStateQuery={initialStateQuery} />
-          <FormAResearchTasksSection form={form} initialStateQuery={initialStateQuery} />
-          <FormAContractsSection form={form} initialStateQuery={initialStateQuery} />
-          <FormAUGUnitsSection form={form} initialStateQuery={initialStateQuery} />
-          <FormAPublicationsSection form={form} initialStateQuery={initialStateQuery} />
-          <AppButton type="submit" className="w-full">
-            Submit
-          </AppButton>
+          <FormACruiseManagerInfoSection form={form} initValues={initialStateQuery} />
+          <FormACruiseLengthSection form={form} initValues={initialStateQuery} />
+          <FormAPermissionsSection form={form} initValues={initialStateQuery} />
+          <FormAResearchAreaSection form={form} initValues={initialStateQuery} />
+          <FormACruiseGoalSection form={form} initValues={initialStateQuery} />
+          <FormAResearchTasksSection form={form} initValues={initialStateQuery} />
+          <FormAContractsSection form={form} initValues={initialStateQuery} />
+          <FormAMembersSection form={form} initValues={initialStateQuery} />
         </form>
       </Suspense>
     </AppLayout>
