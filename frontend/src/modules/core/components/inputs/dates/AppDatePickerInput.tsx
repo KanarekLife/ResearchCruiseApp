@@ -4,6 +4,7 @@ import ChevronRightIcon from 'bootstrap-icons/icons/chevron-right.svg?react';
 import XLgIcon from 'bootstrap-icons/icons/x-lg.svg?react';
 import { AnimatePresence, motion } from 'motion/react';
 import React from 'react';
+import { createPortal } from 'react-dom';
 
 import { AppButton } from '@/core/components/AppButton';
 import { AppMonthPickerPopover } from '@/core/components/inputs/dates/AppMonthPickerPopover';
@@ -51,6 +52,7 @@ export function AppDatePickerInput({
 
   const inputRef = React.useRef<HTMLDivElement>(null);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
+  const removeSelectedDatePortalRef = React.useRef<HTMLDivElement>(null);
 
   useOutsideClickDetection({
     refs: [inputRef, dropdownRef],
@@ -121,18 +123,17 @@ export function AppDatePickerInput({
               : placeholder}
             <span className="flex gap-2 items-center">
               <AppInputErrorTriangle errors={errors} />
-              {selectedDate && (
-                <AppButton
-                  variant="plain"
-                  onClick={handleResetSelection}
-                  className="inline-block p-0 hover:text-red-500"
-                >
-                  <XLgIcon className="h-4 w-4" />
-                </AppButton>
-              )}
+              <div ref={removeSelectedDatePortalRef}></div>
               {!selectedDate && <CalendarEventIcon className="h-4 w-4" />}
             </span>
           </AppButton>
+          {selectedDate &&
+            createPortal(
+              <AppButton variant="plain" onClick={handleResetSelection} className="inline-block p-0 hover:text-red-500">
+                <XLgIcon className="h-4 w-4" />
+              </AppButton>,
+              removeSelectedDatePortalRef.current!
+            )}
         </div>
         <div className={cn('flex flex-row justify-between text-sm', errors || helper ? 'mt-2 ' : '')}>
           <AppInputHelper helper={helper} />

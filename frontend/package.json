@@ -74,5 +74,8 @@
     "extends": [
       "plugin:storybook/recommended"
     ]
+  },
+  "dependencies": {
+    "dayjs": "^1.11.13"
   }
 }
