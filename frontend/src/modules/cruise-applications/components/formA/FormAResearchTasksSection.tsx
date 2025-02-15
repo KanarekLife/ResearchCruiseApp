@@ -10,11 +10,12 @@ import React from 'react';
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppButton } from '@/core/components/AppButton';
 import { AppInput } from '@/core/components/inputs/AppInput';
+import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputErrorsList';
 import { AppTable } from '@/core/components/table/AppTable';
 import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteRowButton';
 import { useDropdown } from '@/core/hooks/DropdownHook';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
-import { cn, groupBy } from '@/core/lib/utils';
+import { cn, groupBy, mapValidationErrors } from '@/core/lib/utils';
 import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
 import { ResearchTaskDetails } from '@/cruise-applications/components/research-task-details/ResearchTaskDetails';
 import { ResearchTaskThumbnail } from '@/cruise-applications/components/research-task-thumbnails/ResearchTaskThumbnail';
@@ -73,20 +74,23 @@ export function FormAResearchTasksSection({ initValues, form, readonly }: FormAP
           name="researchTasks"
           mode="array"
           children={(field) => (
-            <AppTable
-              columns={getColumns(field)}
-              data={field.state.value}
-              buttons={() => [
-                <AddNewResearchTaskButton key="researchTasks.add-new-btn" field={field} disabled={readonly} />,
-                <AddHistoricalResearchTaskButton
-                  key="researchTasks.add-historical-btn"
-                  field={field}
-                  initValues={initValues}
-                  disabled={readonly}
-                />,
-              ]}
-              emptyTableMessage="Nie dodano żadnego zadania."
-            />
+            <>
+              <AppTable
+                columns={getColumns(field)}
+                data={field.state.value}
+                buttons={() => [
+                  <AddNewResearchTaskButton key="researchTasks.add-new-btn" field={field} disabled={readonly} />,
+                  <AddHistoricalResearchTaskButton
+                    key="researchTasks.add-historical-btn"
+                    field={field}
+                    initValues={initValues}
+                    disabled={readonly}
+                  />,
+                ]}
+                emptyTableMessage="Nie dodano żadnego zadania."
+              />
+              <AppInputErrorsList errors={mapValidationErrors(field.state.meta.errors)} />
+            </>
           )}
         />
       </div>

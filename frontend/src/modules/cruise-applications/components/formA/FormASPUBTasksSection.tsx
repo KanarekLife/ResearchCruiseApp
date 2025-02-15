@@ -10,6 +10,7 @@ import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppButton } from '@/core/components/AppButton';
 import { AppInput } from '@/core/components/inputs/AppInput';
 import { AppYearPickerInput } from '@/core/components/inputs/dates/AppYearPickerInput';
+import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputErrorsList';
 import { AppTable } from '@/core/components/table/AppTable';
 import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteRowButton';
 import { useDropdown } from '@/core/hooks/DropdownHook';
@@ -120,26 +121,29 @@ export function FormASPUBTasksSection({ initValues, form, readonly }: FormAProps
           name="spubTasks"
           mode="array"
           children={(field) => (
-            <AppTable
-              columns={getColumns(field)}
-              data={field.state.value}
-              buttons={() => [
-                <AppButton
-                  key="spubTasks.add-new-btn"
-                  onClick={() => field.pushValue({ name: '', yearFrom: '', yearTo: '' })}
-                  disabled={readonly}
-                >
-                  Dodaj
-                </AppButton>,
-                <AddHistoricalSPUBTaskButton
-                  key="spubTasks.add-historical-btn"
-                  field={field}
-                  initValues={initValues}
-                  disabled={readonly}
-                />,
-              ]}
-              emptyTableMessage="Brak zadań SPUB"
-            />
+            <>
+              <AppTable
+                columns={getColumns(field)}
+                data={field.state.value}
+                buttons={() => [
+                  <AppButton
+                    key="spubTasks.add-new-btn"
+                    onClick={() => field.pushValue({ name: '', yearFrom: '', yearTo: '' })}
+                    disabled={readonly}
+                  >
+                    Dodaj
+                  </AppButton>,
+                  <AddHistoricalSPUBTaskButton
+                    key="spubTasks.add-historical-btn"
+                    field={field}
+                    initValues={initValues}
+                    disabled={readonly}
+                  />,
+                ]}
+                emptyTableMessage="Brak zadań SPUB"
+              />
+              <AppInputErrorsList errors={mapValidationErrors(field.state.meta.errors)} />
+            </>
           )}
         />
       </div>

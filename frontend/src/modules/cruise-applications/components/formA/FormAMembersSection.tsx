@@ -11,6 +11,7 @@ import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppButton } from '@/core/components/AppButton';
 import { AppInput } from '@/core/components/inputs/AppInput';
 import { AppNumberInput } from '@/core/components/inputs/AppNumberInput';
+import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputErrorsList';
 import { AppTable } from '@/core/components/table/AppTable';
 import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteRowButton';
 import { useDropdown } from '@/core/hooks/DropdownHook';
@@ -161,49 +162,55 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
           name="ugTeams"
           mode="array"
           children={(field) => (
-            <AppTable
-              columns={getUgTeamsColumns(field)}
-              data={field.state.value}
-              buttons={() => [
-                <AddUGTeamButton
-                  key="ugTeams.add-ug-unit-btn"
-                  field={field}
-                  initValues={initValues}
-                  disabled={readonly}
-                />,
-              ]}
-              emptyTableMessage="Nie dodano żadnego zespołu."
-            />
+            <div>
+              <AppTable
+                columns={getUgTeamsColumns(field)}
+                data={field.state.value}
+                buttons={() => [
+                  <AddUGTeamButton
+                    key="ugTeams.add-ug-unit-btn"
+                    field={field}
+                    initValues={initValues}
+                    disabled={readonly}
+                  />,
+                ]}
+                emptyTableMessage="Nie dodano żadnego zespołu."
+              />
+              <AppInputErrorsList errors={mapValidationErrors(field.state.meta.errors)} />
+            </div>
           )}
         />
         <form.Field
           name="guestTeams"
           mode="array"
           children={(field) => (
-            <AppTable
-              columns={getGuestTeams(field)}
-              data={field.state.value}
-              buttons={() => [
-                <AppButton
-                  key="guestTeams.add-new-btn"
-                  variant="primary"
-                  onClick={() => {
-                    field.pushValue({ name: '', noOfPersons: '0' });
-                  }}
-                  className="flex items-center gap-4"
-                  disabled={readonly}
-                >
-                  Dodaj nowy zespół
-                </AppButton>,
-                <AddHistoricalGuestTeamButton
-                  key="guestTeams.add-historical-btn"
-                  field={field}
-                  initValues={initValues}
-                  disabled={readonly}
-                />,
-              ]}
-              emptyTableMessage="Nie dodano żadnego zespołu."
-            />
+            <div>
+              <AppTable
+                columns={getGuestTeams(field)}
+                data={field.state.value}
+                buttons={() => [
+                  <AppButton
+                    key="guestTeams.add-new-btn"
+                    variant="primary"
+                    onClick={() => {
+                      field.pushValue({ name: '', noOfPersons: '0' });
+                    }}
+                    className="flex items-center gap-4"
+                    disabled={readonly}
+                  >
+                    Dodaj nowy zespół
+                  </AppButton>,
+                  <AddHistoricalGuestTeamButton
+                    key="guestTeams.add-historical-btn"
+                    field={field}
+                    initValues={initValues}
+                    disabled={readonly}
+                  />,
+                ]}
+                emptyTableMessage="Nie dodano żadnego zespołu."
+              />
+              <AppInputErrorsList errors={mapValidationErrors(field.state.meta.errors)} />
+            </div>
           )}
         />
       </div>

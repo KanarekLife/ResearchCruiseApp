@@ -5,6 +5,7 @@ import { Suspense, useState } from 'react';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { FormA } from '@/cruise-applications/components/formA/FormA';
+import { getFormAValidationSchema } from '@/cruise-applications/helpers/FormAValidationSchema';
 import { useFormA, useFormAInitValues } from '@/cruise-applications/hooks/FormAApiHooks';
 import { emptyFormADto, FormADto } from '@/cruise-applications/models/FormADto';
 
@@ -16,6 +17,9 @@ export function FormAPage() {
 
   const form = useForm<FormADto>({
     defaultValues: formA.data ?? emptyFormADto,
+    validators: {
+      onChange: getFormAValidationSchema(initialStateQuery.data),
+    },
     onSubmit: (values) => {
       console.log(values);
     },

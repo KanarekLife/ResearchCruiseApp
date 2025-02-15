@@ -13,6 +13,7 @@ import { AppDropdownInput } from '@/core/components/inputs/AppDropdownInput';
 import { AppInput } from '@/core/components/inputs/AppInput';
 import { AppNumberInput } from '@/core/components/inputs/AppNumberInput';
 import { AppYearPickerInput } from '@/core/components/inputs/dates/AppYearPickerInput';
+import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputErrorsList';
 import { AppTable } from '@/core/components/table/AppTable';
 import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteRowButton';
 import { useDropdown } from '@/core/hooks/DropdownHook';
@@ -239,19 +240,22 @@ export function FormAPublicationsSection({ initValues, form, readonly }: FormAPr
           name="publications"
           mode="array"
           children={(field) => (
-            <AppTable
-              columns={getColumns(field)}
-              data={field.state.value}
-              buttons={() => [
-                <AddNewPublicationButton key="publications.add-new-btn" field={field} disabled={readonly} />,
-                <AddHistoricalPublicationButton
-                  key="publications.add-historical-btn"
-                  field={field}
-                  initValues={initValues}
-                  disabled={readonly}
-                />,
-              ]}
-            />
+            <>
+              <AppTable
+                columns={getColumns(field)}
+                data={field.state.value}
+                buttons={() => [
+                  <AddNewPublicationButton key="publications.add-new-btn" field={field} disabled={readonly} />,
+                  <AddHistoricalPublicationButton
+                    key="publications.add-historical-btn"
+                    field={field}
+                    initValues={initValues}
+                    disabled={readonly}
+                  />,
+                ]}
+              />
+              <AppInputErrorsList errors={mapValidationErrors(field.state.meta.errors)} />
+            </>
           )}
         />
       </div>

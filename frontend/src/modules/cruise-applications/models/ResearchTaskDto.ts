@@ -1,10 +1,4 @@
-export type ResearchTaskDto =
-  | ThesisResearchTaskDto
-  | ProjectPreparationResearchTaskDto
-  | ProjectResearchTaskDto
-  | DidacticsResearchTaskDto
-  | OwnResearchTaskDto
-  | OtherResearchTaskDto;
+import { z } from 'zod';
 
 export enum ResearchTaskType {
   BachelorThesis = '0',
@@ -27,12 +21,25 @@ export type ThesisResearchTaskDto = {
   title: string;
 };
 
+export const ThesisResearchTaskDtoValidationSchema = z.object({
+  type: z.enum([ResearchTaskType.BachelorThesis, ResearchTaskType.MasterThesis, ResearchTaskType.DoctoralThesis]),
+  author: z.string(),
+  title: z.string(),
+});
+
 export type ProjectPreparationResearchTaskDto = {
   type: ResearchTaskType.ProjectPreparation;
   title: string;
   date: string;
   financingApproved: 'true' | 'false';
 };
+
+export const ProjectPreparationResearchTaskDtoValidationSchema = z.object({
+  type: z.enum([ResearchTaskType.ProjectPreparation]),
+  title: z.string(),
+  date: z.string().date(),
+  financingApproved: z.enum(['true', 'false']),
+});
 
 export type ProjectResearchTaskDto = {
   type:
@@ -48,10 +55,36 @@ export type ProjectResearchTaskDto = {
   securedAmount: string;
 };
 
+export const ProjectResearchTaskDtoValidationSchema = z.object({
+  type: z.enum([
+    ResearchTaskType.DomesticProject,
+    ResearchTaskType.ForeignProject,
+    ResearchTaskType.InternalUgProject,
+    ResearchTaskType.OtherProject,
+    ResearchTaskType.CommercialProject,
+  ]),
+  title: z.string(),
+  financingAmount: z.string().refine((val) => {
+    const parsed = parseFloat(val);
+    return !isNaN(parsed) && parsed >= 0;
+  }, 'financingAmount must be a non-negative float number'),
+  startDate: z.string().date(),
+  endDate: z.string().date(),
+  securedAmount: z.string().refine((val) => {
+    const parsed = parseFloat(val);
+    return !isNaN(parsed) && parsed >= 0;
+  }, 'securedAmount must be a non-negative float number'),
+});
+
 export type DidacticsResearchTaskDto = {
   type: ResearchTaskType.Didactics;
   description: string;
 };
+
+export const DidacticsResearchTaskDtoValidationSchema = z.object({
+  type: z.enum([ResearchTaskType.Didactics]),
+  description: z.string(),
+});
 
 export type OwnResearchTaskDto = {
   type: ResearchTaskType.OwnResearchTask;
@@ -61,10 +94,48 @@ export type OwnResearchTaskDto = {
   ministerialPoints: string;
 };
 
+export const OwnResearchTaskDtoValidationSchema = z.object({
+  type: z.enum([ResearchTaskType.OwnResearchTask]),
+  title: z.string(),
+  date: z.string().date(),
+  magazine: z.string(),
+  ministerialPoints: z.string().refine(
+    (val) => {
+      const parsed = parseInt(val, 10);
+      return !isNaN(parsed) && parsed >= 0;
+    },
+    {
+      message: 'ministerialPoints must be a non-negative integer',
+    }
+  ),
+});
+
 export type OtherResearchTaskDto = {
   type: ResearchTaskType.OtherResearchTask;
   description: string;
 };
+
+export const OtherResearchTaskDtoValidationSchema = z.object({
+  type: z.enum([ResearchTaskType.OtherResearchTask]),
+  description: z.string(),
+});
+
+export type ResearchTaskDto =
+  | ThesisResearchTaskDto
+  | ProjectPreparationResearchTaskDto
+  | ProjectResearchTaskDto
+  | DidacticsResearchTaskDto
+  | OwnResearchTaskDto
+  | OtherResearchTaskDto;
+
+export const ResearchTaskDtoValidationSchema = z.union([
+  ThesisResearchTaskDtoValidationSchema,
+  ProjectPreparationResearchTaskDtoValidationSchema,
+  ProjectResearchTaskDtoValidationSchema,
+  DidacticsResearchTaskDtoValidationSchema,
+  OwnResearchTaskDtoValidationSchema,
+  OtherResearchTaskDtoValidationSchema,
+]);
 
 export const taskTypes = [
   ResearchTaskType.BachelorThesis,

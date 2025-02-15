@@ -10,6 +10,7 @@ import React from 'react';
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppButton } from '@/core/components/AppButton';
 import { AppInput } from '@/core/components/inputs/AppInput';
+import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputErrorsList';
 import { AppTable } from '@/core/components/table/AppTable';
 import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteRowButton';
 import { useDropdown } from '@/core/hooks/DropdownHook';
@@ -148,20 +149,23 @@ export function FormAContractsSection({ initValues, form, readonly }: FormAProps
           name="contracts"
           mode="array"
           children={(field) => (
-            <AppTable
-              columns={getColumns(field)}
-              data={field.state.value}
-              buttons={() => [
-                <AddNewContractButton key="contracts.add-new-btn" field={field} disabled={readonly} />,
-                <AddHistoricalContractButton
-                  key="contracts.add-historical-btn"
-                  field={field}
-                  initValues={initValues}
-                  disabled={readonly}
-                />,
-              ]}
-              emptyTableMessage="Nie dodano żadnej umowy."
-            />
+            <>
+              <AppTable
+                columns={getColumns(field)}
+                data={field.state.value}
+                buttons={() => [
+                  <AddNewContractButton key="contracts.add-new-btn" field={field} disabled={readonly} />,
+                  <AddHistoricalContractButton
+                    key="contracts.add-historical-btn"
+                    field={field}
+                    initValues={initValues}
+                    disabled={readonly}
+                  />,
+                ]}
+                emptyTableMessage="Nie dodano żadnej umowy."
+              />
+              <AppInputErrorsList errors={mapValidationErrors(field.state.meta.errors)} />
+            </>
           )}
         />
       </div>

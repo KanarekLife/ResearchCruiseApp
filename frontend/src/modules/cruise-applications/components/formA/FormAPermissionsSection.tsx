@@ -4,6 +4,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppButton } from '@/core/components/AppButton';
 import { AppInput } from '@/core/components/inputs/AppInput';
+import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputErrorsList';
 import { AppTable } from '@/core/components/table/AppTable';
 import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteRowButton';
 import { mapValidationErrors } from '@/core/lib/utils';
@@ -86,16 +87,23 @@ export function FormAPermissionsSection({ form, readonly }: FormAProps) {
           name="permissions"
           mode="array"
           children={(field) => (
-            <AppTable
-              columns={getColumns(field)}
-              data={field.state.value}
-              buttons={() => [
-                <AppButton key="permissions.add-btn" onClick={() => field.pushValue(newPermission)} disabled={readonly}>
-                  Dodaj pozwolenie
-                </AppButton>,
-              ]}
-              emptyTableMessage="Nie dodano żadnego pozwolenia."
-            />
+            <>
+              <AppTable
+                columns={getColumns(field)}
+                data={field.state.value}
+                buttons={() => [
+                  <AppButton
+                    key="permissions.add-btn"
+                    onClick={() => field.pushValue(newPermission)}
+                    disabled={readonly}
+                  >
+                    Dodaj pozwolenie
+                  </AppButton>,
+                ]}
+                emptyTableMessage="Nie dodano żadnego pozwolenia."
+              />
+              <AppInputErrorsList errors={mapValidationErrors(field.state.meta.errors)} />
+            </>
           )}
         />
       </div>

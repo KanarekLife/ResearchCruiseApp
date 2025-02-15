@@ -1,8 +1,6 @@
 import { AppLink, Props as AppLinkProps } from '@/core/components/AppLink';
 import { cn } from '@/core/lib/utils';
 
-// TODO: Add focus: state
-
 type Props = {
   children: React.ReactNode;
 
