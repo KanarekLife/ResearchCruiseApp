@@ -75,7 +75,7 @@ export function AppTableHeader<TData, TValue>({ header, children }: Props<TData,
   }
 
   return (
-    <th colSpan={header.colSpan}>
+    <th colSpan={header.colSpan} style={{ width: `${header.getSize()}px` }}>
       <div className="relative inline-block" ref={headerRef}>
         {supportsDropdown && (
           <AppButton

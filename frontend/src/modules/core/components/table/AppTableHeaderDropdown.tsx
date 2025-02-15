@@ -64,7 +64,7 @@ export function AppTableHeaderDropdown<TData, TValue>({
   const uniqueValues = React.useMemo(() => {
     return Array.from(header.column.getFacetedUniqueValues().entries()).sort();
   }, [header.column]);
-  const { top, left } = useDropdown({ openingItemRef: headerRef, dropdownRef });
+  const { top, left, direction } = useDropdown({ openingItemRef: headerRef, dropdownRef });
 
   function toggleFilter(filter: TData) {
     if ((filterValue ?? []).includes(filter)) {
@@ -107,9 +107,9 @@ export function AppTableHeaderDropdown<TData, TValue>({
       className={
         'fixed origin-top-right w-56 rounded-md bg-white ring-1 shadow-lg ring-black/5 focus:outline-hidden z-50'
       }
-      initial={{ opacity: 0, translateY: '-10%' }}
+      initial={{ opacity: 0, translateY: direction === 'up' ? '-10%' : '10%' }}
       animate={{ opacity: 1, translateY: '0' }}
-      exit={{ opacity: 0, translateY: '-10%' }}
+      exit={{ opacity: 0, translateY: direction === 'down' ? '-10%' : '10%' }}
       transition={{ ease: 'easeOut', duration: 0.2 }}
       role="menu"
       aria-orientation="vertical"

@@ -16,8 +16,10 @@ type Props<T> = {
   data: T[];
   columns: ColumnDef<T>[];
   buttons?: (predefinedButtons: React.ReactNode[]) => React.ReactNode[];
+  childForEmpty?: React.ReactNode;
 };
-export function AppTable<T>({ data, columns, buttons }: Props<T>) {
+
+export function AppTable<T>({ data, columns, buttons, childForEmpty }: Props<T>) {
   const table = useReactTable<T>({
     columns,
     data,
@@ -70,13 +72,24 @@ export function AppTable<T>({ data, columns, buttons }: Props<T>) {
             <tr key={row.id} className=" odd:bg-gray-100 text-gray-800">
               {row.getVisibleCells().map((cell) => {
                 return (
-                  <td key={cell.id} className="text-center pt-2 pb-2 last:pr-4">
+                  <td
+                    key={cell.id}
+                    className="text-center pt-2 pb-2 last:pr-4"
+                    style={{ width: `${cell.column.getSize()}px` }}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 );
               })}
             </tr>
           ))}
+          {!!childForEmpty && table.getRowModel().rows.length === 0 && (
+            <tr>
+              <td colSpan={table.getAllColumns().length} className="text-center pt-4 pb-4">
+                {childForEmpty}
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

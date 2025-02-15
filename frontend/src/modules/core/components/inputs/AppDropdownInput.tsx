@@ -26,7 +26,7 @@ type Props = {
   onChange: (value: string) => void;
   onBlur: () => void;
   errors?: string[];
-  label: React.ReactNode;
+  label?: React.ReactNode;
   required?: boolean;
   disabled?: boolean;
   helper?: React.ReactNode;
@@ -98,11 +98,14 @@ export function AppDropdownInput({
         <input type="hidden" name={name} value={selectedValue.value} required={required} disabled={disabled} />
         <AppButton
           variant="plain"
-          onClick={() => setExpanded(!expanded)}
+          onClick={() => {
+            if (disabled) return;
+            setExpanded(!expanded);
+          }}
           className={cn(
             'cursor-pointer w-full text-sm',
             'ring-2 ring-transparent focus:ring-blue-500 focus:border-blue-500 focus:rounded-lg focus:shadow focus:outline-none',
-            'w-full flex justify-between items-center'
+            'flex justify-between items-center'
           )}
         >
           {selectedValue.inlineLabel}
@@ -111,27 +114,40 @@ export function AppDropdownInput({
             <span>{expanded ? <ChevronUpIcon className="w-6 h-6" /> : <ChevronDownIcon className="w-6 h-6" />}</span>
           </span>
         </AppButton>
-
-        <AnimatePresence>
-          {expanded && (
-            <Modal
-              dropdownRef={dropdownRef}
-              inputRef={inputRef}
-              allPossibleOptions={allPossibleOptions}
-              disabled={disabled}
-              selectOption={selectOption}
-            />
-          )}
-        </AnimatePresence>
       </div>
-      <div className="flex flex-row justify-between mt-2 text-sm">
+      <div className={cn('flex flex-row justify-between text-sm', errors || helper ? 'mt-2 ' : '')}>
         <AppInputHelper helper={helper} />
         <AppInputErrorsList errors={errors} />
       </div>
+      <AnimatePresence>
+        {expanded && (
+          <Modal dropdownRef={dropdownRef} inputRef={inputRef}>
+            {allPossibleOptions
+              .filter((pv) => pv.inlineLabel)
+              .map((pv) => (
+                <AppButton
+                  key={`dropdown-option-${pv.value}`}
+                  variant="plain"
+                  className={cn(
+                    'inline-flex gap-4 items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900',
+                    'ring-2 ring-transparent focus:ring-blue-500 focus:border-blue-500 focus:rounded-lg focus:shadow focus:outline-none',
+                    disabled ? 'opacity-50' : ''
+                  )}
+                  role="menuitem"
+                  onClick={() => selectOption(pv)}
+                  disabled={disabled}
+                >
+                  {pv.richLabel ?? pv.inlineLabel}
+                </AppButton>
+              ))}
+          </Modal>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
+type ModalProps = {
 type ModalProps = {
   dropdownRef: React.RefObject<HTMLDivElement | null>;
   inputRef: React.RefObject<HTMLDivElement | null>;
@@ -155,36 +171,18 @@ function Modal({
     <motion.div
       style={{ top: top, left: left, width: width }}
       className={cn(
-        'fixed origin-top-right w-(--width) rounded-md bg-white ring-1 shadow-lg ring-black/5 focus:outline-hidden z-50'
+        'fixed origin-top-right rounded-md bg-white ring-1 shadow-lg ring-black/5 focus:outline-hidden z-50'
       )}
       initial={{ opacity: 0, translateY: '-10%' }}
       animate={{ opacity: 1, translateY: '0' }}
-      exit={{ opacity: 0, translateY: '-10%' }}
+      exit={{ opacity: 0, translateY: direction === 'up' ? '10%' : '-10%' }}
       transition={{ ease: 'easeOut', duration: 0.2 }}
       role="menu"
       aria-orientation="vertical"
       aria-labelledby="menu-button"
       ref={dropdownRef}
     >
-      {allPossibleOptions
-        .filter((pv) => pv.inlineLabel)
-        .map((pv) => (
-          <AppButton
-            key={pv.value}
-            variant="plain"
-            className={cn(
-              'inline-flex gap-4 items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900',
-              'ring-2 ring-transparent focus:ring-blue-500 focus:border-blue-500 focus:rounded-lg focus:shadow focus:outline-none',
-              'w-full',
-              disabled ? 'opacity-50' : ''
-            )}
-            role="menuitem"
-            onClick={() => selectOption(pv)}
-            disabled={disabled}
-          >
-            {pv.richLabel ?? pv.inlineLabel}
-          </AppButton>
-        ))}
+      {children}
     </motion.div>
   );
 }

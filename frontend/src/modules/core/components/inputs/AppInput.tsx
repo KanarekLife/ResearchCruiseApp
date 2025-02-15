@@ -58,9 +58,10 @@ export function AppInput({
             (errors && errors.length > 0) ? 'border-danger ring-danger text-danger focus:text-gray-900' : ''
           )}
         />
-        <AppInputErrorTriangle errors={errors} />
+        <AppInputErrorTriangle errors={errors} mode="absolute" />
       </div>
-      <div className="flex flex-row justify-between mt-2 text-sm">
+
+      <div className={cn('flex flex-row justify-between text-sm', errors || helper ? 'mt-2' : '')}>
         <AppInputHelper helper={helper} />
         <AppInputErrorsList errors={errors} />
       </div>
