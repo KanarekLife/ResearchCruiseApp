@@ -48,7 +48,8 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
               <AppNumberInput
                 name={field.name}
                 value={parseInt(field.state.value)}
-                onChange={(e) => field.handleChange(e.target.value)}
+                minimum={0}
+                onChange={(x: number) => field.handleChange(x.toString())}
                 onBlur={field.handleBlur}
                 errors={mapValidationErrors(field.state.meta.errors)}
                 className="mx-4"
@@ -69,7 +70,8 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
               <AppNumberInput
                 name={field.name}
                 value={parseInt(field.state.value)}
-                onChange={(e) => field.handleChange(e.target.value)}
+                minimum={0}
+                onChange={(x: number) => field.handleChange(x.toString())}
                 onBlur={field.handleBlur}
                 errors={mapValidationErrors(field.state.meta.errors)}
                 className="mx-4"
@@ -139,7 +141,8 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
               <AppNumberInput
                 name={field.name}
                 value={parseInt(field.state.value)}
-                onChange={(e) => field.handleChange(e.target.value)}
+                minimum={0}
+                onChange={(x: number) => field.handleChange(x.toString())}
                 onBlur={field.handleBlur}
                 errors={mapValidationErrors(field.state.meta.errors)}
                 className="mx-4"

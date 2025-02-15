@@ -9,6 +9,7 @@ import React from 'react';
 
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppButton } from '@/core/components/AppButton';
+import { AppFileInput } from '@/core/components/inputs/AppFileInput';
 import { AppInput } from '@/core/components/inputs/AppInput';
 import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputErrorsList';
 import { AppTable } from '@/core/components/table/AppTable';
@@ -125,7 +126,23 @@ export function FormAContractsSection({ initValues, form, readonly }: FormAProps
         accessorFn: (row) => row.scan,
         enableColumnFilter: false,
         enableSorting: false,
-        cell: () => <span>TODO</span>,
+        cell: ({ row }) => (
+          <form.Field
+            name={`contracts[${row.index}].scan`}
+            children={(field) => (
+              <AppFileInput
+                name={field.name}
+                value={field.state.value}
+                acceptedMimeTypes={['application/pdf']}
+                onChange={field.handleChange}
+                onBlur={field.handleBlur}
+                errors={mapValidationErrors(field.state.meta.errors)}
+                label="Skan"
+                required
+              />
+            )}
+          />
+        ),
       },
       {
         id: 'actions',
@@ -306,10 +323,7 @@ function AddNewContractButton({ field, disabled }: AddNewContractButtonProps) {
                     institutionUnit: '',
                     institutionLocalization: '',
                     description: '',
-                    scan: {
-                      content: '',
-                      name: '',
-                    },
+                    scan: undefined,
                   });
                   field.handleChange((prev) => prev);
                   field.handleBlur();

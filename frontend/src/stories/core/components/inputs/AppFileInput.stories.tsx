@@ -77,7 +77,7 @@ export const WithUploadMessage: Story = {
 
 export const WithMaxSize: Story = {
   args: {
-    maxSize: 2 * 1024 * 1024,
+    maxSizeInMb: 10,
     allowMultiple: true,
     value: [],
   },
