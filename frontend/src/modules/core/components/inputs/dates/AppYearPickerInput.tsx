@@ -39,7 +39,7 @@ export function AppYearPickerInput({
   helper,
   placeholder = 'Wybierz rok',
 }: Props) {
-  const [selectedYear, setSelectedYear] = React.useState<number | undefined>(undefined);
+  const [selectedYear, setSelectedYear] = React.useState<number | undefined>(value);
   const [visibleDecade, setVisibleDecade] = React.useState<{ from: number; to: number }>(() => {
     const now = new Date().getFullYear();
     const from = Math.floor(now / 10) * 10;

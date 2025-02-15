@@ -9,6 +9,7 @@ import { FormACruiseLengthSection } from '@/cruise-applications/components/formA
 import { FormACruiseManagerInfoSection } from '@/cruise-applications/components/formA/FormACruiseManagerInfoSection';
 import { FormAMembersSection } from '@/cruise-applications/components/formA/FormAMembersSection';
 import { FormAPermissionsSection } from '@/cruise-applications/components/formA/FormAPermissionsSection';
+import { FormAPublicationsSection } from '@/cruise-applications/components/formA/FormAPublicationsSection';
 import { FormAResearchAreaSection } from '@/cruise-applications/components/formA/FormAResearchAreaSection';
 import { FormAResearchTasksSection } from '@/cruise-applications/components/formA/FormAResearchTasksSection';
 import { useFormAInitValues } from '@/cruise-applications/hooks/useFormAInitValues';
@@ -41,6 +42,7 @@ export function FormAPage() {
           <FormAResearchTasksSection form={form} initValues={initialStateQuery} />
           <FormAContractsSection form={form} initValues={initialStateQuery} />
           <FormAMembersSection form={form} initValues={initialStateQuery} />
+          <FormAPublicationsSection form={form} initValues={initialStateQuery} />
         </form>
       </Suspense>
     </AppLayout>

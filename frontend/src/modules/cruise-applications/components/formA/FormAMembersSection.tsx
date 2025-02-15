@@ -51,6 +51,7 @@ export function FormAMembersSection({ initValues, form }: FormASectionProps) {
                 onBlur={field.handleBlur}
                 errors={mapValidationErrors(field.state.meta.errors)}
                 className="mx-4"
+                required
               />
             )}
           />
@@ -70,6 +71,7 @@ export function FormAMembersSection({ initValues, form }: FormASectionProps) {
                 onBlur={field.handleBlur}
                 errors={mapValidationErrors(field.state.meta.errors)}
                 className="mx-4"
+                required
               />
             )}
           />
@@ -110,6 +112,7 @@ export function FormAMembersSection({ initValues, form }: FormASectionProps) {
                 onBlur={field.handleBlur}
                 errors={mapValidationErrors(field.state.meta.errors)}
                 className="mx-4"
+                required
               />
             )}
           />
@@ -129,6 +132,7 @@ export function FormAMembersSection({ initValues, form }: FormASectionProps) {
                 onBlur={field.handleBlur}
                 errors={mapValidationErrors(field.state.meta.errors)}
                 className="mx-4"
+                required
               />
             )}
           />
