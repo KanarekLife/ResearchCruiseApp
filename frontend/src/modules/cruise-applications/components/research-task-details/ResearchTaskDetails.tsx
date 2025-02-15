@@ -22,27 +22,36 @@ import {
 type Props = {
   form: ReactFormExtendedApi<FormADto, undefined>;
   row: Row<ResearchTaskDto>;
+  disabled?: boolean;
 };
-export function ResearchTaskDetails({ form, row }: Props) {
+export function ResearchTaskDetails({ form, row, disabled }: Props) {
   switch (row.original.type) {
     case ResearchTaskType.BachelorThesis:
     case ResearchTaskType.MasterThesis:
     case ResearchTaskType.DoctoralThesis:
-      return <ThesisResearchTaskDetails form={form} row={row as Row<ThesisResearchTaskDto>} />;
+      return <ThesisResearchTaskDetails form={form} row={row as Row<ThesisResearchTaskDto>} disabled={disabled} />;
     case ResearchTaskType.ProjectPreparation:
-      return <ProjectPreparationResearchTaskDetails form={form} row={row as Row<ProjectPreparationResearchTaskDto>} />;
+      return (
+        <ProjectPreparationResearchTaskDetails
+          form={form}
+          row={row as Row<ProjectPreparationResearchTaskDto>}
+          disabled={disabled}
+        />
+      );
     case ResearchTaskType.DomesticProject:
     case ResearchTaskType.ForeignProject:
     case ResearchTaskType.InternalUgProject:
     case ResearchTaskType.OtherProject:
     case ResearchTaskType.CommercialProject:
-      return <ProjectResearchTaskDetails form={form} row={row as Row<ProjectResearchTaskDto>} />;
+      return <ProjectResearchTaskDetails form={form} row={row as Row<ProjectResearchTaskDto>} disabled={disabled} />;
     case ResearchTaskType.Didactics:
-      return <DidacticsResearchTaskDetails form={form} row={row as Row<DidacticsResearchTaskDto>} />;
+      return (
+        <DidacticsResearchTaskDetails form={form} row={row as Row<DidacticsResearchTaskDto>} disabled={disabled} />
+      );
     case ResearchTaskType.OwnResearchTask:
-      return <OwnResearchTaskDetails form={form} row={row as Row<OwnResearchTaskDto>} />;
+      return <OwnResearchTaskDetails form={form} row={row as Row<OwnResearchTaskDto>} disabled={disabled} />;
     case ResearchTaskType.OtherResearchTask:
-      return <OtherResearchTaskDetails form={form} row={row as Row<OtherResearchTaskDto>} />;
+      return <OtherResearchTaskDetails form={form} row={row as Row<OtherResearchTaskDto>} disabled={disabled} />;
     default:
       throw new Error(`Unknown research task type`);
   }

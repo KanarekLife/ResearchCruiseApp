@@ -15,7 +15,7 @@ import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteR
 import { useDropdown } from '@/core/hooks/DropdownHook';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
 import { cn, groupBy } from '@/core/lib/utils';
-import { FormASectionProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
 import { ResearchTaskDetails } from '@/cruise-applications/components/research-task-details/ResearchTaskDetails';
 import { ResearchTaskThumbnail } from '@/cruise-applications/components/research-task-thumbnails/ResearchTaskThumbnail';
 import { FormADto } from '@/cruise-applications/models/FormADto';
@@ -28,7 +28,7 @@ import {
   taskTypes,
 } from '@/cruise-applications/models/ResearchTaskDto';
 
-export function FormAResearchTasksSection({ initValues, form }: FormASectionProps) {
+export function FormAResearchTasksSection({ initValues, form, readonly }: FormAProps) {
   function getColumns(
     field: FieldApi<FormADto, 'researchTasks', undefined, undefined, ResearchTaskDto[]>
   ): ColumnDef<ResearchTaskDto>[] {
@@ -52,13 +52,13 @@ export function FormAResearchTasksSection({ initValues, form }: FormASectionProp
       },
       {
         header: 'Szczegóły',
-        cell: ({ row }) => <ResearchTaskDetails form={form} row={row} />,
+        cell: ({ row }) => <ResearchTaskDetails form={form} row={row} disabled={readonly} />,
       },
       {
         id: 'actions',
         cell: ({ row }) => (
           <div className="flex justify-end">
-            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} />
+            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} disabled={readonly} />
           </div>
         ),
         size: 10,
@@ -77,11 +77,12 @@ export function FormAResearchTasksSection({ initValues, form }: FormASectionProp
               columns={getColumns(field)}
               data={field.state.value}
               buttons={() => [
-                <AddNewResearchTaskButton key="researchTasks.add-new-btn" field={field} />,
+                <AddNewResearchTaskButton key="researchTasks.add-new-btn" field={field} disabled={readonly} />,
                 <AddHistoricalResearchTaskButton
                   key="researchTasks.add-historical-btn"
                   field={field}
                   initValues={initValues}
+                  disabled={readonly}
                 />,
               ]}
               emptyTableMessage="Nie dodano żadnego zadania."
@@ -96,8 +97,9 @@ export function FormAResearchTasksSection({ initValues, form }: FormASectionProp
 type AddHistoricalResearchTaskButtonProps = {
   field: FieldApi<FormADto, 'researchTasks', undefined, undefined, ResearchTaskDto[]>;
   initValues: UseSuspenseQueryResult<FormAInitValuesDto, Error>;
+  disabled?: boolean;
 };
-function AddHistoricalResearchTaskButton({ field, initValues }: AddHistoricalResearchTaskButtonProps) {
+function AddHistoricalResearchTaskButton({ field, initValues, disabled }: AddHistoricalResearchTaskButtonProps) {
   const [expanded, setExpanded] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState('');
   const elementRef = React.useRef<HTMLDivElement>(null);
@@ -111,7 +113,12 @@ function AddHistoricalResearchTaskButton({ field, initValues }: AddHistoricalRes
   return (
     <>
       <div ref={elementRef}>
-        <AppButton variant="primaryOutline" onClick={() => setExpanded(!expanded)} className="flex items-center gap-4">
+        <AppButton
+          variant="primaryOutline"
+          onClick={() => setExpanded(!expanded)}
+          className="flex items-center gap-4"
+          disabled={disabled}
+        >
           Dodaj historyczne zadanie
           {expanded ? <ChevronUpIcon className="w-5 h-5" /> : <ChevronDownIcon className="w-5 h-5" />}
         </AppButton>
@@ -165,8 +172,9 @@ function AddHistoricalResearchTaskButton({ field, initValues }: AddHistoricalRes
 
 type AddNewResearchTaskButtonProps = {
   field: FieldApi<FormADto, 'researchTasks', undefined, undefined, ResearchTaskDto[]>;
+  disabled?: boolean;
 };
-function AddNewResearchTaskButton({ field }: AddNewResearchTaskButtonProps) {
+function AddNewResearchTaskButton({ field, disabled }: AddNewResearchTaskButtonProps) {
   const [expanded, setExpanded] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState('');
   const elementRef = React.useRef<HTMLDivElement>(null);
@@ -183,7 +191,12 @@ function AddNewResearchTaskButton({ field }: AddNewResearchTaskButtonProps) {
   return (
     <>
       <div ref={elementRef}>
-        <AppButton variant="primary" onClick={() => setExpanded(!expanded)} className="flex items-center gap-4">
+        <AppButton
+          variant="primary"
+          onClick={() => setExpanded(!expanded)}
+          className="flex items-center gap-4"
+          disabled={disabled}
+        >
           Dodaj nowe zadanie
           {expanded ? <ChevronUpIcon className="w-5 h-5" /> : <ChevronDownIcon className="w-5 h-5" />}
         </AppButton>

@@ -7,11 +7,11 @@ import { AppInput } from '@/core/components/inputs/AppInput';
 import { AppTable } from '@/core/components/table/AppTable';
 import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteRowButton';
 import { mapValidationErrors } from '@/core/lib/utils';
-import { FormASectionProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
 import { FormADto } from '@/cruise-applications/models/FormADto';
 import { PermissionDto } from '@/cruise-applications/models/PermissionDto';
 
-export function FormAPermissionsSection({ form }: FormASectionProps) {
+export function FormAPermissionsSection({ form, readonly }: FormAProps) {
   const newPermission: PermissionDto = { description: '', executive: '', scan: undefined };
 
   function getColumns(
@@ -39,6 +39,7 @@ export function FormAPermissionsSection({ form }: FormASectionProps) {
                 onBlur={field.handleBlur}
                 errors={mapValidationErrors(field.state.meta.errors)}
                 className="mx-4"
+                disabled={readonly}
               />
             )}
           />
@@ -60,6 +61,7 @@ export function FormAPermissionsSection({ form }: FormASectionProps) {
                 onBlur={field.handleBlur}
                 errors={mapValidationErrors(field.state.meta.errors)}
                 className="mx-4"
+                disabled={readonly}
               />
             )}
           />
@@ -69,7 +71,7 @@ export function FormAPermissionsSection({ form }: FormASectionProps) {
         id: 'actions',
         cell: ({ row }) => (
           <div className="flex justify-end">
-            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} />
+            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} disabled={readonly} />
           </div>
         ),
         size: 10,
@@ -88,7 +90,7 @@ export function FormAPermissionsSection({ form }: FormASectionProps) {
               columns={getColumns(field)}
               data={field.state.value}
               buttons={() => [
-                <AppButton key="permissions.add-btn" onClick={() => field.pushValue(newPermission)}>
+                <AppButton key="permissions.add-btn" onClick={() => field.pushValue(newPermission)} disabled={readonly}>
                   Dodaj pozwolenie
                 </AppButton>,
               ]}

@@ -11,8 +11,9 @@ import { ProjectPreparationResearchTaskDto } from '@/cruise-applications/models/
 type Props = {
   form: ReactFormExtendedApi<FormADto, undefined>;
   row: Row<ProjectPreparationResearchTaskDto>;
+  disabled?: boolean;
 };
-export function ProjectPreparationResearchTaskDetails({ form, row }: Props) {
+export function ProjectPreparationResearchTaskDetails({ form, row, disabled }: Props) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <form.Field
@@ -28,6 +29,7 @@ export function ProjectPreparationResearchTaskDetails({ form, row }: Props) {
             placeholder="Wprowadź tytuł"
             containerClassName="lg:col-span-2"
             required
+            disabled={disabled}
           />
         )}
       />
@@ -42,6 +44,7 @@ export function ProjectPreparationResearchTaskDetails({ form, row }: Props) {
             onChange={field.handleChange}
             label="Przewidywany termin składania"
             required
+            disabled={disabled}
           />
         )}
       />
@@ -61,6 +64,7 @@ export function ProjectPreparationResearchTaskDetails({ form, row }: Props) {
             label="Otrzymano decyzję o finansowaniu?"
             required
             showEmptyOption={false}
+            disabled={disabled}
           />
         )}
       />

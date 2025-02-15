@@ -15,12 +15,12 @@ import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteR
 import { useDropdown } from '@/core/hooks/DropdownHook';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
 import { cn, groupBy, mapValidationErrors } from '@/core/lib/utils';
-import { FormASectionProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
 import { ContractDto, getContractCategoryName } from '@/cruise-applications/models/ContractDto';
 import { FormADto } from '@/cruise-applications/models/FormADto';
 import { FormAInitValuesDto } from '@/cruise-applications/models/FormAInitValuesDto';
 
-export function FormAContractsSection({ initValues, form }: FormASectionProps) {
+export function FormAContractsSection({ initValues, form, readonly }: FormAProps) {
   function getColumns(
     field: FieldApi<FormADto, 'contracts', undefined, undefined, ContractDto[]>
   ): ColumnDef<ContractDto>[] {
@@ -58,6 +58,7 @@ export function FormAContractsSection({ initValues, form }: FormASectionProps) {
                   label="Nazwa instytucji"
                   placeholder='np. "Uniwersytet Gdański"'
                   required
+                  disabled={readonly}
                 />
               )}
             />
@@ -73,6 +74,7 @@ export function FormAContractsSection({ initValues, form }: FormASectionProps) {
                   label="Jednostka"
                   placeholder='np. "Wydział Biologii"'
                   required
+                  disabled={readonly}
                 />
               )}
             />
@@ -88,6 +90,7 @@ export function FormAContractsSection({ initValues, form }: FormASectionProps) {
                   label="Lokalizacja instytucji"
                   placeholder='np. "Gdańsk"'
                   required
+                  disabled={readonly}
                 />
               )}
             />
@@ -110,6 +113,7 @@ export function FormAContractsSection({ initValues, form }: FormASectionProps) {
                 label="Opis"
                 placeholder='np. "Umowa o współpracy"'
                 required
+                disabled={readonly}
               />
             )}
           />
@@ -126,7 +130,7 @@ export function FormAContractsSection({ initValues, form }: FormASectionProps) {
         id: 'actions',
         cell: ({ row }) => (
           <div className="flex justify-end">
-            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} />
+            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} disabled={readonly} />
           </div>
         ),
         size: 10,
@@ -148,11 +152,12 @@ export function FormAContractsSection({ initValues, form }: FormASectionProps) {
               columns={getColumns(field)}
               data={field.state.value}
               buttons={() => [
-                <AddNewContractButton key="contracts.add-new-btn" field={field} />,
+                <AddNewContractButton key="contracts.add-new-btn" field={field} disabled={readonly} />,
                 <AddHistoricalContractButton
                   key="contracts.add-historical-btn"
                   field={field}
                   initValues={initValues}
+                  disabled={readonly}
                 />,
               ]}
               emptyTableMessage="Nie dodano żadnej umowy."
@@ -167,8 +172,9 @@ export function FormAContractsSection({ initValues, form }: FormASectionProps) {
 type AddHistoricalContractButtonProps = {
   field: FieldApi<FormADto, 'contracts', undefined, undefined, ContractDto[]>;
   initValues: UseSuspenseQueryResult<FormAInitValuesDto, Error>;
+  disabled?: boolean;
 };
-function AddHistoricalContractButton({ field, initValues }: AddHistoricalContractButtonProps) {
+function AddHistoricalContractButton({ field, initValues, disabled }: AddHistoricalContractButtonProps) {
   const [expanded, setExpanded] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState('');
   const elementRef = React.useRef<HTMLDivElement>(null);
@@ -182,7 +188,12 @@ function AddHistoricalContractButton({ field, initValues }: AddHistoricalContrac
   return (
     <>
       <div ref={elementRef}>
-        <AppButton variant="primaryOutline" onClick={() => setExpanded(!expanded)} className="flex items-center gap-4">
+        <AppButton
+          variant="primaryOutline"
+          onClick={() => setExpanded(!expanded)}
+          className="flex items-center gap-4"
+          disabled={disabled}
+        >
           Dodaj historyczną umowę
           {expanded ? <ChevronUpIcon className="w-5 h-5" /> : <ChevronDownIcon className="w-5 h-5" />}
         </AppButton>
@@ -236,8 +247,9 @@ function AddHistoricalContractButton({ field, initValues }: AddHistoricalContrac
 
 type AddNewContractButtonProps = {
   field: FieldApi<FormADto, 'contracts', undefined, undefined, ContractDto[]>;
+  disabled?: boolean;
 };
-function AddNewContractButton({ field }: AddNewContractButtonProps) {
+function AddNewContractButton({ field, disabled }: AddNewContractButtonProps) {
   const [expanded, setExpanded] = React.useState(false);
   const elementRef = React.useRef<HTMLDivElement>(null);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
@@ -252,7 +264,12 @@ function AddNewContractButton({ field }: AddNewContractButtonProps) {
   return (
     <>
       <div ref={elementRef}>
-        <AppButton variant="primary" onClick={() => setExpanded(!expanded)} className="flex items-center gap-4">
+        <AppButton
+          variant="primary"
+          onClick={() => setExpanded(!expanded)}
+          className="flex items-center gap-4"
+          disabled={disabled}
+        >
           Dodaj nowy kontrakt
           {expanded ? <ChevronUpIcon className="w-5 h-5" /> : <ChevronDownIcon className="w-5 h-5" />}
         </AppButton>

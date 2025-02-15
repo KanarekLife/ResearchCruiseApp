@@ -180,6 +180,7 @@ export function FormAPeriodInput({
             style={{
               left: `${rangerInstance.getPercentageForValue(value)}%`,
             }}
+            disabled={disabled}
           />
         ))}
         {stepPositions

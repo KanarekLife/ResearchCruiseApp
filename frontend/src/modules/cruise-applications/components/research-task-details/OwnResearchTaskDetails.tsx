@@ -11,8 +11,9 @@ import { OwnResearchTaskDto } from '@/cruise-applications/models/ResearchTaskDto
 type Props = {
   form: ReactFormExtendedApi<FormADto, undefined>;
   row: Row<OwnResearchTaskDto>;
+  disabled?: boolean;
 };
-export function OwnResearchTaskDetails({ form, row }: Props) {
+export function OwnResearchTaskDetails({ form, row, disabled }: Props) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <form.Field
@@ -27,6 +28,7 @@ export function OwnResearchTaskDetails({ form, row }: Props) {
             label="Roboczy tytuł projektu"
             placeholder="Wprowadź tytuł"
             required
+            disabled={disabled}
           />
         )}
       />
@@ -41,6 +43,7 @@ export function OwnResearchTaskDetails({ form, row }: Props) {
             onChange={field.handleChange}
             label="Przewidywany termin składania"
             required
+            disabled={disabled}
           />
         )}
       />
@@ -57,6 +60,7 @@ export function OwnResearchTaskDetails({ form, row }: Props) {
             label="Czasopismo"
             placeholder="Wprowadź czasopismo"
             required
+            disabled={disabled}
           />
         )}
       />
@@ -74,6 +78,7 @@ export function OwnResearchTaskDetails({ form, row }: Props) {
             errors={mapValidationErrors(field.state.meta.errors)}
             label="Przewidywane punkty ministerialne"
             required
+            disabled={disabled}
           />
         )}
       />

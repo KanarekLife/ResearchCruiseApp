@@ -2,10 +2,10 @@ import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppDropdownInput } from '@/core/components/inputs/AppDropdownInput';
 import { AppInput } from '@/core/components/inputs/AppInput';
 import { mapValidationErrors } from '@/core/lib/utils';
-import { FormASectionProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
 import { CruiseGoal } from '@/cruise-applications/models/FormADto';
 
-export function FormACruiseGoalSection({ initValues, form }: FormASectionProps) {
+export function FormACruiseGoalSection({ initValues, form, readonly }: FormAProps) {
   return (
     <AppAccordion title="5. Cel rejsu" expandedByDefault>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -24,6 +24,7 @@ export function FormACruiseGoalSection({ initValues, form }: FormASectionProps) 
                 inlineLabel: cruiseGoal,
               }))}
               required
+              disabled={readonly}
             />
           )}
         />
@@ -42,7 +43,7 @@ export function FormACruiseGoalSection({ initValues, form }: FormASectionProps) 
                   errors={mapValidationErrors(field.state.meta.errors)}
                   label="Opis"
                   placeholder="np. szczegóły dotyczące celu rejsu"
-                  disabled={!cruiseGoal}
+                  disabled={!cruiseGoal || readonly}
                   required
                 />
               )}

@@ -9,8 +9,9 @@ import { ThesisResearchTaskDto } from '@/cruise-applications/models/ResearchTask
 type Props = {
   form: ReactFormExtendedApi<FormADto, undefined>;
   row: Row<ThesisResearchTaskDto>;
+  disabled?: boolean;
 };
-export function ThesisResearchTaskDetails({ form, row }: Props) {
+export function ThesisResearchTaskDetails({ form, row, disabled }: Props) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <form.Field
@@ -25,6 +26,7 @@ export function ThesisResearchTaskDetails({ form, row }: Props) {
             label="Autor"
             placeholder="Wprowadź autora"
             required
+            disabled={disabled}
           />
         )}
       />
@@ -41,6 +43,7 @@ export function ThesisResearchTaskDetails({ form, row }: Props) {
             label="Tytuł"
             placeholder="Wprowadź tytuł"
             required
+            disabled={disabled}
           />
         )}
       />

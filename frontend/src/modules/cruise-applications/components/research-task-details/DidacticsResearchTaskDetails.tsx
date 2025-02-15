@@ -9,8 +9,9 @@ import { DidacticsResearchTaskDto } from '@/cruise-applications/models/ResearchT
 type Props = {
   form: ReactFormExtendedApi<FormADto, undefined>;
   row: Row<DidacticsResearchTaskDto>;
+  disabled?: boolean;
 };
-export function DidacticsResearchTaskDetails({ form, row }: Props) {
+export function DidacticsResearchTaskDetails({ form, row, disabled }: Props) {
   return (
     <div>
       <form.Field
@@ -25,6 +26,7 @@ export function DidacticsResearchTaskDetails({ form, row }: Props) {
             label="Opis zajęcia dydaktycznego"
             placeholder="Wprowadź opis zajęcia dydaktycznego"
             required
+            disabled={disabled}
           />
         )}
       />

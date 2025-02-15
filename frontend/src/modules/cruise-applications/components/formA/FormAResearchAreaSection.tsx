@@ -2,9 +2,9 @@ import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppDropdownInput } from '@/core/components/inputs/AppDropdownInput';
 import { AppInput } from '@/core/components/inputs/AppInput';
 import { mapValidationErrors } from '@/core/lib/utils';
-import { FormASectionProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
 
-export function FormAResearchAreaSection({ form, initValues }: FormASectionProps) {
+export function FormAResearchAreaSection({ form, initValues, readonly }: FormAProps) {
   return (
     <AppAccordion title="4. Rejon prowadzenia badań" expandedByDefault>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -28,6 +28,7 @@ export function FormAResearchAreaSection({ form, initValues }: FormASectionProps
                 inlineLabel: researchArea.name,
               }))}
               required
+              disabled={readonly}
             />
           )}
         />
@@ -46,7 +47,7 @@ export function FormAResearchAreaSection({ form, initValues }: FormASectionProps
                   errors={mapValidationErrors(field.state.meta.errors)}
                   label="Informacje dodatkowe"
                   placeholder="np. szczegóły dotyczące regionu"
-                  disabled={!researchAreaId}
+                  disabled={!researchAreaId || readonly}
                 />
               )}
             />

@@ -16,13 +16,13 @@ import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteR
 import { useDropdown } from '@/core/hooks/DropdownHook';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
 import { cn, mapValidationErrors } from '@/core/lib/utils';
-import { FormASectionProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
 import { FormADto } from '@/cruise-applications/models/FormADto';
 import { FormAInitValuesDto } from '@/cruise-applications/models/FormAInitValuesDto';
 import { GuestTeamDto } from '@/cruise-applications/models/GuestTeamDto';
 import { UGTeamDto } from '@/cruise-applications/models/UGTeamDto';
 
-export function FormAMembersSection({ initValues, form }: FormASectionProps) {
+export function FormAMembersSection({ initValues, form, readonly }: FormAProps) {
   function getUgTeamsColumns(
     field: FieldApi<FormADto, 'ugTeams', undefined, undefined, UGTeamDto[]>
   ): ColumnDef<UGTeamDto>[] {
@@ -52,6 +52,7 @@ export function FormAMembersSection({ initValues, form }: FormASectionProps) {
                 errors={mapValidationErrors(field.state.meta.errors)}
                 className="mx-4"
                 required
+                disabled={readonly}
               />
             )}
           />
@@ -72,6 +73,7 @@ export function FormAMembersSection({ initValues, form }: FormASectionProps) {
                 errors={mapValidationErrors(field.state.meta.errors)}
                 className="mx-4"
                 required
+                disabled={readonly}
               />
             )}
           />
@@ -81,7 +83,7 @@ export function FormAMembersSection({ initValues, form }: FormASectionProps) {
         id: 'actions',
         cell: ({ row }) => (
           <div className="flex justify-end">
-            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} />
+            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} disabled={readonly} />
           </div>
         ),
         size: 10,
@@ -113,6 +115,7 @@ export function FormAMembersSection({ initValues, form }: FormASectionProps) {
                 errors={mapValidationErrors(field.state.meta.errors)}
                 className="mx-4"
                 required
+                disabled={readonly}
               />
             )}
           />
@@ -133,6 +136,7 @@ export function FormAMembersSection({ initValues, form }: FormASectionProps) {
                 errors={mapValidationErrors(field.state.meta.errors)}
                 className="mx-4"
                 required
+                disabled={readonly}
               />
             )}
           />
@@ -142,7 +146,7 @@ export function FormAMembersSection({ initValues, form }: FormASectionProps) {
         id: 'actions',
         cell: ({ row }) => (
           <div className="flex justify-end">
-            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} />
+            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} disabled={readonly} />
           </div>
         ),
         size: 10,
@@ -160,7 +164,14 @@ export function FormAMembersSection({ initValues, form }: FormASectionProps) {
             <AppTable
               columns={getUgTeamsColumns(field)}
               data={field.state.value}
-              buttons={() => [<AddUGTeamButton key="ugTeams.add-ug-unit-btn" field={field} initValues={initValues} />]}
+              buttons={() => [
+                <AddUGTeamButton
+                  key="ugTeams.add-ug-unit-btn"
+                  field={field}
+                  initValues={initValues}
+                  disabled={readonly}
+                />,
+              ]}
               emptyTableMessage="Nie dodano żadnego zespołu."
             />
           )}
@@ -180,6 +191,7 @@ export function FormAMembersSection({ initValues, form }: FormASectionProps) {
                     field.pushValue({ name: '', noOfPersons: '0' });
                   }}
                   className="flex items-center gap-4"
+                  disabled={readonly}
                 >
                   Dodaj nowy zespół
                 </AppButton>,
@@ -187,6 +199,7 @@ export function FormAMembersSection({ initValues, form }: FormASectionProps) {
                   key="guestTeams.add-historical-btn"
                   field={field}
                   initValues={initValues}
+                  disabled={readonly}
                 />,
               ]}
               emptyTableMessage="Nie dodano żadnego zespołu."
@@ -201,8 +214,9 @@ export function FormAMembersSection({ initValues, form }: FormASectionProps) {
 type AddUGTeamButtonProps = {
   field: FieldApi<FormADto, 'ugTeams', undefined, undefined, UGTeamDto[]>;
   initValues: UseSuspenseQueryResult<FormAInitValuesDto, Error>;
+  disabled?: boolean;
 };
-function AddUGTeamButton({ field, initValues }: AddUGTeamButtonProps) {
+function AddUGTeamButton({ field, initValues, disabled }: AddUGTeamButtonProps) {
   const [expanded, setExpanded] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState('');
   const elementRef = React.useRef<HTMLDivElement>(null);
@@ -216,7 +230,12 @@ function AddUGTeamButton({ field, initValues }: AddUGTeamButtonProps) {
   return (
     <>
       <div ref={elementRef}>
-        <AppButton variant="primaryOutline" onClick={() => setExpanded(!expanded)} className="flex items-center gap-4">
+        <AppButton
+          variant="primaryOutline"
+          onClick={() => setExpanded(!expanded)}
+          className="flex items-center gap-4"
+          disabled={disabled}
+        >
           Dodaj jednostkę UG
           {expanded ? <ChevronUpIcon className="w-5 h-5" /> : <ChevronDownIcon className="w-5 h-5" />}
         </AppButton>
@@ -260,8 +279,9 @@ function AddUGTeamButton({ field, initValues }: AddUGTeamButtonProps) {
 type AddHistoricalGuestTeamButtonProps = {
   field: FieldApi<FormADto, 'guestTeams', undefined, undefined, GuestTeamDto[]>;
   initValues: UseSuspenseQueryResult<FormAInitValuesDto, Error>;
+  disabled?: boolean;
 };
-function AddHistoricalGuestTeamButton({ field, initValues }: AddHistoricalGuestTeamButtonProps) {
+function AddHistoricalGuestTeamButton({ field, initValues, disabled }: AddHistoricalGuestTeamButtonProps) {
   const [expanded, setExpanded] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState('');
   const elementRef = React.useRef<HTMLDivElement>(null);
@@ -275,7 +295,12 @@ function AddHistoricalGuestTeamButton({ field, initValues }: AddHistoricalGuestT
   return (
     <>
       <div ref={elementRef}>
-        <AppButton variant="primaryOutline" onClick={() => setExpanded(!expanded)} className="flex items-center gap-4">
+        <AppButton
+          variant="primaryOutline"
+          onClick={() => setExpanded(!expanded)}
+          className="flex items-center gap-4"
+          disabled={disabled}
+        >
           Dodaj historyczny zespół
           {expanded ? <ChevronUpIcon className="w-5 h-5" /> : <ChevronDownIcon className="w-5 h-5" />}
         </AppButton>

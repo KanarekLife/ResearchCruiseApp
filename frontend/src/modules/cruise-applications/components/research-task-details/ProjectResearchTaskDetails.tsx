@@ -10,8 +10,9 @@ import { ProjectResearchTaskDto } from '@/cruise-applications/models/ResearchTas
 type Props = {
   form: ReactFormExtendedApi<FormADto, undefined>;
   row: Row<ProjectResearchTaskDto>;
+  disabled?: boolean;
 };
-export function ProjectResearchTaskDetails({ form, row }: Props) {
+export function ProjectResearchTaskDetails({ form, row, disabled }: Props) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <form.Field
@@ -27,6 +28,7 @@ export function ProjectResearchTaskDetails({ form, row }: Props) {
             placeholder="Wprowadź tytuł"
             containerClassName="lg:col-span-2"
             required
+            disabled={disabled}
           />
         )}
       />
@@ -41,6 +43,7 @@ export function ProjectResearchTaskDetails({ form, row }: Props) {
             onChange={field.handleChange}
             label="Data rozpoczęcia"
             required
+            disabled={disabled}
           />
         )}
       />
@@ -55,6 +58,7 @@ export function ProjectResearchTaskDetails({ form, row }: Props) {
             onChange={field.handleChange}
             label="Data zakończenia"
             required
+            disabled={disabled}
           />
         )}
       />

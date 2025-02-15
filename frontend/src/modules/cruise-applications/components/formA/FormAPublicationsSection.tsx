@@ -18,7 +18,7 @@ import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteR
 import { useDropdown } from '@/core/hooks/DropdownHook';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
 import { cn, groupBy, mapValidationErrors } from '@/core/lib/utils';
-import { FormASectionProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
 import { FormADto } from '@/cruise-applications/models/FormADto';
 import { FormAInitValuesDto } from '@/cruise-applications/models/FormAInitValuesDto';
 import { PublicationDto } from '@/cruise-applications/models/PublicationDto';
@@ -28,7 +28,7 @@ const name = {
   postscript: 'Dopisek',
 };
 
-export function FormAPublicationsSection({ initValues, form }: FormASectionProps) {
+export function FormAPublicationsSection({ initValues, form, readonly }: FormAProps) {
   function getColumns(
     field: FieldApi<FormADto, 'publications', undefined, undefined, PublicationDto[]>
   ): ColumnDef<PublicationDto>[] {
@@ -59,6 +59,7 @@ export function FormAPublicationsSection({ initValues, form }: FormASectionProps
                 ]}
                 required
                 showEmptyOption={false}
+                disabled={readonly}
               />
             )}
           />
@@ -84,6 +85,7 @@ export function FormAPublicationsSection({ initValues, form }: FormASectionProps
                   label="DOI"
                   placeholder='np. "10.1016/j.jmarsys.2019.03.007"'
                   required
+                  disabled={readonly}
                 />
               )}
             />
@@ -100,6 +102,7 @@ export function FormAPublicationsSection({ initValues, form }: FormASectionProps
                   label="Autorzy"
                   placeholder='np. "Kowalski J., Nowak A."'
                   required
+                  disabled={readonly}
                 />
               )}
             />
@@ -116,6 +119,7 @@ export function FormAPublicationsSection({ initValues, form }: FormASectionProps
                   label="Tytuł"
                   placeholder='np. "The impact of sea level rise on the coastal zone"'
                   required
+                  disabled={readonly}
                 />
               )}
             />
@@ -132,6 +136,7 @@ export function FormAPublicationsSection({ initValues, form }: FormASectionProps
                   label="Czasopismo"
                   placeholder='np. "Journal of Marine Systems"'
                   required
+                  disabled={readonly}
                 />
               )}
             />
@@ -155,6 +160,7 @@ export function FormAPublicationsSection({ initValues, form }: FormASectionProps
                 errors={mapValidationErrors(field.state.meta.errors)}
                 label="Rok"
                 required
+                disabled={readonly}
               />
             )}
           />
@@ -178,6 +184,7 @@ export function FormAPublicationsSection({ initValues, form }: FormASectionProps
                 errors={mapValidationErrors(field.state.meta.errors)}
                 label="Punkty"
                 required
+                disabled={readonly}
               />
             )}
           />
@@ -188,7 +195,7 @@ export function FormAPublicationsSection({ initValues, form }: FormASectionProps
         id: 'actions',
         cell: ({ row }) => (
           <div className="flex justify-end">
-            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} />
+            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} disabled={readonly} />
           </div>
         ),
         size: 20,
@@ -236,11 +243,12 @@ export function FormAPublicationsSection({ initValues, form }: FormASectionProps
               columns={getColumns(field)}
               data={field.state.value}
               buttons={() => [
-                <AddNewPublicationButton key="publications.add-new-btn" field={field} />,
+                <AddNewPublicationButton key="publications.add-new-btn" field={field} disabled={readonly} />,
                 <AddHistoricalPublicationButton
                   key="publications.add-historical-btn"
                   field={field}
                   initValues={initValues}
+                  disabled={readonly}
                 />,
               ]}
             />
@@ -254,8 +262,9 @@ export function FormAPublicationsSection({ initValues, form }: FormASectionProps
 type AddHistoricalPublicationButtonProps = {
   field: FieldApi<FormADto, 'publications', undefined, undefined, PublicationDto[]>;
   initValues: UseSuspenseQueryResult<FormAInitValuesDto, Error>;
+  disabled?: boolean;
 };
-function AddHistoricalPublicationButton({ field, initValues }: AddHistoricalPublicationButtonProps) {
+function AddHistoricalPublicationButton({ field, initValues, disabled }: AddHistoricalPublicationButtonProps) {
   const [expanded, setExpanded] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState('');
   const elementRef = React.useRef<HTMLDivElement>(null);
@@ -269,7 +278,12 @@ function AddHistoricalPublicationButton({ field, initValues }: AddHistoricalPubl
   return (
     <>
       <div ref={elementRef}>
-        <AppButton variant="primaryOutline" onClick={() => setExpanded(!expanded)} className="flex items-center gap-4">
+        <AppButton
+          variant="primaryOutline"
+          onClick={() => setExpanded(!expanded)}
+          className="flex items-center gap-4"
+          disabled={disabled}
+        >
           Dodaj historyczną publikację
           {expanded ? <ChevronUpIcon className="w-5 h-5" /> : <ChevronDownIcon className="w-5 h-5" />}
         </AppButton>
@@ -336,8 +350,9 @@ function AddHistoricalPublicationButton({ field, initValues }: AddHistoricalPubl
 
 type AddNewPublicationButtonProps = {
   field: FieldApi<FormADto, 'publications', undefined, undefined, PublicationDto[]>;
+  disabled?: boolean;
 };
-function AddNewPublicationButton({ field }: AddNewPublicationButtonProps) {
+function AddNewPublicationButton({ field, disabled }: AddNewPublicationButtonProps) {
   const [expanded, setExpanded] = React.useState(false);
   const elementRef = React.useRef<HTMLDivElement>(null);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
@@ -352,7 +367,12 @@ function AddNewPublicationButton({ field }: AddNewPublicationButtonProps) {
   return (
     <>
       <div ref={elementRef}>
-        <AppButton variant="primary" onClick={() => setExpanded(!expanded)} className="flex items-center gap-4">
+        <AppButton
+          variant="primary"
+          onClick={() => setExpanded(!expanded)}
+          className="flex items-center gap-4"
+          disabled={disabled}
+        >
           Dodaj nową publikację
           {expanded ? <ChevronUpIcon className="w-5 h-5" /> : <ChevronDownIcon className="w-5 h-5" />}
         </AppButton>

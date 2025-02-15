@@ -2,7 +2,7 @@ import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppAvatar } from '@/core/components/AppAvatar';
 import { AppDropdownInput, AppDropdownInputOption } from '@/core/components/inputs/AppDropdownInput';
 import { mapValidationErrors } from '@/core/lib/utils';
-import { FormASectionProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
 import { FormUserDto } from '@/cruise-applications/models/FormUserDto';
 
 function mapPersonToLabel(person: FormUserDto): AppDropdownInputOption<string> {
@@ -23,7 +23,7 @@ function mapPersonToLabel(person: FormUserDto): AppDropdownInputOption<string> {
   };
 }
 
-export function FormACruiseManagerInfoSection({ initValues, form }: FormASectionProps) {
+export function FormACruiseManagerInfoSection({ initValues, form, readonly }: FormAProps) {
   return (
     <AppAccordion title="1. Kierownik zgłaszanego rejsu" expandedByDefault>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -40,6 +40,7 @@ export function FormACruiseManagerInfoSection({ initValues, form }: FormASection
               required
               placeholder="Wybierz kierownika rejsu"
               allOptions={initValues.data.cruiseManagers.map(mapPersonToLabel)}
+              disabled={readonly}
             />
           )}
         />
@@ -56,6 +57,7 @@ export function FormACruiseManagerInfoSection({ initValues, form }: FormASection
               label="Zastępca kierownika rejsu"
               placeholder="Wybierz zastępcę kierownika rejsu"
               allOptions={initValues.data.deputyManagers.map(mapPersonToLabel)}
+              disabled={readonly}
             />
           )}
         />
@@ -76,6 +78,7 @@ export function FormACruiseManagerInfoSection({ initValues, form }: FormASection
                 value: year,
                 inlineLabel: year,
               }))}
+              disabled={readonly}
             />
           )}
         />

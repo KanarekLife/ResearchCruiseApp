@@ -5,10 +5,10 @@ import { AppDropdownInput } from '@/core/components/inputs/AppDropdownInput';
 import { AppInput } from '@/core/components/inputs/AppInput';
 import { AppNumberInput } from '@/core/components/inputs/AppNumberInput';
 import { mapValidationErrors } from '@/core/lib/utils';
-import { FormASectionProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
 import { FormAPeriodInput } from '@/cruise-applications/components/FormAPeriodInput';
 
-export function FormACruiseLengthSection({ initValues, form }: FormASectionProps) {
+export function FormACruiseLengthSection({ initValues, form, readonly }: FormAProps) {
   return (
     <AppAccordion title="2. Czas trwania zgłaszanego rejsu" expandedByDefault>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -23,6 +23,7 @@ export function FormACruiseLengthSection({ initValues, form }: FormASectionProps
               errors={mapValidationErrors(field.state.meta.errors)}
               label="Dopuszczalny okres, w którym miałby się odbywać rejs"
               required
+              disabled={readonly}
             />
           )}
         />
@@ -42,6 +43,7 @@ export function FormACruiseLengthSection({ initValues, form }: FormASectionProps
                   maxValues={acceptablePeriod}
                   label="Optymalny okres, w którym miałby się odbywać rejs"
                   required
+                  disabled={readonly}
                 />
               )}
             />
@@ -69,6 +71,7 @@ export function FormACruiseLengthSection({ initValues, form }: FormASectionProps
                     errors={mapValidationErrors(field.state.meta.errors)}
                     label="Liczba planowanych dób rejsowych"
                     required
+                    disabled={readonly}
                   />
                 )}
               />
@@ -93,6 +96,7 @@ export function FormACruiseLengthSection({ initValues, form }: FormASectionProps
                     errors={mapValidationErrors(field.state.meta.errors)}
                     label="Liczba planowanych godzin rejsowych"
                     required
+                    disabled={readonly}
                   />
                 )}
               />
@@ -112,6 +116,7 @@ export function FormACruiseLengthSection({ initValues, form }: FormASectionProps
                 errors={mapValidationErrors(field.state.meta.errors)}
                 label="Uwagi dotyczące teminu"
                 placeholder='np. "Rejs w okresie wakacyjnym"'
+                disabled={readonly}
               />
             </div>
           )}
@@ -132,6 +137,7 @@ export function FormACruiseLengthSection({ initValues, form }: FormASectionProps
                   value: i.toString(),
                   inlineLabel: shipUsage,
                 }))}
+                disabled={readonly}
               />
             </div>
           )}
@@ -161,6 +167,7 @@ export function FormACruiseLengthSection({ initValues, form }: FormASectionProps
                           label="Inny sposób użycia"
                           placeholder="np. statek badawczy"
                           required
+                          disabled={readonly}
                         />
                       )}
                     />

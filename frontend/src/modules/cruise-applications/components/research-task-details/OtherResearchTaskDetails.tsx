@@ -9,8 +9,9 @@ import { OtherResearchTaskDto } from '@/cruise-applications/models/ResearchTaskD
 type Props = {
   form: ReactFormExtendedApi<FormADto, undefined>;
   row: Row<OtherResearchTaskDto>;
+  disabled?: boolean;
 };
-export function OtherResearchTaskDetails({ form, row }: Props) {
+export function OtherResearchTaskDetails({ form, row, disabled }: Props) {
   return (
     <div>
       <form.Field
@@ -25,6 +26,7 @@ export function OtherResearchTaskDetails({ form, row }: Props) {
             label="Opis zadania"
             placeholder="Wprowadź opis zadania"
             required
+            disabled={disabled}
           />
         )}
       />
