@@ -139,6 +139,7 @@ export function FormAContractsSection({ initValues, form, readonly }: FormAProps
                 errors={mapValidationErrors(field.state.meta.errors)}
                 label="Skan"
                 required
+                disabled={readonly}
               />
             )}
           />

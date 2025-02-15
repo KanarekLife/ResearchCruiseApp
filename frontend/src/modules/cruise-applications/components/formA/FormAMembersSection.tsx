@@ -136,7 +136,7 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
         accessorFn: (row) => row.noOfPersons,
         cell: ({ row }) => (
           <form.Field
-            name={`ugTeams[${row.index}].noOfEmployees`}
+            name={`guestTeams[${row.index}].noOfPersons`}
             children={(field) => (
               <AppNumberInput
                 name={field.name}

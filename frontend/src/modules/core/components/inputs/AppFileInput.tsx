@@ -129,20 +129,22 @@ export function AppFileInput({
             className
           )}
         >
-          <div className="flex flex-col items-center justify-center pt-5 pb-6 text-sm">
-            <CloudUploadIcon className="w-8 h-8 mb-4" />
-            {uploadMessage}
-            {notifications && notifications.length > 0 && (
-              <div className="bg-danger-100 text-danger-900 rounded mx-2 p-1 mt-1">
-                <ul className="list-disc list-inside">
-                  {notifications.map((notification) => (
-                    <li key={notification}>{notification}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-          {files.length > 0 && <AppFileList files={files} onRemove={removeFile} disabled={disabled} />}
+          {!disabled && (
+            <div className="flex flex-col items-center justify-center pt-5 pb-4 text-sm">
+              <CloudUploadIcon className="w-8 h-8 mb-4" />
+              {uploadMessage}
+              {notifications && notifications.length > 0 && (
+                <div className="bg-danger-100 text-danger-900 rounded mx-2 p-1 mt-1">
+                  <ul className="list-disc list-inside">
+                    {notifications.map((notification) => (
+                      <li key={notification}>{notification}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+          {files.length > 0 && <AppFileList files={files} onRemove={removeFile} disabled={disabled} className="my-1" />}
         </label>
       </div>
 

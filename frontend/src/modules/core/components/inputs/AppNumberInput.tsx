@@ -7,6 +7,7 @@ import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputError
 import { AppInputErrorTriangle } from '@/core/components/inputs/parts/AppInputErrorTriangle';
 import { AppInputHelper } from '@/core/components/inputs/parts/AppInputHelper';
 import { AppInputLabel } from '@/core/components/inputs/parts/AppInputLabel';
+import { useInputCursorPosition } from '@/core/hooks/InputCursorPositionHook';
 import { cn, roundNumber } from '@/core/lib/utils';
 
 type Props = {
@@ -53,7 +54,7 @@ export function AppNumberInput({
 }: Props) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [stringValue, setStringValue] = React.useState(value.toString());
-  const [cursorPosition, setCursorPosition] = React.useState(0);
+  const setCursorPosition = useInputCursorPosition({ inputRef });
 
   // Update the string value when the value changes
   React.useEffect(() => {
@@ -64,10 +65,6 @@ export function AppNumberInput({
       setStringValue(newStringValue);
     }
   }, [precision, stringValue, type, value]);
-
-  React.useEffect(() => {
-    inputRef.current?.setSelectionRange(cursorPosition, cursorPosition);
-  });
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const stringInput = event.target.value.replace(',', '.'); // float input require dot as the decimal separator

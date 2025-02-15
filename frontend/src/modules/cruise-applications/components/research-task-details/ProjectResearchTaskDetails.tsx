@@ -79,6 +79,7 @@ export function ProjectResearchTaskDetails({ form, row, disabled }: Props) {
             errors={mapValidationErrors(field.state.meta.errors)}
             label="Kwota finansowania [zł]"
             required
+            disabled={disabled}
           />
         )}
       />
@@ -96,6 +97,7 @@ export function ProjectResearchTaskDetails({ form, row, disabled }: Props) {
             errors={mapValidationErrors(field.state.meta.errors)}
             label="Środki zabezpieczone na realizację rejsu [zł]"
             required
+            disabled={disabled}
           />
         )}
       />
