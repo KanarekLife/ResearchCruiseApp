@@ -17,7 +17,7 @@ export function RootLayout() {
         </div>
       </div>
       <AppBackground />
-      <main className="flex-1">
+      <main className="flex-1" id="modal-root">
         <Outlet />
       </main>
       <ScrollRestoration />

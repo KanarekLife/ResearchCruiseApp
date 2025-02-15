@@ -25,7 +25,6 @@ export function useOutsideClickDetection({ refs, ignoreWhen, onOutsideClick }: P
     }
 
     document.addEventListener('mousedown', handleClickOutside);
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
