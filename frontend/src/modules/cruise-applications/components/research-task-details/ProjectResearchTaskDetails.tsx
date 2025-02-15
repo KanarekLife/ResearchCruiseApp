@@ -2,6 +2,7 @@ import { ReactFormExtendedApi } from '@tanstack/react-form';
 import { Row } from '@tanstack/react-table';
 
 import { AppInput } from '@/core/components/inputs/AppInput';
+import { AppNumberInput } from '@/core/components/inputs/AppNumberInput';
 import { AppMonthPickerInput } from '@/core/components/inputs/dates/AppMonthPickerInput';
 import { mapValidationErrors } from '@/core/lib/utils';
 import { FormADto } from '@/cruise-applications/models/FormADto';
@@ -65,9 +66,39 @@ export function ProjectResearchTaskDetails({ form, row, disabled }: Props) {
         )}
       />
 
-      <form.Field name={`researchTasks[${row.index}].financingAmount`} children={() => <span>TODO</span>} />
+      <form.Field
+        name={`researchTasks[${row.index}].financingAmount`}
+        children={(field) => (
+          <AppNumberInput
+            name={field.name}
+            value={parseFloat(field.state.value as string)}
+            type="float"
+            minimum={0}
+            onChange={field.handleChange}
+            onBlur={field.handleBlur}
+            errors={mapValidationErrors(field.state.meta.errors)}
+            label="Kwota finansowania [zł]"
+            required
+          />
+        )}
+      />
 
-      <form.Field name={`researchTasks[${row.index}].securedAmount`} children={() => <span>TODO</span>} />
+      <form.Field
+        name={`researchTasks[${row.index}].securedAmount`}
+        children={(field) => (
+          <AppNumberInput
+            name={field.name}
+            value={parseFloat(field.state.value as string)}
+            type="float"
+            minimum={0}
+            onChange={field.handleChange}
+            onBlur={field.handleBlur}
+            errors={mapValidationErrors(field.state.meta.errors)}
+            label="Środki zabezpieczone na realizację rejsu [zł]"
+            required
+          />
+        )}
+      />
     </div>
   );
 }

@@ -65,7 +65,7 @@ export const Default: Story = {};
 export const WithEmptyData: Story = {
   args: {
     data: [],
-    childForEmpty: <div>No data</div>,
+    emptyTableMessage: 'No data',
   },
 };
 

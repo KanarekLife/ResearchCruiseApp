@@ -180,7 +180,9 @@ export function FormAPublicationsSection({ initValues, form, readonly }: FormAPr
               <AppNumberInput
                 name={field.name}
                 value={parseInt(field.state.value)}
-                onChange={(e) => field.handleChange(e.target.value)}
+                minimum={0}
+                step={10}
+                onChange={(x: number) => field.handleChange(x.toString())}
                 onBlur={field.handleBlur}
                 errors={mapValidationErrors(field.state.meta.errors)}
                 label="Punkty"

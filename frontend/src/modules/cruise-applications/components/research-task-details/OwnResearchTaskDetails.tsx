@@ -72,10 +72,10 @@ export function OwnResearchTaskDetails({ form, row, disabled }: Props) {
           <AppNumberInput
             name={field.name}
             value={parseInt(field.state.value as string)}
+            minimum={0}
+            step={10}
             onChange={field.handleChange}
             onBlur={field.handleBlur}
-            onIncrement={() => field.setValue((prev: string) => (parseInt(prev) + 1).toString())}
-            onDecrement={() => field.setValue((prev: string) => (parseInt(prev) - 1).toString())}
             errors={mapValidationErrors(field.state.meta.errors)}
             label="Przewidywane punkty ministerialne"
             required

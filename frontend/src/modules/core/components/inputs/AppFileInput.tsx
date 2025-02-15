@@ -19,7 +19,7 @@ type Props = {
   disabled?: boolean;
   helper?: React.ReactNode;
   uploadMessage?: string;
-  maxSize?: number;
+  maxSizeInMb?: number;
   acceptedMimeTypes?: string[];
   allowMultiple?: boolean;
 } & (
@@ -49,7 +49,7 @@ export function AppFileInput({
   disabled,
   helper,
   uploadMessage = 'Kliknij lub przeciągnij plik',
-  maxSize,
+  maxSizeInMb = 2,
   acceptedMimeTypes,
 }: Props) {
   const [files, setFiles] = React.useState<FileDto[]>(allowMultiple ? value : value ? [value] : []);
@@ -86,8 +86,8 @@ export function AppFileInput({
     const newNotifications: string[] = [];
     const promises = Array.from(files)
       .filter((file) => {
-        if (maxSize && file.size > maxSize) {
-          newNotifications.push(`Plik ${file.name} jest zbyt duży (max. ${maxSize / 1024 / 1024} MB)`);
+        if (maxSizeInMb && file.size > maxSizeInMb * 1024 * 1024) {
+          newNotifications.push(`Plik ${file.name} jest zbyt duży (max. ${maxSizeInMb} MB)`);
           return false;
         }
 

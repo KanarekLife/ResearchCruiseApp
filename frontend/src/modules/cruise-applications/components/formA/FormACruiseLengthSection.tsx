@@ -60,14 +60,9 @@ export function FormACruiseLengthSection({ initValues, form, readonly }: FormAPr
                 children={(field) => (
                   <AppNumberInput
                     name={field.name}
-                    value={Math.floor((parseInt(cruiseHours) / 24) * 100) / 100}
-                    onChange={(e) => field.handleChange((Number(e.target.value) * 24).toString())}
-                    onIncrement={() =>
-                      field.handleChange(((Math.floor(parseInt(cruiseHours) / 24) + 1) * 24).toString())
-                    }
-                    onDecrement={() =>
-                      field.handleChange(((Math.floor(parseInt(cruiseHours) / 24) - 1) * 24).toString())
-                    }
+                    value={parseInt(cruiseHours) / 24}
+                    minimum={0}
+                    onChange={(x: number) => field.handleChange((x * 24).toString())}
                     onBlur={field.handleBlur}
                     errors={mapValidationErrors(field.state.meta.errors)}
                     label="Liczba planowanych dób rejsowych"
@@ -90,9 +85,8 @@ export function FormACruiseLengthSection({ initValues, form, readonly }: FormAPr
                   <AppNumberInput
                     name={field.name}
                     value={parseInt(cruiseHours)}
-                    onChange={(e) => field.handleChange(Number(e.target.value).toString())}
-                    onIncrement={() => field.handleChange((parseInt(cruiseHours) + 1).toString())}
-                    onDecrement={() => field.handleChange((parseInt(cruiseHours) - 1).toString())}
+                    minimum={0}
+                    onChange={(x: number) => field.handleChange(x.toString())}
                     onBlur={field.handleBlur}
                     errors={mapValidationErrors(field.state.meta.errors)}
                     label="Liczba planowanych godzin rejsowych"
@@ -115,7 +109,7 @@ export function FormACruiseLengthSection({ initValues, form, readonly }: FormAPr
                 onChange={field.handleChange}
                 onBlur={field.handleBlur}
                 errors={mapValidationErrors(field.state.meta.errors)}
-                label="Uwagi dotyczące teminu"
+                label="Uwagi dotyczące terminu"
                 placeholder='np. "Rejs w okresie wakacyjnym"'
                 disabled={readonly}
               />

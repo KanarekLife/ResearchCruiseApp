@@ -8,7 +8,7 @@ export type ContractDto = {
   institutionUnit: string;
   institutionLocalization: string;
   description: string;
-  scan: FileDto;
+  scan: FileDto | undefined;
 };
 
 export function getContractCategoryName(category: ContractDto['category']): string {

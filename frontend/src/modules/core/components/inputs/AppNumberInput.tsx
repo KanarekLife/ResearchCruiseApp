@@ -108,7 +108,7 @@ export function AppNumberInput({
   }
 
   return (
-    <div className="flex flex-col">
+    <div className={cn(className, 'flex flex-col')}>
       <AppInputLabel name={name} label={label} />
       <div className="relative flex items-center">
         <AppNumberInputButton
@@ -125,7 +125,6 @@ export function AppNumberInput({
           required={required}
           disabled={disabled}
           className={cn(
-            className,
             'bg-gray-50 border border-gray-300 h-11 text-center text-gray-900 text-sm block w-full py-2.5',
             'transition duration-300 ease-in-out',
             'focus:ring-primary focus:border-primary focus:shadow focus:outline-none transform:scale-105',
