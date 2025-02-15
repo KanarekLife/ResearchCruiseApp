@@ -7,7 +7,7 @@ import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputError
 import { AppInputErrorTriangle } from '@/core/components/inputs/parts/AppInputErrorTriangle';
 import { AppInputHelper } from '@/core/components/inputs/parts/AppInputHelper';
 import { AppInputLabel } from '@/core/components/inputs/parts/AppInputLabel';
-import { cn } from '@/core/lib/utils';
+import { cn, roundNumber } from '@/core/lib/utils';
 
 type Props = {
   name: string;
@@ -53,29 +53,36 @@ export function AppNumberInput({
 }: Props) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [stringValue, setStringValue] = React.useState(value.toString());
+  const [cursorPosition, setCursorPosition] = React.useState(0);
+
+  // Update the string value when the value changes
+  React.useEffect(() => {
+    // We want to round even the integer values to the precision, if such value was provided, but we don't want to add zeros at the end
+    const newStringValue = type === 'integer' ? roundNumber(value, precision).toString() : value.toFixed(precision);
+    if (newStringValue !== stringValue) {
+      // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
+      setStringValue(newStringValue);
+    }
+  }, [precision, stringValue, type, value]);
 
   React.useEffect(() => {
-    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect -- we need to sync the input value with the prop value
-    setStringValue(roundNumber(value, precision ?? 2).toString());
-  }, [precision, type, value]);
+    inputRef.current?.setSelectionRange(cursorPosition, cursorPosition);
+  });
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const stringInput = event.target.value.replace(',', '.'); // float input require dot as the decimal separator
 
+    // Calculate the cursor position after removing the zeros at the beginning of the string
+    let cursorPosition = event.target.selectionStart!;
+    const zerosAtBeginningRegex = /^0+/;
+    const zerosAtBeginningCount = stringInput.match(zerosAtBeginningRegex)?.[0].length;
+    cursorPosition -= zerosAtBeginningCount ?? 0;
+    setCursorPosition(cursorPosition);
+
     if (stringInput === '') {
       updateValue(0);
-      return;
-    }
-
-    if ((minimum === undefined || minimum < 0) && (stringInput === '-' || stringInput === '0-')) {
-      onChange?.(0);
-      // Allow to input negative zero to ease the input of negative numbers
-      setStringValue('-0');
-      return;
-    }
-
-    if (stringInput.endsWith('-')) {
-      updateValue(-1 * value);
+      // Set the cursor after the zero
+      setCursorPosition(1);
       return;
     }
 
@@ -182,9 +189,4 @@ function AppNumberInputButton({ side, inputToFocus, onClick, disabled }: ButtonP
       {side === 'left' ? <DashLgIcon /> : <PlusLgIcon />}
     </AppButton>
   );
-}
-
-function roundNumber(value: number, precision: number) {
-  const factor = 10 ** precision;
-  return Math.round(value * factor) / factor;
 }

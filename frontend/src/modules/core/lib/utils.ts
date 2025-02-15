@@ -29,3 +29,8 @@ export function groupBy<T>(array: T[], key: (item: T) => string): [string, T[]][
     )
   );
 }
+
+export function roundNumber(value: number, precision: number) {
+  const factor = 10 ** precision;
+  return Math.round(value * factor) / factor;
+}
