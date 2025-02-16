@@ -121,7 +121,7 @@ export function AppNumberInput({
           disabled={disabled}
           inputToFocus={inputRef}
         />
-        <div className="relative">
+        <div className="relative w-full">
           <input
             name={name}
             value={stringValue}
