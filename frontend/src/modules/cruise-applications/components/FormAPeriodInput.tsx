@@ -44,11 +44,11 @@ function getPointAtTime(position: number): string {
 }
 
 function getExplanationForPeriod(start: number, end: number): string {
-  if (start === 0 && end === 23) {
+  if (start === 0 && end === 24) {
     return 'Cały rok';
   }
 
-  return `od początku ${getPointAtTime(start)} do końca ${getPointAtTime(end)}`;
+  return `od początku ${getPointAtTime(start)} do końca ${getPointAtTime(end - 1)}`;
 }
 
 type Props = {
@@ -88,7 +88,7 @@ export function FormAPeriodInput({
       return [parseInt(maxValues[0]), parseInt(maxValues[1])];
     }
 
-    return [0, 23];
+    return [0, 24];
   });
 
   React.useMemo(() => {
@@ -124,7 +124,7 @@ export function FormAPeriodInput({
     getRangerElement: () => rangerRef.current,
     values,
     min: 0,
-    max: 23,
+    max: 24,
     stepSize: 1,
     onDrag: (instance: Ranger<HTMLDivElement>) => {
       const sortedValues = instance.sortedValues as number[];
@@ -156,7 +156,7 @@ export function FormAPeriodInput({
     },
   });
 
-  const stepPositions = Array.from(Array(24).keys()).map((i) => rangerInstance.getPercentageForValue(i));
+  const stepPositions = Array.from(Array(25).keys()).map((i) => rangerInstance.getPercentageForValue(i));
 
   function getWidth() {
     return (

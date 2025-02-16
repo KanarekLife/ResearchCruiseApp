@@ -18,7 +18,7 @@ export function FormAPage() {
   const form = useForm<FormADto>({
     defaultValues: formA.data ?? emptyFormADto,
     validators: {
-      onChange: getFormAValidationSchema(initialStateQuery.data),
+      onBlur: getFormAValidationSchema(initialStateQuery.data),
     },
     onSubmit: (values) => {
       console.log(values);

@@ -89,6 +89,7 @@ export const FortnightValidationSchema = z.enum([
   '21',
   '22',
   '23',
+  '24',
 ]);
 
 /**
