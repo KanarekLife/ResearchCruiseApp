@@ -20,7 +20,7 @@ export function AppFileList({ files, onRemove, disabled, className }: FileListPr
 
   return (
     <>
-      <ul className={cn('w-full', className)} onClick={(event) => event.stopPropagation()}>
+      <ul className={cn('w-full', className)} onClick={(e) => e.stopPropagation()}>
         <AnimatePresence>
           {files.map((file) => (
             <motion.li
