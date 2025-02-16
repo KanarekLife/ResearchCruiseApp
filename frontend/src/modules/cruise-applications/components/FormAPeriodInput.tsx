@@ -22,13 +22,42 @@ const months = [
   'Grudzień',
 ];
 
+function getPointAtTime(position: number): string {
+  const pointAtTimeMonths = [
+    'stycznia',
+    'lutego',
+    'marca',
+    'kwietnia',
+    'maja',
+    'czerwca',
+    'lipca',
+    'sierpnia',
+    'września',
+    'października',
+    'listopada',
+    'grudnia',
+  ];
+
+  const week = position % 2 == 0 ? '1. połowy' : '2. połowy';
+  const month = pointAtTimeMonths[Math.floor(position / 2)];
+  return `${week} ${month}`;
+}
+
+function getExplanationForPeriod(start: number, end: number): string {
+  if (start === 0 && end === 23) {
+    return 'Cały rok';
+  }
+
+  return `od początku ${getPointAtTime(start)} do końca ${getPointAtTime(end)}`;
+}
+
 type Props = {
   name: string;
   value: CruisePeriodType;
-  maxValues?: CruisePeriodType;
 
-  onChange: (value: CruisePeriodType) => void;
-  onBlur: () => void;
+  maxValues?: CruisePeriodType;
+  onChange?: (value: CruisePeriodType) => void;
+  onBlur?: () => void;
   errors?: string[];
   label: React.ReactNode;
   required?: boolean;
@@ -49,7 +78,8 @@ export function FormAPeriodInput({
   helper,
 }: Props) {
   const rangerRef = React.useRef<HTMLDivElement>(null);
-  const [values, setValues] = React.useState<ReadonlyArray<number>>(() => {
+
+  const [values, setValues] = React.useState(() => {
     if (value.length === 2) {
       return [parseInt(value[0]), parseInt(value[1])];
     }
@@ -66,7 +96,7 @@ export function FormAPeriodInput({
       return;
     }
 
-    const intMaxValues = maxValues.map(parseInt).sort((a, b) => a - b);
+    const intMaxValues = maxValues.map((x) => parseInt(x)).sort((a, b) => a - b);
     const tmpValues = [...values].sort((a, b) => a - b);
     let changed = false;
 
@@ -75,6 +105,12 @@ export function FormAPeriodInput({
       changed = true;
     }
     if (values[1] > intMaxValues[1]) {
+      tmpValues[1] = intMaxValues[1];
+      changed = true;
+    }
+
+    if (tmpValues[0] >= tmpValues[1]) {
+      tmpValues[0] = intMaxValues[0];
       tmpValues[1] = intMaxValues[1];
       changed = true;
     }
@@ -91,53 +127,36 @@ export function FormAPeriodInput({
     max: 23,
     stepSize: 1,
     onDrag: (instance: Ranger<HTMLDivElement>) => {
-      const values = instance.sortedValues as number[];
-      if (values[0] === values[1]) {
+      const sortedValues = instance.sortedValues as number[];
+
+      if (sortedValues[0] === sortedValues[1]) {
         return;
       }
-      if (maxValues && maxValues.length === 2) {
-        if (values[0] < parseInt(maxValues[0])) {
-          values[0] = parseInt(maxValues[0]);
-        }
-        if (values[1] > parseInt(maxValues[1])) {
-          values[1] = parseInt(maxValues[1]);
-        }
+
+      if (values[0] === sortedValues[0] && values[1] === sortedValues[1]) {
+        return;
       }
-      setValues(values);
-      onChange(values.map((v) => v.toString()) as CruisePeriodType);
+
+      if (values[0] > sortedValues[1] || values[1] < sortedValues[0]) {
+        return;
+      }
+
+      if (maxValues && sortedValues[0] < parseInt(maxValues[0])) {
+        return;
+      }
+
+      if (maxValues && sortedValues[1] > parseInt(maxValues[1])) {
+        return;
+      }
+
+      setValues(sortedValues);
+      if (onChange) {
+        onChange(sortedValues.map((v) => v.toString()) as CruisePeriodType);
+      }
     },
   });
 
   const stepPositions = Array.from(Array(24).keys()).map((i) => rangerInstance.getPercentageForValue(i));
-
-  function getPointAtTime(position: number) {
-    const pointAtTimeMonths = [
-      'stycznia',
-      'lutego',
-      'marca',
-      'kwietnia',
-      'maja',
-      'czerwca',
-      'lipca',
-      'sierpnia',
-      'września',
-      'października',
-      'listopada',
-      'grudnia',
-    ];
-
-    const week = position % 2 == 0 ? '1. połowy' : '2. połowy';
-    const month = pointAtTimeMonths[Math.floor(position / 2)];
-    return `${week} ${month}`;
-  }
-
-  function getExplanationForPeriod(start: number, end: number) {
-    if (start === 0 && end === 23) {
-      return 'Cały rok';
-    }
-
-    return `od początku ${getPointAtTime(start)} do końca ${getPointAtTime(end)}`;
-  }
 
   function getWidth() {
     return (
