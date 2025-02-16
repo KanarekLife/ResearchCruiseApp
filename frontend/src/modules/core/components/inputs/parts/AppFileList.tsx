@@ -1,5 +1,6 @@
 import DownloadIcon from 'bootstrap-icons/icons/download.svg?react';
 import XIcon from 'bootstrap-icons/icons/x.svg?react';
+import { AnimatePresence, motion } from 'motion/react';
 import React from 'react';
 
 import { AppModal } from '@/core/components/AppModal';
@@ -19,25 +20,35 @@ export function AppFileList({ files, onRemove, disabled, className }: FileListPr
 
   return (
     <>
-      <div className={cn('w-full', className)} onClick={(event) => event.stopPropagation()}>
-        {files.map((file) => (
-          <AppFileListElement
-            key={file.name}
-            file={file}
-            setFileInPreview={setFileInPreview}
-            onRemove={onRemove}
-            disabled={disabled}
-          />
-        ))}
-      </div>
+      <ul className={cn('w-full', className)} onClick={(event) => event.stopPropagation()}>
+        <AnimatePresence>
+          {files.map((file) => (
+            <motion.li
+              key={file.name}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+            >
+              <AppFileListElement
+                file={file}
+                setFileInPreview={setFileInPreview}
+                onRemove={onRemove}
+                disabled={disabled}
+              />
+            </motion.li>
+          ))}
+        </AnimatePresence>
+      </ul>
       {createModalPortal(
         <AppModal
           isOpen={fileInPreview !== undefined}
           onClose={() => setFileInPreview(undefined)}
           title={fileInPreview?.name || ''}
         >
-          <div className="flex flex-col items-center justify-center p-4 h-220">
-            <object data={fileInPreview?.content} className="h-full w-full" />
+          <div className="flex flex-col items-center justify-center p-4 h-220 relative">
+            <object data={fileInPreview?.content} className="h-full w-full flex items-center justify-center">
+              Nie można wyświetlić podglądu pliku
+            </object>
           </div>
         </AppModal>
       )}
@@ -63,7 +74,7 @@ function AppFileListElement({ file, setFileInPreview, onRemove, disabled }: File
         disabled ? 'bg-gray-100 ' : 'bg-white'
       )}
     >
-      <div className="truncate" onClick={() => setFileInPreview(file)}>
+      <div className="truncate hover:text-primary duration-300 ease-in-out" onClick={() => setFileInPreview(file)}>
         {file.name}
       </div>
 
