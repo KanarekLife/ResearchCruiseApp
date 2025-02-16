@@ -64,6 +64,7 @@ export function FormACruiseLengthSection() {
                     name={field.name}
                     value={parseInt(cruiseHours) / 24}
                     minimum={0}
+                    maximum={60}
                     onChange={(x: number) => field.handleChange((x * 24).toString())}
                     onBlur={field.handleBlur}
                     errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
@@ -88,6 +89,7 @@ export function FormACruiseLengthSection() {
                     name={field.name}
                     value={parseInt(cruiseHours)}
                     minimum={0}
+                    maximum={1440}
                     onChange={(x: number) => field.handleChange(x.toString())}
                     onBlur={field.handleBlur}
                     errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
