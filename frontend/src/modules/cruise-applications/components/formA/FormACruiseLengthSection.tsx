@@ -6,7 +6,8 @@ import { AppInput } from '@/core/components/inputs/AppInput';
 import { AppNumberInput } from '@/core/components/inputs/AppNumberInput';
 import { mapValidationErrors } from '@/core/lib/utils';
 import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
-import { FormAPeriodInput } from '@/cruise-applications/components/FormAPeriodInput';
+
+import { FormAPeriodInput } from '../FormAPeriodInput';
 
 export function FormACruiseLengthSection({ initValues, form, readonly }: FormAProps) {
   return (
