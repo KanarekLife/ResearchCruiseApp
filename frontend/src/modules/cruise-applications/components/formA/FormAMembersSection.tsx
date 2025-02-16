@@ -123,7 +123,7 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
                 onChange={field.handleChange}
                 onBlur={field.handleBlur}
                 errors={mapValidationErrors(field.state.meta.errors)}
-                className="mx-4"
+                containerClassName="mx-4"
                 required
                 disabled={readonly}
               />
