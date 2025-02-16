@@ -114,36 +114,38 @@ export function AppNumberInput({
   return (
     <div className={cn(className, 'flex flex-col')}>
       <AppInputLabel name={name} label={label} />
-      <div className="relative flex items-center">
+      <div className="flex items-center">
         <AppNumberInputButton
           onClick={() => updateValue(value - step)}
           side="left"
           disabled={disabled}
           inputToFocus={inputRef}
         />
-        <input
-          name={name}
-          value={stringValue}
-          onChange={handleInputChange}
-          onBlur={onBlur}
-          required={required}
-          disabled={disabled}
-          className={cn(
-            'bg-gray-50 border border-gray-300 h-11 text-center text-gray-900 text-sm block w-full py-2.5',
-            'transition duration-300 ease-in-out',
-            'focus:ring-primary focus:border-primary focus:shadow focus:outline-none transform:scale-105',
-            disabled ? 'bg-gray-200' : '',
-            errors?.length ? 'border-danger ring-danger text-danger focus:text-gray-900' : ''
-          )}
-          ref={inputRef}
-        />
+        <div className="relative">
+          <input
+            name={name}
+            value={stringValue}
+            onChange={handleInputChange}
+            onBlur={onBlur}
+            required={required}
+            disabled={disabled}
+            className={cn(
+              'bg-gray-50 border border-gray-300 h-11 text-center text-gray-900 text-sm block w-full py-2.5',
+              'transition duration-300 ease-in-out',
+              'focus:ring-primary focus:border-primary focus:shadow focus:outline-none transform:scale-105',
+              disabled ? 'bg-gray-200' : '',
+              errors?.length ? 'border-danger ring-danger text-danger focus:text-gray-900' : ''
+            )}
+            ref={inputRef}
+          />
+          <AppInputErrorTriangle errors={errors} mode={'absolute'} />
+        </div>
         <AppNumberInputButton
           onClick={() => updateValue(value + step)}
           side="right"
           disabled={disabled}
           inputToFocus={inputRef}
         />
-        <AppInputErrorTriangle errors={errors} />
       </div>
       <div className="flex flex-col justify-between mt-2 text-sm">
         <AppInputHelper helper={helper} />

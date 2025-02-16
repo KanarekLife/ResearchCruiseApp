@@ -1,4 +1,5 @@
 import CloudUploadIcon from 'bootstrap-icons/icons/cloud-upload.svg?react';
+import { AnimatePresence, motion } from 'motion/react';
 import React from 'react';
 
 import { AppFileList } from '@/core/components/inputs/parts/AppFileList';
@@ -19,6 +20,7 @@ type Props = {
   disabled?: boolean;
   helper?: React.ReactNode;
   uploadMessage?: string;
+  emptyMessage?: string;
   maxSizeInMb?: number;
   acceptedMimeTypes?: string[];
   allowMultiple?: boolean;
@@ -49,6 +51,7 @@ export function AppFileInput({
   disabled,
   helper,
   uploadMessage = 'Kliknij lub przeciągnij plik',
+  emptyMessage = 'Brak plików',
   maxSizeInMb = 2,
   acceptedMimeTypes,
 }: Props) {
@@ -70,7 +73,7 @@ export function AppFileInput({
     event.stopPropagation();
 
     const filesList = event.dataTransfer.files;
-    if (filesList) {
+    if (!disabled && filesList) {
       setFiles(await loadFileList(filesList));
     }
   }
@@ -124,27 +127,37 @@ export function AppFileInput({
           className={cn(
             'flex flex-col items-center justify-center w-full border-2 border-gray-300 text-gray-500',
             'border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 overflow-x-auto',
+            'duration-200 ease-in-out transition-all min-h-10',
             disabled ? 'bg-gray-200 hover:bg-gray-200 cursor-default' : '',
             errors ? 'border-danger ring-danger text-danger focus:text-gray-900' : '',
             className
           )}
         >
-          {!disabled && (
-            <div className="flex flex-col items-center justify-center pt-5 pb-4 text-sm">
-              <CloudUploadIcon className="w-8 h-8 mb-4" />
-              {uploadMessage}
-              {notifications && notifications.length > 0 && (
-                <div className="bg-danger-100 text-danger-900 rounded mx-2 p-1 mt-1">
-                  <ul className="list-disc list-inside">
-                    {notifications.map((notification) => (
-                      <li key={notification}>{notification}</li>
-                    ))}
-                  </ul>
+          <AnimatePresence>
+            {!disabled && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+              >
+                <div className="flex flex-col items-center justify-center pt-5 pb-4 text-sm">
+                  <CloudUploadIcon className="w-8 h-8 mb-4" />
+                  {uploadMessage}
+                  {notifications && notifications.length > 0 && (
+                    <div className="bg-danger-100 text-danger-900 rounded mx-2 p-1 mt-1">
+                      <ul className="list-disc list-inside">
+                        {notifications.map((notification) => (
+                          <li key={notification}>{notification}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          )}
-          {files.length > 0 && <AppFileList files={files} onRemove={removeFile} disabled={disabled} className="my-1" />}
+              </motion.div>
+            )}
+          </AnimatePresence>
+          {<AppFileList files={files} onRemove={removeFile} disabled={disabled} className="my-1" />}
+          {files.length === 0 && disabled && <div>{emptyMessage}</div>}
         </label>
       </div>
 
