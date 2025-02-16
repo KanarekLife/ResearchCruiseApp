@@ -103,7 +103,14 @@ export function FormASPUBTasksSection({ initValues, form, readonly }: FormAProps
         id: 'actions',
         cell: ({ row }) => (
           <div className="flex justify-end">
-            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} disabled={readonly} />
+            <AppTableDeleteRowButton
+              onClick={() => {
+                field.removeValue(row.index);
+                field.handleChange((prev) => prev);
+                field.handleBlur();
+              }}
+              disabled={readonly}
+            />
           </div>
         ),
         size: 10,
@@ -128,7 +135,13 @@ export function FormASPUBTasksSection({ initValues, form, readonly }: FormAProps
                 buttons={() => [
                   <AppButton
                     key="spubTasks.add-new-btn"
-                    onClick={() => field.pushValue({ name: '', yearFrom: '', yearTo: '' })}
+                    onClick={() => {
+                      field.pushValue({ name: '', yearFrom: '', yearTo: '' });
+                      field.handleChange((prev) => prev);
+                      field.handleBlur();
+                      field.form.validateAllFields('blur');
+                      field.form.validateAllFields('change');
+                    }}
                     disabled={readonly}
                   >
                     Dodaj
@@ -188,6 +201,10 @@ function AddHistoricalSPUBTaskButton({ field, initValues, disabled }: AddHistori
                 key={`spubTasks.add-historical-btn.${JSON.stringify(spubTask)}`}
                 onClick={() => {
                   field.pushValue(spubTask);
+                  field.handleChange((prev) => prev);
+                  field.handleBlur();
+                  field.form.validateAllFields('blur');
+                  field.form.validateAllFields('change');
                   setExpanded(false);
                 }}
                 variant="plain"

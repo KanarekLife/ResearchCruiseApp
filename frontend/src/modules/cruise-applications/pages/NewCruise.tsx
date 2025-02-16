@@ -1,5 +1,5 @@
 import { useForm } from '@tanstack/react-form';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
@@ -10,16 +10,20 @@ import { emptyFormADto, FormADto } from '@/cruise-applications/models/FormADto';
 
 export function NewCruisePage() {
   const initialStateQuery = useFormAInitValues();
-
+  const validator = getFormAValidationSchema(initialStateQuery.data);
   const form = useForm<FormADto>({
     defaultValues: emptyFormADto,
     validators: {
-      onBlur: getFormAValidationSchema(initialStateQuery.data),
+      onBlur: validator,
     },
     onSubmit: (values) => {
       console.log(values);
     },
   });
+
+  useEffect(() => {
+    form.validateAllFields('blur');
+  }, [form]);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

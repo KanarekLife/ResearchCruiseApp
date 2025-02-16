@@ -41,6 +41,7 @@ export function OwnResearchTaskDetails({ form, row, disabled }: Props) {
             value={field.state.value as string}
             onBlur={field.handleBlur}
             onChange={field.handleChange}
+            errors={mapValidationErrors(field.state.meta.errors)}
             label="Przewidywany termin składania"
             required
             disabled={disabled}

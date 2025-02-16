@@ -155,7 +155,7 @@ export function FormAPublicationsSection({ initValues, form, readonly }: FormAPr
             children={(field) => (
               <AppYearPickerInput
                 name={field.name}
-                value={parseInt(field.state.value)}
+                value={field.state.value ? parseInt(field.state.value) : undefined}
                 onChange={(e) => field.handleChange(e?.toString() ?? '')}
                 onBlur={field.handleBlur}
                 errors={mapValidationErrors(field.state.meta.errors)}
@@ -196,7 +196,14 @@ export function FormAPublicationsSection({ initValues, form, readonly }: FormAPr
         id: 'actions',
         cell: ({ row }) => (
           <div className="flex justify-end">
-            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} disabled={readonly} />
+            <AppTableDeleteRowButton
+              onClick={() => {
+                field.removeValue(row.index);
+                field.handleChange((prev) => prev);
+                field.handleBlur();
+              }}
+              disabled={readonly}
+            />
           </div>
         ),
         size: 20,
@@ -321,6 +328,10 @@ function AddHistoricalPublicationButton({ field, initValues, disabled }: AddHist
                     key={`publications.add-historical-btn.${JSON.stringify(publication)}`}
                     onClick={() => {
                       field.pushValue(publication);
+                      field.handleChange((prev) => prev);
+                      field.handleBlur();
+                      field.form.validateAllFields('blur');
+                      field.form.validateAllFields('change');
                       setExpanded(false);
                     }}
                     className="w-full rounded-lg hover:bg-gray-100 focus:inset-ring-2 inset-ring-blue-500 px-2 cursor-pointer"
@@ -399,9 +410,13 @@ function AddNewPublicationButton({ field, disabled }: AddNewPublicationButtonPro
                     authors: '',
                     title: '',
                     magazine: '',
-                    year: '1900',
+                    year: '',
                     ministerialPoints: '0',
                   });
+                  field.handleChange((prev) => prev);
+                  field.handleBlur();
+                  field.form.validateAllFields('blur');
+                  field.form.validateAllFields('change');
                   setExpanded(false);
                 }}
                 variant="plain"

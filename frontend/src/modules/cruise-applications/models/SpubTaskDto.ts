@@ -7,7 +7,7 @@ export type SpubTaskDto = {
 };
 
 export const SpubTaskDtoValidationSchema = z.object({
-  name: z.string(),
-  yearFrom: z.string().length(4),
-  yearTo: z.string().length(4),
+  name: z.string().nonempty('Nazwa jest wymagana'),
+  yearFrom: z.string().nonempty('Rok rozpoczęcia jest wymagany'),
+  yearTo: z.string().nonempty('Rok zakończenia jest wymagany'),
 });

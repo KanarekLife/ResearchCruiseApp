@@ -131,7 +131,14 @@ export function FormAContractsSection({ initValues, form, readonly }: FormAProps
         id: 'actions',
         cell: ({ row }) => (
           <div className="flex justify-end">
-            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} disabled={readonly} />
+            <AppTableDeleteRowButton
+              onClick={() => {
+                field.removeValue(row.index);
+                field.handleChange((prev) => prev);
+                field.handleBlur();
+              }}
+              disabled={readonly}
+            />
           </div>
         ),
         size: 10,
@@ -231,6 +238,10 @@ function AddHistoricalContractButton({ field, initValues, disabled }: AddHistori
                     key={`contracts.add-historical-btn.${JSON.stringify(task)}`}
                     onClick={() => {
                       field.pushValue(task);
+                      field.handleChange((prev) => prev);
+                      field.handleBlur();
+                      field.form.validateAllFields('blur');
+                      field.form.validateAllFields('change');
                       setExpanded(false);
                     }}
                     variant="plain"
@@ -300,6 +311,10 @@ function AddNewContractButton({ field, disabled }: AddNewContractButtonProps) {
                       name: '',
                     },
                   });
+                  field.handleChange((prev) => prev);
+                  field.handleBlur();
+                  field.form.validateAllFields('blur');
+                  field.form.validateAllFields('change');
                   setExpanded(false);
                 }}
                 variant="plain"

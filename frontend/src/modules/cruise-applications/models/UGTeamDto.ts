@@ -11,9 +11,9 @@ export const UGTeamDtoValidationSchema = z.object({
   noOfEmployees: z.string().refine((val) => {
     const parsed = parseInt(val, 10);
     return !isNaN(parsed) && parsed >= 0;
-  }, 'noOfEmployees must an integer'),
+  }, 'Liczba pracowników musi być liczbą nieujemną'),
   noOfStudents: z.string().refine((val) => {
     const parsed = parseInt(val, 10);
     return !isNaN(parsed) && parsed >= 0;
-  }, 'noOfStudents must an integer'),
+  }, 'Liczba studentów musi być liczbą nieujemną'),
 });

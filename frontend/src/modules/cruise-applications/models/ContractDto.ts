@@ -17,9 +17,9 @@ export function getContractCategoryName(category: ContractDto['category']): stri
 
 export const ContractDtoValidationSchema = z.object({
   category: z.enum(['domestic', 'international']),
-  institutionName: z.string(),
-  institutionUnit: z.string(),
-  institutionLocalization: z.string(),
-  description: z.string(),
+  institutionName: z.string().nonempty('Nazwa instytucji jest wymagana'),
+  institutionUnit: z.string().nonempty('Jednostka jest wymagana'),
+  institutionLocalization: z.string().nonempty('Lokalizacja instytucji jest wymagana'),
+  description: z.string().nonempty('Opis jest wymagany'),
   scan: FileDtoValidationSchema,
 });

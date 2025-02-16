@@ -84,7 +84,14 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
         id: 'actions',
         cell: ({ row }) => (
           <div className="flex justify-end">
-            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} disabled={readonly} />
+            <AppTableDeleteRowButton
+              onClick={() => {
+                field.removeValue(row.index);
+                field.handleChange((prev) => prev);
+                field.handleBlur();
+              }}
+              disabled={readonly}
+            />
           </div>
         ),
         size: 10,
@@ -147,7 +154,14 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
         id: 'actions',
         cell: ({ row }) => (
           <div className="flex justify-end">
-            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} disabled={readonly} />
+            <AppTableDeleteRowButton
+              onClick={() => {
+                field.removeValue(row.index);
+                field.handleChange((prev) => prev);
+                field.handleBlur();
+              }}
+              disabled={readonly}
+            />
           </div>
         ),
         size: 10,
@@ -194,6 +208,10 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
                     variant="primary"
                     onClick={() => {
                       field.pushValue({ name: '', noOfPersons: '0' });
+                      field.handleChange((prev) => prev);
+                      field.handleBlur();
+                      field.form.validateAllFields('blur');
+                      field.form.validateAllFields('change');
                     }}
                     className="flex items-center gap-4"
                     disabled={readonly}
@@ -268,6 +286,10 @@ function AddUGTeamButton({ field, initValues, disabled }: AddUGTeamButtonProps) 
                   key={`ugTeams.add-ug-unit-btn.${unit.id}`}
                   onClick={() => {
                     field.pushValue({ ugUnitId: unit.id, noOfEmployees: '0', noOfStudents: '0' });
+                    field.handleChange((prev) => prev);
+                    field.handleBlur();
+                    field.form.validateAllFields('blur');
+                    field.form.validateAllFields('change');
                     setExpanded(false);
                   }}
                   variant="plain"
@@ -331,6 +353,10 @@ function AddHistoricalGuestTeamButton({ field, initValues, disabled }: AddHistor
                 key={`guestTeams.add-historical-btn.${guestInstitution}`}
                 onClick={() => {
                   field.pushValue({ name: guestInstitution, noOfPersons: '0' });
+                  field.handleChange((prev) => prev);
+                  field.handleBlur();
+                  field.form.validateAllFields('blur');
+                  field.form.validateAllFields('change');
                   setExpanded(false);
                 }}
                 variant="plain"

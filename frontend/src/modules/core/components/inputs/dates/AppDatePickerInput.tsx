@@ -128,6 +128,7 @@ export function AppDatePickerInput({
             </span>
           </AppButton>
           {selectedDate &&
+            removeSelectedDatePortalRef.current &&
             createPortal(
               <AppButton variant="plain" onClick={handleResetSelection} className="inline-block p-0 hover:text-red-500">
                 <XLgIcon className="h-4 w-4" />

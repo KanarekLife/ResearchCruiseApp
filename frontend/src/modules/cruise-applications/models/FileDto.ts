@@ -6,6 +6,6 @@ export type FileDto = {
 };
 
 export const FileDtoValidationSchema = z.object({
-  name: z.string(),
-  content: z.string(),
+  name: z.string().nonempty('Nazwa pliku nie może być pusta'),
+  content: z.string().nonempty('Zawartość pliku nie może być pusta'),
 });

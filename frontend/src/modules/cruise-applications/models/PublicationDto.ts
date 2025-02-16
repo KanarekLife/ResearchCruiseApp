@@ -14,13 +14,13 @@ export type PublicationDto = {
 export const PublicationDtoValidationSchema = z.object({
   id: z.string().uuid(),
   category: z.enum(['subject', 'postscript']),
-  doi: z.string(),
-  authors: z.string(),
-  title: z.string(),
-  magazine: z.string(),
-  year: z.string().length(4),
+  doi: z.string().nonempty('DOI jest wymagane'),
+  authors: z.string().nonempty('Autorzy są wymagani'),
+  title: z.string().nonempty('Tytuł jest wymagany'),
+  magazine: z.string().nonempty('Czasopismo jest wymagane'),
+  year: z.string().nonempty('Rok jest wymagany'),
   ministerialPoints: z.string().refine((val) => {
     const parsed = parseInt(val, 10);
     return !isNaN(parsed) && parsed >= 0;
-  }, 'ministerialPoints must an integer'),
+  }, 'Punkty muszą być liczbą nieujemną'),
 });

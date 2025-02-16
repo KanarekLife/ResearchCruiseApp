@@ -25,6 +25,7 @@ import {
   getEmptyTask,
   getTaskName,
   ResearchTaskDto,
+  ResearchTaskDtoValidationSchema,
   ResearchTaskType,
   taskTypes,
 } from '@/cruise-applications/models/ResearchTaskDto';
@@ -59,7 +60,14 @@ export function FormAResearchTasksSection({ initValues, form, readonly }: FormAP
         id: 'actions',
         cell: ({ row }) => (
           <div className="flex justify-end">
-            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} disabled={readonly} />
+            <AppTableDeleteRowButton
+              onClick={() => {
+                field.removeValue(row.index);
+                field.handleChange((prev) => prev);
+                field.handleBlur();
+              }}
+              disabled={readonly}
+            />
           </div>
         ),
         size: 10,
@@ -73,6 +81,9 @@ export function FormAResearchTasksSection({ initValues, form, readonly }: FormAP
         <form.Field
           name="researchTasks"
           mode="array"
+          validators={{
+            onBlur: ResearchTaskDtoValidationSchema.array().min(1),
+          }}
           children={(field) => (
             <>
               <AppTable
@@ -156,6 +167,10 @@ function AddHistoricalResearchTaskButton({ field, initValues, disabled }: AddHis
                     key={`researchTasks.add-historical-btn.${JSON.stringify(task)}`}
                     onClick={() => {
                       field.pushValue(task);
+                      field.handleChange((prev) => prev);
+                      field.handleBlur();
+                      field.form.validateAllFields('blur');
+                      field.form.validateAllFields('change');
                       setExpanded(false);
                     }}
                     variant="plain"
@@ -230,6 +245,10 @@ function AddNewResearchTaskButton({ field, disabled }: AddNewResearchTaskButtonP
                   key={`researchTasks.add-new-btn.${type}`}
                   onClick={() => {
                     field.pushValue(getEmptyTask(type));
+                    field.handleChange((prev) => prev);
+                    field.handleBlur();
+                    field.form.validateAllFields('blur');
+                    field.form.validateAllFields('change');
                     setExpanded(false);
                   }}
                   variant="plain"

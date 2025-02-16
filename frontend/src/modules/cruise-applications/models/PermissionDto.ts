@@ -9,7 +9,7 @@ export type PermissionDto = {
 };
 
 export const PermissionDtoValidationSchema = z.object({
-  description: z.string(),
-  executive: z.string(),
+  description: z.string().nonempty('Treść pozwolenia jest wymagany'),
+  executive: z.string().nonempty('Organ wydający jest wymagany'),
   scan: FileDtoValidationSchema.optional(),
 });

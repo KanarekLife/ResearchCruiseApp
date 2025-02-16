@@ -23,8 +23,8 @@ export type ThesisResearchTaskDto = {
 
 export const ThesisResearchTaskDtoValidationSchema = z.object({
   type: z.enum([ResearchTaskType.BachelorThesis, ResearchTaskType.MasterThesis, ResearchTaskType.DoctoralThesis]),
-  author: z.string(),
-  title: z.string(),
+  author: z.string().nonempty('Autor nie może być pusty'),
+  title: z.string().nonempty('Tytuł nie może być pusty'),
 });
 
 export type ProjectPreparationResearchTaskDto = {
@@ -36,9 +36,11 @@ export type ProjectPreparationResearchTaskDto = {
 
 export const ProjectPreparationResearchTaskDtoValidationSchema = z.object({
   type: z.enum([ResearchTaskType.ProjectPreparation]),
-  title: z.string(),
-  date: z.string().date(),
-  financingApproved: z.enum(['true', 'false']),
+  title: z.string().nonempty('Tytuł nie może być pusty'),
+  date: z.string().nonempty('Data nie może być pusta'),
+  financingApproved: z.enum(['true', 'false'], {
+    message: 'Wymagane jest wskazanie czy finansowanie zostało zatwierdzone',
+  }),
 });
 
 export type ProjectResearchTaskDto = {
@@ -63,17 +65,17 @@ export const ProjectResearchTaskDtoValidationSchema = z.object({
     ResearchTaskType.OtherProject,
     ResearchTaskType.CommercialProject,
   ]),
-  title: z.string(),
+  title: z.string().nonempty('Tytuł nie może być pusty'),
   financingAmount: z.string().refine((val) => {
     const parsed = parseFloat(val);
     return !isNaN(parsed) && parsed >= 0;
-  }, 'financingAmount must be a non-negative float number'),
-  startDate: z.string().date(),
-  endDate: z.string().date(),
+  }, 'Kwota finansowania musi być poprawną kwotą większą lub równą 0.00'),
+  startDate: z.string().nonempty('Data rozpoczęcia nie może być pusta'),
+  endDate: z.string().nonempty('Data zakończenia nie może być pusta'),
   securedAmount: z.string().refine((val) => {
     const parsed = parseFloat(val);
     return !isNaN(parsed) && parsed >= 0;
-  }, 'securedAmount must be a non-negative float number'),
+  }, 'Kwota zabezpieczona musi być poprawną kwotą większą lub równą 0.00'),
 });
 
 export type DidacticsResearchTaskDto = {
@@ -83,7 +85,7 @@ export type DidacticsResearchTaskDto = {
 
 export const DidacticsResearchTaskDtoValidationSchema = z.object({
   type: z.enum([ResearchTaskType.Didactics]),
-  description: z.string(),
+  description: z.string().nonempty('Opis nie może być pusty'),
 });
 
 export type OwnResearchTaskDto = {
@@ -96,16 +98,16 @@ export type OwnResearchTaskDto = {
 
 export const OwnResearchTaskDtoValidationSchema = z.object({
   type: z.enum([ResearchTaskType.OwnResearchTask]),
-  title: z.string(),
-  date: z.string().date(),
-  magazine: z.string(),
+  title: z.string().nonempty('Tytuł nie może być pusty'),
+  date: z.string().nonempty('Data nie może być pusta'),
+  magazine: z.string().nonempty('Czasopismo nie może być puste'),
   ministerialPoints: z.string().refine(
     (val) => {
       const parsed = parseInt(val, 10);
       return !isNaN(parsed) && parsed >= 0;
     },
     {
-      message: 'ministerialPoints must be a non-negative integer',
+      message: 'Punkty ministerialne muszą być liczbą całkowitą większą lub równą 0',
     }
   ),
 });
@@ -117,7 +119,7 @@ export type OtherResearchTaskDto = {
 
 export const OtherResearchTaskDtoValidationSchema = z.object({
   type: z.enum([ResearchTaskType.OtherResearchTask]),
-  description: z.string(),
+  description: z.string().nonempty('Opis nie może być pusty'),
 });
 
 export type ResearchTaskDto =
