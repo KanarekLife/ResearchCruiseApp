@@ -25,9 +25,9 @@ export function NewCruisePage() {
     form.validateAllFields('blur');
   }, [form]);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    event.stopPropagation();
+  function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
+    evt.preventDefault();
+    evt.stopPropagation();
     form.handleSubmit();
   }
 

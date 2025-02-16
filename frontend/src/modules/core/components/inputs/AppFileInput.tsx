@@ -68,18 +68,18 @@ export function AppFileInput({
     onBlur?.();
   }, [allowMultiple, files, onBlur, onChange]);
 
-  async function handleDrop(event: React.DragEvent<HTMLDivElement>) {
-    event.preventDefault();
-    event.stopPropagation();
+  async function handleDrop(evt: React.DragEvent<HTMLDivElement>) {
+    evt.preventDefault();
+    evt.stopPropagation();
 
-    const filesList = event.dataTransfer.files;
+    const filesList = evt.dataTransfer.files;
     if (!disabled && filesList) {
       setFiles(await loadFileList(filesList));
     }
   }
 
-  async function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const filesList = event.target.files;
+  async function handleChange(evt: React.ChangeEvent<HTMLInputElement>) {
+    const filesList = evt.target.files;
     if (filesList) {
       setFiles(await loadFileList(filesList));
     }
@@ -103,7 +103,7 @@ export function AppFileInput({
 
         return true;
       })
-      .map(async (file) => await loadFile(file));
+      .map((file) => loadFile(file));
 
     setNotifications(newNotifications);
     return await Promise.all(promises);
