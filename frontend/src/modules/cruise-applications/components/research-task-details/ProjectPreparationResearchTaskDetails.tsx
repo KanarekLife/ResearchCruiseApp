@@ -45,6 +45,7 @@ export function ProjectPreparationResearchTaskDetails({ form, row, disabled }: P
             label="Przewidywany termin składania"
             required
             disabled={disabled}
+            errors={mapValidationErrors(field.state.meta.errors)}
           />
         )}
       />
@@ -65,6 +66,7 @@ export function ProjectPreparationResearchTaskDetails({ form, row, disabled }: P
             required
             showEmptyOption={false}
             disabled={disabled}
+            errors={mapValidationErrors(field.state.meta.errors)}
           />
         )}
       />

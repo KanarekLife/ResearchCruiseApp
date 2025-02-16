@@ -72,7 +72,14 @@ export function FormAPermissionsSection({ form, readonly }: FormAProps) {
         id: 'actions',
         cell: ({ row }) => (
           <div className="flex justify-end">
-            <AppTableDeleteRowButton onClick={() => field.removeValue(row.index)} disabled={readonly} />
+            <AppTableDeleteRowButton
+              onClick={() => {
+                field.removeValue(row.index);
+                field.handleChange((prev) => prev);
+                field.handleBlur();
+              }}
+              disabled={readonly}
+            />
           </div>
         ),
         size: 10,
@@ -94,7 +101,13 @@ export function FormAPermissionsSection({ form, readonly }: FormAProps) {
                 buttons={() => [
                   <AppButton
                     key="permissions.add-btn"
-                    onClick={() => field.pushValue(newPermission)}
+                    onClick={() => {
+                      field.pushValue(newPermission);
+                      field.handleChange((prev) => prev);
+                      field.handleBlur();
+                      field.form.validateAllFields('blur');
+                      field.form.validateAllFields('change');
+                    }}
                     disabled={readonly}
                   >
                     Dodaj pozwolenie

@@ -41,6 +41,7 @@ export function ProjectResearchTaskDetails({ form, row, disabled }: Props) {
             value={field.state.value as string}
             onBlur={field.handleBlur}
             onChange={field.handleChange}
+            errors={mapValidationErrors(field.state.meta.errors)}
             label="Data rozpoczęcia"
             required
             disabled={disabled}
@@ -56,6 +57,7 @@ export function ProjectResearchTaskDetails({ form, row, disabled }: Props) {
             value={field.state.value as string}
             onBlur={field.handleBlur}
             onChange={field.handleChange}
+            errors={mapValidationErrors(field.state.meta.errors)}
             label="Data zakończenia"
             required
             disabled={disabled}

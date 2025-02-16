@@ -148,24 +148,18 @@ export function AppDropdownInput({
 }
 
 type ModalProps = {
-type ModalProps = {
   dropdownRef: React.RefObject<HTMLDivElement | null>;
   inputRef: React.RefObject<HTMLDivElement | null>;
 
-  allPossibleOptions: AppDropdownInputOption[];
-
-  disabled?: boolean;
-  selectOption: (option: AppDropdownInputOption) => void;
+  children: React.ReactNode;
 };
 
-function Modal({
-  dropdownRef,
-  inputRef,
-  allPossibleOptions,
-  disabled,
-  selectOption,
-}: ModalProps) {
-  const { top, left, width } = useDropdown({ openingItemRef: inputRef, dropdownRef, dropdownPosition: 'left' });
+function Modal({ dropdownRef, inputRef, children }: ModalProps) {
+  const { top, left, width, direction } = useDropdown({
+    openingItemRef: inputRef,
+    dropdownRef,
+    dropdownPosition: 'left',
+  });
 
   return (
     <motion.div

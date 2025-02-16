@@ -108,7 +108,7 @@ export function getFormAValidationSchema(initValues: FormAInitValuesDto) {
           periodNotes: z.string(),
           permissions: PermissionDtoValidationSchema.array().refine(
             (val) => val.every((x) => !x.scan),
-            'skan nie może być dostarczony'
+            'Skan nie może być dostarczony na tym etapie'
           ),
           researchAreaId: z
             .string()

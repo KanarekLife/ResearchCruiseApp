@@ -74,6 +74,7 @@ export function AppYearPickerInput({
   function handleResetSelection(evt: React.MouseEvent) {
     setSelectedYear(undefined);
     onChange(undefined);
+    onBlur();
     setExpanded(false);
     evt.preventDefault();
     evt.stopPropagation();
@@ -82,6 +83,7 @@ export function AppYearPickerInput({
   function handleSelectYear(newYear: number): void {
     setSelectedYear(newYear);
     onChange(newYear);
+    onBlur();
     setExpanded(false);
   }
 
