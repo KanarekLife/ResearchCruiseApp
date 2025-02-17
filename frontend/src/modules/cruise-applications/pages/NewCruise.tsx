@@ -1,5 +1,5 @@
 import { useForm } from '@tanstack/react-form';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useState } from 'react';
 
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
@@ -9,25 +9,23 @@ import { useFormAInitValues } from '@/cruise-applications/hooks/FormAApiHooks';
 import { emptyFormADto, FormADto } from '@/cruise-applications/models/FormADto';
 
 export function NewCruisePage() {
+  const [hasFormBeenSubmitted, setHasFormBeenSubmitted] = useState(false);
   const initialStateQuery = useFormAInitValues();
   const validator = getFormAValidationSchema(initialStateQuery.data);
   const form = useForm<FormADto>({
     defaultValues: emptyFormADto,
     validators: {
-      onBlur: validator,
+      onChange: validator,
     },
     onSubmit: (values) => {
       console.log(values);
     },
   });
 
-  useEffect(() => {
-    form.validateAllFields('blur');
-  }, [form]);
-
   function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
     evt.stopPropagation();
+    setHasFormBeenSubmitted(true);
     form.handleSubmit();
   }
 
@@ -35,7 +33,7 @@ export function NewCruisePage() {
     <AppLayout title="Formularz A" variant="defaultWithoutCentering">
       <Suspense fallback={<AppLoader />}>
         <form className="space-y-8" onSubmit={handleSubmit}>
-          <FormA form={form} initValues={initialStateQuery} />
+          <FormA context={{ form, initValues: initialStateQuery.data, isReadonly: false, hasFormBeenSubmitted }} />
         </form>
       </Suspense>
     </AppLayout>

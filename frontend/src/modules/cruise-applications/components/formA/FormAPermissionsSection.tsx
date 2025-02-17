@@ -7,13 +7,13 @@ import { AppInput } from '@/core/components/inputs/AppInput';
 import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputErrorsList';
 import { AppTable } from '@/core/components/table/AppTable';
 import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteRowButton';
-import { mapValidationErrors } from '@/core/lib/utils';
-import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { getErrors } from '@/core/lib/utils';
+import { useFormA } from '@/cruise-applications/contexts/FormAContext';
 import { FormADto } from '@/cruise-applications/models/FormADto';
 import { PermissionDto } from '@/cruise-applications/models/PermissionDto';
 
-export function FormAPermissionsSection({ form, readonly }: FormAProps) {
-  const newPermission: PermissionDto = { description: '', executive: '', scan: undefined };
+export function FormAPermissionsSection() {
+  const { form, isReadonly, hasFormBeenSubmitted } = useFormA();
 
   function getColumns(
     field: FieldApi<FormADto, 'permissions', undefined, undefined, PermissionDto[]>
@@ -38,9 +38,9 @@ export function FormAPermissionsSection({ form, readonly }: FormAProps) {
                 value={field.state.value}
                 onChange={field.handleChange}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 className="mx-4"
-                disabled={readonly}
+                disabled={isReadonly}
               />
             )}
           />
@@ -60,9 +60,9 @@ export function FormAPermissionsSection({ form, readonly }: FormAProps) {
                 value={field.state.value}
                 onChange={field.handleChange}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 className="mx-4"
-                disabled={readonly}
+                disabled={isReadonly}
               />
             )}
           />
@@ -78,7 +78,7 @@ export function FormAPermissionsSection({ form, readonly }: FormAProps) {
                 field.handleChange((prev) => prev);
                 field.handleBlur();
               }}
-              disabled={readonly}
+              disabled={isReadonly}
             />
           </div>
         ),
@@ -102,20 +102,20 @@ export function FormAPermissionsSection({ form, readonly }: FormAProps) {
                   <AppButton
                     key="permissions.add-btn"
                     onClick={() => {
-                      field.pushValue(newPermission);
+                      field.pushValue({ description: '', executive: '' });
                       field.handleChange((prev) => prev);
                       field.handleBlur();
                       field.form.validateAllFields('blur');
                       field.form.validateAllFields('change');
                     }}
-                    disabled={readonly}
+                    disabled={isReadonly}
                   >
                     Dodaj pozwolenie
                   </AppButton>,
                 ]}
                 emptyTableMessage="Nie dodano żadnego pozwolenia."
               />
-              <AppInputErrorsList errors={mapValidationErrors(field.state.meta.errors)} />
+              <AppInputErrorsList errors={getErrors(field.state.meta)} />
             </>
           )}
         />

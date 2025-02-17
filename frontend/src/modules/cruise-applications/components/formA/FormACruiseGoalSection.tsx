@@ -1,11 +1,13 @@
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppDropdownInput } from '@/core/components/inputs/AppDropdownInput';
 import { AppInput } from '@/core/components/inputs/AppInput';
-import { mapValidationErrors } from '@/core/lib/utils';
-import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { getErrors } from '@/core/lib/utils';
+import { useFormA } from '@/cruise-applications/contexts/FormAContext';
 import { CruiseGoal } from '@/cruise-applications/models/FormADto';
 
-export function FormACruiseGoalSection({ initValues, form, readonly }: FormAProps) {
+export function FormACruiseGoalSection() {
+  const { form, isReadonly, initValues, hasFormBeenSubmitted } = useFormA();
+
   return (
     <AppAccordion title="5. Cel rejsu" expandedByDefault>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -17,14 +19,14 @@ export function FormACruiseGoalSection({ initValues, form, readonly }: FormAProp
               value={field.state.value}
               onChange={(e) => field.handleChange(e as CruiseGoal)}
               onBlur={field.handleBlur}
-              errors={mapValidationErrors(field.state.meta.errors)}
+              errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
               label="Cel rejsu"
-              allOptions={initValues.data.cruiseGoals.map((cruiseGoal, index) => ({
+              allOptions={initValues.cruiseGoals.map((cruiseGoal, index) => ({
                 value: index.toString(),
                 inlineLabel: cruiseGoal,
               }))}
               required
-              disabled={readonly}
+              disabled={isReadonly}
             />
           )}
         />
@@ -40,10 +42,10 @@ export function FormACruiseGoalSection({ initValues, form, readonly }: FormAProp
                   value={field.state.value}
                   onChange={field.handleChange}
                   onBlur={field.handleBlur}
-                  errors={mapValidationErrors(field.state.meta.errors)}
+                  errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Opis"
                   placeholder="np. szczegóły dotyczące celu rejsu"
-                  disabled={!cruiseGoal || readonly}
+                  disabled={!cruiseGoal || isReadonly}
                   required
                 />
               )}

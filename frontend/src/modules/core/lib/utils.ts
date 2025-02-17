@@ -1,4 +1,4 @@
-import { ValidationError } from '@tanstack/react-form';
+import { FieldMeta } from '@tanstack/react-form';
 import clsx, { ClassValue } from 'clsx';
 import { createPortal } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
@@ -7,12 +7,12 @@ export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
-export function mapValidationErrors(errors: ValidationError[]): string[] | undefined {
-  if (!errors.length) {
+export function getErrors(field: FieldMeta, hasFormBeenSubmitted: boolean = true): string[] | undefined {
+  if ((!hasFormBeenSubmitted && field.isPristine) || field.errors.length === 0) {
     return undefined;
   }
 
-  return errors.map((error) => error!.toString());
+  return field.errors.map((error) => error!.toString());
 }
 
 export function groupBy<T>(array: T[], key: (item: T) => string): [string, T[]][] {

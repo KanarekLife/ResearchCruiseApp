@@ -23,13 +23,21 @@ type Props = {
   form: ReactFormExtendedApi<FormADto, undefined>;
   row: Row<ResearchTaskDto>;
   disabled?: boolean;
+  hasFormBeenSubmitted?: boolean;
 };
-export function ResearchTaskDetails({ form, row, disabled }: Props) {
+export function ResearchTaskDetails({ form, row, disabled, hasFormBeenSubmitted }: Props) {
   switch (row.original.type) {
     case ResearchTaskType.BachelorThesis:
     case ResearchTaskType.MasterThesis:
     case ResearchTaskType.DoctoralThesis:
-      return <ThesisResearchTaskDetails form={form} row={row as Row<ThesisResearchTaskDto>} disabled={disabled} />;
+      return (
+        <ThesisResearchTaskDetails
+          form={form}
+          row={row as Row<ThesisResearchTaskDto>}
+          disabled={disabled}
+          hasFormBeenSubmitted={hasFormBeenSubmitted}
+        />
+      );
     case ResearchTaskType.ProjectPreparation:
       return (
         <ProjectPreparationResearchTaskDetails
@@ -43,15 +51,41 @@ export function ResearchTaskDetails({ form, row, disabled }: Props) {
     case ResearchTaskType.InternalUgProject:
     case ResearchTaskType.OtherProject:
     case ResearchTaskType.CommercialProject:
-      return <ProjectResearchTaskDetails form={form} row={row as Row<ProjectResearchTaskDto>} disabled={disabled} />;
+      return (
+        <ProjectResearchTaskDetails
+          form={form}
+          row={row as Row<ProjectResearchTaskDto>}
+          disabled={disabled}
+          hasFormBeenSubmitted={hasFormBeenSubmitted}
+        />
+      );
     case ResearchTaskType.Didactics:
       return (
-        <DidacticsResearchTaskDetails form={form} row={row as Row<DidacticsResearchTaskDto>} disabled={disabled} />
+        <DidacticsResearchTaskDetails
+          form={form}
+          row={row as Row<DidacticsResearchTaskDto>}
+          disabled={disabled}
+          hasFormBeenSubmitted={hasFormBeenSubmitted}
+        />
       );
     case ResearchTaskType.OwnResearchTask:
-      return <OwnResearchTaskDetails form={form} row={row as Row<OwnResearchTaskDto>} disabled={disabled} />;
+      return (
+        <OwnResearchTaskDetails
+          form={form}
+          row={row as Row<OwnResearchTaskDto>}
+          disabled={disabled}
+          hasFormBeenSubmitted={hasFormBeenSubmitted}
+        />
+      );
     case ResearchTaskType.OtherResearchTask:
-      return <OtherResearchTaskDetails form={form} row={row as Row<OtherResearchTaskDto>} disabled={disabled} />;
+      return (
+        <OtherResearchTaskDetails
+          form={form}
+          row={row as Row<OtherResearchTaskDto>}
+          disabled={disabled}
+          hasFormBeenSubmitted={hasFormBeenSubmitted}
+        />
+      );
     default:
       throw new Error(`Unknown research task type`);
   }

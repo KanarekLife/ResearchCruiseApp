@@ -1,5 +1,4 @@
 import { FieldApi } from '@tanstack/react-form';
-import { UseSuspenseQueryResult } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 import ChevronDownIcon from 'bootstrap-icons/icons/chevron-down.svg?react';
 import ChevronUpIcon from 'bootstrap-icons/icons/chevron-up.svg?react';
@@ -16,13 +15,15 @@ import { AppTable } from '@/core/components/table/AppTable';
 import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteRowButton';
 import { useDropdown } from '@/core/hooks/DropdownHook';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
-import { cn, groupBy, mapValidationErrors } from '@/core/lib/utils';
-import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { cn, getErrors, groupBy } from '@/core/lib/utils';
+import { useFormA } from '@/cruise-applications/contexts/FormAContext';
 import { ContractDto, getContractCategoryName } from '@/cruise-applications/models/ContractDto';
 import { FormADto } from '@/cruise-applications/models/FormADto';
 import { FormAInitValuesDto } from '@/cruise-applications/models/FormAInitValuesDto';
 
-export function FormAContractsSection({ initValues, form, readonly }: FormAProps) {
+export function FormAContractsSection() {
+  const { form, isReadonly, initValues, hasFormBeenSubmitted } = useFormA();
+
   function getColumns(
     field: FieldApi<FormADto, 'contracts', undefined, undefined, ContractDto[]>
   ): ColumnDef<ContractDto>[] {
@@ -56,11 +57,11 @@ export function FormAContractsSection({ initValues, form, readonly }: FormAProps
                   value={field.state.value}
                   onChange={field.handleChange}
                   onBlur={field.handleBlur}
-                  errors={mapValidationErrors(field.state.meta.errors)}
+                  errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Nazwa instytucji"
                   placeholder='np. "Uniwersytet Gdański"'
                   required
-                  disabled={readonly}
+                  disabled={isReadonly}
                 />
               )}
             />
@@ -72,11 +73,11 @@ export function FormAContractsSection({ initValues, form, readonly }: FormAProps
                   value={field.state.value}
                   onChange={field.handleChange}
                   onBlur={field.handleBlur}
-                  errors={mapValidationErrors(field.state.meta.errors)}
+                  errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Jednostka"
                   placeholder='np. "Wydział Biologii"'
                   required
-                  disabled={readonly}
+                  disabled={isReadonly}
                 />
               )}
             />
@@ -88,11 +89,11 @@ export function FormAContractsSection({ initValues, form, readonly }: FormAProps
                   value={field.state.value}
                   onChange={field.handleChange}
                   onBlur={field.handleBlur}
-                  errors={mapValidationErrors(field.state.meta.errors)}
+                  errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Lokalizacja instytucji"
                   placeholder='np. "Gdańsk"'
                   required
-                  disabled={readonly}
+                  disabled={isReadonly}
                 />
               )}
             />
@@ -111,11 +112,11 @@ export function FormAContractsSection({ initValues, form, readonly }: FormAProps
                 value={field.state.value}
                 onChange={field.handleChange}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 label="Opis"
                 placeholder='np. "Umowa o współpracy"'
                 required
-                disabled={readonly}
+                disabled={isReadonly}
               />
             )}
           />
@@ -136,10 +137,10 @@ export function FormAContractsSection({ initValues, form, readonly }: FormAProps
                 acceptedMimeTypes={['application/pdf']}
                 onChange={field.handleChange}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 label="Skan"
                 required
-                disabled={readonly}
+                disabled={isReadonly}
               />
             )}
           />
@@ -155,7 +156,7 @@ export function FormAContractsSection({ initValues, form, readonly }: FormAProps
                 field.handleChange((prev) => prev);
                 field.handleBlur();
               }}
-              disabled={readonly}
+              disabled={isReadonly}
             />
           </div>
         ),
@@ -179,17 +180,17 @@ export function FormAContractsSection({ initValues, form, readonly }: FormAProps
                 columns={getColumns(field)}
                 data={field.state.value}
                 buttons={() => [
-                  <AddNewContractButton key="contracts.add-new-btn" field={field} disabled={readonly} />,
+                  <AddNewContractButton key="contracts.add-new-btn" field={field} disabled={isReadonly} />,
                   <AddHistoricalContractButton
                     key="contracts.add-historical-btn"
                     field={field}
                     initValues={initValues}
-                    disabled={readonly}
+                    disabled={isReadonly}
                   />,
                 ]}
                 emptyTableMessage="Nie dodano żadnej umowy."
               />
-              <AppInputErrorsList errors={mapValidationErrors(field.state.meta.errors)} />
+              <AppInputErrorsList errors={getErrors(field.state.meta, hasFormBeenSubmitted)} />
             </>
           )}
         />
@@ -200,7 +201,7 @@ export function FormAContractsSection({ initValues, form, readonly }: FormAProps
 
 type AddHistoricalContractButtonProps = {
   field: FieldApi<FormADto, 'contracts', undefined, undefined, ContractDto[]>;
-  initValues: UseSuspenseQueryResult<FormAInitValuesDto, Error>;
+  initValues: FormAInitValuesDto;
   disabled?: boolean;
 };
 function AddHistoricalContractButton({ field, initValues, disabled }: AddHistoricalContractButtonProps) {
@@ -242,7 +243,7 @@ function AddHistoricalContractButton({ field, initValues, disabled }: AddHistori
               />
             </div>
             {groupBy(
-              initValues.data.historicalContracts.filter((contract) =>
+              initValues.historicalContracts.filter((contract) =>
                 JSON.stringify(Object.values(contract)).toLowerCase().includes(searchValue.toLowerCase())
               ),
               (x) => x.category

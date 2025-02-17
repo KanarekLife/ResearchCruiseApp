@@ -35,18 +35,11 @@ export function getFormAValidationSchema(initValues: FormAInitValuesDto) {
             return z.NEVER;
           }
 
-          const MESSAGE = 'Kierownik rejsu i zastępca kierownika rejsu nie mogą być tą samą osobą';
-
           if (cruiseManagerId == deputyManagerId) {
             ctx.addIssue({
               code: 'custom',
-              path: ['cruiseManagerId'],
-              message: MESSAGE,
-            });
-            ctx.addIssue({
-              code: 'custom',
               path: ['deputyManagerId'],
-              message: MESSAGE,
+              message: 'Kierownik rejsu nie może być jednocześnie zastępcą kierownika rejsu',
             });
           }
         })

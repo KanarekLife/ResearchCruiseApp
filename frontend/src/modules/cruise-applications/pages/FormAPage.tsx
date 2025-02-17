@@ -11,6 +11,7 @@ import { emptyFormADto, FormADto } from '@/cruise-applications/models/FormADto';
 
 export function FormAPage() {
   const [editMode] = useState(false);
+  const [hasFormBeenSubmitted, setHasFormBeenSubmitted] = useState(false);
   const { cruiseId } = getRouteApi('/cruises/$cruiseId/formA').useParams();
   const initialStateQuery = useFormAInitValues();
   const formA = useFormA(cruiseId);
@@ -18,7 +19,7 @@ export function FormAPage() {
   const form = useForm<FormADto>({
     defaultValues: formA.data ?? emptyFormADto,
     validators: {
-      onBlur: getFormAValidationSchema(initialStateQuery.data),
+      onChange: getFormAValidationSchema(initialStateQuery.data),
     },
     onSubmit: (values) => {
       console.log(values);
@@ -28,6 +29,7 @@ export function FormAPage() {
   function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
     evt.stopPropagation();
+    setHasFormBeenSubmitted(true);
     form.handleSubmit();
   }
 
@@ -35,7 +37,7 @@ export function FormAPage() {
     <AppLayout title="Formularz A" variant="defaultWithoutCentering">
       <Suspense fallback={<AppLoader />}>
         <form className="space-y-8" onSubmit={handleSubmit}>
-          <FormA form={form} initValues={initialStateQuery} readonly={!editMode} />
+          <FormA context={{ form, initValues: initialStateQuery.data, isReadonly: !editMode, hasFormBeenSubmitted }} />
         </form>
       </Suspense>
     </AppLayout>

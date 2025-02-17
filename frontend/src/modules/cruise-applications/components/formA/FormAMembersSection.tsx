@@ -1,5 +1,4 @@
 import { FieldApi } from '@tanstack/react-form';
-import { UseSuspenseQueryResult } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 import ChevronDownIcon from 'bootstrap-icons/icons/chevron-down.svg?react';
 import ChevronUpIcon from 'bootstrap-icons/icons/chevron-up.svg?react';
@@ -16,14 +15,16 @@ import { AppTable } from '@/core/components/table/AppTable';
 import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteRowButton';
 import { useDropdown } from '@/core/hooks/DropdownHook';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
-import { cn, mapValidationErrors } from '@/core/lib/utils';
-import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { cn, getErrors } from '@/core/lib/utils';
+import { useFormA } from '@/cruise-applications/contexts/FormAContext';
 import { FormADto } from '@/cruise-applications/models/FormADto';
 import { FormAInitValuesDto } from '@/cruise-applications/models/FormAInitValuesDto';
 import { GuestTeamDto } from '@/cruise-applications/models/GuestTeamDto';
 import { UGTeamDto } from '@/cruise-applications/models/UGTeamDto';
 
-export function FormAMembersSection({ initValues, form, readonly }: FormAProps) {
+export function FormAMembersSection() {
+  const { form, isReadonly, initValues, hasFormBeenSubmitted } = useFormA();
+
   function getUgTeamsColumns(
     field: FieldApi<FormADto, 'ugTeams', undefined, undefined, UGTeamDto[]>
   ): ColumnDef<UGTeamDto>[] {
@@ -36,7 +37,7 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
       {
         header: 'Jednostka',
         accessorFn: (row) => row.ugUnitId,
-        cell: ({ row }) => initValues.data.ugUnits.find((unit) => unit.id === row.original.ugUnitId)?.name,
+        cell: ({ row }) => initValues.ugUnits.find((unit) => unit.id === row.original.ugUnitId)?.name,
       },
       {
         header: 'Liczba pracowników',
@@ -51,10 +52,10 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
                 minimum={0}
                 onChange={(x: number) => field.handleChange(x.toString())}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 className="mx-4"
                 required
-                disabled={readonly}
+                disabled={isReadonly}
               />
             )}
           />
@@ -73,10 +74,10 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
                 minimum={0}
                 onChange={(x: number) => field.handleChange(x.toString())}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 className="mx-4"
                 required
-                disabled={readonly}
+                disabled={isReadonly}
               />
             )}
           />
@@ -92,7 +93,7 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
                 field.handleChange((prev) => prev);
                 field.handleBlur();
               }}
-              disabled={readonly}
+              disabled={isReadonly}
             />
           </div>
         ),
@@ -122,10 +123,10 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
                 value={field.state.value}
                 onChange={field.handleChange}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 className="mx-4"
                 required
-                disabled={readonly}
+                disabled={isReadonly}
               />
             )}
           />
@@ -144,10 +145,10 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
                 minimum={0}
                 onChange={(x: number) => field.handleChange(x.toString())}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 className="mx-4"
                 required
-                disabled={readonly}
+                disabled={isReadonly}
               />
             )}
           />
@@ -163,7 +164,7 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
                 field.handleChange((prev) => prev);
                 field.handleBlur();
               }}
-              disabled={readonly}
+              disabled={isReadonly}
             />
           </div>
         ),
@@ -188,12 +189,12 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
                     key="ugTeams.add-ug-unit-btn"
                     field={field}
                     initValues={initValues}
-                    disabled={readonly}
+                    disabled={isReadonly}
                   />,
                 ]}
                 emptyTableMessage="Nie dodano żadnego zespołu."
               />
-              <AppInputErrorsList errors={mapValidationErrors(field.state.meta.errors)} />
+              <AppInputErrorsList errors={getErrors(field.state.meta, hasFormBeenSubmitted)} />
             </div>
           )}
         />
@@ -217,7 +218,7 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
                       field.form.validateAllFields('change');
                     }}
                     className="flex items-center gap-4"
-                    disabled={readonly}
+                    disabled={isReadonly}
                   >
                     Dodaj nowy zespół
                   </AppButton>,
@@ -225,12 +226,12 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
                     key="guestTeams.add-historical-btn"
                     field={field}
                     initValues={initValues}
-                    disabled={readonly}
+                    disabled={isReadonly}
                   />,
                 ]}
                 emptyTableMessage="Nie dodano żadnego zespołu."
               />
-              <AppInputErrorsList errors={mapValidationErrors(field.state.meta.errors)} />
+              <AppInputErrorsList errors={getErrors(field.state.meta, hasFormBeenSubmitted)} />
             </div>
           )}
         />
@@ -241,7 +242,7 @@ export function FormAMembersSection({ initValues, form, readonly }: FormAProps) 
 
 type AddUGTeamButtonProps = {
   field: FieldApi<FormADto, 'ugTeams', undefined, undefined, UGTeamDto[]>;
-  initValues: UseSuspenseQueryResult<FormAInitValuesDto, Error>;
+  initValues: FormAInitValuesDto;
   disabled?: boolean;
 };
 function AddUGTeamButton({ field, initValues, disabled }: AddUGTeamButtonProps) {
@@ -282,7 +283,7 @@ function AddUGTeamButton({ field, initValues, disabled }: AddUGTeamButtonProps) 
                 autoFocus
               />
             </div>
-            {initValues.data.ugUnits
+            {initValues.ugUnits
               .filter((unit) => unit.name.toLowerCase().includes(searchValue.toLowerCase()))
               .map((unit) => (
                 <AppButton
@@ -310,7 +311,7 @@ function AddUGTeamButton({ field, initValues, disabled }: AddUGTeamButtonProps) 
 
 type AddHistoricalGuestTeamButtonProps = {
   field: FieldApi<FormADto, 'guestTeams', undefined, undefined, GuestTeamDto[]>;
-  initValues: UseSuspenseQueryResult<FormAInitValuesDto, Error>;
+  initValues: FormAInitValuesDto;
   disabled?: boolean;
 };
 function AddHistoricalGuestTeamButton({ field, initValues, disabled }: AddHistoricalGuestTeamButtonProps) {
@@ -351,7 +352,7 @@ function AddHistoricalGuestTeamButton({ field, initValues, disabled }: AddHistor
                 autoFocus
               />
             </div>
-            {initValues.data.historicalGuestInstitutions.map((guestInstitution) => (
+            {initValues.historicalGuestInstitutions.map((guestInstitution) => (
               <AppButton
                 key={`guestTeams.add-historical-btn.${guestInstitution}`}
                 onClick={() => {

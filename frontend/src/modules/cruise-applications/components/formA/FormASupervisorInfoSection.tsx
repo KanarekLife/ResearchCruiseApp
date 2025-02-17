@@ -1,10 +1,12 @@
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppAlert } from '@/core/components/AppAlert';
 import { AppInput } from '@/core/components/inputs/AppInput';
-import { mapValidationErrors } from '@/core/lib/utils';
-import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { getErrors } from '@/core/lib/utils';
+import { useFormA } from '@/cruise-applications/contexts/FormAContext';
 
-export function FormASupervisorInfoSection({ form, readonly }: FormAProps) {
+export function FormASupervisorInfoSection() {
+  const { form, isReadonly, hasFormBeenSubmitted } = useFormA();
+
   return (
     <AppAccordion title="11. Dane kontaktowe przełożonego" expandedByDefault>
       <div className="max-w-180 mx-auto space-y-4">
@@ -22,12 +24,11 @@ export function FormASupervisorInfoSection({ form, readonly }: FormAProps) {
               value={field.state.value}
               onChange={field.handleChange}
               onBlur={field.handleBlur}
-              errors={mapValidationErrors(field.state.meta.errors)}
+              errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
               label="Adres e-mail przełożonego"
               placeholder="Wprowadź adres e-mail przełożonego"
               type="email"
-              required
-              disabled={readonly}
+              disabled={isReadonly}
             />
           )}
         />

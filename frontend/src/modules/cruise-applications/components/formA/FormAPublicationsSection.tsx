@@ -1,5 +1,4 @@
 import { FieldApi } from '@tanstack/react-form';
-import { UseSuspenseQueryResult } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 import ChevronDownIcon from 'bootstrap-icons/icons/chevron-down.svg?react';
 import ChevronUpIcon from 'bootstrap-icons/icons/chevron-up.svg?react';
@@ -18,8 +17,8 @@ import { AppTable } from '@/core/components/table/AppTable';
 import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteRowButton';
 import { useDropdown } from '@/core/hooks/DropdownHook';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
-import { cn, groupBy, mapValidationErrors } from '@/core/lib/utils';
-import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { cn, getErrors, groupBy } from '@/core/lib/utils';
+import { useFormA } from '@/cruise-applications/contexts/FormAContext';
 import { FormADto } from '@/cruise-applications/models/FormADto';
 import { FormAInitValuesDto } from '@/cruise-applications/models/FormAInitValuesDto';
 import { PublicationDto } from '@/cruise-applications/models/PublicationDto';
@@ -29,7 +28,9 @@ const name = {
   postscript: 'Dopisek',
 };
 
-export function FormAPublicationsSection({ initValues, form, readonly }: FormAProps) {
+export function FormAPublicationsSection() {
+  const { form, isReadonly, initValues, hasFormBeenSubmitted } = useFormA();
+
   function getColumns(
     field: FieldApi<FormADto, 'publications', undefined, undefined, PublicationDto[]>
   ): ColumnDef<PublicationDto>[] {
@@ -53,14 +54,14 @@ export function FormAPublicationsSection({ initValues, form, readonly }: FormAPr
                 value={field.state.value}
                 onChange={field.handleChange}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 allOptions={[
                   { value: 'subject', inlineLabel: name.subject },
                   { value: 'postscript', inlineLabel: name.postscript },
                 ]}
                 required
                 showEmptyOption={false}
-                disabled={readonly}
+                disabled={isReadonly}
               />
             )}
           />
@@ -82,11 +83,11 @@ export function FormAPublicationsSection({ initValues, form, readonly }: FormAPr
                   value={field.state.value}
                   onChange={field.handleChange}
                   onBlur={field.handleBlur}
-                  errors={mapValidationErrors(field.state.meta.errors)}
+                  errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="DOI"
                   placeholder='np. "10.1016/j.jmarsys.2019.03.007"'
                   required
-                  disabled={readonly}
+                  disabled={isReadonly}
                 />
               )}
             />
@@ -99,11 +100,11 @@ export function FormAPublicationsSection({ initValues, form, readonly }: FormAPr
                   value={field.state.value}
                   onChange={field.handleChange}
                   onBlur={field.handleBlur}
-                  errors={mapValidationErrors(field.state.meta.errors)}
+                  errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Autorzy"
                   placeholder='np. "Kowalski J., Nowak A."'
                   required
-                  disabled={readonly}
+                  disabled={isReadonly}
                 />
               )}
             />
@@ -116,11 +117,11 @@ export function FormAPublicationsSection({ initValues, form, readonly }: FormAPr
                   value={field.state.value}
                   onChange={field.handleChange}
                   onBlur={field.handleBlur}
-                  errors={mapValidationErrors(field.state.meta.errors)}
+                  errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Tytuł"
                   placeholder='np. "The impact of sea level rise on the coastal zone"'
                   required
-                  disabled={readonly}
+                  disabled={isReadonly}
                 />
               )}
             />
@@ -133,11 +134,11 @@ export function FormAPublicationsSection({ initValues, form, readonly }: FormAPr
                   value={field.state.value}
                   onChange={field.handleChange}
                   onBlur={field.handleBlur}
-                  errors={mapValidationErrors(field.state.meta.errors)}
+                  errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Czasopismo"
                   placeholder='np. "Journal of Marine Systems"'
                   required
-                  disabled={readonly}
+                  disabled={isReadonly}
                 />
               )}
             />
@@ -158,10 +159,10 @@ export function FormAPublicationsSection({ initValues, form, readonly }: FormAPr
                 value={field.state.value ? parseInt(field.state.value) : undefined}
                 onChange={(e) => field.handleChange(e?.toString() ?? '')}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 label="Rok"
                 required
-                disabled={readonly}
+                disabled={isReadonly}
               />
             )}
           />
@@ -184,10 +185,10 @@ export function FormAPublicationsSection({ initValues, form, readonly }: FormAPr
                 step={10}
                 onChange={(x: number) => field.handleChange(x.toString())}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 label="Punkty"
                 required
-                disabled={readonly}
+                disabled={isReadonly}
               />
             )}
           />
@@ -204,7 +205,7 @@ export function FormAPublicationsSection({ initValues, form, readonly }: FormAPr
                 field.handleChange((prev) => prev);
                 field.handleBlur();
               }}
-              disabled={readonly}
+              disabled={isReadonly}
             />
           </div>
         ),
@@ -254,16 +255,16 @@ export function FormAPublicationsSection({ initValues, form, readonly }: FormAPr
                 columns={getColumns(field)}
                 data={field.state.value}
                 buttons={() => [
-                  <AddNewPublicationButton key="publications.add-new-btn" field={field} disabled={readonly} />,
+                  <AddNewPublicationButton key="publications.add-new-btn" field={field} disabled={isReadonly} />,
                   <AddHistoricalPublicationButton
                     key="publications.add-historical-btn"
                     field={field}
                     initValues={initValues}
-                    disabled={readonly}
+                    disabled={isReadonly}
                   />,
                 ]}
               />
-              <AppInputErrorsList errors={mapValidationErrors(field.state.meta.errors)} />
+              <AppInputErrorsList errors={getErrors(field.state.meta)} />
             </>
           )}
         />
@@ -274,7 +275,7 @@ export function FormAPublicationsSection({ initValues, form, readonly }: FormAPr
 
 type AddHistoricalPublicationButtonProps = {
   field: FieldApi<FormADto, 'publications', undefined, undefined, PublicationDto[]>;
-  initValues: UseSuspenseQueryResult<FormAInitValuesDto, Error>;
+  initValues: FormAInitValuesDto;
   disabled?: boolean;
 };
 function AddHistoricalPublicationButton({ field, initValues, disabled }: AddHistoricalPublicationButtonProps) {
@@ -316,7 +317,7 @@ function AddHistoricalPublicationButton({ field, initValues, disabled }: AddHist
               />
             </div>
             {groupBy(
-              initValues.data.historicalPublications.filter((publication) =>
+              initValues.historicalPublications.filter((publication) =>
                 JSON.stringify(Object.values(publication)).toLowerCase().includes(searchValue.toLowerCase())
               ),
               (x) => x.category
