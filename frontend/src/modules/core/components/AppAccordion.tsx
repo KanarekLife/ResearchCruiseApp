@@ -24,13 +24,13 @@ export function AppAccordion({ title, children, expandedByDefault = undefined }:
           <span>{expanded ? <ChevronUpIcon className="w-6 h-6" /> : <ChevronDownIcon className="w-6 h-6" />}</span>
         </button>
       </h2>
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {expanded && (
           <motion.div
-            initial={{ opacity: 0, y: '-10%', z: -50 }}
-            animate={{ opacity: 1, y: 0, z: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ ease: 'easeOut', y: '-10%', z: -50 }}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ ease: 'easeOut' }}
             className="px-4"
           >
             {children}
