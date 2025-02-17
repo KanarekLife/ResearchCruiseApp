@@ -39,3 +39,7 @@ export function roundNumber(value: number, precision: number) {
 export function createModalPortal(modal: React.ReactNode): React.ReactPortal {
   return createPortal(modal, document.getElementById('modal-root') ?? document.body);
 }
+
+export function createFABPortal(fab: React.ReactNode): React.ReactPortal {
+  return createPortal(fab, document.getElementById('fab-root') ?? document.body);
+}

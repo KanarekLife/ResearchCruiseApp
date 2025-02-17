@@ -1,3 +1,4 @@
+import { FormAActionsSection } from '@/cruise-applications/components/formA/FormAActionsSection';
 import { FormAContractsSection } from '@/cruise-applications/components/formA/FormAContractsSection';
 import { FormACruiseGoalSection } from '@/cruise-applications/components/formA/FormACruiseGoalSection';
 import { FormACruiseLengthSection } from '@/cruise-applications/components/formA/FormACruiseLengthSection';
@@ -11,7 +12,7 @@ import { FormASPUBTasksSection } from '@/cruise-applications/components/formA/Fo
 import { FormASupervisorInfoSection } from '@/cruise-applications/components/formA/FormASupervisorInfoSection';
 import { FormAContextType, FormAProvider } from '@/cruise-applications/contexts/FormAContext';
 
-export function FormA({ context }: { context: FormAContextType }) {
+export function FormA({ context, onSaveDraft }: { context: FormAContextType; onSaveDraft?: () => void }) {
   return (
     <FormAProvider value={context}>
       <FormACruiseManagerInfoSection />
@@ -25,6 +26,7 @@ export function FormA({ context }: { context: FormAContextType }) {
       <FormAPublicationsSection />
       <FormASPUBTasksSection />
       <FormASupervisorInfoSection />
+      <FormAActionsSection onSaveDraft={onSaveDraft} />
     </FormAProvider>
   );
 }
