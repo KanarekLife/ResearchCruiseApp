@@ -8,7 +8,7 @@ import { AnimatePresence } from 'motion/react';
 import React from 'react';
 
 import { AppButton } from '@/core/components/AppButton';
-import { AppTableHeaderDropdown } from '@/core/components/table/AppTableHeaderDropdown';
+import { AppDesktopTableHeaderDropdown } from '@/core/components/table/desktop/AppDesktopTableHeaderDropdown';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
 import { cn } from '@/core/lib/utils';
 
@@ -52,7 +52,7 @@ type Props<TData, TValue> = {
   header: Header<TData, TValue>;
   children: React.ReactNode;
 };
-export function AppTableHeader<TData, TValue>({ header, children }: Props<TData, TValue>) {
+export function AppDesktopTableHeader<TData, TValue>({ header, children }: Props<TData, TValue>) {
   const headerRef = React.useRef<HTMLDivElement>(null);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = React.useState(false);
@@ -93,7 +93,7 @@ export function AppTableHeader<TData, TValue>({ header, children }: Props<TData,
 
         <AnimatePresence>
           {expanded && (
-            <AppTableHeaderDropdown
+            <AppDesktopTableHeaderDropdown
               header={header}
               dropdownRef={dropdownRef}
               headerRef={headerRef}

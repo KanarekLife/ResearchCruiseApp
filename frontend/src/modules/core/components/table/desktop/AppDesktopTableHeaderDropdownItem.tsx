@@ -8,7 +8,7 @@ type Props = {
   onClick?: () => void;
   children: React.ReactNode;
 };
-export function AppTableHeaderDropdownItem({ isRendered, disabled, expanded, onClick, children }: Props) {
+export function AppDesktopTableHeaderDropdownItem({ isRendered, disabled, expanded, onClick, children }: Props) {
   if (!isRendered) {
     return null;
   }

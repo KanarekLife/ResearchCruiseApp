@@ -7,7 +7,7 @@ import { motion } from 'motion/react';
 import React from 'react';
 
 import { AppFloatingLabelInput } from '@/core/components/inputs/AppFloatingLabelInput';
-import { AppTableHeaderDropdownItem } from '@/core/components/table/AppTableHeaderDropdownItem';
+import { AppDesktopTableHeaderDropdownItem } from '@/core/components/table/desktop/AppDesktopTableHeaderDropdownItem';
 import { useDropdown } from '@/core/hooks/DropdownHook';
 
 function SortingToggle<TData>({ header }: { header: Header<TData, unknown> }) {
@@ -49,7 +49,7 @@ type Props<TData, TValue> = {
   headerRef: React.RefObject<HTMLDivElement | null>;
   expanded: boolean;
 };
-export function AppTableHeaderDropdown<TData, TValue>({
+export function AppDesktopTableHeaderDropdown<TData, TValue>({
   header,
   capabilities,
   dropdownRef,
@@ -119,13 +119,13 @@ export function AppTableHeaderDropdown<TData, TValue>({
     >
       <div className="py-1" role="none">
         {supportsSort && <p>Sortowanie</p>}
-        <AppTableHeaderDropdownItem
+        <AppDesktopTableHeaderDropdownItem
           onClick={() => header.column.toggleSorting()}
           isRendered={supportsSort}
           expanded={expanded}
         >
           <SortingToggle header={header} />
-        </AppTableHeaderDropdownItem>
+        </AppDesktopTableHeaderDropdownItem>
 
         {supportsFilter && supportsSort && <hr className="h-px my-0.5 border-0 bg-gray-700" />}
 
@@ -152,7 +152,7 @@ export function AppTableHeaderDropdown<TData, TValue>({
           {uniqueValues
             .filter(([value]) => value.toString().includes(searchValue))
             .map((value) => (
-              <AppTableHeaderDropdownItem
+              <AppDesktopTableHeaderDropdownItem
                 key={value[0]}
                 onClick={() => toggleFilter(value[0])}
                 isRendered={supportsFilter}
@@ -160,11 +160,11 @@ export function AppTableHeaderDropdown<TData, TValue>({
               >
                 <input type="checkbox" checked={isFilterChecked(value[0])} className="cursor-pointer" readOnly />
                 {value[0]}
-              </AppTableHeaderDropdownItem>
+              </AppDesktopTableHeaderDropdownItem>
             ))}
         </div>
 
-        <AppTableHeaderDropdownItem
+        <AppDesktopTableHeaderDropdownItem
           onClick={() => clearFilters()}
           isRendered={supportsFilter}
           disabled={!filterValue}
@@ -172,7 +172,7 @@ export function AppTableHeaderDropdown<TData, TValue>({
         >
           <TrashIcon className="w-4 h-4 mr-2" />
           Wyczyść filtry
-        </AppTableHeaderDropdownItem>
+        </AppDesktopTableHeaderDropdownItem>
       </div>
     </motion.div>
   );
