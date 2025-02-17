@@ -31,7 +31,7 @@ export type FormADto = {
   publications: PublicationDto[];
   spubTasks: SpubTaskDto[];
   supervisorEmail: string;
-  note?: string | '';
+  note?: string;
 };
 
 export const emptyFormADto: FormADto = {

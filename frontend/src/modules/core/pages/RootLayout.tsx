@@ -1,3 +1,5 @@
+import config from '@config';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Outlet, ScrollRestoration } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 
@@ -20,8 +22,11 @@ export function RootLayout() {
       <main className="flex-1" id="modal-root">
         <Outlet />
       </main>
+      <div id="fab-root">
+        {config.dev && <TanStackRouterDevtools />}
+        {config.dev && <ReactQueryDevtools buttonPosition="top-left" />}
+      </div>
       <ScrollRestoration />
-      <TanStackRouterDevtools />
     </>
   );
 }

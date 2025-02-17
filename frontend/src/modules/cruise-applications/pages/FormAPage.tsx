@@ -6,15 +6,15 @@ import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { FormA } from '@/cruise-applications/components/formA/FormA';
 import { getFormAValidationSchema } from '@/cruise-applications/helpers/FormAValidationSchema';
-import { useFormA, useFormAInitValues } from '@/cruise-applications/hooks/FormAApiHooks';
+import { useFormAQuery, useFormAInitValuesQuery } from '@/cruise-applications/hooks/FormAApiHooks';
 import { emptyFormADto, FormADto } from '@/cruise-applications/models/FormADto';
 
 export function FormAPage() {
   const [editMode] = useState(false);
   const [hasFormBeenSubmitted, setHasFormBeenSubmitted] = useState(false);
   const { cruiseId } = getRouteApi('/cruises/$cruiseId/formA').useParams();
-  const initialStateQuery = useFormAInitValues();
-  const formA = useFormA(cruiseId);
+  const initialStateQuery = useFormAInitValuesQuery();
+  const formA = useFormAQuery(cruiseId);
 
   const form = useForm<FormADto>({
     defaultValues: formA.data ?? emptyFormADto,
