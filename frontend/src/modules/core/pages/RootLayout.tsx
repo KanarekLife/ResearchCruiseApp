@@ -25,7 +25,7 @@ export function RootLayout() {
       </main>
       <div id="fab-root">
         {config.dev && <TanStackRouterDevtools />}
-        {config.dev && <ReactQueryDevtools buttonPosition="top-left" />}
+        {config.dev && <ReactQueryDevtools />}
       </div>
       <AppAlertDisplayer />
       <ScrollRestoration />
