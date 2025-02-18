@@ -50,7 +50,14 @@ export function UploadPublicationsButton({ onUpload }: Props) {
 
   return (
     <>
-      <input type="file" ref={inputRef} multiple={true} className="hidden" onChange={handleFileChange} />
+      <input
+        type="file"
+        ref={inputRef}
+        multiple={true}
+        className="hidden"
+        onChange={handleFileChange}
+        accept="text/csv"
+      />
       <AppButton onClick={() => inputRef.current?.click()}>Import publikacji z pliku CSV</AppButton>
     </>
   );
