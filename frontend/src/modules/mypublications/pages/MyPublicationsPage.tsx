@@ -130,6 +130,7 @@ export function MyPublicationsPage() {
                 type="link"
                 variant="primaryOutline"
                 href="https://repozytorium.bg.ug.edu.pl/search.seam"
+                target="_blank"
               >
                 Przejdź do repozytorium BG
                 <ExternalLinkIcon className="h-4 w-4 ml-2" />
