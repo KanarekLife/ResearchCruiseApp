@@ -1,4 +1,4 @@
-import { flexRender, HeaderContext } from '@tanstack/react-table';
+import { flexRender, Header } from '@tanstack/react-table';
 import FunnelIcon from 'bootstrap-icons/icons/funnel.svg?react';
 import React from 'react';
 
@@ -38,7 +38,11 @@ export function AppMobileTable<T>({ table, buttons, emptyTableMessage }: TablePr
                     return (
                       <div key={cell.id} className="flex justify-between gap-4 items-center w-full px-5">
                         <div className="font-bold">
-                          {flexRender(cell.column.columnDef.header, {} as HeaderContext<T, unknown>)}
+                          {flexRender(cell.column.columnDef.header, {
+                            table,
+                            column: cell.column,
+                            header: { column: cell.column } as Header<T, unknown>,
+                          })}
                         </div>
                         <div>{flexRender(cell.column.columnDef.cell, cell.getContext())}</div>
                       </div>

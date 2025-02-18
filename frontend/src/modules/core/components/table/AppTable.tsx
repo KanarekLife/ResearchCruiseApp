@@ -18,7 +18,6 @@ type Props<T> = {
   buttons?: (predefinedButtons: React.ReactNode[]) => React.ReactNode[];
   emptyTableMessage?: string;
 };
-
 export function AppTable<T>({ data, columns, buttons, emptyTableMessage }: Props<T>) {
   const { width } = useWindowSize();
   const table = useReactTable<T>({
