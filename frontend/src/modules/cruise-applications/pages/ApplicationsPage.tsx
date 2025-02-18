@@ -1,4 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
+import { AppLink } from '@/core/components/AppLink';
 
 import { Suspense } from 'react';
 import { AppLayout } from '@/core/components/AppLayout';
@@ -28,9 +29,9 @@ export function ApplicationsPage() {
       header: 'Formularze',
       cell: ( {row} ) => (
         <>
-          {row.original.hasFormA && <span><a href={`/cruises/${row.original.id}/formA`}>Formularz A</a></span>}
-          {row.original.hasFormB && <span><a href={`/cruises/${row.original.id}/formB`}>Formularz B</a></span>}
-          {row.original.hasFormC && <span><a href={`/cruises/${row.original.id}/formC`}>Formularz C</a></span>}
+          {row.original.hasFormA && <span><AppLink href={`/cruises/${row.original.id}/formA`}>Formularz A</AppLink></span>}
+          {row.original.hasFormB && <span><AppLink href={`/cruises/${row.original.id}/formB`}>Formularz B</AppLink></span>}
+          {row.original.hasFormC && <span><AppLink href={`/cruises/${row.original.id}/formC`}>Formularz C</AppLink></span>}
         </>
       )
     },

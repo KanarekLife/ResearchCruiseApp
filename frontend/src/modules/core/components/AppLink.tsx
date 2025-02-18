@@ -16,20 +16,22 @@ export type Props = {
   className?: string;
   title?: string;
   rel?: string;
+  disabled?: boolean;
 };
-export function AppLink({ children, href, className, title, rel, target = '_self', variant = 'default' }: Props) {
+export function AppLink({ children, href, className, title, rel, target = '_self', variant = 'default', disabled = false }: Props) {
   const isInternalLink = (href as string).startsWith('/') || (href as string).startsWith('.');
 
   if (isInternalLink) {
     return (
-      <Link to={href as RouterUrl} target={target} className={cn(variants[variant], className)} title={title} rel={rel}>
+      <Link to={href as RouterUrl} target={target} className={cn(variants[variant], className)} title={title} rel={rel} disabled={disabled}>
         {children}
       </Link>
     );
   }
 
   return (
-    <a href={href} target={target} className={cn(variants[variant], className)} title={title} rel={rel}>
+    // TODO: support disabled state for external links
+    <a href={href} target={target} className={cn(variants[variant], className)} title={title} rel={rel} aria-disabled={disabled}>
       {children}
     </a>
   );
