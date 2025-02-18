@@ -4,8 +4,8 @@ import React from 'react';
 
 import { AppButton } from '@/core/components/AppButton';
 import { AppModal } from '@/core/components/AppModal';
+import { TableProps } from '@/core/components/table/common/tableProps';
 import { AppMobileTableFilterForm } from '@/core/components/table/mobile/AppMobileTableFilterForm';
-import { TableProps } from '@/core/components/table/tableProps';
 import { createModalPortal } from '@/core/lib/utils';
 
 export function AppMobileTable<T>({ table, buttons, emptyTableMessage }: TableProps<T>) {
@@ -36,7 +36,7 @@ export function AppMobileTable<T>({ table, buttons, emptyTableMessage }: TablePr
                 <td className="flex flex-col gap-2 justify-center items-center py-3">
                   {row.getVisibleCells().map((cell) => {
                     return (
-                      <div key={cell.id} className="flex justify-between items-center w-full px-5">
+                      <div key={cell.id} className="flex justify-between gap-4 items-center w-full px-5">
                         <div className="font-bold">
                           {flexRender(cell.column.columnDef.header, {} as HeaderContext<T, unknown>)}
                         </div>

@@ -60,9 +60,9 @@ export function FormAPermissionsSection() {
                 value={field.state.value}
                 onChange={field.handleChange}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 className="mx-4"
-                disabled={readonly}
+                disabled={isReadonly}
               />
             )}
           />

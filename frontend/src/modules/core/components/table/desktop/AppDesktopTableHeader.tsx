@@ -1,52 +1,14 @@
 import { Header } from '@tanstack/react-table';
-import ChevronDownIcon from 'bootstrap-icons/icons/chevron-down.svg?react';
-import ChevronExpandIcon from 'bootstrap-icons/icons/chevron-expand.svg?react';
-import ChevronUpIcon from 'bootstrap-icons/icons/chevron-up.svg?react';
-import FunnelIcon from 'bootstrap-icons/icons/funnel.svg?react';
-import FunnelFillIcon from 'bootstrap-icons/icons/funnel-fill.svg?react';
 import { AnimatePresence } from 'motion/react';
 import React from 'react';
 
 import { AppButton } from '@/core/components/AppButton';
+import { AppTableFilterIcon } from '@/core/components/table/common/AppTableFilterIcon';
+import { AppTableSortingIcon } from '@/core/components/table/common/AppTableSortingIcons';
+import { getCapabilities } from '@/core/components/table/common/utils';
 import { AppDesktopTableHeaderDropdown } from '@/core/components/table/desktop/AppDesktopTableHeaderDropdown';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
 import { cn } from '@/core/lib/utils';
-
-function getCapabilities<TData, TValue>(header: Header<TData, TValue>) {
-  return {
-    supportsFilter: header.column.getCanFilter(),
-    supportsSort: header.column.getCanSort(),
-    supportsDropdown: header.column.getCanFilter() || header.column.getCanSort(),
-  };
-}
-
-function FilterIcon<TData>({ header }: { header: Header<TData, unknown> }) {
-  if (!header.column.getCanFilter()) {
-    return null;
-  }
-
-  if (header.column.getFilterValue()) {
-    return <FunnelFillIcon className="w-4 h-4" />;
-  }
-
-  return <FunnelIcon className="w-4 h-4" />;
-}
-
-function SortingIcon<TData>({ header }: { header: Header<TData, unknown> }) {
-  if (!header.column.getCanSort()) {
-    return null;
-  }
-
-  if (header.column.getIsSorted() === 'asc') {
-    return <ChevronDownIcon className="w-4 h-4" />;
-  }
-
-  if (header.column.getIsSorted() === 'desc') {
-    return <ChevronUpIcon className="w-4 h-4" />;
-  }
-
-  return <ChevronExpandIcon className="w-4 h-4" />;
-}
 
 type Props<TData, TValue> = {
   header: Header<TData, TValue>;
@@ -83,9 +45,9 @@ export function AppDesktopTableHeader<TData, TValue>({ header, children }: Props
             onClick={() => handleHeaderClick()}
             className={cn(supportsDropdown ? 'cursor-pointer' : '', 'flex justify-center items-center gap-2')}
           >
-            <FilterIcon header={header} />
+            <AppTableFilterIcon header={header} />
             <span>{children}</span>
-            <SortingIcon header={header} />
+            <AppTableSortingIcon header={header} />
           </AppButton>
         )}
 

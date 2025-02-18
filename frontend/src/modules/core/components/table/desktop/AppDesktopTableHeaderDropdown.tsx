@@ -1,46 +1,12 @@
 import { Header } from '@tanstack/react-table';
-import SortDownIcon from 'bootstrap-icons/icons/sort-down.svg?react';
-import SortUpIcon from 'bootstrap-icons/icons/sort-up.svg?react';
 import TrashIcon from 'bootstrap-icons/icons/trash.svg?react';
-import XIcon from 'bootstrap-icons/icons/x.svg?react';
 import { motion } from 'motion/react';
 import React from 'react';
 
 import { AppFloatingLabelInput } from '@/core/components/inputs/AppFloatingLabelInput';
+import { AppTableSortingToggle } from '@/core/components/table/common/AppTableSortingToggle';
 import { AppDesktopTableHeaderDropdownItem } from '@/core/components/table/desktop/AppDesktopTableHeaderDropdownItem';
 import { useDropdown } from '@/core/hooks/DropdownHook';
-
-function SortingToggle<TData>({ header }: { header: Header<TData, unknown> }) {
-  if (!header.column.getCanSort()) {
-    return null;
-  }
-
-  if (header.column.getIsSorted() === 'desc') {
-    return (
-      <span className="flex gap-2 items-center">
-        <XIcon className="w-4 h-4" />
-        Usuń sortowanie
-      </span>
-    );
-  }
-
-  if (header.column.getIsSorted() === 'asc') {
-    return (
-      <span className="flex gap-2 items-center">
-        <SortUpIcon className="w-4 h-4" />
-        Sortuj rosnąco
-      </span>
-    );
-  }
-
-  // header.column.getIsSorted() === false
-  return (
-    <span className="flex gap-2 items-center">
-      <SortDownIcon className="w-4 h-4" />
-      Sortuj malejąco
-    </span>
-  );
-}
 
 type Props<TData, TValue> = {
   header: Header<TData, TValue>;
@@ -124,7 +90,7 @@ export function AppDesktopTableHeaderDropdown<TData, TValue>({
           isRendered={supportsSort}
           expanded={expanded}
         >
-          <SortingToggle header={header} />
+          <AppTableSortingToggle header={header} />
         </AppDesktopTableHeaderDropdownItem>
 
         {supportsFilter && supportsSort && <hr className="h-px my-0.5 border-0 bg-gray-700" />}

@@ -1,25 +1,11 @@
 import { flexRender } from '@tanstack/react-table';
 
-import { AppButton } from '@/core/components/AppButton';
+import { AppTableClearFiltersButton } from '@/core/components/table/common/AppTableClearFiltersButton';
+import { TableProps } from '@/core/components/table/common/tableProps';
 import { AppDesktopTableHeader } from '@/core/components/table/desktop/AppDesktopTableHeader';
-import { TableProps } from '@/core/components/table/tableProps';
 
 export function AppDesktopTable<T>({ table, buttons, emptyTableMessage }: TableProps<T>) {
-  function isAnyFilterActive() {
-    return table.getAllColumns().some((column) => column.getIsFiltered());
-  }
-
-  const defaultButtons: React.ReactNode[] = [
-    <AppButton
-      key="clearFiltersBtn"
-      onClick={() => table.resetColumnFilters()}
-      className={isAnyFilterActive() ? '' : 'opacity-50'}
-      variant="danger"
-      disabled={!isAnyFilterActive()}
-    >
-      Wyczyść filtry
-    </AppButton>,
-  ];
+  const defaultButtons: React.ReactNode[] = [<AppTableClearFiltersButton key="clearFiltersBtn" table={table} />];
   const allButtons = buttons ? buttons(defaultButtons) : defaultButtons;
 
   return (
