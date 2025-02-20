@@ -20,18 +20,10 @@ type Props<T> = {
   columns: ColumnDef<T>[];
   buttons?: (predefinedButtons: React.ReactNode[]) => React.ReactNode[];
   emptyTableMessage?: string;
-} & (
-  | {
-      rowSelectionState: RowSelectionState;
-      setRowSelectionState: OnChangeFn<RowSelectionState>;
-      getRowId?: (originalRow: T, index: number, parent?: Row<T>) => string;
-    }
-  | {
-      rowSelectionState?: unknown;
-      setRowSelectionState?: unknown;
-      getRowId?: unknown;
-    }
-);
+  rowSelectionState?: RowSelectionState;
+  setRowSelectionState?: OnChangeFn<RowSelectionState>;
+  getRowId?: (originalRow: T, index: number, parent?: Row<T>) => string;
+};
 
 export function AppTable<T>({
   data,
@@ -54,14 +46,12 @@ export function AppTable<T>({
     defaultColumn: {
       filterFn: 'arrIncludesSome',
     },
-    onRowSelectionChange: setRowSelectionState as OnChangeFn<RowSelectionState>,
+    onRowSelectionChange: setRowSelectionState,
     state: {
-      rowSelection: rowSelectionState as RowSelectionState,
+      rowSelection: rowSelectionState,
     },
-    getRowId: getRowId as (originalRow: T, index: number, parent?: Row<T>) => string,
+    getRowId: getRowId,
   });
-
-  console.log(rowSelectionState);
 
   const isMobile = width < 768;
   const TableComponent = isMobile ? AppMobileTable : AppDesktopTable;
