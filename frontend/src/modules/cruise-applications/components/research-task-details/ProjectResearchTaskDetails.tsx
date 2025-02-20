@@ -75,7 +75,7 @@ export function ProjectResearchTaskDetails({ form, row, disabled, hasFormBeenSub
             value={parseFloat(field.state.value as string)}
             type="float"
             minimum={0}
-            onChange={field.handleChange}
+            onChange={(e) => field.handleChange(e.toString())}
             onBlur={field.handleBlur}
             errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
             label="Kwota finansowania [zł]"
@@ -93,7 +93,7 @@ export function ProjectResearchTaskDetails({ form, row, disabled, hasFormBeenSub
             value={parseFloat(field.state.value as string)}
             type="float"
             minimum={0}
-            onChange={field.handleChange}
+            onChange={(e) => field.handleChange(e.toString())}
             onBlur={field.handleBlur}
             errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
             label="Środki zabezpieczone na realizację rejsu [zł]"

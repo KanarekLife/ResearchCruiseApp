@@ -8,25 +8,92 @@ import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { AppModal } from '@/core/components/AppModal';
 import { AppInput } from '@/core/components/inputs/AppInput';
-import { getErrors } from '@/core/lib/utils';
+import { useAppContext } from '@/core/hooks/AppContextHook';
+import { getErrors, removeEmptyValues } from '@/core/lib/utils';
 import { FormA } from '@/cruise-applications/components/formA/FormA';
 import { getFormAValidationSchema } from '@/cruise-applications/helpers/FormAValidationSchema';
-import { useFormAInitValuesQuery, useSaveFormADraftMutation } from '@/cruise-applications/hooks/FormAApiHooks';
-import { emptyFormADto, FormADto } from '@/cruise-applications/models/FormADto';
+import { useFormAInitValuesQuery, useSaveFormAMutation } from '@/cruise-applications/hooks/FormAApiHooks';
+import { FormADto } from '@/cruise-applications/models/FormADto';
+import { useUserContext } from '@/user/hooks/UserContextHook';
 
 export function NewCruisePage() {
   const navigate = useNavigate();
+  const appContext = useAppContext();
+  const userContext = useUserContext();
   const [hasFormBeenSubmitted, setHasFormBeenSubmitted] = useState(false);
   const [isSaveDraftModalOpen, setIsSaveDraftModalOpen] = useState(false);
   const initialStateQuery = useFormAInitValuesQuery();
-  const saveDraftMutation = useSaveFormADraftMutation();
+  const saveDraftMutation = useSaveFormAMutation();
   const form = useForm<FormADto>({
-    defaultValues: emptyFormADto,
+    defaultValues: {
+      id: undefined,
+      cruiseManagerId: userContext.currentUser!.id,
+      deputyManagerId: '',
+      year: initialStateQuery.data.years[0],
+      acceptablePeriod: ['0', '24'],
+      optimalPeriod: ['0', '24'],
+      cruiseHours: '0',
+      periodNotes: '',
+      shipUsage: '',
+      differentUsage: '',
+      permissions: [],
+      researchAreaId: '',
+      researchAreaInfo: '',
+      cruiseGoal: '',
+      cruiseGoalDescription: '',
+      researchTasks: [],
+      contracts: [],
+      ugTeams: [],
+      guestTeams: [],
+      publications: [],
+      spubTasks: [],
+      supervisorEmail: '',
+      note: '',
+    },
     validators: {
       onChange: getFormAValidationSchema(initialStateQuery.data),
     },
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: ({ value }) => {
+      const dto = removeEmptyValues(value, [
+        'year',
+        'periodNotes',
+        'differentUsage',
+        'supervisorEmail',
+        'cruiseGoalDescription',
+      ]);
+
+      if (dto.cruiseManagerId !== userContext.currentUser!.id && dto.deputyManagerId !== userContext.currentUser!.id) {
+        setIsSaveDraftModalOpen(false);
+        appContext.showAlert({
+          title: 'Wykryto błąd w formularzu',
+          message: 'Jedynie kierownik lub jego zastępca mogą zapisać formularz',
+          variant: 'danger',
+        });
+        return;
+      }
+
+      saveDraftMutation.mutate(
+        { form: dto, draft: false },
+        {
+          onSuccess: () => {
+            navigate({ to: '/' });
+            appContext.showAlert({
+              title: 'Formularz przyjęty',
+              message: 'Formularz został zapisany i wysłany do potwierdzenia przez przełożonego',
+              variant: 'success',
+            });
+          },
+          onError: (err) => {
+            console.error(err);
+            appContext.showAlert({
+              title: 'Wystąpił błąd',
+              message: 'Nie udało się zapisać formularza',
+              variant: 'danger',
+            });
+          },
+          onSettled: () => setIsSaveDraftModalOpen(false),
+        }
+      );
     },
   });
 
@@ -38,11 +105,43 @@ export function NewCruisePage() {
   }
 
   function handleSaveDraft() {
+    const dto = removeEmptyValues(form.state.values, [
+      'year',
+      'periodNotes',
+      'differentUsage',
+      'supervisorEmail',
+      'cruiseGoalDescription',
+    ]);
+
+    if (dto.cruiseManagerId !== userContext.currentUser!.id && dto.deputyManagerId !== userContext.currentUser!.id) {
+      setIsSaveDraftModalOpen(false);
+      appContext.showAlert({
+        title: 'Wykryto błąd w formularzu',
+        message: 'Jedynie kierownik lub jego zastępca mogą zapisać formularz',
+        variant: 'danger',
+      });
+      return;
+    }
+
     saveDraftMutation.mutate(
-      { form: form.state.values },
+      { form: dto, draft: true },
       {
-        onSuccess: () => navigate({ to: '/' }),
-        onError: (err) => console.error(err),
+        onSuccess: () => {
+          navigate({ to: '/' });
+          appContext.showAlert({
+            title: 'Zapisano formularz',
+            message: 'Formularz został zapisany w wersji roboczej',
+            variant: 'success',
+          });
+        },
+        onError: (err) => {
+          console.error(err);
+          appContext.showAlert({
+            title: 'Wystąpił błąd',
+            message: 'Nie udało się zapisać formularza',
+            variant: 'danger',
+          });
+        },
         onSettled: () => setIsSaveDraftModalOpen(false),
       }
     );
@@ -62,6 +161,7 @@ export function NewCruisePage() {
           </Suspense>
         </AppLayout>
       </div>
+
       <AppModal title="Zapisz Formularz A" isOpen={isSaveDraftModalOpen} onClose={() => setIsSaveDraftModalOpen(false)}>
         <div className="space-y-4">
           <form.Field

@@ -44,6 +44,7 @@ export function ResearchTaskDetails({ form, row, disabled, hasFormBeenSubmitted 
           form={form}
           row={row as Row<ProjectPreparationResearchTaskDto>}
           disabled={disabled}
+          hasFormBeenSubmitted={hasFormBeenSubmitted}
         />
       );
     case ResearchTaskType.DomesticProject:

@@ -6,10 +6,12 @@ import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { FormA } from '@/cruise-applications/components/formA/FormA';
 import { getFormAValidationSchema } from '@/cruise-applications/helpers/FormAValidationSchema';
-import { useFormAQuery, useFormAInitValuesQuery } from '@/cruise-applications/hooks/FormAApiHooks';
-import { emptyFormADto, FormADto } from '@/cruise-applications/models/FormADto';
+import { useFormAInitValuesQuery, useFormAQuery } from '@/cruise-applications/hooks/FormAApiHooks';
+import { FormADto } from '@/cruise-applications/models/FormADto';
+import { useUserContext } from '@/user/hooks/UserContextHook';
 
 export function FormAPage() {
+  const userContext = useUserContext();
   const [editMode] = useState(false);
   const [hasFormBeenSubmitted, setHasFormBeenSubmitted] = useState(false);
   const { cruiseId } = getRouteApi('/cruises/$cruiseId/formA').useParams();
@@ -17,7 +19,31 @@ export function FormAPage() {
   const formA = useFormAQuery(cruiseId);
 
   const form = useForm<FormADto>({
-    defaultValues: formA.data ?? emptyFormADto,
+    defaultValues: formA.data ?? {
+      id: undefined,
+      cruiseManagerId: userContext.currentUser!.id,
+      deputyManagerId: '',
+      year: initialStateQuery.data.years[0],
+      acceptablePeriod: ['0', '24'],
+      optimalPeriod: ['0', '24'],
+      cruiseHours: '0',
+      periodNotes: '',
+      shipUsage: '',
+      differentUsage: '',
+      permissions: [],
+      researchAreaId: '',
+      researchAreaInfo: '',
+      cruiseGoal: '',
+      cruiseGoalDescription: '',
+      researchTasks: [],
+      contracts: [],
+      ugTeams: [],
+      guestTeams: [],
+      publications: [],
+      spubTasks: [],
+      supervisorEmail: '',
+      note: '',
+    },
     validators: {
       onChange: getFormAValidationSchema(initialStateQuery.data),
     },
