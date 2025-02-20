@@ -139,7 +139,6 @@ export function FormAContractsSection() {
                 onBlur={field.handleBlur}
                 errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 label="Skan"
-                required
                 disabled={isReadonly}
               />
             )}

@@ -130,15 +130,6 @@ export type ResearchTaskDto =
   | OwnResearchTaskDto
   | OtherResearchTaskDto;
 
-export const ResearchTaskDtoValidationSchema = z.union([
-  ThesisResearchTaskDtoValidationSchema,
-  ProjectPreparationResearchTaskDtoValidationSchema,
-  ProjectResearchTaskDtoValidationSchema,
-  DidacticsResearchTaskDtoValidationSchema,
-  OwnResearchTaskDtoValidationSchema,
-  OtherResearchTaskDtoValidationSchema,
-]);
-
 export const taskTypes = [
   ResearchTaskType.BachelorThesis,
   ResearchTaskType.MasterThesis,
@@ -153,6 +144,19 @@ export const taskTypes = [
   ResearchTaskType.OwnResearchTask,
   ResearchTaskType.OtherResearchTask,
 ];
+
+export const ResearchTaskDtoDraftValidationSchema = z.object({
+  type: z.enum([taskTypes[0], ...taskTypes.slice(1)]),
+});
+
+export const ResearchTaskDtoValidationSchema = z.union([
+  ThesisResearchTaskDtoValidationSchema,
+  ProjectPreparationResearchTaskDtoValidationSchema,
+  ProjectResearchTaskDtoValidationSchema,
+  DidacticsResearchTaskDtoValidationSchema,
+  OwnResearchTaskDtoValidationSchema,
+  OtherResearchTaskDtoValidationSchema,
+]);
 
 export function getTaskName(taskType: ResearchTaskType): string {
   switch (taskType) {

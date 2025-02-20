@@ -24,13 +24,28 @@ export function useFormAQuery(cruiseId: string) {
   });
 }
 
-type SaveFormADraftProps = {
+type SaveFormAProps = {
   form: FormADto;
+  draft: boolean;
 };
-export function useSaveFormADraftMutation() {
+export function useSaveFormAMutation() {
   return useMutation({
-    mutationFn: async ({ form }: SaveFormADraftProps) => {
-      return client.post('/api/CruiseApplications?isDraft=true', form);
+    mutationFn: async ({ form, draft }: SaveFormAProps) => {
+      return client.post(`/api/CruiseApplications?isDraft=${draft}`, form);
+    },
+  });
+}
+
+type UpdateFormAProps = {
+  id: string;
+  form: FormADto;
+  draft: boolean;
+};
+export function useUpdateFormAMutation() {
+  return useMutation({
+    mutationFn: async ({ id, form, draft }: UpdateFormAProps) => {
+      form.id = id;
+      return client.put(`/api/CruiseApplications/${id}/FormA?isDraft=${draft}`, form);
     },
   });
 }

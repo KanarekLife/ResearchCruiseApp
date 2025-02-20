@@ -43,3 +43,23 @@ export function createModalPortal(modal: React.ReactNode): React.ReactPortal {
 export function createFABPortal(fab: React.ReactNode): React.ReactPortal {
   return createPortal(fab, document.getElementById('fab-root') ?? document.body);
 }
+
+export function removeEmptyValues<T extends object>(obj: T, excludeKeys: (keyof T)[] = []): T {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([key, value]) => {
+      if (excludeKeys.includes(key as keyof T)) {
+        return true;
+      }
+
+      if (value === null || value === undefined) {
+        return false;
+      }
+
+      if (typeof value === 'string' && value.trim() === '') {
+        return false;
+      }
+
+      return true;
+    })
+  ) as T;
+}

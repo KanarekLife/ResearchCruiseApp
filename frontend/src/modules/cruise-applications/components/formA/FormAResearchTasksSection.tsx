@@ -24,7 +24,6 @@ import {
   getEmptyTask,
   getTaskName,
   ResearchTaskDto,
-  ResearchTaskDtoValidationSchema,
   ResearchTaskType,
   taskTypes,
 } from '@/cruise-applications/models/ResearchTaskDto';
@@ -55,7 +54,14 @@ export function FormAResearchTasksSection() {
       },
       {
         header: 'Szczegóły',
-        cell: ({ row }) => <ResearchTaskDetails form={form} row={row} disabled={isReadonly} />,
+        cell: ({ row }) => (
+          <ResearchTaskDetails
+            form={form}
+            row={row}
+            disabled={isReadonly}
+            hasFormBeenSubmitted={hasFormBeenSubmitted}
+          />
+        ),
       },
       {
         id: 'actions',
@@ -82,9 +88,6 @@ export function FormAResearchTasksSection() {
         <form.Field
           name="researchTasks"
           mode="array"
-          validators={{
-            onBlur: ResearchTaskDtoValidationSchema.array().min(1),
-          }}
           children={(field) => (
             <>
               <AppTable

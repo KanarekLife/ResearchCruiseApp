@@ -3,6 +3,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Outlet, ScrollRestoration } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 
+import { AppAlertDisplayer } from '@/core/components/layout/AppAlertDisplayer';
 import AppBackground from '@/core/components/layout/AppBackground';
 import { AppNavbar } from '@/core/components/layout/AppNavbar';
 import { AppNetworkDisconnectAlert } from '@/core/components/layout/AppNetworkDisconnectAlert';
@@ -26,6 +27,7 @@ export function RootLayout() {
         {config.dev && <TanStackRouterDevtools />}
         {config.dev && <ReactQueryDevtools buttonPosition="top-left" />}
       </div>
+      <AppAlertDisplayer />
       <ScrollRestoration />
     </>
   );

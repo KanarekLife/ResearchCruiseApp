@@ -28,6 +28,7 @@ export function FormAMembersSection() {
   function getUgTeamsColumns(
     field: FieldApi<FormADto, 'ugTeams', undefined, undefined, UGTeamDto[]>
   ): ColumnDef<UGTeamDto>[] {
+    const tableField = field;
     return [
       {
         header: 'Lp.',
@@ -50,7 +51,10 @@ export function FormAMembersSection() {
                 name={field.name}
                 value={parseInt(field.state.value)}
                 minimum={0}
-                onChange={(x: number) => field.handleChange(x.toString())}
+                onChange={(x: number) => {
+                  field.handleChange(x.toString());
+                  tableField.handleChange((prev) => prev);
+                }}
                 onBlur={field.handleBlur}
                 errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 className="mx-4"
@@ -72,7 +76,10 @@ export function FormAMembersSection() {
                 name={field.name}
                 value={parseInt(field.state.value)}
                 minimum={0}
-                onChange={(x: number) => field.handleChange(x.toString())}
+                onChange={(x: number) => {
+                  field.handleChange(x.toString());
+                  tableField.handleChange((prev) => prev);
+                }}
                 onBlur={field.handleBlur}
                 errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 className="mx-4"
@@ -92,6 +99,7 @@ export function FormAMembersSection() {
                 field.removeValue(row.index);
                 field.handleChange((prev) => prev);
                 field.handleBlur();
+                tableField.handleChange((prev) => prev);
               }}
               disabled={isReadonly}
             />
@@ -105,6 +113,7 @@ export function FormAMembersSection() {
   function getGuestTeams(
     field: FieldApi<FormADto, 'guestTeams', undefined, undefined, GuestTeamDto[]>
   ): ColumnDef<GuestTeamDto>[] {
+    const tableField = field;
     return [
       {
         header: 'Lp.',
@@ -143,7 +152,10 @@ export function FormAMembersSection() {
                 name={field.name}
                 value={parseInt(field.state.value)}
                 minimum={0}
-                onChange={(x: number) => field.handleChange(x.toString())}
+                onChange={(x: number) => {
+                  field.handleChange(x.toString());
+                  tableField.handleChange((prev) => prev);
+                }}
                 onBlur={field.handleBlur}
                 errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 className="mx-4"
@@ -163,6 +175,7 @@ export function FormAMembersSection() {
                 field.removeValue(row.index);
                 field.handleChange((prev) => prev);
                 field.handleBlur();
+                tableField.handleChange((prev) => prev);
               }}
               disabled={isReadonly}
             />
