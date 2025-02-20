@@ -5,6 +5,9 @@ import {
   getFacetedUniqueValues,
   getFilteredRowModel,
   getSortedRowModel,
+  OnChangeFn,
+  Row,
+  RowSelectionState,
   useReactTable,
 } from '@tanstack/react-table';
 
@@ -17,8 +20,28 @@ type Props<T> = {
   columns: ColumnDef<T>[];
   buttons?: (predefinedButtons: React.ReactNode[]) => React.ReactNode[];
   emptyTableMessage?: string;
-};
-export function AppTable<T>({ data, columns, buttons, emptyTableMessage }: Props<T>) {
+} & (
+  | {
+      rowSelectionState: RowSelectionState;
+      setRowSelectionState: OnChangeFn<RowSelectionState>;
+      getRowId?: (originalRow: T, index: number, parent?: Row<T>) => string;
+    }
+  | {
+      rowSelectionState?: unknown;
+      setRowSelectionState?: unknown;
+      getRowId?: unknown;
+    }
+);
+
+export function AppTable<T>({
+  data,
+  columns,
+  buttons,
+  emptyTableMessage,
+  rowSelectionState,
+  setRowSelectionState,
+  getRowId,
+}: Props<T>) {
   const { width } = useWindowSize();
   const table = useReactTable<T>({
     columns,
@@ -31,9 +54,17 @@ export function AppTable<T>({ data, columns, buttons, emptyTableMessage }: Props
     defaultColumn: {
       filterFn: 'arrIncludesSome',
     },
+    onRowSelectionChange: setRowSelectionState as OnChangeFn<RowSelectionState>,
+    state: {
+      rowSelection: rowSelectionState as RowSelectionState,
+    },
+    getRowId: getRowId as (originalRow: T, index: number, parent?: Row<T>) => string,
   });
-  const isMobile = width < 768;
 
+  console.log(rowSelectionState);
+
+  const isMobile = width < 768;
   const TableComponent = isMobile ? AppMobileTable : AppDesktopTable;
+
   return <TableComponent table={table} buttons={buttons} emptyTableMessage={emptyTableMessage} />;
 }
