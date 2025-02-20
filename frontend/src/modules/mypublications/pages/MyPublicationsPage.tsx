@@ -7,6 +7,7 @@ import { AppButton } from '@/core/components/AppButton';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { AppModal } from '@/core/components/AppModal';
+import { AppCheckbox } from '@/core/components/inputs/AppCheckbox';
 import { AppTable } from '@/core/components/table/AppTable';
 import { UploadPublicationsButton } from '@/mypublications/components/UploadPublicationsButton';
 import {
@@ -35,19 +36,21 @@ export function MyPublicationsPage() {
     {
       id: 'selector',
       header: ({ table }) => (
-        <input
-          type="checkbox"
-          onChange={table.getToggleAllRowsSelectedHandler()}
+        <AppCheckbox
+          name="selectAllPublications"
+          onChange={(x) => table.toggleAllRowsSelected(x)}
           checked={table.getIsAllRowsSelected()}
-          className="mx-4"
+          size="lg"
         />
       ),
       cell: ({ row }) => (
-        <input
-          type="checkbox"
+        <AppCheckbox
+          name={`selectPublication-${row.id}`}
           checked={row.getIsSelected()}
           disabled={!row.getCanSelect()}
           onChange={row.getToggleSelectedHandler()}
+          className="inline-block"
+          size="md"
         />
       ),
       enableSorting: false,
@@ -104,6 +107,7 @@ export function MyPublicationsPage() {
             rowSelectionState={selectedPublications}
             setRowSelectionState={setSelectedPublications}
             getRowId={(row) => row.id}
+            emptyTableMessage="Nie dodano żadnej publikacji"
             buttons={(defaultButtons) => [
               <UploadPublicationsButton key="upload" onUpload={uploadPublicationsMutation.mutate} />,
               <AppButton

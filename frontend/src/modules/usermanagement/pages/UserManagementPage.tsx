@@ -7,6 +7,7 @@ import { AppButton } from '@/core/components/AppButton';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { AppModal } from '@/core/components/AppModal';
+import { AppCheckbox } from '@/core/components/inputs/AppCheckbox';
 import { AppTable } from '@/core/components/table/AppTable';
 import { cn } from '@/core/lib/utils';
 import { getRoleLabel, Role } from '@/core/models/Role';
@@ -46,19 +47,21 @@ export function UserManagementPage() {
     {
       id: 'selector',
       header: ({ table }) => (
-        <input
-          type="checkbox"
-          onChange={table.getToggleAllRowsSelectedHandler()}
+        <AppCheckbox
+          name="selectAllUsers"
+          onChange={(x) => table.toggleAllRowsSelected(x)}
           checked={table.getIsAllRowsSelected()}
-          className="mx-4"
+          size="lg"
         />
       ),
       cell: ({ row }) => (
-        <input
-          type="checkbox"
+        <AppCheckbox
+          name={`selectUser-${row.id}`}
           checked={row.getIsSelected()}
           disabled={!row.getCanSelect()}
           onChange={row.getToggleSelectedHandler()}
+          className="inline-block"
+          size="md"
         />
       ),
       enableSorting: false,

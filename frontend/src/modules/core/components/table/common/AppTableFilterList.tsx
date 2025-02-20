@@ -2,6 +2,7 @@ import { Header } from '@tanstack/react-table';
 import TrashIcon from 'bootstrap-icons/icons/trash.svg?react';
 import React from 'react';
 
+import { AppCheckbox } from '@/core/components/inputs/AppCheckbox';
 import { AppFloatingLabelInput } from '@/core/components/inputs/AppFloatingLabelInput';
 import { AppTableListItem } from '@/core/components/table/common/AppTableListItem';
 import { getCapabilities } from '@/core/components/table/common/utils';
@@ -18,6 +19,10 @@ export function AppTableFilterList<TData, TValue>({ header, expanded }: Props<TD
   const uniqueValues = React.useMemo(() => {
     return Array.from(header.column.getFacetedUniqueValues().entries()).sort();
   }, [header.column]);
+
+  const areAllChecked = React.useMemo(() => {
+    return uniqueValues.every(([value]) => (filterValue ?? []).includes(value));
+  }, [filterValue, uniqueValues]);
 
   function toggleFilter(filter: TData) {
     if ((filterValue ?? []).includes(filter)) {
@@ -57,7 +62,7 @@ export function AppTableFilterList<TData, TValue>({ header, expanded }: Props<TD
     <>
       <div className="inline-flex gap-4 items-center w-full px-4 py-2 ">
         <div>
-          <input type="checkbox" onChange={(evt) => toggleAll(evt.currentTarget.checked)} />
+          <AppCheckbox name="toggleAll" checked={areAllChecked} onChange={(x) => toggleAll(x)} />
         </div>
         <div className="relative w-full text-left">
           <AppFloatingLabelInput
@@ -81,7 +86,7 @@ export function AppTableFilterList<TData, TValue>({ header, expanded }: Props<TD
               isRendered={supportsFilter}
               expanded={expanded}
             >
-              <input type="checkbox" checked={isFilterChecked(value[0])} className="cursor-pointer" readOnly />
+              <AppCheckbox name={`isFilterChecked-${value}`} checked={isFilterChecked(value[0])} />
               {value[0]}
             </AppTableListItem>
           ))}

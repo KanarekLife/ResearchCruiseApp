@@ -44,7 +44,7 @@ export function AppFloatingLabelInput({
         required={required}
         value={value}
         onBlur={onBlur}
-        onChange={(evt) => onChange && onChange(evt.target.value)}
+        onChange={(evt) => onChange?.(evt.target.value)}
         disabled={disabled}
       />
       <AppInputErrorTriangle errors={errors} />

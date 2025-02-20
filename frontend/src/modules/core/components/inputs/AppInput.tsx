@@ -61,7 +61,7 @@ export function AppInput({
           placeholder={placeholder}
           type={type}
           onBlur={onBlur}
-          onChange={(evt) => onChange && onChange(evt.target.value)}
+          onChange={(evt) => onChange?.(evt.target.value)}
           required={required}
           disabled={disabled}
           className={cn(
