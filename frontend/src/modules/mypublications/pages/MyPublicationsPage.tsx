@@ -1,4 +1,4 @@
-import { ColumnDef } from '@tanstack/react-table';
+import { ColumnDef, RowSelectionState } from '@tanstack/react-table';
 import ExternalLinkIcon from 'bootstrap-icons/icons/box-arrow-up-right.svg?react';
 import TrashIcon from 'bootstrap-icons/icons/trash.svg?react';
 import React, { Suspense } from 'react';
@@ -18,7 +18,7 @@ import {
 import { Publication } from '@/mypublications/models/Publication';
 
 export function MyPublicationsPage() {
-  const [selectedPublications, setSelectedPublications] = React.useState<string[]>([]);
+  const [selectedPublications, setSelectedPublications] = React.useState<RowSelectionState>({});
   const [isDeleteAllModalOpen, setIsDeleteAllModalOpen] = React.useState(false);
 
   const ownPublicationsQuery = useOwnPublicationQuery();
@@ -26,50 +26,28 @@ export function MyPublicationsPage() {
   const deleteAllOwnPublicationsMutation = useDeleteAllOwnPublicationsMutation();
   const uploadPublicationsMutation = useUploadPublicationsMutation();
 
-  function togglePublicationSelection(publicationId: string) {
-    setSelectedPublications((selectedPublications) => {
-      if (selectedPublications.includes(publicationId)) {
-        return selectedPublications.filter((id) => id !== publicationId);
-      }
-
-      return [...selectedPublications, publicationId];
-    });
-  }
-
-  function isPublicationSelected(publicationId: string) {
-    return selectedPublications.includes(publicationId);
-  }
-
-  function toggleSelectAllPublications() {
-    setSelectedPublications((selectedPublications) => {
-      if (selectedPublications.length === ownPublicationsQuery.data?.length) {
-        return [];
-      }
-
-      return ownPublicationsQuery.data?.map((publication) => publication.id) ?? [];
-    });
-  }
-
-  function areAllPublicationsSelected() {
-    return selectedPublications.length === ownPublicationsQuery.data?.length;
+  function deleteSelectedPublications() {
+    Object.keys(selectedPublications).forEach((id) => deleteOwnPublicationMutation.mutateAsync(id));
+    setSelectedPublications({});
   }
 
   const columns: ColumnDef<Publication>[] = [
     {
       id: 'selector',
-      header: () => (
+      header: ({ table }) => (
         <input
           type="checkbox"
-          onChange={() => toggleSelectAllPublications()}
-          checked={areAllPublicationsSelected()}
+          onChange={table.getToggleAllRowsSelectedHandler()}
+          checked={table.getIsAllRowsSelected()}
           className="mx-4"
         />
       ),
-      cell: (cell) => (
+      cell: ({ row }) => (
         <input
           type="checkbox"
-          onChange={() => togglePublicationSelection(cell.row.original.id)}
-          checked={isPublicationSelected(cell.row.original.id)}
+          checked={row.getIsSelected()}
+          disabled={!row.getCanSelect()}
+          onChange={row.getToggleSelectedHandler()}
         />
       ),
       enableSorting: false,
@@ -123,6 +101,9 @@ export function MyPublicationsPage() {
           <AppTable
             data={ownPublicationsQuery.data}
             columns={columns}
+            rowSelectionState={selectedPublications}
+            setRowSelectionState={setSelectedPublications}
+            getRowId={(row) => row.id}
             buttons={(defaultButtons) => [
               <UploadPublicationsButton key="upload" onUpload={uploadPublicationsMutation.mutate} />,
               <AppButton
@@ -139,9 +120,19 @@ export function MyPublicationsPage() {
                 key="removeAllPublications"
                 variant="dangerOutline"
                 onClick={() => setIsDeleteAllModalOpen(true)}
+                disabled={!ownPublicationsQuery.data?.length || deleteAllOwnPublicationsMutation.isPending}
               >
                 <TrashIcon className="h-4 w-4 mr-2" />
                 Usuń wszystkie publikacje
+              </AppButton>,
+              <AppButton
+                key="removeSelectedPublications"
+                variant="dangerOutline"
+                onClick={() => deleteSelectedPublications()}
+                disabled={!Object.keys(selectedPublications).length || deleteOwnPublicationMutation.isPending}
+              >
+                <TrashIcon className="h-4 w-4 mr-2" />
+                Usuń zaznaczone publikacje
               </AppButton>,
               ...defaultButtons,
             ]}
