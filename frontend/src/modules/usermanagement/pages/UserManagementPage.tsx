@@ -1,4 +1,4 @@
-import { ColumnDef } from '@tanstack/react-table';
+import { ColumnDef, RowSelectionState } from '@tanstack/react-table';
 import React, { Suspense } from 'react';
 
 import { AppAvatar } from '@/core/components/AppAvatar';
@@ -32,36 +32,10 @@ const allowedRoles: Record<Role, Role[]> = {
 
 export function UserManagementPage() {
   const userContext = useUserContext();
-  const [selectedUsers, setSelectedUsers] = React.useState<string[]>([]);
+  const [selectedUsers, setSelectedUsers] = React.useState<RowSelectionState>({});
   const [modalState, setModalState] = React.useState<ModalStates>({ state: 'none' });
   const usersQuery = useUsersQuery();
   const currentUserRole = userContext.currentUser?.roles[0] as Role;
-
-  function toggleUserSelection(userId: string) {
-    setSelectedUsers((selectedUser) => {
-      if (selectedUser.includes(userId)) {
-        return selectedUser.filter((id) => id !== userId);
-      }
-
-      return [...selectedUser, userId];
-    });
-  }
-
-  function isUserSelected(userId: string) {
-    return selectedUsers.includes(userId);
-  }
-
-  function toggleSelectAllUsers() {
-    if (areAllUsersSelected()) {
-      setSelectedUsers([]);
-    } else {
-      setSelectedUsers(usersQuery.data?.map((user) => user.id) ?? []);
-    }
-  }
-
-  function areAllUsersSelected() {
-    return usersQuery.data?.length === selectedUsers.length;
-  }
 
   async function handleModalClose() {
     setModalState({ state: 'none' });
@@ -71,19 +45,20 @@ export function UserManagementPage() {
   const columns: ColumnDef<User>[] = [
     {
       id: 'selector',
-      header: () => (
+      header: ({ table }) => (
         <input
           type="checkbox"
-          onChange={() => toggleSelectAllUsers()}
-          checked={areAllUsersSelected()}
+          onChange={table.getToggleAllRowsSelectedHandler()}
+          checked={table.getIsAllRowsSelected()}
           className="mx-4"
         />
       ),
-      cell: (cell) => (
+      cell: ({ row }) => (
         <input
           type="checkbox"
-          onChange={() => toggleUserSelection(cell.row.original.id)}
-          checked={isUserSelected(cell.row.original.id)}
+          checked={row.getIsSelected()}
+          disabled={!row.getCanSelect()}
+          onChange={row.getToggleSelectedHandler()}
         />
       ),
       enableSorting: false,
@@ -152,6 +127,9 @@ export function UserManagementPage() {
           <AppTable
             data={usersQuery.data}
             columns={columns}
+            rowSelectionState={selectedUsers}
+            setRowSelectionState={setSelectedUsers}
+            getRowId={(row) => row.id}
             buttons={(defaultButtons) => [
               <AppButton key="addUser" variant="primary" onClick={() => setModalState({ state: 'newUserModal' })}>
                 Dodaj użytkownika
@@ -159,8 +137,8 @@ export function UserManagementPage() {
               <AppButton
                 key="groupActions"
                 variant="warning"
-                disabled={selectedUsers.length === 0}
-                className={cn(selectedUsers.length === 0 && 'opacity-50')}
+                disabled={!Object.keys(selectedUsers).length}
+                className={cn(!Object.keys(selectedUsers).length && 'opacity-50')}
                 onClick={() => setModalState({ state: 'groupActionsModal' })}
               >
                 Akcje Grupowe
@@ -184,12 +162,12 @@ export function UserManagementPage() {
         />
       </AppModal>
       <AppModal
-        isOpen={modalState.state === 'groupActionsModal' && selectedUsers.length > 0}
+        isOpen={modalState.state === 'groupActionsModal' && Object.keys(selectedUsers).length > 0}
         onClose={() => handleModalClose()}
         title="Akcje grupowe"
       >
         <GroupActionSection
-          selectedUsers={usersQuery.data.filter((user) => selectedUsers.some((userId) => user.id === userId))}
+          selectedUsers={usersQuery.data.filter((user) => selectedUsers[user.id])}
           allowToRemoveUsers={currentUserRole === Role.Administrator}
           close={() => handleModalClose()}
         />
