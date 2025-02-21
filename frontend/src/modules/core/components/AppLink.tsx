@@ -18,7 +18,8 @@ export type Props = {
   rel?: string;
   disabled?: boolean;
 };
-export function AppLink({ children, href, className, title, rel, target = '_self', variant = 'default', disabled = false }: Props) {
+export function AppLink({ children, href, className, title, rel, variant, target = '_self', disabled = false }: Props) {
+  variant = variant ?? (disabled ? 'disabled' : 'default');
   const isInternalLink = (href as string).startsWith('/') || (href as string).startsWith('.');
 
   if (isInternalLink) {
@@ -30,8 +31,7 @@ export function AppLink({ children, href, className, title, rel, target = '_self
   }
 
   return (
-    // TODO: support disabled state for external links
-    <a href={href} target={target} className={cn(variants[variant], className)} title={title} rel={rel} aria-disabled={disabled}>
+    <a href={disabled ? undefined : href} target={target} className={cn(variants[variant], className)} title={title} rel={rel} aria-disabled={disabled}>
       {children}
     </a>
   );
@@ -39,5 +39,6 @@ export function AppLink({ children, href, className, title, rel, target = '_self
 
 const variants = {
   default: 'text-primary hover:underline',
+  disabled: '',   // TODO: make the link look disabled (maybe grey-ish text?)
   plain: '',
 };

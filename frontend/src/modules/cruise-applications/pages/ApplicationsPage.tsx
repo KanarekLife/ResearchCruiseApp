@@ -29,9 +29,9 @@ export function ApplicationsPage() {
       header: 'Formularze',
       cell: ( {row} ) => (
         <>
-          {row.original.hasFormA && <span><AppLink href={`/cruises/${row.original.id}/formA`}>Formularz A</AppLink></span>}
-          {row.original.hasFormB && <span><AppLink href={`/cruises/${row.original.id}/formB`}>Formularz B</AppLink></span>}
-          {row.original.hasFormC && <span><AppLink href={`/cruises/${row.original.id}/formC`}>Formularz C</AppLink></span>}
+          <AppLink disabled={!row.original.hasFormA} href={`/cruises/${row.original.id}/formA`}>Formularz A</AppLink><br/>
+          <AppLink disabled={!row.original.hasFormB} href={`/cruises/${row.original.id}/formB`}>Formularz B</AppLink><br/>
+          <AppLink disabled={!row.original.hasFormC} href={`/cruises/${row.original.id}/formC`}>Formularz C</AppLink>
         </>
       )
     },
