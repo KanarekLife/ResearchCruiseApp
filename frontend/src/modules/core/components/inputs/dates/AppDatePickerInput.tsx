@@ -136,7 +136,7 @@ export function AppDatePickerInput({
               removeSelectedDatePortalRef.current!
             )}
         </div>
-        <div className={cn('flex flex-row justify-between text-sm', errors || helper ? 'mt-2 ' : '')}>
+        <div className={cn('flex flex-col justify-between text-sm', errors || helper ? 'mt-2 ' : '')}>
           <AppInputHelper helper={helper} />
           <AppInputErrorsList errors={errors} />
         </div>

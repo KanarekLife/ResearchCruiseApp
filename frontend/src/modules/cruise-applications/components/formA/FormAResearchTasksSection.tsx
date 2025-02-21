@@ -1,5 +1,4 @@
 import { FieldApi } from '@tanstack/react-form';
-import { UseSuspenseQueryResult } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 import ChevronDownIcon from 'bootstrap-icons/icons/chevron-down.svg?react';
 import ChevronUpIcon from 'bootstrap-icons/icons/chevron-up.svg?react';
@@ -15,22 +14,23 @@ import { AppTable } from '@/core/components/table/AppTable';
 import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteRowButton';
 import { useDropdown } from '@/core/hooks/DropdownHook';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
-import { cn, groupBy, mapValidationErrors } from '@/core/lib/utils';
-import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { cn, getErrors, groupBy } from '@/core/lib/utils';
 import { ResearchTaskDetails } from '@/cruise-applications/components/research-task-details/ResearchTaskDetails';
 import { ResearchTaskThumbnail } from '@/cruise-applications/components/research-task-thumbnails/ResearchTaskThumbnail';
+import { useFormA } from '@/cruise-applications/contexts/FormAContext';
 import { FormADto } from '@/cruise-applications/models/FormADto';
 import { FormAInitValuesDto } from '@/cruise-applications/models/FormAInitValuesDto';
 import {
   getEmptyTask,
   getTaskName,
   ResearchTaskDto,
-  ResearchTaskDtoValidationSchema,
   ResearchTaskType,
   taskTypes,
 } from '@/cruise-applications/models/ResearchTaskDto';
 
-export function FormAResearchTasksSection({ initValues, form, readonly }: FormAProps) {
+export function FormAResearchTasksSection() {
+  const { form, isReadonly, initValues, hasFormBeenSubmitted } = useFormA();
+
   function getColumns(
     field: FieldApi<FormADto, 'researchTasks', undefined, undefined, ResearchTaskDto[]>
   ): ColumnDef<ResearchTaskDto>[] {
@@ -54,7 +54,14 @@ export function FormAResearchTasksSection({ initValues, form, readonly }: FormAP
       },
       {
         header: 'Szczegóły',
-        cell: ({ row }) => <ResearchTaskDetails form={form} row={row} disabled={readonly} />,
+        cell: ({ row }) => (
+          <ResearchTaskDetails
+            form={form}
+            row={row}
+            disabled={isReadonly}
+            hasFormBeenSubmitted={hasFormBeenSubmitted}
+          />
+        ),
       },
       {
         id: 'actions',
@@ -66,7 +73,7 @@ export function FormAResearchTasksSection({ initValues, form, readonly }: FormAP
                 field.handleChange((prev) => prev);
                 field.handleBlur();
               }}
-              disabled={readonly}
+              disabled={isReadonly}
             />
           </div>
         ),
@@ -81,26 +88,23 @@ export function FormAResearchTasksSection({ initValues, form, readonly }: FormAP
         <form.Field
           name="researchTasks"
           mode="array"
-          validators={{
-            onBlur: ResearchTaskDtoValidationSchema.array().min(1),
-          }}
           children={(field) => (
             <>
               <AppTable
                 columns={getColumns(field)}
                 data={field.state.value}
                 buttons={() => [
-                  <AddNewResearchTaskButton key="researchTasks.add-new-btn" field={field} disabled={readonly} />,
+                  <AddNewResearchTaskButton key="researchTasks.add-new-btn" field={field} disabled={isReadonly} />,
                   <AddHistoricalResearchTaskButton
                     key="researchTasks.add-historical-btn"
                     field={field}
                     initValues={initValues}
-                    disabled={readonly}
+                    disabled={isReadonly}
                   />,
                 ]}
                 emptyTableMessage="Nie dodano żadnego zadania."
               />
-              <AppInputErrorsList errors={mapValidationErrors(field.state.meta.errors)} />
+              <AppInputErrorsList errors={getErrors(field.state.meta, hasFormBeenSubmitted)} />
             </>
           )}
         />
@@ -111,7 +115,7 @@ export function FormAResearchTasksSection({ initValues, form, readonly }: FormAP
 
 type AddHistoricalResearchTaskButtonProps = {
   field: FieldApi<FormADto, 'researchTasks', undefined, undefined, ResearchTaskDto[]>;
-  initValues: UseSuspenseQueryResult<FormAInitValuesDto, Error>;
+  initValues: FormAInitValuesDto;
   disabled?: boolean;
 };
 function AddHistoricalResearchTaskButton({ field, initValues, disabled }: AddHistoricalResearchTaskButtonProps) {
@@ -153,7 +157,7 @@ function AddHistoricalResearchTaskButton({ field, initValues, disabled }: AddHis
               />
             </div>
             {groupBy(
-              initValues.data.historicalResearchTasks.filter((task) =>
+              initValues.historicalResearchTasks.filter((task) =>
                 JSON.stringify(Object.values(task)).toLowerCase().includes(searchValue.toLowerCase())
               ),
               (x) => x.type

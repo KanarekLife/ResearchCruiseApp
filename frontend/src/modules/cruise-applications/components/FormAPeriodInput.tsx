@@ -44,11 +44,11 @@ function getPointAtTime(position: number): string {
 }
 
 function getExplanationForPeriod(start: number, end: number): string {
-  if (start === 0 && end === 23) {
+  if (start === 0 && end === 24) {
     return 'Cały rok';
   }
 
-  return `od początku ${getPointAtTime(start)} do końca ${getPointAtTime(end)}`;
+  return `od początku ${getPointAtTime(start)} do końca ${getPointAtTime(end - 1)}`;
 }
 
 type Props = {
@@ -88,7 +88,7 @@ export function FormAPeriodInput({
       return [parseInt(maxValues[0]), parseInt(maxValues[1])];
     }
 
-    return [0, 23];
+    return [0, 24];
   });
 
   React.useMemo(() => {
@@ -124,7 +124,7 @@ export function FormAPeriodInput({
     getRangerElement: () => rangerRef.current,
     values,
     min: 0,
-    max: 23,
+    max: 24,
     stepSize: 1,
     onDrag: (instance: Ranger<HTMLDivElement>) => {
       const sortedValues = instance.sortedValues as number[];
@@ -156,7 +156,7 @@ export function FormAPeriodInput({
     },
   });
 
-  const stepPositions = Array.from(Array(24).keys()).map((i) => rangerInstance.getPercentageForValue(i));
+  const stepPositions = Array.from(Array(25).keys()).map((i) => rangerInstance.getPercentageForValue(i));
 
   function getWidth() {
     return (
@@ -173,7 +173,12 @@ export function FormAPeriodInput({
     <div className="flex flex-col">
       <AppInputLabel name={name} label={label} />
       <input type="hidden" name={name} value={values.join(',')} required={required} disabled={disabled} />
-      <div ref={rangerRef} className="relative select-none h-1 bg-black/5 rounded-sm mt-4 mb-20 mx-8" onBlur={onBlur}>
+
+      <div
+        ref={rangerRef}
+        className="relative select-none h-1 bg-black/5 rounded-sm mt-4 mb-20 mx-8 touch-none"
+        onBlur={onBlur}
+      >
         <span
           className="absolute top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1 h-1 z-0 bg-primary-800"
           style={{
@@ -181,27 +186,36 @@ export function FormAPeriodInput({
             width: `${getWidth()}%`,
           }}
         />
-        {rangerInstance.handles().map(({ value, onKeyDownHandler, onMouseDownHandler, onTouchStart, isActive }) => (
-          <button
-            key={value}
-            type="button"
-            onKeyDown={onKeyDownHandler}
-            onMouseDown={onMouseDownHandler}
-            onTouchStart={onTouchStart}
-            role="slider"
-            aria-valuemin={rangerInstance.options.min}
-            aria-valuemax={rangerInstance.options.max}
-            aria-valuenow={value}
-            className={cn(
-              `absolute top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 outline-none rounded-full bg-primary-800 duration-75 cursor-pointer z-10`,
-              isActive ? 'scale-125' : ''
-            )}
-            style={{
-              left: `${rangerInstance.getPercentageForValue(value)}%`,
-            }}
-            disabled={disabled}
-          />
-        ))}
+        {rangerInstance
+          .handles()
+          .map(({ value, onKeyDownHandler, onMouseDownHandler, onTouchStart, isActive }, index) => (
+            <button
+              // eslint-disable-next-line @eslint-react/no-array-index-key
+              key={index}
+              type="button"
+              onKeyDown={onKeyDownHandler}
+              onMouseDown={onMouseDownHandler}
+              onTouchStart={(evt) => {
+                document.body.style.overflow = 'hidden';
+                onTouchStart(evt);
+              }}
+              onTouchEnd={() => {
+                document.body.style.overflow = '';
+              }}
+              role="slider"
+              aria-valuemin={rangerInstance.options.min}
+              aria-valuemax={rangerInstance.options.max}
+              aria-valuenow={value}
+              className={cn(
+                `absolute top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 outline-none rounded-full bg-primary-800 duration-75 cursor-pointer z-10`,
+                isActive ? 'scale-125' : ''
+              )}
+              style={{
+                left: `${rangerInstance.getPercentageForValue(value)}%`,
+              }}
+              disabled={disabled}
+            />
+          ))}
         {stepPositions
           .filter((_, i) => i % 2 == 0)
           .map((position) => (
@@ -223,8 +237,9 @@ export function FormAPeriodInput({
             </span>
           ))}
       </div>
+
       <p className="text-center">Wybrano okres: {getExplanationForPeriod(values[0], values[1])}</p>
-      <div className="flex flex-row justify-between mt-2 text-sm">
+      <div className="flex flex-col justify-between mt-2 text-sm">
         <AppInputHelper helper={helper} />
         <AppInputErrorsList errors={errors} />
       </div>

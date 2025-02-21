@@ -1,5 +1,4 @@
 import { FieldApi } from '@tanstack/react-form';
-import { UseSuspenseQueryResult } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 import ChevronDownIcon from 'bootstrap-icons/icons/chevron-down.svg?react';
 import ChevronUpIcon from 'bootstrap-icons/icons/chevron-up.svg?react';
@@ -15,13 +14,15 @@ import { AppTable } from '@/core/components/table/AppTable';
 import { AppTableDeleteRowButton } from '@/core/components/table/AppTableDeleteRowButton';
 import { useDropdown } from '@/core/hooks/DropdownHook';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
-import { cn, mapValidationErrors } from '@/core/lib/utils';
-import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { cn, getErrors } from '@/core/lib/utils';
+import { useFormA } from '@/cruise-applications/contexts/FormAContext';
 import { FormADto } from '@/cruise-applications/models/FormADto';
 import { FormAInitValuesDto } from '@/cruise-applications/models/FormAInitValuesDto';
 import { SpubTaskDto } from '@/cruise-applications/models/SpubTaskDto';
 
-export function FormASPUBTasksSection({ initValues, form, readonly }: FormAProps) {
+export function FormASPUBTasksSection() {
+  const { form, isReadonly, initValues, hasFormBeenSubmitted } = useFormA();
+
   function getColumns(
     field: FieldApi<FormADto, 'spubTasks', undefined, undefined, SpubTaskDto[]>
   ): ColumnDef<SpubTaskDto>[] {
@@ -45,9 +46,9 @@ export function FormASPUBTasksSection({ initValues, form, readonly }: FormAProps
                 value={field.state.value ? parseInt(field.state.value) : undefined}
                 onChange={(e) => field.handleChange(e?.toString() ?? '')}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 required
-                disabled={readonly}
+                disabled={isReadonly}
               />
             )}
           />
@@ -68,9 +69,9 @@ export function FormASPUBTasksSection({ initValues, form, readonly }: FormAProps
                 value={field.state.value ? parseInt(field.state.value) : undefined}
                 onChange={(e) => field.handleChange(e?.toString() ?? '')}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 required
-                disabled={readonly}
+                disabled={isReadonly}
               />
             )}
           />
@@ -91,9 +92,9 @@ export function FormASPUBTasksSection({ initValues, form, readonly }: FormAProps
                 value={field.state.value}
                 onChange={field.handleChange}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 required
-                disabled={readonly}
+                disabled={isReadonly}
               />
             )}
           />
@@ -109,7 +110,7 @@ export function FormASPUBTasksSection({ initValues, form, readonly }: FormAProps
                 field.handleChange((prev) => prev);
                 field.handleBlur();
               }}
-              disabled={readonly}
+              disabled={isReadonly}
             />
           </div>
         ),
@@ -142,7 +143,7 @@ export function FormASPUBTasksSection({ initValues, form, readonly }: FormAProps
                       field.form.validateAllFields('blur');
                       field.form.validateAllFields('change');
                     }}
-                    disabled={readonly}
+                    disabled={isReadonly}
                   >
                     Dodaj
                   </AppButton>,
@@ -150,12 +151,12 @@ export function FormASPUBTasksSection({ initValues, form, readonly }: FormAProps
                     key="spubTasks.add-historical-btn"
                     field={field}
                     initValues={initValues}
-                    disabled={readonly}
+                    disabled={isReadonly}
                   />,
                 ]}
                 emptyTableMessage="Brak zadań SPUB"
               />
-              <AppInputErrorsList errors={mapValidationErrors(field.state.meta.errors)} />
+              <AppInputErrorsList errors={getErrors(field.state.meta, hasFormBeenSubmitted)} />
             </>
           )}
         />
@@ -166,7 +167,7 @@ export function FormASPUBTasksSection({ initValues, form, readonly }: FormAProps
 
 type AddHistoricalSPUBTaskButtonProps = {
   field: FieldApi<FormADto, 'spubTasks', undefined, undefined, SpubTaskDto[]>;
-  initValues: UseSuspenseQueryResult<FormAInitValuesDto, Error>;
+  initValues: FormAInitValuesDto;
   disabled?: boolean;
 };
 function AddHistoricalSPUBTaskButton({ field, initValues, disabled }: AddHistoricalSPUBTaskButtonProps) {
@@ -196,7 +197,7 @@ function AddHistoricalSPUBTaskButton({ field, initValues, disabled }: AddHistori
       <AnimatePresence>
         {expanded && (
           <Modal dropdownRef={dropdownRef} elementRef={elementRef}>
-            {initValues.data.historicalSpubTasks.map((spubTask) => (
+            {initValues.historicalSpubTasks.map((spubTask) => (
               <AppButton
                 key={`spubTasks.add-historical-btn.${JSON.stringify(spubTask)}`}
                 onClick={() => {

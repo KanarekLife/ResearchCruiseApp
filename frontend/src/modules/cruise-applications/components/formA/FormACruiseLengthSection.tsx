@@ -4,11 +4,14 @@ import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppDropdownInput } from '@/core/components/inputs/AppDropdownInput';
 import { AppInput } from '@/core/components/inputs/AppInput';
 import { AppNumberInput } from '@/core/components/inputs/AppNumberInput';
-import { mapValidationErrors } from '@/core/lib/utils';
-import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
-import { FormAPeriodInput } from '@/cruise-applications/components/FormAPeriodInput';
+import { getErrors } from '@/core/lib/utils';
+import { useFormA } from '@/cruise-applications/contexts/FormAContext';
 
-export function FormACruiseLengthSection({ initValues, form, readonly }: FormAProps) {
+import { FormAPeriodInput } from '../FormAPeriodInput';
+
+export function FormACruiseLengthSection() {
+  const { form, isReadonly, initValues, hasFormBeenSubmitted } = useFormA();
+
   return (
     <AppAccordion title="2. Czas trwania zgłaszanego rejsu" expandedByDefault>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -20,10 +23,10 @@ export function FormACruiseLengthSection({ initValues, form, readonly }: FormAPr
               value={field.state.value}
               onChange={field.handleChange}
               onBlur={field.handleBlur}
-              errors={mapValidationErrors(field.state.meta.errors)}
+              errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
               label="Dopuszczalny okres, w którym miałby się odbywać rejs"
               required
-              disabled={readonly}
+              disabled={isReadonly}
             />
           )}
         />
@@ -39,11 +42,11 @@ export function FormACruiseLengthSection({ initValues, form, readonly }: FormAPr
                   value={field.state.value}
                   onChange={field.handleChange}
                   onBlur={field.handleBlur}
-                  errors={mapValidationErrors(field.state.meta.errors)}
+                  errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   maxValues={acceptablePeriod}
                   label="Optymalny okres, w którym miałby się odbywać rejs"
                   required
-                  disabled={readonly}
+                  disabled={isReadonly}
                 />
               )}
             />
@@ -59,19 +62,15 @@ export function FormACruiseLengthSection({ initValues, form, readonly }: FormAPr
                 children={(field) => (
                   <AppNumberInput
                     name={field.name}
-                    value={Math.floor((parseInt(cruiseHours) / 24) * 100) / 100}
-                    onChange={(e) => field.handleChange((Number(e.target.value) * 24).toString())}
-                    onIncrement={() =>
-                      field.handleChange(((Math.floor(parseInt(cruiseHours) / 24) + 1) * 24).toString())
-                    }
-                    onDecrement={() =>
-                      field.handleChange(((Math.floor(parseInt(cruiseHours) / 24) - 1) * 24).toString())
-                    }
+                    value={parseInt(cruiseHours) / 24}
+                    minimum={0}
+                    maximum={60}
+                    onChange={(x: number) => field.handleChange((x * 24).toString())}
                     onBlur={field.handleBlur}
-                    errors={mapValidationErrors(field.state.meta.errors)}
+                    errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                     label="Liczba planowanych dób rejsowych"
                     required
-                    disabled={readonly}
+                    disabled={isReadonly}
                   />
                 )}
               />
@@ -89,14 +88,14 @@ export function FormACruiseLengthSection({ initValues, form, readonly }: FormAPr
                   <AppNumberInput
                     name={field.name}
                     value={parseInt(cruiseHours)}
-                    onChange={(e) => field.handleChange(Number(e.target.value).toString())}
-                    onIncrement={() => field.handleChange((parseInt(cruiseHours) + 1).toString())}
-                    onDecrement={() => field.handleChange((parseInt(cruiseHours) - 1).toString())}
+                    minimum={0}
+                    maximum={1440}
+                    onChange={(x: number) => field.handleChange(x.toString())}
                     onBlur={field.handleBlur}
-                    errors={mapValidationErrors(field.state.meta.errors)}
+                    errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                     label="Liczba planowanych godzin rejsowych"
                     required
-                    disabled={readonly}
+                    disabled={isReadonly}
                   />
                 )}
               />
@@ -113,10 +112,10 @@ export function FormACruiseLengthSection({ initValues, form, readonly }: FormAPr
                 value={field.state.value}
                 onChange={field.handleChange}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
-                label="Uwagi dotyczące teminu"
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
+                label="Uwagi dotyczące terminu"
                 placeholder='np. "Rejs w okresie wakacyjnym"'
-                disabled={readonly}
+                disabled={isReadonly}
               />
             </div>
           )}
@@ -131,13 +130,13 @@ export function FormACruiseLengthSection({ initValues, form, readonly }: FormAPr
                 value={field.state.value as string | number}
                 onChange={(e) => field.handleChange(e as string)}
                 onBlur={field.handleBlur}
-                errors={mapValidationErrors(field.state.meta.errors)}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 label="Statek na potrzeby badań będzie wykorzystywany"
-                allOptions={initValues.data?.shipUsages.map((shipUsage, i) => ({
+                allOptions={initValues?.shipUsages.map((shipUsage, i) => ({
                   value: i.toString(),
                   inlineLabel: shipUsage,
                 }))}
-                disabled={readonly}
+                disabled={isReadonly}
               />
             </div>
           )}
@@ -163,11 +162,11 @@ export function FormACruiseLengthSection({ initValues, form, readonly }: FormAPr
                           value={field.state.value}
                           onChange={field.handleChange}
                           onBlur={field.handleBlur}
-                          errors={mapValidationErrors(field.state.meta.errors)}
+                          errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                           label="Inny sposób użycia"
                           placeholder="np. statek badawczy"
                           required
-                          disabled={readonly}
+                          disabled={isReadonly}
                         />
                       )}
                     />

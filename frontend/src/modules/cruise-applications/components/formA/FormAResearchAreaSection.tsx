@@ -1,10 +1,12 @@
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppDropdownInput } from '@/core/components/inputs/AppDropdownInput';
 import { AppInput } from '@/core/components/inputs/AppInput';
-import { mapValidationErrors } from '@/core/lib/utils';
-import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { getErrors } from '@/core/lib/utils';
+import { useFormA } from '@/cruise-applications/contexts/FormAContext';
 
-export function FormAResearchAreaSection({ form, initValues, readonly }: FormAProps) {
+export function FormAResearchAreaSection() {
+  const { form, isReadonly, initValues, hasFormBeenSubmitted } = useFormA();
+
   return (
     <AppAccordion title="4. Rejon prowadzenia badań" expandedByDefault>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -21,14 +23,14 @@ export function FormAResearchAreaSection({ form, initValues, readonly }: FormAPr
                 }
               }}
               onBlur={field.handleBlur}
-              errors={mapValidationErrors(field.state.meta.errors)}
+              errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
               label="Rejon prowadzenia badań"
-              allOptions={initValues.data.researchAreas.map((researchArea) => ({
+              allOptions={initValues.researchAreas.map((researchArea) => ({
                 value: researchArea.id,
                 inlineLabel: researchArea.name,
               }))}
               required
-              disabled={readonly}
+              disabled={isReadonly}
             />
           )}
         />
@@ -44,10 +46,10 @@ export function FormAResearchAreaSection({ form, initValues, readonly }: FormAPr
                   value={field.state.value}
                   onChange={field.handleChange}
                   onBlur={field.handleBlur}
-                  errors={mapValidationErrors(field.state.meta.errors)}
+                  errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Informacje dodatkowe"
                   placeholder="np. szczegóły dotyczące regionu"
-                  disabled={!researchAreaId || readonly}
+                  disabled={!researchAreaId || isReadonly}
                 />
               )}
             />

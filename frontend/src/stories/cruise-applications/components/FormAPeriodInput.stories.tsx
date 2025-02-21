@@ -23,13 +23,13 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    value: [5, 12],
+    value: ['5', '12'],
   },
 };
 
 export const WithMaxValues: Story = {
   args: {
-    maxValues: [6, 18],
+    maxValues: ['6', '18'],
   },
 };
 

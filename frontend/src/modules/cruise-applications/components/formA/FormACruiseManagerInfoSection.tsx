@@ -1,8 +1,8 @@
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppAvatar } from '@/core/components/AppAvatar';
 import { AppDropdownInput, AppDropdownInputOption } from '@/core/components/inputs/AppDropdownInput';
-import { mapValidationErrors } from '@/core/lib/utils';
-import { FormAProps } from '@/cruise-applications/components/formA/FormASectionProps';
+import { getErrors } from '@/core/lib/utils';
+import { useFormA } from '@/cruise-applications/contexts/FormAContext';
 import { FormUserDto } from '@/cruise-applications/models/FormUserDto';
 
 function mapPersonToLabel(person: FormUserDto): AppDropdownInputOption<string> {
@@ -23,7 +23,9 @@ function mapPersonToLabel(person: FormUserDto): AppDropdownInputOption<string> {
   };
 }
 
-export function FormACruiseManagerInfoSection({ initValues, form, readonly }: FormAProps) {
+export function FormACruiseManagerInfoSection() {
+  const { form, isReadonly, initValues, hasFormBeenSubmitted } = useFormA();
+
   return (
     <AppAccordion title="1. Kierownik zgłaszanego rejsu" expandedByDefault>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -35,12 +37,12 @@ export function FormACruiseManagerInfoSection({ initValues, form, readonly }: Fo
               value={field.state.value}
               onChange={field.handleChange}
               onBlur={field.handleBlur}
-              errors={mapValidationErrors(field.state.meta.errors)}
+              errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
               label="Kierownik rejsu"
               required
               placeholder="Wybierz kierownika rejsu"
-              allOptions={initValues.data.cruiseManagers.map(mapPersonToLabel)}
-              disabled={readonly}
+              allOptions={initValues.cruiseManagers.map(mapPersonToLabel)}
+              disabled={isReadonly}
             />
           )}
         />
@@ -53,11 +55,11 @@ export function FormACruiseManagerInfoSection({ initValues, form, readonly }: Fo
               value={field.state.value}
               onChange={field.handleChange}
               onBlur={field.handleBlur}
-              errors={mapValidationErrors(field.state.meta.errors)}
+              errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
               label="Zastępca kierownika rejsu"
               placeholder="Wybierz zastępcę kierownika rejsu"
-              allOptions={initValues.data.deputyManagers.map(mapPersonToLabel)}
-              disabled={readonly}
+              allOptions={initValues.deputyManagers.map(mapPersonToLabel)}
+              disabled={isReadonly}
             />
           )}
         />
@@ -70,15 +72,15 @@ export function FormACruiseManagerInfoSection({ initValues, form, readonly }: Fo
               value={field.state.value}
               onChange={field.handleChange}
               onBlur={field.handleBlur}
-              errors={mapValidationErrors(field.state.meta.errors)}
+              errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
               label="Rok"
               required
               placeholder="Wybierz rok"
-              allOptions={initValues.data.years.map((year) => ({
+              allOptions={initValues.years.map((year) => ({
                 value: year,
                 inlineLabel: year,
               }))}
-              disabled={readonly}
+              disabled={isReadonly}
             />
           )}
         />

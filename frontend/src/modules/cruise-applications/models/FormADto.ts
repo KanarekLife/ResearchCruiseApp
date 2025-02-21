@@ -31,33 +31,7 @@ export type FormADto = {
   publications: PublicationDto[];
   spubTasks: SpubTaskDto[];
   supervisorEmail: string;
-  note?: string | '';
-};
-
-export const emptyFormADto: FormADto = {
-  id: undefined,
-  cruiseManagerId: '',
-  deputyManagerId: '',
-  year: '',
-  acceptablePeriod: [],
-  optimalPeriod: [],
-  cruiseHours: '0',
-  periodNotes: '',
-  shipUsage: '',
-  differentUsage: '',
-  permissions: [],
-  researchAreaId: '',
-  researchAreaInfo: '',
-  cruiseGoal: '',
-  cruiseGoalDescription: '',
-  researchTasks: [],
-  contracts: [],
-  ugTeams: [],
-  guestTeams: [],
-  publications: [],
-  spubTasks: [],
-  supervisorEmail: '',
-  note: '',
+  note?: string;
 };
 
 /**
@@ -89,6 +63,7 @@ export const FortnightValidationSchema = z.enum([
   '21',
   '22',
   '23',
+  '24',
 ]);
 
 /**
@@ -96,10 +71,7 @@ export const FortnightValidationSchema = z.enum([
  * @example ['0', '1'] // represents the period from first half of January to second half of January
  */
 export type CruisePeriodType = z.infer<typeof CruisePeriodValidationSchema>;
-export const CruisePeriodValidationSchema = z.union([
-  z.tuple([FortnightValidationSchema, FortnightValidationSchema]),
-  z.array(z.never()).length(0),
-]);
+export const CruisePeriodValidationSchema = z.tuple([FortnightValidationSchema, FortnightValidationSchema]);
 
 export enum CruiseGoal {
   Research = '0',

@@ -77,7 +77,7 @@ export function AppInput({
         <AppInputErrorTriangle errors={errors} mode="absolute" />
       </div>
 
-      <div className={cn('flex flex-row justify-between text-sm', errors || helper ? 'mt-2' : '')}>
+      <div className={cn('flex flex-col justify-between text-sm', errors || helper ? 'mt-2' : '')}>
         <AppInputHelper helper={helper} />
         <AppInputErrorsList errors={errors} />
       </div>

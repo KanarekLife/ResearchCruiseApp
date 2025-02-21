@@ -2,7 +2,7 @@ import { ReactFormExtendedApi } from '@tanstack/react-form';
 import { Row } from '@tanstack/react-table';
 
 import { AppInput } from '@/core/components/inputs/AppInput';
-import { mapValidationErrors } from '@/core/lib/utils';
+import { getErrors } from '@/core/lib/utils';
 import { FormADto } from '@/cruise-applications/models/FormADto';
 import { OtherResearchTaskDto } from '@/cruise-applications/models/ResearchTaskDto';
 
@@ -10,8 +10,9 @@ type Props = {
   form: ReactFormExtendedApi<FormADto, undefined>;
   row: Row<OtherResearchTaskDto>;
   disabled?: boolean;
+  hasFormBeenSubmitted?: boolean;
 };
-export function OtherResearchTaskDetails({ form, row, disabled }: Props) {
+export function OtherResearchTaskDetails({ form, row, disabled, hasFormBeenSubmitted }: Props) {
   return (
     <div>
       <form.Field
@@ -22,7 +23,7 @@ export function OtherResearchTaskDetails({ form, row, disabled }: Props) {
             value={field.state.value as string}
             onChange={field.handleChange}
             onBlur={field.handleBlur}
-            errors={mapValidationErrors(field.state.meta.errors)}
+            errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
             label="Opis zadania"
             placeholder="Wprowadź opis zadania"
             required
