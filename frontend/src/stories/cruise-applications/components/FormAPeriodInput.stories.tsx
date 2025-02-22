@@ -7,7 +7,7 @@ const meta = {
   component: FormAPeriodInput,
   args: {
     name: 'Period input',
-    value: [],
+    value: ['5', '12'],
     maxValues: undefined,
     onChange: fn(),
     onBlur: fn(),
@@ -21,11 +21,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  args: {
-    value: ['5', '12'],
-  },
-};
+export const Default: Story = {};
 
 export const WithMaxValues: Story = {
   args: {

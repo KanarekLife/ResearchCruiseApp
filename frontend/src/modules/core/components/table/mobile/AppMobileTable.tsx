@@ -8,7 +8,7 @@ import { TableProps } from '@/core/components/table/common/tableProps';
 import { AppMobileTableFilterForm } from '@/core/components/table/mobile/AppMobileTableFilterForm';
 import { createModalPortal } from '@/core/lib/utils';
 
-export function AppMobileTable<T>({ table, buttons, emptyTableMessage }: TableProps<T>) {
+export function AppMobileTable<T>({ table, buttons, emptyTableMessage, variant }: TableProps<T>) {
   const [isFilterModalOpen, setIsFilterModalOpen] = React.useState(false);
 
   const defaultButtons: React.ReactNode[] = [
@@ -36,7 +36,7 @@ export function AppMobileTable<T>({ table, buttons, emptyTableMessage }: TablePr
                 <td className="flex flex-col gap-2 justify-center items-center py-3">
                   {row.getVisibleCells().map((cell) => {
                     return (
-                      <div key={cell.id} className="flex justify-between gap-4 items-center w-full px-5">
+                      <div key={cell.id} className={variants[variant ?? 'table']}>
                         <div className="font-bold">
                           {flexRender(cell.column.columnDef.header, {
                             table,
@@ -73,3 +73,8 @@ export function AppMobileTable<T>({ table, buttons, emptyTableMessage }: TablePr
     </>
   );
 }
+
+const variants = {
+  table: 'flex justify-between gap-4 items-center w-full px-5',
+  form: 'flex flex-col gap-4 w-full px-5',
+};

@@ -263,6 +263,7 @@ export function FormAPublicationsSection() {
                     disabled={isReadonly}
                   />,
                 ]}
+                variant="form"
               />
               <AppInputErrorsList errors={getErrors(field.state.meta)} />
             </>

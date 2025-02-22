@@ -114,6 +114,7 @@ export function FormAPermissionsSection() {
                   </AppButton>,
                 ]}
                 emptyTableMessage="Nie dodano żadnego pozwolenia."
+                variant="form"
               />
               <AppInputErrorsList errors={getErrors(field.state.meta)} />
             </>

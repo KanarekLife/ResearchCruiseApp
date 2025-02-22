@@ -103,6 +103,7 @@ export function FormAResearchTasksSection() {
                   />,
                 ]}
                 emptyTableMessage="Nie dodano żadnego zadania."
+                variant="form"
               />
               <AppInputErrorsList errors={getErrors(field.state.meta, hasFormBeenSubmitted)} />
             </>

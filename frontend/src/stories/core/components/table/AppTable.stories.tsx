@@ -78,3 +78,9 @@ export const WithButtons: Story = {
     ],
   },
 };
+
+export const FormVariant: Story = {
+  args: {
+    variant: 'form',
+  },
+};

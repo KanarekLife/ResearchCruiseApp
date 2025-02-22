@@ -23,6 +23,7 @@ type Props<T> = {
   rowSelectionState?: RowSelectionState;
   setRowSelectionState?: OnChangeFn<RowSelectionState>;
   getRowId?: (originalRow: T, index: number, parent?: Row<T>) => string;
+  variant?: 'form' | 'table';
 };
 
 export function AppTable<T>({
@@ -33,6 +34,7 @@ export function AppTable<T>({
   rowSelectionState,
   setRowSelectionState,
   getRowId,
+  variant = 'table',
 }: Props<T>) {
   const { width } = useWindowSize();
   const table = useReactTable<T>({
@@ -56,5 +58,5 @@ export function AppTable<T>({
   const isMobile = width < 768;
   const TableComponent = isMobile ? AppMobileTable : AppDesktopTable;
 
-  return <TableComponent table={table} buttons={buttons} emptyTableMessage={emptyTableMessage} />;
+  return <TableComponent table={table} buttons={buttons} emptyTableMessage={emptyTableMessage} variant={variant} />;
 }
