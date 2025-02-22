@@ -280,11 +280,12 @@ function Modal({ elementRef, dropdownRef, children }: ModalProps) {
     openingItemRef: elementRef,
     dropdownRef,
     dropdownPosition: 'center',
+    dropdownWidthMultiplier: 1.5,
   });
 
   return (
     <motion.div
-      style={{ top: top, left: left, width: width * 1.5 }}
+      style={{ top: top, left: left, width: width }}
       className={cn(
         'fixed origin-top-right w-(--width) rounded-md bg-white ring-1 shadow-lg ring-black/5 focus:outline-hidden z-50 max-h-96 overflow-y-auto'
       )}

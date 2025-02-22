@@ -4,6 +4,7 @@ type Props = {
   openingItemRef: React.RefObject<HTMLElement | null>;
   dropdownRef: React.RefObject<HTMLElement | null>;
   dropdownPosition?: 'left' | 'center' | 'right';
+  dropdownWidthMultiplier?: number;
 };
 
 type DropdownProperties = {
@@ -23,7 +24,12 @@ function isOverflowingDownwards(headerRect: DOMRect, dropdownRect: DOMRect) {
   return headerRect.top - headerRect.height / 2 + window.scrollY + dropdownRect.height < document.body.scrollHeight;
 }
 
-export function useDropdown({ openingItemRef, dropdownRef, dropdownPosition = 'center' }: Props) {
+export function useDropdown({
+  openingItemRef,
+  dropdownRef,
+  dropdownPosition = 'center',
+  dropdownWidthMultiplier = 1,
+}: Props) {
   const [dropdownProperties, setDropdownProperties] = React.useState<DropdownProperties>({
     top: 0,
     left: 0,
@@ -41,6 +47,14 @@ export function useDropdown({ openingItemRef, dropdownRef, dropdownPosition = 'c
 
     const direction = isOverflowingDownwards(headerRect, dropdownRect) ? 'down' : 'up';
 
+    let width = headerRect.width * dropdownWidthMultiplier;
+    if (headerRect.left + width > window.innerWidth) {
+      width -= headerRect.left + width - window.innerWidth;
+    }
+    if (headerRect.right - width < 0) {
+      width -= headerRect.right - width;
+    }
+
     // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
     setDropdownProperties({
       top:
@@ -52,10 +66,10 @@ export function useDropdown({ openingItemRef, dropdownRef, dropdownPosition = 'c
         headerRect.width * positionModifier[dropdownPosition] -
         dropdownRect.width * positionModifier[dropdownPosition] +
         window.scrollX,
-      width: headerRect.width,
+      width,
       direction,
     });
-  }, [openingItemRef, dropdownRef, dropdownPosition]);
+  }, [openingItemRef, dropdownRef, dropdownWidthMultiplier, dropdownPosition]);
 
   React.useEffect(() => {
     updateDropdownPosition();
