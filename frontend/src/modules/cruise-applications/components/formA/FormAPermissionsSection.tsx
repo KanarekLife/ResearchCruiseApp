@@ -39,7 +39,7 @@ export function FormAPermissionsSection() {
                 onChange={field.handleChange}
                 onBlur={field.handleBlur}
                 errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
-                className="mx-4"
+                containerClassName="mx-4"
                 disabled={isReadonly}
               />
             )}
