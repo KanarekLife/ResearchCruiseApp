@@ -20,10 +20,11 @@ export function NewCruisePage() {
   const navigate = useNavigate();
   const appContext = useAppContext();
   const userContext = useUserContext();
+  const initialStateQuery = useFormAInitValuesQuery();
+  const saveMutation = useSaveFormAMutation();
   const [hasFormBeenSubmitted, setHasFormBeenSubmitted] = useState(false);
   const [isSaveDraftModalOpen, setIsSaveDraftModalOpen] = useState(false);
-  const initialStateQuery = useFormAInitValuesQuery();
-  const saveDraftMutation = useSaveFormAMutation();
+
   const form = useForm<FormADto>({
     defaultValues: {
       id: undefined,
@@ -53,58 +54,12 @@ export function NewCruisePage() {
     validators: {
       onChange: getFormAValidationSchema(initialStateQuery.data),
     },
-    onSubmit: ({ value }) => {
-      const dto = removeEmptyValues(value, [
-        'year',
-        'periodNotes',
-        'differentUsage',
-        'supervisorEmail',
-        'cruiseGoalDescription',
-      ]);
-
-      if (dto.cruiseManagerId !== userContext.currentUser!.id && dto.deputyManagerId !== userContext.currentUser!.id) {
-        setIsSaveDraftModalOpen(false);
-        appContext.showAlert({
-          title: 'Wykryto błąd w formularzu',
-          message: 'Jedynie kierownik lub jego zastępca mogą zapisać formularz',
-          variant: 'danger',
-        });
-        return;
-      }
-
-      saveDraftMutation.mutate(
-        { form: dto, draft: false },
-        {
-          onSuccess: () => {
-            navigate({ to: '/' });
-            appContext.showAlert({
-              title: 'Formularz przyjęty',
-              message: 'Formularz został zapisany i wysłany do potwierdzenia przez przełożonego',
-              variant: 'success',
-            });
-          },
-          onError: (err) => {
-            console.error(err);
-            appContext.showAlert({
-              title: 'Wystąpił błąd',
-              message: 'Nie udało się zapisać formularza',
-              variant: 'danger',
-            });
-          },
-          onSettled: () => setIsSaveDraftModalOpen(false),
-        }
-      );
-    },
   });
 
-  function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmitting(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
-    evt.stopPropagation();
-    setHasFormBeenSubmitted(true);
-    form.handleSubmit();
-  }
 
-  function handleSaveDraft() {
+    setHasFormBeenSubmitted(true);
     const dto = removeEmptyValues(form.state.values, [
       'year',
       'periodNotes',
@@ -123,7 +78,50 @@ export function NewCruisePage() {
       return;
     }
 
-    saveDraftMutation.mutate(
+    saveMutation.mutate(
+      { form: dto, draft: false },
+      {
+        onSuccess: () => {
+          navigate({ to: '/' });
+          appContext.showAlert({
+            title: 'Formularz przyjęty',
+            message: 'Formularz został zapisany i wysłany do potwierdzenia przez przełożonego',
+            variant: 'success',
+          });
+        },
+        onError: (err) => {
+          console.error(err);
+          appContext.showAlert({
+            title: 'Wystąpił błąd',
+            message: 'Nie udało się zapisać formularza',
+            variant: 'danger',
+          });
+        },
+        onSettled: () => setIsSaveDraftModalOpen(false),
+      }
+    );
+  }
+
+  function handleSavingDraft() {
+    const dto = removeEmptyValues(form.state.values, [
+      'year',
+      'periodNotes',
+      'differentUsage',
+      'supervisorEmail',
+      'cruiseGoalDescription',
+    ]);
+
+    if (dto.cruiseManagerId !== userContext.currentUser!.id && dto.deputyManagerId !== userContext.currentUser!.id) {
+      setIsSaveDraftModalOpen(false);
+      appContext.showAlert({
+        title: 'Wykryto błąd w formularzu',
+        message: 'Jedynie kierownik lub jego zastępca mogą zapisać formularz',
+        variant: 'danger',
+      });
+      return;
+    }
+
+    saveMutation.mutate(
       { form: dto, draft: true },
       {
         onSuccess: () => {
@@ -152,7 +150,7 @@ export function NewCruisePage() {
       <div>
         <AppLayout title="Formularz A" variant="defaultWithoutCentering">
           <Suspense fallback={<AppLoader />}>
-            <form className="space-y-8" onSubmit={handleSubmit}>
+            <form className="space-y-8" onSubmit={handleSubmitting}>
               <FormA
                 context={{ form, initValues: initialStateQuery.data, isReadonly: false, hasFormBeenSubmitted }}
                 onSaveDraft={() => setIsSaveDraftModalOpen(true)}
@@ -182,7 +180,7 @@ export function NewCruisePage() {
           />
 
           <div className="flex justify-center gap-4">
-            <AppButton className="gap-4" disabled={saveDraftMutation.isPending} onClick={handleSaveDraft}>
+            <AppButton className="gap-4" disabled={saveMutation.isPending} onClick={handleSavingDraft}>
               <FloppyFillIcon className="h-4 w-4" />
               Zapisz
             </AppButton>
