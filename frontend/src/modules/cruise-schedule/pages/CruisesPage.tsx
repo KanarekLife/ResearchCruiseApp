@@ -22,9 +22,9 @@ export function CruisesPage() {
   const sortedData = React.useMemo(() => cruisesQuery.data.sort(compareCruiseDto).reverse(), [cruisesQuery.data]);
 
   return (
-    <AppLayout title="Rejsy" variant="defaultWithoutCentering">
+    <AppLayout title="Rejsy">
       <Suspense fallback={<AppLoader />}>
-        <CruisesTable cruises={sortedData} />
+        <CruisesTable cruises={sortedData} deleteCruise={(id) => alert(id)} />
       </Suspense>
     </AppLayout>
   );
