@@ -52,7 +52,7 @@ export function FormAPublicationsSection() {
               <AppDropdownInput
                 name={field.name}
                 value={field.state.value}
-                onChange={field.handleChange}
+                onChange={field.handleChange as (value: string) => void}
                 onBlur={field.handleBlur}
                 errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 allOptions={[
@@ -60,7 +60,6 @@ export function FormAPublicationsSection() {
                   { value: 'postscript', inlineLabel: name.postscript },
                 ]}
                 required
-                showEmptyOption={false}
                 disabled={isReadonly}
               />
             )}
