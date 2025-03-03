@@ -60,8 +60,8 @@ export function AppDropdownInput({
     ? [
         {
           value: defaultValue,
-          inlineLabel: (selectedValue.value != defaultValue) ? placeholder : undefined,
-          richLabel: (selectedValue.value != defaultValue) ? <span className="text-red-500">Usuń aktualny wybór</span> : undefined,
+          inlineLabel: (selectedValue.value !== defaultValue) ? placeholder : undefined,
+          richLabel: (selectedValue.value !== defaultValue) ? <span className="text-red-500">Usuń aktualny wybór</span> : undefined,
         },
         ...allOptions,
       ]
