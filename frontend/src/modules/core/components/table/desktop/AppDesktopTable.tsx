@@ -11,6 +11,11 @@ export function AppDesktopTable<T>({ table, buttons, emptyTableMessage }: TableP
   return (
     <div className="w-full overflow-x-auto">
       <table className="min-w-full table-fixed">
+        <colgroup>
+          {table.getAllColumns().map((column) => (
+            <col key={column.id} style={{ width: `${column.columnDef.size}%` }} />
+          ))}
+        </colgroup>
         <thead>
           {allButtons.length > 0 && (
             <tr key="header-buttons">
@@ -43,11 +48,7 @@ export function AppDesktopTable<T>({ table, buttons, emptyTableMessage }: TableP
             <tr key={row.id} className="odd:bg-gray-100 text-gray-800">
               {row.getVisibleCells().map((cell) => {
                 return (
-                  <td
-                    key={cell.id}
-                    className="text-center py-2 first:pl-4 pr-4"
-                    style={{ width: `${cell.column.getSize()}px` }}
-                  >
+                  <td key={cell.id} className="text-center py-2 first:pl-2 pr-2">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 );
