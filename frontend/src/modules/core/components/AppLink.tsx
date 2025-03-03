@@ -39,6 +39,6 @@ export function AppLink({ children, href, className, title, rel, variant, target
 
 const variants = {
   default: 'text-primary hover:underline',
-  disabled: '',   // TODO: make the link look disabled (maybe grey-ish text?)
+  disabled: 'text-gray-400',
   plain: '',
 };

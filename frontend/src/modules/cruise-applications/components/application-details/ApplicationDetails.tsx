@@ -10,25 +10,25 @@ import { ApplicationDetailsSPUBTasksSection } from "./ApplicationDetailsSPUBTask
 import { ApplicationDetailsActionsSection } from "./ApplicationDetailsActionsSection";
 import { useAppContext } from "@/core/hooks/AppContextHook";
 import { useRejectApplicationMutation } from "@/cruise-applications/hooks/CruiseApplicationsApiHooks";
-import { UseSuspenseQueryResult } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { ApplicationDetailsProvider } from "@/cruise-applications/contexts/ApplicationDetailsContext";
 
 type Props = {
-  applicationQuery: UseSuspenseQueryResult<CruiseApplicationDto>;
-  evaluationQuery: UseSuspenseQueryResult<EvaluationDto>;
+  application: CruiseApplicationDto;
+  evaluation: EvaluationDto;
 }
-export function ApplicationDetails({applicationQuery, evaluationQuery}: Props) {
+export function ApplicationDetails({application, evaluation}: Props) {
     const appContext = useAppContext();
-    const rejectMutation = useRejectApplicationMutation();
-    const application = applicationQuery.data;
-    const evaluation = evaluationQuery.data;
+    const queryClient = useQueryClient();
 
-    const rejectApplication = () => {
+    const rejectMutation = useRejectApplicationMutation();
+
+    function rejectApplication () {
       rejectMutation.mutate(
         application.id,
         {
           onSuccess: () => {
-            applicationQuery.refetch();
-            evaluationQuery.refetch();
+            queryClient.invalidateQueries({ queryKey: ['cruiseApplications', application.id] });
             appContext.showAlert({
               title: 'Formularz pomyślnie odrzucony',
               message: 'Formularz został odrzucony.',
@@ -48,15 +48,15 @@ export function ApplicationDetails({applicationQuery, evaluationQuery}: Props) {
     };
 
     return (
-      <>
-        <ApplicationDetailsInformationSection application={application} />
-        <ApplicationDetailsResearchTasksSection researchTasks={evaluation.formAResearchTasks} />
-        <ApplicationDetailsEffectPointsSection effectPoints={evaluation.effectsPoints} />
-        <ApplicationDetailsContractsSection contracts={evaluation.formAContracts} />
-        <ApplicationDetailsMembersSection ugTeams={evaluation.ugTeams} guestTeams={evaluation.guestTeams} ugUnitsPoints={evaluation.ugUnitsPoints} />
-        <ApplicationDetailsPublicationsSection publications={evaluation.formAPublications} />
-        <ApplicationDetailsSPUBTasksSection spubTasks={evaluation.formASpubTasks} />
-        <ApplicationDetailsActionsSection application={application} onReject={rejectApplication} />
-      </>
+      <ApplicationDetailsProvider value={{ application, evaluation }}>
+        <ApplicationDetailsInformationSection />
+        <ApplicationDetailsResearchTasksSection />
+        <ApplicationDetailsEffectPointsSection />
+        <ApplicationDetailsContractsSection />
+        <ApplicationDetailsMembersSection />
+        <ApplicationDetailsPublicationsSection />
+        <ApplicationDetailsSPUBTasksSection />
+        <ApplicationDetailsActionsSection onReject={rejectApplication} />
+      </ApplicationDetailsProvider>
     );
   }

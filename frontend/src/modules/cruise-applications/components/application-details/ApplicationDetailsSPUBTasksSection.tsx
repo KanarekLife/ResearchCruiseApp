@@ -4,11 +4,13 @@ import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppInput } from '@/core/components/inputs/AppInput';
 import { AppYearPickerInput } from '@/core/components/inputs/dates/AppYearPickerInput';
 import { AppTable } from '@/core/components/table/AppTable';
-import { FormASpubTask } from '@/cruise-applications/models/EvaluationDto';
+import { EvaluationFormASpubTask } from '@/cruise-applications/models/EvaluationDto';
+import { useApplicationDetails } from '@/cruise-applications/contexts/ApplicationDetailsContext';
 
-export function ApplicationDetailsSPUBTasksSection({ spubTasks }: { spubTasks: FormASpubTask[] }) {
+export function ApplicationDetailsSPUBTasksSection() {
+  const { evaluation } = useApplicationDetails();
 
-  const columns: ColumnDef<FormASpubTask>[] = [
+  const columns: ColumnDef<EvaluationFormASpubTask>[] = [
     {
       header: 'Lp.',
       cell: ({ row }) => `${row.index + 1}. `,
@@ -72,7 +74,7 @@ export function ApplicationDetailsSPUBTasksSection({ spubTasks }: { spubTasks: F
     >
       <div>
         <AppTable
-          data={spubTasks}
+          data={evaluation.formASpubTasks}
           columns={columns}
           emptyTableMessage="Nie dodano żadnego zadania."
         />

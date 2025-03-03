@@ -2,19 +2,17 @@ import { ColumnDef } from '@tanstack/react-table';
 
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppTable } from '@/core/components/table/AppTable';
-import { FormAPublication } from '@/cruise-applications/models/EvaluationDto';
+import { EvaluationFormAPublication } from '@/cruise-applications/models/EvaluationDto';
 import { AppYearPickerInput } from '@/core/components/inputs/dates/AppYearPickerInput';
 import { AppInput } from '@/core/components/inputs/AppInput';
 import { AppNumberInput } from '@/core/components/inputs/AppNumberInput';
+import { useApplicationDetails } from '@/cruise-applications/contexts/ApplicationDetailsContext';
+import { getPublicationCategoryLabel } from '@/cruise-applications/models/PublicationDto';
 
-const name = {
-  subject: 'Temat',
-  postscript: 'Dopisek',
-};
+export function ApplicationDetailsPublicationsSection() {
+  const { evaluation } = useApplicationDetails();
 
-export function ApplicationDetailsPublicationsSection({ publications }: { publications: FormAPublication[] }) {
-
-  const columns: ColumnDef<FormAPublication>[] = [
+  const columns: ColumnDef<EvaluationFormAPublication>[] = [
     {
       header: 'Lp.',
       cell: ({ row }) => `${row.index + 1}. `,
@@ -26,7 +24,7 @@ export function ApplicationDetailsPublicationsSection({ publications }: { public
       enableColumnFilter: false,
       enableSorting: false,
       cell: ({ row }) => (
-        <div>{name[row.original.publication.category]}</div>
+        <div>{getPublicationCategoryLabel(row.original.publication.category)}</div>
       ),
       size: 100,
     },
@@ -113,7 +111,7 @@ export function ApplicationDetailsPublicationsSection({ publications }: { public
     <AppAccordion title="6. Publikacje" expandedByDefault>
       <div>
         <AppTable
-          data={publications}
+          data={evaluation.formAPublications}
           columns={columns}
           emptyTableMessage="Nie dodano żadnej publikacji."
         />

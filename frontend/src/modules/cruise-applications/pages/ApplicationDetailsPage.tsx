@@ -8,13 +8,14 @@ import { ApplicationDetails } from '../components/application-details/Applicatio
 
 export function ApplicationDetailsPage() {
   const { applicationId } = getRouteApi('/applications/$applicationId/details').useParams();
+  
   const applicationQuery = useCruiseApplicationQuery(applicationId);
   const evaluationQuery = useEvaluationQuery(applicationId);
 
   return (
     <AppLayout title="Szczegóły Zgłoszenia" variant="defaultWithoutCentering">
       <Suspense fallback={<AppLoader />}>
-        <ApplicationDetails applicationQuery={applicationQuery} evaluationQuery={evaluationQuery} />
+        <ApplicationDetails application={applicationQuery.data} evaluation={evaluationQuery.data} />
       </Suspense>
     </AppLayout>
   );

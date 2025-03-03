@@ -1,12 +1,12 @@
+import { AppDropdownInput } from '@/core/components/inputs/AppDropdownInput';
 import { AppInput } from '@/core/components/inputs/AppInput';
-import { AppNumberInput } from '@/core/components/inputs/AppNumberInput';
 import { AppDatePickerInput } from '@/core/components/inputs/dates/AppDatePickerInput';
-import { OwnResearchTaskDto } from '@/cruise-applications/models/ResearchTaskDto';
+import { ProjectPreparationResearchTaskDto } from '@/cruise-applications/models/ResearchTaskDto';
 
 type Props = {
-  data: OwnResearchTaskDto;
+  data: ProjectPreparationResearchTaskDto;
 };
-export function OwnResearchTaskDetails({ data }: Props) {
+export function ReadOnlyProjectPreparationResearchTaskDetails({ data }: Props) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <AppInput
@@ -14,6 +14,7 @@ export function OwnResearchTaskDetails({ data }: Props) {
         value={data.title}
         label="Roboczy tytuł projektu"
         placeholder="Wprowadź tytuł"
+        containerClassName="lg:col-span-2"
         required
         disabled={true}
       />
@@ -26,21 +27,14 @@ export function OwnResearchTaskDetails({ data }: Props) {
         disabled={true}
       />
 
-      <AppInput
-        name="researchTasks[].magazine"
-        value={data.magazine}
-        label="Czasopismo"
-        placeholder="Wprowadź czasopismo"
-        required
-        disabled={true}
-      />
-
-      <AppNumberInput
-        name="researchTasks[].ministerialPoints"
-        value={parseInt(data.ministerialPoints)}
-        minimum={0}
-        step={10}
-        label="Przewidywane punkty ministerialne"
+      <AppDropdownInput
+        name="researchTasks[].financingApproved"
+        value={data.financingApproved}
+        allOptions={[
+          { value: 'true', inlineLabel: 'Tak' },
+          { value: 'false', inlineLabel: 'Nie' },
+        ]}
+        label="Otrzymano decyzję o finansowaniu?"
         required
         disabled={true}
       />

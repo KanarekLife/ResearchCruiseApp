@@ -4,7 +4,7 @@ import { OtherResearchTaskDto } from '@/cruise-applications/models/ResearchTaskD
 type Props = {
   data: OtherResearchTaskDto;
 };
-export function OtherResearchTaskDetails({ data }: Props) {
+export function ReadOnlyOtherResearchTaskDetails({ data }: Props) {
   return (
     <div>
       <AppInput

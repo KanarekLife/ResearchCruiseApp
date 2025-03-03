@@ -1,12 +1,12 @@
-import { AppDropdownInput } from '@/core/components/inputs/AppDropdownInput';
 import { AppInput } from '@/core/components/inputs/AppInput';
+import { AppNumberInput } from '@/core/components/inputs/AppNumberInput';
 import { AppDatePickerInput } from '@/core/components/inputs/dates/AppDatePickerInput';
-import { ProjectPreparationResearchTaskDto } from '@/cruise-applications/models/ResearchTaskDto';
+import { OwnResearchTaskDto } from '@/cruise-applications/models/ResearchTaskDto';
 
 type Props = {
-  data: ProjectPreparationResearchTaskDto;
+  data: OwnResearchTaskDto;
 };
-export function ProjectPreparationResearchTaskDetails({ data }: Props) {
+export function ReadOnlyOwnResearchTaskDetails({ data }: Props) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <AppInput
@@ -14,7 +14,6 @@ export function ProjectPreparationResearchTaskDetails({ data }: Props) {
         value={data.title}
         label="Roboczy tytuł projektu"
         placeholder="Wprowadź tytuł"
-        containerClassName="lg:col-span-2"
         required
         disabled={true}
       />
@@ -27,14 +26,21 @@ export function ProjectPreparationResearchTaskDetails({ data }: Props) {
         disabled={true}
       />
 
-      <AppDropdownInput
-        name="researchTasks[].financingApproved"
-        value={data.financingApproved}
-        allOptions={[
-          { value: 'true', inlineLabel: 'Tak' },
-          { value: 'false', inlineLabel: 'Nie' },
-        ]}
-        label="Otrzymano decyzję o finansowaniu?"
+      <AppInput
+        name="researchTasks[].magazine"
+        value={data.magazine}
+        label="Czasopismo"
+        placeholder="Wprowadź czasopismo"
+        required
+        disabled={true}
+      />
+
+      <AppNumberInput
+        name="researchTasks[].ministerialPoints"
+        value={parseInt(data.ministerialPoints)}
+        minimum={0}
+        step={10}
+        label="Przewidywane punkty ministerialne"
         required
         disabled={true}
       />

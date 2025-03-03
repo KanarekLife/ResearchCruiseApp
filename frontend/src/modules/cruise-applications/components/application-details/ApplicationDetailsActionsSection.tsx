@@ -4,16 +4,18 @@ import React from 'react';
 
 import { AppButton } from '@/core/components/AppButton';
 import { cn } from '@/core/lib/utils';
-import { CruiseApplicationDto, CruiseApplicationStatus } from '@/cruise-applications/models/CruiseApplicationDto';
+import { CruiseApplicationStatus } from '@/cruise-applications/models/CruiseApplicationDto';
+import { useApplicationDetails } from '@/cruise-applications/contexts/ApplicationDetailsContext';
 
 type Props = {
-  application: CruiseApplicationDto;
   onReject: () => void;
 };
-export function ApplicationDetailsActionsSection({ application, onReject }: Props) {
+export function ApplicationDetailsActionsSection({ onReject }: Props) {
   const [isSticky, setIsSticky] = React.useState(false);
   const { scrollYProgress } = useScroll();
   const [confirmationMode, setConfirmationMode] = React.useState(false);
+
+  const { application } = useApplicationDetails();
 
   scrollYProgress.on('change', (latestValue) => {
     setIsSticky(latestValue < 1);

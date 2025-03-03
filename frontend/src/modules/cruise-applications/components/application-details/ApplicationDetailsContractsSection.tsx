@@ -5,11 +5,13 @@ import { AppFileInput } from '@/core/components/inputs/AppFileInput';
 import { AppInput } from '@/core/components/inputs/AppInput';
 import { AppTable } from '@/core/components/table/AppTable';
 import { getContractCategoryName } from '@/cruise-applications/models/ContractDto';
-import { FormAContract } from '@/cruise-applications/models/EvaluationDto';
+import { EvaluationFormAContract } from '@/cruise-applications/models/EvaluationDto';
+import { useApplicationDetails } from '@/cruise-applications/contexts/ApplicationDetailsContext';
 
-export function ApplicationDetailsContractsSection({ contracts }: { contracts: FormAContract[] }) {
+export function ApplicationDetailsContractsSection() {
+  const { evaluation } = useApplicationDetails();
 
-  const columns: ColumnDef<FormAContract>[] = [
+  const columns: ColumnDef<EvaluationFormAContract>[] = [
     {
       header: 'Lp.',
       cell: ({ row }) => `${row.index + 1}. `,
@@ -87,7 +89,7 @@ export function ApplicationDetailsContractsSection({ contracts }: { contracts: F
     >
       <div>
         <AppTable
-          data={contracts}
+          data={evaluation.formAContracts}
           columns={columns}
           emptyTableMessage="Nie dodano żadnej umowy."
         />

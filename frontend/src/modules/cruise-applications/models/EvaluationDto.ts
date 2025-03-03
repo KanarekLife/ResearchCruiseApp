@@ -1,40 +1,45 @@
 import { ContractDto } from '@/cruise-applications/models/ContractDto';
-import { EvaluationUGTeamDto } from "@/cruise-applications/models/EvaluationUGTeamDto";
 import { GuestTeamDto } from "@/cruise-applications/models/GuestTeamDto";
 import { PublicationDto } from "@/cruise-applications/models/PublicationDto";
 import { ResearchTaskDto } from "@/cruise-applications/models/ResearchTaskDto";
 import { SpubTaskDto } from "@/cruise-applications/models/SpubTaskDto";
 
 export type EvaluationDto = {
-  formAResearchTasks: FormAResearchTask[];
-  formAContracts: FormAContract[];
+  formAResearchTasks: EvaluationFormAResearchTask[];
+  formAContracts: EvaluationFormAContract[];
   ugTeams: EvaluationUGTeamDto[];
   guestTeams: GuestTeamDto[];
   ugUnitsPoints: string;
-  formAPublications: FormAPublication[];
-  formASpubTasks: FormASpubTask[];
+  formAPublications: EvaluationFormAPublication[];
+  formASpubTasks: EvaluationFormASpubTask[];
   effectsPoints: string;
 };
 
-export type FormAResearchTask = {
+export type EvaluationFormAResearchTask = {
   id: string;
   researchTask: ResearchTaskDto;
   points: string;
 };
 
-export type FormAContract = {
+export type EvaluationFormAContract = {
   id: string;
   contract: ContractDto;
   points: string;
 };
 
-export type FormAPublication = {
+export type EvaluationUGTeamDto = {
+  ugUnitName: string;
+  noOfEmployees: string;
+  noOfStudents: string;
+};
+
+export type EvaluationFormAPublication = {
   id: string;
   publication: PublicationDto;
   points: string;
 };
 
-export type FormASpubTask = {
+export type EvaluationFormASpubTask = {
   id: string;
   spubTask: SpubTaskDto;
   points: string;

@@ -4,15 +4,12 @@ import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppNumberInput } from '@/core/components/inputs/AppNumberInput';
 import { AppTable } from '@/core/components/table/AppTable';
 import { GuestTeamDto } from '@/cruise-applications/models/GuestTeamDto';
-import { EvaluationUGTeamDto } from '@/cruise-applications/models/EvaluationUGTeamDto';
+import { EvaluationUGTeamDto } from '@/cruise-applications/models/EvaluationDto';
 import { AppInput } from '@/core/components/inputs/AppInput';
+import { useApplicationDetails } from '@/cruise-applications/contexts/ApplicationDetailsContext';
 
-type Props = {
-  ugTeams: EvaluationUGTeamDto[];
-  guestTeams: GuestTeamDto[];
-  ugUnitsPoints: string;
-};
-export function ApplicationDetailsMembersSection({ ugTeams, guestTeams, ugUnitsPoints }: Props) {
+export function ApplicationDetailsMembersSection() {
+  const { evaluation } = useApplicationDetails();
 
   const ugTeamsColumns: ColumnDef<EvaluationUGTeamDto>[] = [
     {
@@ -87,20 +84,20 @@ export function ApplicationDetailsMembersSection({ ugTeams, guestTeams, ugUnitsP
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16">
         <AppTable
           columns={ugTeamsColumns}
-          data={ugTeams}
+          data={evaluation.ugTeams}
           emptyTableMessage="Nie dodano żadnego zespołu."
         />
         
         <AppTable
           columns={guestTeamsColumns}
-          data={guestTeams}
+          data={evaluation.guestTeams}
           emptyTableMessage="Nie dodano żadnego zespołu."
         />
 
         <div className="col-span-2">
           <AppInput
             name="Punkty"
-            value={ugUnitsPoints}
+            value={evaluation.ugUnitsPoints}
             label="Punkty"
             required
             disabled

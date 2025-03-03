@@ -1,9 +1,9 @@
-import { DidacticsResearchTaskDetails } from '@/cruise-applications/components/application-details/research-task-details/DidacticsResearchTaskDetails';
-import { OtherResearchTaskDetails } from '@/cruise-applications/components/application-details/research-task-details/OtherResearchTaskDetails';
-import { OwnResearchTaskDetails } from '@/cruise-applications/components/application-details/research-task-details/OwnResearchTaskDetails';
-import { ProjectPreparationResearchTaskDetails } from '@/cruise-applications/components/application-details/research-task-details/ProjectPreparationResearchTaskDetails';
-import { ProjectResearchTaskDetails } from '@/cruise-applications/components/application-details/research-task-details/ProjectResearchTaskDetails';
-import { ThesisResearchTaskDetails } from '@/cruise-applications/components/application-details/research-task-details/ThesisResearchTaskDetails';
+import { ReadOnlyDidacticsResearchTaskDetails } from '@/cruise-applications/components/application-details/research-task-details/ReadOnlyDidacticsResearchTaskDetails';
+import { ReadOnlyOtherResearchTaskDetails } from '@/cruise-applications/components/application-details/research-task-details/ReadOnlyOtherResearchTaskDetails';
+import { ReadOnlyOwnResearchTaskDetails } from '@/cruise-applications/components/application-details/research-task-details/ReadOnlyOwnResearchTaskDetails';
+import { ReadOnlyProjectPreparationResearchTaskDetails } from '@/cruise-applications/components/application-details/research-task-details/ReadOnlyProjectPreparationResearchTaskDetails';
+import { ReadOnlyProjectResearchTaskDetails } from '@/cruise-applications/components/application-details/research-task-details/ReadOnlyProjectResearchTaskDetails';
+import { ReadOnlyThesisResearchTaskDetails } from '@/cruise-applications/components/application-details/research-task-details/ReadOnlyThesisResearchTaskDetails';
 import {
   DidacticsResearchTaskDto,
   OtherResearchTaskDto,
@@ -18,19 +18,19 @@ import {
 type Props = {
   data: ResearchTaskDto;
 };
-export function ResearchTaskDetails({ data }: Props) {
+export function ReadOnlyResearchTaskDetails({ data }: Props) {
   switch (data.type) {
     case ResearchTaskType.BachelorThesis:
     case ResearchTaskType.MasterThesis:
     case ResearchTaskType.DoctoralThesis:
       return (
-        <ThesisResearchTaskDetails
+        <ReadOnlyThesisResearchTaskDetails
           data={data as ThesisResearchTaskDto}
         />
       );
     case ResearchTaskType.ProjectPreparation:
       return (
-        <ProjectPreparationResearchTaskDetails
+        <ReadOnlyProjectPreparationResearchTaskDetails
           data={data as ProjectPreparationResearchTaskDto}
         />
       );
@@ -40,25 +40,25 @@ export function ResearchTaskDetails({ data }: Props) {
     case ResearchTaskType.OtherProject:
     case ResearchTaskType.CommercialProject:
       return (
-        <ProjectResearchTaskDetails
+        <ReadOnlyProjectResearchTaskDetails
           data={data as ProjectResearchTaskDto}
         />
       );
     case ResearchTaskType.Didactics:
       return (
-        <DidacticsResearchTaskDetails
+        <ReadOnlyDidacticsResearchTaskDetails
           data={data as DidacticsResearchTaskDto}
         />
       );
     case ResearchTaskType.OwnResearchTask:
       return (
-        <OwnResearchTaskDetails
+        <ReadOnlyOwnResearchTaskDetails
           data={data as OwnResearchTaskDto}
         />
       );
     case ResearchTaskType.OtherResearchTask:
       return (
-        <OtherResearchTaskDetails
+        <ReadOnlyOtherResearchTaskDetails
           data={data as OtherResearchTaskDto}
         />
       );

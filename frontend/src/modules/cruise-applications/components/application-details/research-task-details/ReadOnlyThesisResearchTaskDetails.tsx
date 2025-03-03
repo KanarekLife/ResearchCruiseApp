@@ -4,7 +4,7 @@ import { ThesisResearchTaskDto } from '@/cruise-applications/models/ResearchTask
 type Props = {
   data: ThesisResearchTaskDto;
 };
-export function ThesisResearchTaskDetails({ data }: Props) {
+export function ReadOnlyThesisResearchTaskDetails({ data }: Props) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <AppInput

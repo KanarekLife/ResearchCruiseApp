@@ -4,7 +4,7 @@ import { DidacticsResearchTaskDto } from '@/cruise-applications/models/ResearchT
 type Props = {
   data: DidacticsResearchTaskDto;
 };
-export function DidacticsResearchTaskDetails({ data }: Props) {
+export function ReadOnlyDidacticsResearchTaskDetails({ data }: Props) {
   return (
     <div>
       <AppInput

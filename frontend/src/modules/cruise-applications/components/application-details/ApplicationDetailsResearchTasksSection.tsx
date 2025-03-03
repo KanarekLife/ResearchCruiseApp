@@ -3,12 +3,14 @@ import { ColumnDef } from '@tanstack/react-table';
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppTable } from '@/core/components/table/AppTable';
 import { getTaskName } from '@/cruise-applications/models/ResearchTaskDto';
-import { FormAResearchTask } from '@/cruise-applications/models/EvaluationDto';
-import { ResearchTaskDetails } from './research-task-details/ResearchTaskDetails';
+import { EvaluationFormAResearchTask } from '@/cruise-applications/models/EvaluationDto';
+import { ReadOnlyResearchTaskDetails } from './research-task-details/ReadOnlyResearchTaskDetails';
+import { useApplicationDetails } from '@/cruise-applications/contexts/ApplicationDetailsContext';
 
-export function ApplicationDetailsResearchTasksSection({ researchTasks }: { researchTasks: FormAResearchTask[] }) {
+export function ApplicationDetailsResearchTasksSection() {
+  const { evaluation } = useApplicationDetails();
 
-  const columns: ColumnDef<FormAResearchTask>[] = [
+  const columns: ColumnDef<EvaluationFormAResearchTask>[] = [
     {
       header: 'Lp.',
       cell: ({ row }) => `${row.index + 1}. `,
@@ -23,7 +25,7 @@ export function ApplicationDetailsResearchTasksSection({ researchTasks }: { rese
     {
       header: 'Szczegóły',
       cell: ({ row }) => (
-        <ResearchTaskDetails data={row.original.researchTask} />
+        <ReadOnlyResearchTaskDetails data={row.original.researchTask} />
       ),
     },
     {
@@ -37,7 +39,7 @@ export function ApplicationDetailsResearchTasksSection({ researchTasks }: { rese
     <AppAccordion title="2. Zadania do zrealizowania w trakcie rejsu" expandedByDefault>
       <div>
         <AppTable
-            data={researchTasks}
+            data={evaluation.formAResearchTasks}
             columns={columns}
             buttons={(defaultButtons) => [
               ...defaultButtons,

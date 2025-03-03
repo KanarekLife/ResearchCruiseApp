@@ -1,10 +1,11 @@
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppInput } from '@/core/components/inputs/AppInput';
 
-import { CruiseApplicationDto } from '@/cruise-applications/models/CruiseApplicationDto';
 import { AppLink } from '@/core/components/AppLink';
+import { useApplicationDetails } from '@/cruise-applications/contexts/ApplicationDetailsContext';
 
-export function ApplicationDetailsInformationSection({ application }: { application: CruiseApplicationDto }) {
+export function ApplicationDetailsInformationSection() {
+  const { application } = useApplicationDetails();
 
   return (
     <AppAccordion title="1. Informacje o zgłoszeniu" expandedByDefault>
