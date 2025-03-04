@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { CruisesTable } from '@/cruise-schedule/components/CruisesTable';
-import { useCruisesQuery } from '@/cruise-schedule/hooks/CruisesApiHooks';
+import { useCruisesQuery, useDeleteCruiseMutation } from '@/cruise-schedule/hooks/CruisesApiHooks';
 import { CruiseDto } from '@/cruise-schedule/models/CruiseDto';
 
 function compareCruiseDto(a: CruiseDto, b: CruiseDto) {
@@ -18,13 +18,14 @@ function compareCruiseDto(a: CruiseDto, b: CruiseDto) {
 
 export function CruisesPage() {
   const cruisesQuery = useCruisesQuery();
+  const deleteCruiseMutation = useDeleteCruiseMutation();
 
   const sortedData = React.useMemo(() => cruisesQuery.data.sort(compareCruiseDto).reverse(), [cruisesQuery.data]);
 
   return (
     <AppLayout title="Rejsy">
       <Suspense fallback={<AppLoader />}>
-        <CruisesTable cruises={sortedData} deleteCruise={(id) => alert(id)} />
+        <CruisesTable cruises={sortedData} deleteCruise={(id) => deleteCruiseMutation.mutateAsync(id)} />
       </Suspense>
     </AppLayout>
   );

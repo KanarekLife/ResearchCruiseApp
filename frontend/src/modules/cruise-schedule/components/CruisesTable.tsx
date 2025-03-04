@@ -1,4 +1,4 @@
-import { CellContext, ColumnDef } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 
 import { AppAvatar } from '@/core/components/AppAvatar';
@@ -6,6 +6,7 @@ import { AppBadge } from '@/core/components/AppBadge';
 import { AppButton } from '@/core/components/AppButton';
 import { AppLink } from '@/core/components/AppLink';
 import { AppTable } from '@/core/components/table/AppTable';
+import { CruiseApplicationShortInfoDto } from '@/cruise-schedule/models/CruiseApplicationShortInfoDto';
 import { CruiseDto } from '@/cruise-schedule/models/CruiseDto';
 
 const emptyGuid = '00000000-0000-0000-0000-000000000000';
@@ -34,6 +35,7 @@ export function CruisesTable({ cruises, deleteCruise }: Props) {
       header: 'Status',
       accessorFn: (row) => row.status,
       cell: ({ row }) => <AppBadge variant="primary">{row.original.status}</AppBadge>,
+      size: 10,
     },
     {
       header: 'Kierownik główny',
@@ -41,19 +43,21 @@ export function CruisesTable({ cruises, deleteCruise }: Props) {
         row.mainCruiseManagerId == emptyGuid
           ? 'Nie przypisano'
           : `${row.mainCruiseManagerFirstName} ${row.mainCruiseManagerLastName}`,
-      cell: (cell) => <MainCruiseManagerCell cell={cell} />,
+      cell: (cell) => (
+        <MainCruiseManagerCell managerId={cell.row.original.mainCruiseManagerId} fullName={cell.getValue() as string} />
+      ),
     },
     {
       header: 'Zgłoszenia',
       accessorFn: (row) => row.cruiseApplicationsShortInfo,
-      cell: ({ row }) => row.original.cruiseApplicationsShortInfo.length,
+      cell: ({ row }) => <ApplicationsCell applications={row.original.cruiseApplicationsShortInfo} />,
       enableColumnFilter: false,
       enableSorting: false,
     },
     {
       id: 'actions',
       header: undefined,
-      cell: (cell) => <ActionsCell cell={cell} deleteCruise={deleteCruise} />,
+      cell: ({ row }) => <ActionsCell cruiseId={row.original.id} deleteCruise={deleteCruise} />,
       size: 40,
     },
   ];
@@ -61,34 +65,58 @@ export function CruisesTable({ cruises, deleteCruise }: Props) {
 }
 
 type MainCruiseManagerCellProps = {
-  cell: CellContext<CruiseDto, unknown>;
+  managerId: string;
+  fullName: string;
 };
-function MainCruiseManagerCell({ cell }: MainCruiseManagerCellProps) {
+function MainCruiseManagerCell({ managerId, fullName }: MainCruiseManagerCellProps) {
   return (
     <div className="flex items-center justify-center gap-2">
-      {cell.row.original.mainCruiseManagerId != emptyGuid && (
-        <AppAvatar variant="small" fullName={cell.getValue() as string} />
-      )}
-      <div>{cell.getValue() as string}</div>
+      {managerId != emptyGuid && <AppAvatar variant="small" fullName={fullName} />}
+      <div>{fullName}</div>
     </div>
   );
 }
 
 type ActionsCellProps = {
-  cell: CellContext<CruiseDto, unknown>;
+  cruiseId: string;
   deleteCruise: (id: string) => void;
 };
-function ActionsCell({ cell, deleteCruise }: ActionsCellProps) {
+function ActionsCell({ cruiseId, deleteCruise }: ActionsCellProps) {
   return (
     <div className="grid grid-cols-1 gap-2 min-w-20">
-      <AppLink href={`/cruises/${cell.row.original.id}/details`}>
+      <AppLink href={`/cruises/${cruiseId}`}>
         <AppButton variant="primary" size="xs" className="w-full">
           Szczegóły
         </AppButton>
       </AppLink>
-      <AppButton variant="dangerOutline" size="xs" onClick={() => deleteCruise(cell.row.original.id)}>
+      <AppButton variant="dangerOutline" size="xs" onClick={() => deleteCruise(cruiseId)}>
         Usuń
       </AppButton>
+    </div>
+  );
+}
+
+type ApplicationsCellProps = {
+  applications: CruiseApplicationShortInfoDto[];
+};
+function ApplicationsCell({ applications }: ApplicationsCellProps) {
+  if (!applications || applications.length === 0) {
+    return 'Brak zgłoszeń';
+  }
+  return (
+    <div className="flex flex-col gap-4  text-balance">
+      {applications.map((application) => (
+        <div className="flex flex-col xl:flex-row items-center justify-between gap-2" key={application.id}>
+          <div className="flex-2">
+            <AppLink href={`/applications/${application.id}/details`}>
+              Zgłoszenie nr. <span className="font-bold">{application.number}</span>
+            </AppLink>
+          </div>
+          <div className="flex-1">
+            <AppBadge>{application.points} pkt.</AppBadge>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
