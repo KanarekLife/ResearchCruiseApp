@@ -4,8 +4,8 @@ import dayjs from 'dayjs';
 import { AppAvatar } from '@/core/components/AppAvatar';
 import { AppBadge } from '@/core/components/AppBadge';
 import { AppButton } from '@/core/components/AppButton';
-import { AppLink } from '@/core/components/AppLink';
 import { AppTable } from '@/core/components/table/AppTable';
+import { CruiseStatusBadge } from '@/cruise-schedule/components/CruiseStatusBadge';
 import { CruiseApplicationShortInfoDto } from '@/cruise-schedule/models/CruiseApplicationShortInfoDto';
 import { CruiseDto } from '@/cruise-schedule/models/CruiseDto';
 
@@ -23,18 +23,21 @@ export function CruisesTable({ cruises, deleteCruise }: Props) {
       accessorFn: (row) => row.number,
     },
     {
-      header: 'Czas trwania',
-      cell: ({ row }) => (
-        <div className="flex flex-col items-center justify-around">
-          <p>Od {dayjs(row.original.startDate).format(dateFormat)}</p>
-          <p>Do {dayjs(row.original.endDate).format(dateFormat)}</p>
-        </div>
-      ),
+      header: 'Data rozpoczęcia',
+      accessorFn: (row) => row.startDate,
+      cell: (cell) => dayjs(cell.getValue() as string).format(dateFormat),
+      enableColumnFilter: false,
+    },
+    {
+      header: 'Data zakończenia',
+      accessorFn: (row) => row.endDate,
+      cell: (cell) => dayjs(cell.getValue() as string).format(dateFormat),
+      enableColumnFilter: false,
     },
     {
       header: 'Status',
       accessorFn: (row) => row.status,
-      cell: ({ row }) => <AppBadge variant="primary">{row.original.status}</AppBadge>,
+      cell: ({ row }) => <CruiseStatusBadge status={row.original.status} />,
       size: 10,
     },
     {
@@ -49,14 +52,11 @@ export function CruisesTable({ cruises, deleteCruise }: Props) {
     },
     {
       header: 'Zgłoszenia',
-      accessorFn: (row) => row.cruiseApplicationsShortInfo,
       cell: ({ row }) => <ApplicationsCell applications={row.original.cruiseApplicationsShortInfo} />,
-      enableColumnFilter: false,
-      enableSorting: false,
+      size: 200,
     },
     {
       id: 'actions',
-      header: undefined,
       cell: ({ row }) => <ActionsCell cruiseId={row.original.id} deleteCruise={deleteCruise} />,
       size: 40,
     },
@@ -77,25 +77,6 @@ function MainCruiseManagerCell({ managerId, fullName }: MainCruiseManagerCellPro
   );
 }
 
-type ActionsCellProps = {
-  cruiseId: string;
-  deleteCruise: (id: string) => void;
-};
-function ActionsCell({ cruiseId, deleteCruise }: ActionsCellProps) {
-  return (
-    <div className="grid grid-cols-1 gap-2 min-w-20">
-      <AppLink href={`/cruises/${cruiseId}`}>
-        <AppButton variant="primary" size="xs" className="w-full">
-          Szczegóły
-        </AppButton>
-      </AppLink>
-      <AppButton variant="dangerOutline" size="xs" onClick={() => deleteCruise(cruiseId)}>
-        Usuń
-      </AppButton>
-    </div>
-  );
-}
-
 type ApplicationsCellProps = {
   applications: CruiseApplicationShortInfoDto[];
 };
@@ -106,17 +87,31 @@ function ApplicationsCell({ applications }: ApplicationsCellProps) {
   return (
     <div className="flex flex-col gap-4  text-balance">
       {applications.map((application) => (
-        <div className="flex flex-col xl:flex-row items-center justify-between gap-2" key={application.id}>
-          <div className="flex-2">
-            <AppLink href={`/applications/${application.id}/details`}>
-              Zgłoszenie nr. <span className="font-bold">{application.number}</span>
-            </AppLink>
-          </div>
-          <div className="flex-1">
-            <AppBadge>{application.points} pkt.</AppBadge>
-          </div>
+        <div className="flex flex-col gap-2" key={application.id}>
+          <AppButton type="link" href={`/applications/${application.id}/details`} variant="primaryOutline" size="sm">
+            <div className="flex items-center justify-around gap-2 w-full">
+              <div>Zgłoszenie nr.{application.number}</div> <AppBadge>{application.points} pkt.</AppBadge>
+            </div>
+          </AppButton>
         </div>
       ))}
+    </div>
+  );
+}
+
+type ActionsCellProps = {
+  cruiseId: string;
+  deleteCruise: (id: string) => void;
+};
+function ActionsCell({ cruiseId, deleteCruise }: ActionsCellProps) {
+  return (
+    <div className="grid grid-cols-1 gap-2 min-w-20">
+      <AppButton type="link" href={`/cruises/${cruiseId}`} variant="primary" className="w-full">
+        Szczegóły
+      </AppButton>
+      <AppButton variant="dangerOutline" onClick={() => deleteCruise(cruiseId)}>
+        Usuń
+      </AppButton>
     </div>
   );
 }

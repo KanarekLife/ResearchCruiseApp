@@ -1,5 +1,6 @@
 import { CruiseApplicationShortInfoDto } from '@/cruise-schedule/models/CruiseApplicationShortInfoDto';
 
+export type CruiseStatus = 'Nowy' | 'Potwierdzony' | 'Zakończony';
 export type CruiseDto = {
   id: string;
   number: string;
@@ -10,5 +11,5 @@ export type CruiseDto = {
   mainCruiseManagerLastName: string;
   mainDeputyManagerId: string;
   cruiseApplicationsShortInfo: CruiseApplicationShortInfoDto[];
-  status: string;
+  status: CruiseStatus;
 };
