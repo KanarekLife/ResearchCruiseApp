@@ -24,3 +24,15 @@ export function useDeleteCruiseMutation() {
     },
   });
 }
+
+export function useAutoAddCruisesMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async () => {
+      await client.put('/api/Cruises/autoAdded');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cruises'] });
+    },
+  });
+}

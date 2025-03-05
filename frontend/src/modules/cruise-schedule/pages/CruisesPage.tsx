@@ -4,21 +4,59 @@ import { AppButton } from '@/core/components/AppButton';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { AppModal } from '@/core/components/AppModal';
+import { useAppContext } from '@/core/hooks/AppContextHook';
 import { CruisesTable } from '@/cruise-schedule/components/CruisesTable';
-import { useCruisesQuery, useDeleteCruiseMutation } from '@/cruise-schedule/hooks/CruisesApiHooks';
+import {
+  useAutoAddCruisesMutation,
+  useCruisesQuery,
+  useDeleteCruiseMutation,
+} from '@/cruise-schedule/hooks/CruisesApiHooks';
 import { CruiseDto } from '@/cruise-schedule/models/CruiseDto';
 
 export function CruisesPage() {
   const cruisesQuery = useCruisesQuery();
   const deleteCruiseMutation = useDeleteCruiseMutation();
+  const autoAddCruisesMutation = useAutoAddCruisesMutation();
+  const appContext = useAppContext();
 
   const [cruiseSelectedForDeletion, setCruiseSelectedForDeletion] = useState<CruiseDto | undefined>(undefined);
+
+  async function autoAddCruises() {
+    await autoAddCruisesMutation.mutateAsync(undefined, {
+      onSuccess: () => {
+        appContext.showAlert({
+          title: 'Operacja zakończona sukcesem',
+          message: 'Rejsy zostały dodane automatycznie',
+          variant: 'success',
+        });
+      },
+      onError: () => {
+        appContext.showAlert({
+          title: 'Wystąpił błąd',
+          message: 'Proces dodawania rejsów automatycznie zakończył się niepowodzeniem',
+          variant: 'danger',
+        });
+      },
+    });
+  }
+
+  const buttons = [
+    <AppButton key="autoAddCruises" onClick={autoAddCruises} variant="primaryOutline">
+      Dodaj rejsy automatycznie
+    </AppButton>,
+    <AppButton key="newCruise" type="link" href="/cruises/new">
+      Nowy rejs
+    </AppButton>,
+    <AppButton key="exportCruises" variant="primaryOutline">
+      Eksport
+    </AppButton>,
+  ];
 
   return (
     <>
       <AppLayout title="Rejsy">
         <Suspense fallback={<AppLoader />}>
-          <CruisesTable cruises={cruisesQuery.data} deleteCruise={setCruiseSelectedForDeletion} />
+          <CruisesTable cruises={cruisesQuery.data} deleteCruise={setCruiseSelectedForDeletion} buttons={buttons} />
         </Suspense>
       </AppLayout>
 

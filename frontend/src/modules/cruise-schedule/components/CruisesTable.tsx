@@ -15,11 +15,13 @@ const dateFormat = 'DD.MM.YYYY, HH:mm';
 type Props = {
   cruises: CruiseDto[];
   deleteCruise: (cruise: CruiseDto) => void;
+  buttons: React.ReactNode[];
 };
-export function CruisesTable({ cruises, deleteCruise }: Props) {
+export function CruisesTable({ cruises, deleteCruise, buttons }: Props) {
   const columns: ColumnDef<CruiseDto>[] = [
     {
       header: 'Numer',
+      id: 'number',
       accessorFn: (row) => row.number,
     },
     {
@@ -61,7 +63,19 @@ export function CruisesTable({ cruises, deleteCruise }: Props) {
       size: 40,
     },
   ];
-  return <AppTable columns={columns} data={cruises} />;
+  return (
+    <AppTable
+      columns={columns}
+      data={cruises}
+      buttons={(predefinedButtons) => buttons.concat(predefinedButtons)}
+      initialSortingState={[
+        {
+          id: 'number',
+          desc: true,
+        },
+      ]}
+    />
+  );
 }
 
 type MainCruiseManagerCellProps = {
@@ -71,8 +85,12 @@ type MainCruiseManagerCellProps = {
 function MainCruiseManagerCell({ managerId, fullName }: MainCruiseManagerCellProps) {
   return (
     <div className="flex items-center justify-center gap-2">
-      {managerId != emptyGuid && <AppAvatar variant="small" fullName={fullName} />}
-      <div>{fullName}</div>
+      {managerId !== emptyGuid && (
+        <>
+          <AppAvatar variant="small" fullName={fullName} /> <div>{fullName}</div>
+        </>
+      )}
+      {managerId === emptyGuid && <AppBadge variant="warning">{fullName}</AppBadge>}
     </div>
   );
 }
@@ -82,7 +100,7 @@ type ApplicationsCellProps = {
 };
 function ApplicationsCell({ applications }: ApplicationsCellProps) {
   if (!applications || applications.length === 0) {
-    return 'Brak zgłoszeń';
+    return <AppBadge variant="warning">Brak zgłoszeń</AppBadge>;
   }
   return (
     <div className="flex flex-col gap-4  text-balance">
@@ -106,7 +124,7 @@ type ActionsCellProps = {
 function ActionsCell({ cruise, deleteCruise }: ActionsCellProps) {
   return (
     <div className="grid grid-cols-1 gap-2 min-w-20">
-      <AppButton type="link" href={`/cruises/${cruise.id}`} variant="primary" className="w-full">
+      <AppButton type="link" href={`/cruises/${cruise.id}`}>
         Szczegóły
       </AppButton>
       {cruise.status === 'Nowy' && (
