@@ -3,6 +3,7 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { client } from '@/core/lib/api';
 import { FormADto } from '@/cruise-applications/models/FormADto';
 import { FormAInitValuesDto } from '@/cruise-applications/models/FormAInitValuesDto';
+import { AxiosError, AxiosResponse } from 'axios';
 
 export function useFormAInitValuesQuery() {
   return useSuspenseQuery({
@@ -19,6 +20,32 @@ export function useFormAQuery(cruiseId: string) {
     queryKey: ['formA', cruiseId],
     queryFn: async () => {
       return client.get(`/api/CruiseApplications/${cruiseId}/formA`);
+    },
+    select: (res) => {
+      const dto = res.data as FormADto;
+      dto.note ??= '';
+      return dto;
+    },
+  });
+}
+
+export function useFormAForSupervisorInitValuesQuery(cruiseId: string, supervisorCode: string) {
+  return useSuspenseQuery({
+    queryKey: ['formAForSupervisorInitValues', cruiseId, supervisorCode],
+    queryFn: async () => {
+      return client.get(
+        `/forms/InitValuesForSupervisor/A?cruiseApplicationId=${cruiseId}&supervisorCode=${supervisorCode}`
+      );
+    },
+    select: (res) => res.data as FormAInitValuesDto,
+  });
+}
+
+export function useFormAForSupervisorQuery(cruiseId: string, supervisorCode: string) {
+  return useSuspenseQuery({
+    queryKey: ['formAForSupervisor', cruiseId, supervisorCode],
+    queryFn: async () => {
+      return client.get(`/api/CruiseApplications/${cruiseId}/formAForSupervisor?supervisorCode=${supervisorCode}`);
     },
     select: (res) => {
       const dto = res.data as FormADto;
@@ -50,6 +77,20 @@ export function useUpdateFormAMutation() {
     mutationFn: async ({ id, form, draft }: UpdateFormAProps) => {
       form.id = id;
       return client.put(`/api/CruiseApplications/${id}/FormA?isDraft=${draft}`, form);
+    },
+  });
+}
+
+type SupervisorAnswerFormAProps = {
+  id: string;
+  accept: boolean;
+  supervisorCode: string;
+};
+export function useSupervisorAnswerFormAMutation() {
+  return useMutation<AxiosResponse, AxiosError<string>, SupervisorAnswerFormAProps>({
+    mutationFn: async ({ id, accept, supervisorCode }: SupervisorAnswerFormAProps) => {
+      return client.patch(`/api/CruiseApplications/${id}
+    /supervisorAnswer?accept=${accept}&supervisorCode=${supervisorCode}`);
     },
   });
 }

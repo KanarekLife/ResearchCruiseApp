@@ -19,6 +19,7 @@ import { Route as NewcruiseImport } from './routes/newcruise'
 import { Route as MypublicationsImport } from './routes/mypublications'
 import { Route as LoginImport } from './routes/login'
 import { Route as HelpImport } from './routes/help'
+import { Route as FormaforsupervisorImport } from './routes/formaforsupervisor'
 import { Route as ForgotpasswordImport } from './routes/forgotpassword'
 import { Route as ConfirmemailImport } from './routes/confirmemail'
 import { Route as AccountsettingsImport } from './routes/accountsettings'
@@ -74,6 +75,12 @@ const LoginRoute = LoginImport.update({
 const HelpRoute = HelpImport.update({
   id: '/help',
   path: '/help',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const FormaforsupervisorRoute = FormaforsupervisorImport.update({
+  id: '/formaforsupervisor',
+  path: '/formaforsupervisor',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -150,6 +157,13 @@ declare module '@tanstack/react-router' {
       path: '/forgotpassword'
       fullPath: '/forgotpassword'
       preLoaderRoute: typeof ForgotpasswordImport
+      parentRoute: typeof rootRoute
+    }
+    '/formaforsupervisor': {
+      id: '/formaforsupervisor'
+      path: '/formaforsupervisor'
+      fullPath: '/formaforsupervisor'
+      preLoaderRoute: typeof FormaforsupervisorImport
       parentRoute: typeof rootRoute
     }
     '/help': {
@@ -239,6 +253,7 @@ export interface FileRoutesByFullPath {
   '/accountsettings': typeof AccountsettingsRoute
   '/confirmemail': typeof ConfirmemailRoute
   '/forgotpassword': typeof ForgotpasswordRoute
+  '/formaforsupervisor': typeof FormaforsupervisorRoute
   '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/mypublications': typeof MypublicationsRoute
@@ -257,6 +272,7 @@ export interface FileRoutesByTo {
   '/accountsettings': typeof AccountsettingsRoute
   '/confirmemail': typeof ConfirmemailRoute
   '/forgotpassword': typeof ForgotpasswordRoute
+  '/formaforsupervisor': typeof FormaforsupervisorRoute
   '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/mypublications': typeof MypublicationsRoute
@@ -276,6 +292,7 @@ export interface FileRoutesById {
   '/accountsettings': typeof AccountsettingsRoute
   '/confirmemail': typeof ConfirmemailRoute
   '/forgotpassword': typeof ForgotpasswordRoute
+  '/formaforsupervisor': typeof FormaforsupervisorRoute
   '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/mypublications': typeof MypublicationsRoute
@@ -296,6 +313,7 @@ export interface FileRouteTypes {
     | '/accountsettings'
     | '/confirmemail'
     | '/forgotpassword'
+    | '/formaforsupervisor'
     | '/help'
     | '/login'
     | '/mypublications'
@@ -313,6 +331,7 @@ export interface FileRouteTypes {
     | '/accountsettings'
     | '/confirmemail'
     | '/forgotpassword'
+    | '/formaforsupervisor'
     | '/help'
     | '/login'
     | '/mypublications'
@@ -330,6 +349,7 @@ export interface FileRouteTypes {
     | '/accountsettings'
     | '/confirmemail'
     | '/forgotpassword'
+    | '/formaforsupervisor'
     | '/help'
     | '/login'
     | '/mypublications'
@@ -349,6 +369,7 @@ export interface RootRouteChildren {
   AccountsettingsRoute: typeof AccountsettingsRoute
   ConfirmemailRoute: typeof ConfirmemailRoute
   ForgotpasswordRoute: typeof ForgotpasswordRoute
+  FormaforsupervisorRoute: typeof FormaforsupervisorRoute
   HelpRoute: typeof HelpRoute
   LoginRoute: typeof LoginRoute
   MypublicationsRoute: typeof MypublicationsRoute
@@ -367,6 +388,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountsettingsRoute: AccountsettingsRoute,
   ConfirmemailRoute: ConfirmemailRoute,
   ForgotpasswordRoute: ForgotpasswordRoute,
+  FormaforsupervisorRoute: FormaforsupervisorRoute,
   HelpRoute: HelpRoute,
   LoginRoute: LoginRoute,
   MypublicationsRoute: MypublicationsRoute,
@@ -394,6 +416,7 @@ export const routeTree = rootRoute
         "/accountsettings",
         "/confirmemail",
         "/forgotpassword",
+        "/formaforsupervisor",
         "/help",
         "/login",
         "/mypublications",
@@ -418,6 +441,9 @@ export const routeTree = rootRoute
     },
     "/forgotpassword": {
       "filePath": "forgotpassword.tsx"
+    },
+    "/formaforsupervisor": {
+      "filePath": "formaforsupervisor.tsx"
     },
     "/help": {
       "filePath": "help.tsx"
