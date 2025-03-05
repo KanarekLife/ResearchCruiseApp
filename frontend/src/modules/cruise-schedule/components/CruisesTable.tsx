@@ -14,7 +14,7 @@ const dateFormat = 'DD.MM.YYYY, HH:mm';
 
 type Props = {
   cruises: CruiseDto[];
-  deleteCruise: (id: string) => void;
+  deleteCruise: (cruise: CruiseDto) => void;
 };
 export function CruisesTable({ cruises, deleteCruise }: Props) {
   const columns: ColumnDef<CruiseDto>[] = [
@@ -57,7 +57,7 @@ export function CruisesTable({ cruises, deleteCruise }: Props) {
     },
     {
       id: 'actions',
-      cell: ({ row }) => <ActionsCell cruiseId={row.original.id} deleteCruise={deleteCruise} />,
+      cell: ({ row }) => <ActionsCell cruise={row.original} deleteCruise={deleteCruise} />,
       size: 40,
     },
   ];
@@ -100,18 +100,20 @@ function ApplicationsCell({ applications }: ApplicationsCellProps) {
 }
 
 type ActionsCellProps = {
-  cruiseId: string;
-  deleteCruise: (id: string) => void;
+  cruise: CruiseDto;
+  deleteCruise: (CruiseDto: CruiseDto) => void;
 };
-function ActionsCell({ cruiseId, deleteCruise }: ActionsCellProps) {
+function ActionsCell({ cruise, deleteCruise }: ActionsCellProps) {
   return (
     <div className="grid grid-cols-1 gap-2 min-w-20">
-      <AppButton type="link" href={`/cruises/${cruiseId}`} variant="primary" className="w-full">
+      <AppButton type="link" href={`/cruises/${cruise.id}`} variant="primary" className="w-full">
         Szczegóły
       </AppButton>
-      <AppButton variant="dangerOutline" onClick={() => deleteCruise(cruiseId)}>
-        Usuń
-      </AppButton>
+      {cruise.status === 'Nowy' && (
+        <AppButton variant="dangerOutline" onClick={() => deleteCruise(cruise)}>
+          Usuń
+        </AppButton>
+      )}
     </div>
   );
 }
