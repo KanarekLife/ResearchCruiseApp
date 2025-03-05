@@ -26,7 +26,7 @@ import { FormASupervisorInfoSection } from '@/cruise-applications/components/for
 import { FormAForSupervisorActionsSection } from '@/cruise-applications/components/formA/FormAForSupervisorActionsSection';
 
 export function FormAForSupervisorPage() {
-  const { cruiseApplicationId, supervisorCode } = getRouteApi('/formaforsupervisor').useSearch();
+  const { cruiseApplicationId, supervisorCode } = getRouteApi('/cruiseapproval').useSearch();
   const navigate = useNavigate();
 
   if (!cruiseApplicationId || !supervisorCode) {

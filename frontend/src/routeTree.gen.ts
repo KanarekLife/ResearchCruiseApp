@@ -19,8 +19,8 @@ import { Route as NewcruiseImport } from './routes/newcruise'
 import { Route as MypublicationsImport } from './routes/mypublications'
 import { Route as LoginImport } from './routes/login'
 import { Route as HelpImport } from './routes/help'
-import { Route as FormaforsupervisorImport } from './routes/formaforsupervisor'
 import { Route as ForgotpasswordImport } from './routes/forgotpassword'
+import { Route as CruiseapprovalImport } from './routes/cruiseapproval'
 import { Route as ConfirmemailImport } from './routes/confirmemail'
 import { Route as AccountsettingsImport } from './routes/accountsettings'
 import { Route as IndexImport } from './routes/index'
@@ -78,15 +78,15 @@ const HelpRoute = HelpImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const FormaforsupervisorRoute = FormaforsupervisorImport.update({
-  id: '/formaforsupervisor',
-  path: '/formaforsupervisor',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const ForgotpasswordRoute = ForgotpasswordImport.update({
   id: '/forgotpassword',
   path: '/forgotpassword',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CruiseapprovalRoute = CruiseapprovalImport.update({
+  id: '/cruiseapproval',
+  path: '/cruiseapproval',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -152,18 +152,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConfirmemailImport
       parentRoute: typeof rootRoute
     }
+    '/cruiseapproval': {
+      id: '/cruiseapproval'
+      path: '/cruiseapproval'
+      fullPath: '/cruiseapproval'
+      preLoaderRoute: typeof CruiseapprovalImport
+      parentRoute: typeof rootRoute
+    }
     '/forgotpassword': {
       id: '/forgotpassword'
       path: '/forgotpassword'
       fullPath: '/forgotpassword'
       preLoaderRoute: typeof ForgotpasswordImport
-      parentRoute: typeof rootRoute
-    }
-    '/formaforsupervisor': {
-      id: '/formaforsupervisor'
-      path: '/formaforsupervisor'
-      fullPath: '/formaforsupervisor'
-      preLoaderRoute: typeof FormaforsupervisorImport
       parentRoute: typeof rootRoute
     }
     '/help': {
@@ -252,8 +252,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accountsettings': typeof AccountsettingsRoute
   '/confirmemail': typeof ConfirmemailRoute
+  '/cruiseapproval': typeof CruiseapprovalRoute
   '/forgotpassword': typeof ForgotpasswordRoute
-  '/formaforsupervisor': typeof FormaforsupervisorRoute
   '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/mypublications': typeof MypublicationsRoute
@@ -271,8 +271,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accountsettings': typeof AccountsettingsRoute
   '/confirmemail': typeof ConfirmemailRoute
+  '/cruiseapproval': typeof CruiseapprovalRoute
   '/forgotpassword': typeof ForgotpasswordRoute
-  '/formaforsupervisor': typeof FormaforsupervisorRoute
   '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/mypublications': typeof MypublicationsRoute
@@ -291,8 +291,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/accountsettings': typeof AccountsettingsRoute
   '/confirmemail': typeof ConfirmemailRoute
+  '/cruiseapproval': typeof CruiseapprovalRoute
   '/forgotpassword': typeof ForgotpasswordRoute
-  '/formaforsupervisor': typeof FormaforsupervisorRoute
   '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/mypublications': typeof MypublicationsRoute
@@ -312,8 +312,8 @@ export interface FileRouteTypes {
     | '/'
     | '/accountsettings'
     | '/confirmemail'
+    | '/cruiseapproval'
     | '/forgotpassword'
-    | '/formaforsupervisor'
     | '/help'
     | '/login'
     | '/mypublications'
@@ -330,8 +330,8 @@ export interface FileRouteTypes {
     | '/'
     | '/accountsettings'
     | '/confirmemail'
+    | '/cruiseapproval'
     | '/forgotpassword'
-    | '/formaforsupervisor'
     | '/help'
     | '/login'
     | '/mypublications'
@@ -348,8 +348,8 @@ export interface FileRouteTypes {
     | '/'
     | '/accountsettings'
     | '/confirmemail'
+    | '/cruiseapproval'
     | '/forgotpassword'
-    | '/formaforsupervisor'
     | '/help'
     | '/login'
     | '/mypublications'
@@ -368,8 +368,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountsettingsRoute: typeof AccountsettingsRoute
   ConfirmemailRoute: typeof ConfirmemailRoute
+  CruiseapprovalRoute: typeof CruiseapprovalRoute
   ForgotpasswordRoute: typeof ForgotpasswordRoute
-  FormaforsupervisorRoute: typeof FormaforsupervisorRoute
   HelpRoute: typeof HelpRoute
   LoginRoute: typeof LoginRoute
   MypublicationsRoute: typeof MypublicationsRoute
@@ -387,8 +387,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountsettingsRoute: AccountsettingsRoute,
   ConfirmemailRoute: ConfirmemailRoute,
+  CruiseapprovalRoute: CruiseapprovalRoute,
   ForgotpasswordRoute: ForgotpasswordRoute,
-  FormaforsupervisorRoute: FormaforsupervisorRoute,
   HelpRoute: HelpRoute,
   LoginRoute: LoginRoute,
   MypublicationsRoute: MypublicationsRoute,
@@ -415,8 +415,8 @@ export const routeTree = rootRoute
         "/",
         "/accountsettings",
         "/confirmemail",
+        "/cruiseapproval",
         "/forgotpassword",
-        "/formaforsupervisor",
         "/help",
         "/login",
         "/mypublications",
@@ -439,11 +439,11 @@ export const routeTree = rootRoute
     "/confirmemail": {
       "filePath": "confirmemail.tsx"
     },
+    "/cruiseapproval": {
+      "filePath": "cruiseapproval.tsx"
+    },
     "/forgotpassword": {
       "filePath": "forgotpassword.tsx"
-    },
-    "/formaforsupervisor": {
-      "filePath": "formaforsupervisor.tsx"
     },
     "/help": {
       "filePath": "help.tsx"
