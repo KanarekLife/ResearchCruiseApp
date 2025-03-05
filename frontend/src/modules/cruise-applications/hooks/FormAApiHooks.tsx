@@ -3,7 +3,6 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { client } from '@/core/lib/api';
 import { FormADto } from '@/cruise-applications/models/FormADto';
 import { FormAInitValuesDto } from '@/cruise-applications/models/FormAInitValuesDto';
-import { AxiosError, AxiosResponse } from 'axios';
 
 export function useFormAInitValuesQuery() {
   return useSuspenseQuery({
@@ -29,7 +28,11 @@ export function useFormAQuery(cruiseId: string) {
   });
 }
 
-export function useFormAForSupervisorInitValuesQuery(cruiseId: string, supervisorCode: string) {
+type SupervisorFormQueryProps = {
+  cruiseId: string;
+  supervisorCode: string;
+};
+export function useFormAForSupervisorInitValuesQuery({ cruiseId, supervisorCode }: SupervisorFormQueryProps) {
   return useSuspenseQuery({
     queryKey: ['formAForSupervisorInitValues', cruiseId, supervisorCode],
     queryFn: async () => {
@@ -41,7 +44,7 @@ export function useFormAForSupervisorInitValuesQuery(cruiseId: string, superviso
   });
 }
 
-export function useFormAForSupervisorQuery(cruiseId: string, supervisorCode: string) {
+export function useFormAForSupervisorQuery({ cruiseId, supervisorCode }: SupervisorFormQueryProps) {
   return useSuspenseQuery({
     queryKey: ['formAForSupervisor', cruiseId, supervisorCode],
     queryFn: async () => {
@@ -87,7 +90,7 @@ type SupervisorAnswerFormAProps = {
   supervisorCode: string;
 };
 export function useSupervisorAnswerFormAMutation() {
-  return useMutation<AxiosResponse, AxiosError<string>, SupervisorAnswerFormAProps>({
+  return useMutation({
     mutationFn: async ({ id, accept, supervisorCode }: SupervisorAnswerFormAProps) => {
       return client.patch(`/api/CruiseApplications/${id}
     /supervisorAnswer?accept=${accept}&supervisorCode=${supervisorCode}`);

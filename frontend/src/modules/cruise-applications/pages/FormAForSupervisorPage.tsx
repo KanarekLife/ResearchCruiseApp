@@ -5,7 +5,6 @@ import { Suspense } from 'react';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { useAppContext } from '@/core/hooks/AppContextHook';
-import { getFormAValidationSchema } from '@/cruise-applications/helpers/FormAValidationSchema';
 import {
   useFormAForSupervisorQuery,
   useSupervisorAnswerFormAMutation,
@@ -35,9 +34,9 @@ export function FormAForSupervisorPage() {
   }
 
   const appContext = useAppContext();
-  const initialStateQuery = useFormAForSupervisorInitValuesQuery(cruiseApplicationId, supervisorCode);
+  const initialStateQuery = useFormAForSupervisorInitValuesQuery({ cruiseId: cruiseApplicationId, supervisorCode });
   const answerMutation = useSupervisorAnswerFormAMutation();
-  const formA = useFormAForSupervisorQuery(cruiseApplicationId, supervisorCode);
+  const formA = useFormAForSupervisorQuery({ cruiseId: cruiseApplicationId, supervisorCode });
 
   const form = useForm<FormADto>({
     defaultValues: formA.data ?? {
@@ -65,9 +64,6 @@ export function FormAForSupervisorPage() {
       supervisorEmail: '',
       note: '',
     },
-    validators: {
-      onChange: getFormAValidationSchema(initialStateQuery.data),
-    },
   });
 
   function handleAcceptForm() {
@@ -82,7 +78,7 @@ export function FormAForSupervisorPage() {
             variant: 'success',
           });
         },
-        onError: (err) => {
+        onError: (err: any) => {
           console.error(err);
           if (err.response?.status === 403) {
             appContext.showAlert({
@@ -114,7 +110,7 @@ export function FormAForSupervisorPage() {
             variant: 'success',
           });
         },
-        onError: (err) => {
+        onError: (err: any) => {
           console.error(err);
           if (err.response?.status === 403) {
             appContext.showAlert({
