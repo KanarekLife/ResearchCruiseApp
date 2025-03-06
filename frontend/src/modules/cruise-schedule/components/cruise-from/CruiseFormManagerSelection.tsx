@@ -1,3 +1,4 @@
+import { useStore } from '@tanstack/react-form';
 import { AnimatePresence, motion } from 'motion/react';
 import React from 'react';
 
@@ -13,15 +14,26 @@ import { useCruiseForm } from '@/cruise-schedule/contexts/CruiseFormContext';
 export function CruiseFormManagerSelection() {
   const { form, cruiseApplications, isReadonly } = useCruiseForm();
 
-  const possibleUsers = React.useMemo(
-    () => getDropdownUsersForApplications(cruiseApplications ?? [], form.state.values.cruiseApplicationsIds),
-    [cruiseApplications, form.state.values.cruiseApplicationsIds]
-  );
+  const cruiseApplicationsIds = useStore(form.store, (state) => state.values.cruiseApplicationsIds);
+  const allowedUsers = React.useMemo(() => {
+    return getDropdownUsersForApplications(cruiseApplications ?? [], cruiseApplicationsIds);
+  }, [cruiseApplications, cruiseApplicationsIds]);
+
+  // Clear selected managers if they are not listed in the selected applications
+  React.useEffect(() => {
+    const allowedUsersIds = allowedUsers.map((user) => user.value);
+    if (!allowedUsersIds.includes(form.state.values.managersTeam.mainCruiseManagerId)) {
+      form.setFieldValue('managersTeam.mainCruiseManagerId', '');
+    }
+    if (!allowedUsersIds.includes(form.state.values.managersTeam.mainDeputyManagerId)) {
+      form.setFieldValue('managersTeam.mainDeputyManagerId', '');
+    }
+  }, [allowedUsers, form]);
 
   return (
-    <AppAccordion title="Kierownik główny i zastępca kierownika głównego" expandedByDefault>
-      <AnimatePresence initial={possibleUsers.length !== 0}>
-        {possibleUsers.length === 0 && (
+    <AppAccordion title="3. Kierownik główny i zastępca kierownika głównego" expandedByDefault>
+      <AnimatePresence initial={cruiseApplicationsIds.length !== 0}>
+        {cruiseApplicationsIds.length === 0 && (
           <motion.div
             className="mt-2"
             initial={{ opacity: 0, height: 0 }}
@@ -33,6 +45,7 @@ export function CruiseFormManagerSelection() {
           </motion.div>
         )}
       </AnimatePresence>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
         <form.Field
           name="managersTeam.mainCruiseManagerId"
@@ -43,11 +56,11 @@ export function CruiseFormManagerSelection() {
               onChange={field.handleChange}
               onBlur={field.handleBlur}
               errors={getErrors(field.state.meta)}
-              allOptions={possibleUsers}
+              allOptions={allowedUsers}
               label="Kierownik główny"
               required
               placeholder="Wybierz kierownika głównego"
-              disabled={isReadonly}
+              disabled={isReadonly || cruiseApplicationsIds.length === 0}
             />
           )}
         />
@@ -61,11 +74,11 @@ export function CruiseFormManagerSelection() {
               onChange={field.handleChange}
               onBlur={field.handleBlur}
               errors={getErrors(field.state.meta)}
-              allOptions={possibleUsers}
+              allOptions={allowedUsers}
               label="Zastępca kierownika głównego"
               required
               placeholder="Wybierz zastępcę kierownika głównego"
-              disabled={isReadonly}
+              disabled={isReadonly || cruiseApplicationsIds.length === 0}
             />
           )}
         />

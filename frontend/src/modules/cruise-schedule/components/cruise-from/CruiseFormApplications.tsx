@@ -12,22 +12,29 @@ import { CruiseFormDto } from '@/cruise-schedule/models/CruiseFormDto';
 export function CruiseFormApplications() {
   const { form, cruiseApplications, isReadonly } = useCruiseForm();
 
+  const handleAddApplication = (
+    field: FieldApi<CruiseFormDto, 'cruiseApplicationsIds', undefined, undefined, string[]>,
+    id: string
+  ) => {
+    field.pushValue(id);
+    field.handleChange((prev) => prev);
+    field.handleBlur();
+  };
+
+  const handleRemoveApplication = (
+    field: FieldApi<CruiseFormDto, 'cruiseApplicationsIds', undefined, undefined, string[]>,
+    id: string
+  ) => {
+    const index = field.state.value.indexOf(id);
+    field.removeValue(index);
+    field.handleChange((prev) => prev);
+    field.handleBlur();
+  };
+
   function getColumns(
     field: FieldApi<CruiseFormDto, 'cruiseApplicationsIds', undefined, undefined, string[]>,
     attached: boolean
   ): ColumnDef<CruiseApplicationDto>[] {
-    function addApplication(application: CruiseApplicationDto) {
-      field.pushValue(application.id);
-      field.handleChange((prev) => prev);
-      field.handleBlur();
-    }
-
-    function removeApplication(rowId: number) {
-      field.removeValue(rowId);
-      field.handleChange((prev) => prev);
-      field.handleBlur();
-    }
-
     return [
       {
         header: 'Numer',
@@ -52,22 +59,30 @@ export function CruiseFormApplications() {
       {
         header: 'Punkty',
         accessorFn: (row) => row.points,
+        enableColumnFilter: false,
       },
-      {
-        id: 'actions',
-        enableHiding: true,
-        cell: ({ row }) =>
-          isReadonly ||
-          (attached ? (
-            <AppButton variant="dangerOutline" size="sm" onClick={() => removeApplication(row.index)}>
-              Usuń
-            </AppButton>
-          ) : (
-            <AppButton variant="successOutline" size="sm" onClick={() => addApplication(row.original)}>
-              Dodaj
-            </AppButton>
-          )),
-      },
+      ...(!isReadonly
+        ? ([
+            {
+              id: 'actions',
+              cell: ({ row }) => (
+                <AppButton
+                  variant={attached ? 'dangerOutline' : 'successOutline'}
+                  size="sm"
+                  onClick={() => {
+                    if (attached) {
+                      handleRemoveApplication(field, row.original.id);
+                    } else {
+                      handleAddApplication(field, row.original.id);
+                    }
+                  }}
+                >
+                  {attached ? 'Usuń' : 'Dodaj'}
+                </AppButton>
+              ),
+            },
+          ] as ColumnDef<CruiseApplicationDto>[])
+        : []),
     ];
   }
 
@@ -82,14 +97,14 @@ export function CruiseFormApplications() {
               columns={getColumns(field, true)}
               data={cruiseApplications.filter((application) => field.state.value.includes(application.id))}
               buttons={() => []}
-              variant="form"
+              emptyTableMessage="Brak załączonych zgłoszeń"
             />
 
             <AppTable
               columns={getColumns(field, false)}
               data={cruiseApplications.filter((application) => !field.state.value.includes(application.id))}
               buttons={() => []}
-              variant="form"
+              emptyTableMessage="Brak zgłoszeń możliwych do załączenia"
             />
           </div>
         )}
