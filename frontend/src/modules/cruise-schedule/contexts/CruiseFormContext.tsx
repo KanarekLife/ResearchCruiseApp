@@ -1,12 +1,14 @@
 import { ReactFormExtendedApi } from '@tanstack/react-form';
 import { createContext, useContext } from 'react';
 
+import { CruiseApplicationDto } from '@/cruise-applications/models/CruiseApplicationDto';
 import { CruiseDto } from '@/cruise-schedule/models/CruiseDto';
 import { CruiseFormDto } from '@/cruise-schedule/models/CruiseFormDto';
 
 export type CruiseFromContextType = {
   form: ReactFormExtendedApi<CruiseFormDto, undefined>;
   cruise?: CruiseDto;
+  cruiseApplications: CruiseApplicationDto[];
   isReadonly: boolean;
 };
 

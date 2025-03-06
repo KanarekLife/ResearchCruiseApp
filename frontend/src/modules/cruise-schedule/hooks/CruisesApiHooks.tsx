@@ -23,6 +23,16 @@ export function useCruiseQuery(id: string) {
   });
 }
 
+export function useCruiseApplicationsForCruiseQuery() {
+  return useSuspenseQuery({
+    queryKey: ['cruiseApplications', 'forCruise'],
+    queryFn: async () => {
+      return client.get('/api/CruiseApplications/forCruise');
+    },
+    select: (res) => res.data,
+  });
+}
+
 export function useDeleteCruiseMutation() {
   const queryClient = useQueryClient();
   return useMutation({

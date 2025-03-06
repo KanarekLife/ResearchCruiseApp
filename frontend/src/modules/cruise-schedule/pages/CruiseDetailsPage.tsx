@@ -5,24 +5,18 @@ import { Suspense } from 'react';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { CruiseFrom } from '@/cruise-schedule/components/cruise-from/CruiseFrom';
-import { useCruiseQuery } from '@/cruise-schedule/hooks/CruisesApiHooks';
+import { useCruiseApplicationsForCruiseQuery, useCruiseQuery } from '@/cruise-schedule/hooks/CruisesApiHooks';
+import { CruiseDto } from '@/cruise-schedule/models/CruiseDto';
 import { CruiseFormDto } from '@/cruise-schedule/models/CruiseFormDto';
 
 export function CruiseDetailsPage() {
   const { cruiseId } = getRouteApi('/cruises/$cruiseId/').useParams();
 
   const cruisesQuery = useCruiseQuery(cruiseId);
+  const applicationQuery = useCruiseApplicationsForCruiseQuery();
 
   const form = useForm<CruiseFormDto>({
-    defaultValues: {
-      startDate: '',
-      endDate: '',
-      managersTeam: {
-        mainCruiseManagerId: '',
-        mainDeputyManagerId: '',
-      },
-      cruiseApplicationsIds: [],
-    },
+    defaultValues: mapCruiseToForm(cruisesQuery.data),
   });
 
   function handleSubmitting(evt: React.FormEvent<HTMLFormElement>) {
@@ -39,7 +33,8 @@ export function CruiseDetailsPage() {
               context={{
                 form,
                 cruise: cruisesQuery.data,
-                isReadonly: false,
+                cruiseApplications: applicationQuery.data,
+                isReadonly: true,
               }}
             />
           </form>
@@ -47,4 +42,16 @@ export function CruiseDetailsPage() {
       </AppLayout>
     </>
   );
+}
+
+function mapCruiseToForm(cruise: CruiseDto): CruiseFormDto {
+  return {
+    startDate: cruise.startDate,
+    endDate: cruise.endDate,
+    managersTeam: {
+      mainCruiseManagerId: cruise.mainCruiseManagerId,
+      mainDeputyManagerId: cruise.mainDeputyManagerId,
+    },
+    cruiseApplicationsIds: cruise.cruiseApplicationsShortInfo.map((x) => x.id),
+  };
 }

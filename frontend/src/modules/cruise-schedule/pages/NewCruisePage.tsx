@@ -4,9 +4,12 @@ import { Suspense } from 'react';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { CruiseFrom } from '@/cruise-schedule/components/cruise-from/CruiseFrom';
+import { useCruiseApplicationsForCruiseQuery } from '@/cruise-schedule/hooks/CruisesApiHooks';
 import { CruiseFormDto } from '@/cruise-schedule/models/CruiseFormDto';
 
 export function NewCruisePage() {
+  const cruiseApplicationsQuery = useCruiseApplicationsForCruiseQuery();
+
   const form = useForm<CruiseFormDto>({
     defaultValues: {
       startDate: '',
@@ -21,7 +24,7 @@ export function NewCruisePage() {
 
   function handleSubmitting(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
-    console.log('Form submitted');
+    console.log(form.state.values);
   }
 
   return (
@@ -32,10 +35,13 @@ export function NewCruisePage() {
             <CruiseFrom
               context={{
                 form,
-                cruise: undefined,
+                cruiseApplications: cruiseApplicationsQuery.data,
                 isReadonly: false,
               }}
             />
+            <button type="submit" onClick={() => console.log(form.state.values)}>
+              Submit
+            </button>
           </form>
         </Suspense>
       </AppLayout>
