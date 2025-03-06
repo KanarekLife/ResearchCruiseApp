@@ -6,8 +6,7 @@ import { AppBadge } from '@/core/components/AppBadge';
 import { AppButton } from '@/core/components/AppButton';
 import { AppTable } from '@/core/components/table/AppTable';
 import { CruiseStatusBadge } from '@/cruise-schedule/components/CruiseStatusBadge';
-import { CruiseApplicationShortInfoDto } from '@/cruise-schedule/models/CruiseApplicationShortInfoDto';
-import { CruiseDto } from '@/cruise-schedule/models/CruiseDto';
+import { CruiseApplicationShortInfoDto, CruiseDto } from '@/cruise-schedule/models/CruiseDto';
 
 const emptyGuid = '00000000-0000-0000-0000-000000000000';
 const dateFormat = 'DD.MM.YYYY, HH:mm';
@@ -60,7 +59,7 @@ export function CruisesTable({ cruises, deleteCruise, buttons }: Props) {
     {
       id: 'actions',
       cell: ({ row }) => <ActionsCell cruise={row.original} deleteCruise={deleteCruise} />,
-      size: 40,
+      size: 100,
     },
   ];
   return (
@@ -123,7 +122,7 @@ type ActionsCellProps = {
 };
 function ActionsCell({ cruise, deleteCruise }: ActionsCellProps) {
   return (
-    <div className="grid grid-cols-1 gap-2 min-w-20">
+    <div className="grid grid-cols-1 gap-2 min-w-30">
       <AppButton type="link" href={`/cruises/${cruise.id}`}>
         Szczegóły
       </AppButton>

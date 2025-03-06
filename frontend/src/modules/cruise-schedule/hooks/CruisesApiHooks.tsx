@@ -13,6 +13,16 @@ export function useCruisesQuery() {
   });
 }
 
+export function useCruiseQuery(id: string) {
+  return useSuspenseQuery({
+    queryKey: ['cruises', id],
+    queryFn: async () => {
+      return client.get(`/api/Cruises/${id}`);
+    },
+    select: (res) => res.data as CruiseDto,
+  });
+}
+
 export function useDeleteCruiseMutation() {
   const queryClient = useQueryClient();
   return useMutation({
