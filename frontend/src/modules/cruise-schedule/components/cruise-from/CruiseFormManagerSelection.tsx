@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react';
+import React from 'react';
 
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppAlert } from '@/core/components/AppAlert';
@@ -12,9 +13,9 @@ import { useCruiseForm } from '@/cruise-schedule/contexts/CruiseFormContext';
 export function CruiseFormManagerSelection() {
   const { form, cruiseApplications, isReadonly } = useCruiseForm();
 
-  const possibleUsers = getDropdownUsersForApplications(
-    cruiseApplications ?? [],
-    form.state.values.cruiseApplicationsIds
+  const possibleUsers = React.useMemo(
+    () => getDropdownUsersForApplications(cruiseApplications ?? [], form.state.values.cruiseApplicationsIds),
+    [cruiseApplications, form.state.values.cruiseApplicationsIds]
   );
 
   return (

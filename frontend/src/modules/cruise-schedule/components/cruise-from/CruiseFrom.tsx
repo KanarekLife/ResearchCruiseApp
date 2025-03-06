@@ -1,3 +1,4 @@
+import { CruiseFormApplications } from '@/cruise-schedule/components/cruise-from/CruiseFormApplications';
 import { CruiseFormBasicInformation } from '@/cruise-schedule/components/cruise-from/CruiseFormBasicInformation';
 import { CruiseFormDateSelection } from '@/cruise-schedule/components/cruise-from/CruiseFormDateSelection';
 import { CruiseFormManagerSelection } from '@/cruise-schedule/components/cruise-from/CruiseFormManagerSelection';
@@ -13,6 +14,7 @@ export function CruiseFrom({ context }: Props) {
       <CruiseFormBasicInformation />
       <CruiseFormDateSelection />
       <CruiseFormManagerSelection />
+      <CruiseFormApplications />
     </CruiseFormProvider>
   );
 }
