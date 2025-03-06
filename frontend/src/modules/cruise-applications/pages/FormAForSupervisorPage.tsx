@@ -1,38 +1,19 @@
 import { useForm } from '@tanstack/react-form';
 import { getRouteApi, useNavigate } from '@tanstack/react-router';
-import { Suspense } from 'react';
+import axios, { AxiosError } from 'axios';
 
-import { AppLayout } from '@/core/components/AppLayout';
-import { AppLoader } from '@/core/components/AppLoader';
 import { useAppContext } from '@/core/hooks/AppContextHook';
+import { FormAForSupervisor } from '@/cruise-applications/components/formA/FormAForSupervisor';
 import {
+  useFormAForSupervisorInitValuesQuery,
   useFormAForSupervisorQuery,
   useSupervisorAnswerFormAMutation,
-  useFormAForSupervisorInitValuesQuery,
 } from '@/cruise-applications/hooks/FormAApiHooks';
 import { FormADto } from '@/cruise-applications/models/FormADto';
-import { FormAProvider } from '@/cruise-applications/contexts/FormAContext';
-import { FormACruiseManagerInfoSection } from '@/cruise-applications/components/formA/FormACruiseManagerInfoSection';
-import { FormACruiseLengthSection } from '@/cruise-applications/components/formA/FormACruiseLengthSection';
-import { FormAPermissionsSection } from '@/cruise-applications/components/formA/FormAPermissionsSection';
-import { FormAResearchAreaSection } from '@/cruise-applications/components/formA/FormAResearchAreaSection';
-import { FormACruiseGoalSection } from '@/cruise-applications/components/formA/FormACruiseGoalSection';
-import { FormAResearchTasksSection } from '@/cruise-applications/components/formA/FormAResearchTasksSection';
-import { FormAContractsSection } from '@/cruise-applications/components/formA/FormAContractsSection';
-import { FormAMembersSection } from '@/cruise-applications/components/formA/FormAMembersSection';
-import { FormAPublicationsSection } from '@/cruise-applications/components/formA/FormAPublicationsSection';
-import { FormASPUBTasksSection } from '@/cruise-applications/components/formA/FormASPUBTasksSection';
-import { FormASupervisorInfoSection } from '@/cruise-applications/components/formA/FormASupervisorInfoSection';
-import { FormAForSupervisorActionsSection } from '@/cruise-applications/components/formA/FormAForSupervisorActionsSection';
 
 export function FormAForSupervisorPage() {
   const { cruiseApplicationId, supervisorCode } = getRouteApi('/cruiseapproval').useSearch();
   const navigate = useNavigate();
-
-  if (!cruiseApplicationId || !supervisorCode) {
-    return navigate({ to: '/' });
-  }
-
   const appContext = useAppContext();
   const initialStateQuery = useFormAForSupervisorInitValuesQuery({ cruiseId: cruiseApplicationId, supervisorCode });
   const answerMutation = useSupervisorAnswerFormAMutation();
@@ -78,9 +59,9 @@ export function FormAForSupervisorPage() {
             variant: 'success',
           });
         },
-        onError: (err: any) => {
+        onError: (err: Error | AxiosError) => {
           console.error(err);
-          if (err.response?.status === 403) {
+          if (axios.isAxiosError(err) && err.response?.status === 403) {
             appContext.showAlert({
               title: 'Niedozwolona operacja',
               message: err.response?.data,
@@ -110,9 +91,9 @@ export function FormAForSupervisorPage() {
             variant: 'success',
           });
         },
-        onError: (err: any) => {
+        onError: (err: Error | AxiosError) => {
           console.error(err);
-          if (err.response?.status === 403) {
+          if (axios.isAxiosError(err) && err.response?.status === 403) {
             appContext.showAlert({
               title: 'Niedozwolona operacja',
               message: err.response?.data,
@@ -131,29 +112,11 @@ export function FormAForSupervisorPage() {
   }
 
   return (
-    <>
-      <AppLayout title="Formularz A">
-        <Suspense fallback={<AppLoader />}>
-          <div className="space-y-8">
-            <FormAProvider
-              value={{ form, initValues: initialStateQuery.data, isReadonly: true, hasFormBeenSubmitted: false }}
-            >
-              <FormACruiseManagerInfoSection />
-              <FormACruiseLengthSection />
-              <FormAPermissionsSection />
-              <FormAResearchAreaSection />
-              <FormACruiseGoalSection />
-              <FormAResearchTasksSection />
-              <FormAContractsSection />
-              <FormAMembersSection />
-              <FormAPublicationsSection />
-              <FormASPUBTasksSection />
-              <FormASupervisorInfoSection />
-              <FormAForSupervisorActionsSection onAccept={handleAcceptForm} onDeny={handleDenyForm} />
-            </FormAProvider>
-          </div>
-        </Suspense>
-      </AppLayout>
-    </>
+    <FormAForSupervisor
+      form={form}
+      formInitValues={initialStateQuery.data}
+      handleAcceptForm={handleAcceptForm}
+      handleDenyForm={handleDenyForm}
+    />
   );
 }
