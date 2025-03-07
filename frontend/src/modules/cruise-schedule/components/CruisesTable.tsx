@@ -23,6 +23,7 @@ export function CruisesTable({ cruises, deleteCruise, buttons }: Props) {
       id: 'number',
       accessorFn: (row) => row.number,
       sortingFn: (a, b) => compareCruiseNumber(a.original.number, b.original.number),
+      cell: (cell) => <span className="font-bold">{cell.getValue() as string}</span>,
     },
     {
       header: 'Data rozpoczęcia',

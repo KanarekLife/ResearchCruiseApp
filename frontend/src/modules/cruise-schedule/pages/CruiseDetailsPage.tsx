@@ -12,7 +12,12 @@ import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { AppModal } from '@/core/components/AppModal';
 import { CruiseFrom } from '@/cruise-schedule/components/cruise-from/CruiseFrom';
-import { useCruiseApplicationsForCruiseQuery, useCruiseQuery } from '@/cruise-schedule/hooks/CruisesApiHooks';
+import {
+  useConfirmCruiseMutation,
+  useCruiseApplicationsForCruiseQuery,
+  useCruiseQuery,
+  useEndCruiseMutation,
+} from '@/cruise-schedule/hooks/CruisesApiHooks';
 import { CruiseDto } from '@/cruise-schedule/models/CruiseDto';
 import { CruiseFormDto } from '@/cruise-schedule/models/CruiseFormDto';
 
@@ -21,72 +26,93 @@ export function CruiseDetailsPage() {
 
   const cruisesQuery = useCruiseQuery(cruiseId);
   const applicationQuery = useCruiseApplicationsForCruiseQuery();
+  const confirmCruiseMutation = useConfirmCruiseMutation(cruiseId);
+  const endCruiseMutation = useEndCruiseMutation(cruiseId);
 
   const [editMode, setEditMode] = React.useState(false);
   const [isConfirmAcceptanceModalOpen, setIsConfirmAcceptanceModalOpen] = React.useState(false);
+  const [isConfirmCruiseEndModalOpen, setIsConfirmCruiseEndModalOpen] = React.useState(false);
 
   const form = useForm<CruiseFormDto>({
     defaultValues: mapCruiseToForm(cruisesQuery.data),
   });
 
-  function handleSubmitting() {
-    console.log('Form submitted');
+  function getButtons() {
+    switch (cruisesQuery.data?.status) {
+      case 'Nowy':
+        return editMode ? (
+          <>
+            <AppButton
+              className="gap-4 !justify-center w-36 lg:w-48"
+              variant="primaryOutline"
+              onClick={() => {
+                form.reset();
+                setEditMode(false);
+              }}
+            >
+              <XLgIcon className="h-4 w-4" />
+              Anuluj
+            </AppButton>
+            <AppButton
+              className="gap-4 !justify-center w-36 lg:w-48"
+              variant="primaryOutline"
+              onClick={() => form.reset()}
+            >
+              <ArrowClockwiseIcon className="h-4 w-4" />
+              Cofnij zmiany
+            </AppButton>
+            <AppButton className="gap-4 !justify-center w-36 lg:w-48">
+              <FloppyFillIcon className="h-4 w-4" />
+              Zapisz rejs
+            </AppButton>
+          </>
+        ) : (
+          <>
+            <AppButton
+              className="gap-4 !justify-center w-36 lg:w-64"
+              variant="primaryOutline"
+              onClick={() => setEditMode(true)}
+            >
+              <PencilIcon className="h-4 w-4" />
+              Edytuj
+            </AppButton>
+            <AppButton
+              className="gap-4 !justify-center w-36 lg:w-64"
+              onClick={() => setIsConfirmAcceptanceModalOpen(true)}
+            >
+              <CheckLgIcon className="h-4 w-4" />
+              Zatwierdź rejs
+            </AppButton>
+          </>
+        );
+      case 'Potwierdzony':
+        return (
+          <AppButton
+            className="gap-4 !justify-center w-64 lg:w-96"
+            onClick={() => setIsConfirmCruiseEndModalOpen(true)}
+          >
+            <CheckLgIcon className="h-4 w-4" />
+            Oznacz rejs jako zakończony
+          </AppButton>
+        );
+      default:
+        return null;
+    }
   }
-
-  const buttons = editMode ? (
-    <>
-      <AppButton
-        className="gap-4 !justify-center w-36 lg:w-48"
-        variant="primaryOutline"
-        onClick={() => {
-          form.reset();
-          setEditMode(false);
-        }}
-      >
-        <XLgIcon className="h-4 w-4" />
-        Anuluj
-      </AppButton>
-      <AppButton className="gap-4 !justify-center w-36 lg:w-48" variant="primaryOutline" onClick={() => form.reset()}>
-        <ArrowClockwiseIcon className="h-4 w-4" />
-        Cofnij zmiany
-      </AppButton>
-      <AppButton className="gap-4 !justify-center w-36 lg:w-48">
-        <FloppyFillIcon className="h-4 w-4" />
-        Zapisz rejs
-      </AppButton>
-    </>
-  ) : (
-    <>
-      <AppButton
-        className="gap-4 !justify-center w-36 lg:w-64"
-        variant="primaryOutline"
-        onClick={() => setEditMode(true)}
-      >
-        <PencilIcon className="h-4 w-4" />
-        Edytuj
-      </AppButton>
-      <AppButton className="gap-4 !justify-center w-36 lg:w-64" onClick={() => setIsConfirmAcceptanceModalOpen(true)}>
-        <CheckLgIcon className="h-4 w-4" />
-        Zatwierdź rejs
-      </AppButton>
-    </>
-  );
 
   return (
     <>
       <AppLayout title={`Szczegóły rejsu nr. ${cruisesQuery.data?.number}`}>
         <Suspense fallback={<AppLoader />}>
-          <form onSubmit={handleSubmitting}>
-            <CruiseFrom
-              context={{
-                form,
-                cruise: cruisesQuery.data,
-                cruiseApplications: applicationQuery.data,
-                isReadonly: !editMode,
-              }}
-              buttons={buttons}
-            />
-          </form>
+          <CruiseFrom
+            context={{
+              form,
+              cruise: cruisesQuery.data,
+              cruiseApplications: applicationQuery.data,
+              isReadonly: !editMode,
+            }}
+            buttons={getButtons()}
+          />
         </Suspense>
       </AppLayout>
 
@@ -100,10 +126,10 @@ export function CruiseDetailsPage() {
             variant="successOutline"
             className="basis-2/3"
             onClick={async () => {
-              handleSubmitting();
+              await confirmCruiseMutation.mutateAsync();
               setIsConfirmAcceptanceModalOpen(false);
             }}
-            disabled={false}
+            disabled={confirmCruiseMutation.isPending}
           >
             Potwierdź rejs nr. {cruisesQuery.data?.number}
           </AppButton>
@@ -113,7 +139,37 @@ export function CruiseDetailsPage() {
             onClick={() => {
               setIsConfirmAcceptanceModalOpen(false);
             }}
-            disabled={false}
+            disabled={confirmCruiseMutation.isPending}
+          >
+            Anuluj
+          </AppButton>
+        </div>
+      </AppModal>
+
+      <AppModal
+        title={`Czy na pewno chcesz oznaczyć rejs nr. ${cruisesQuery.data?.number} jako zakończony?`}
+        isOpen={isConfirmCruiseEndModalOpen}
+        onClose={() => setIsConfirmCruiseEndModalOpen(false)}
+      >
+        <div className="flex flex-row gap-4 mt-4">
+          <AppButton
+            variant="successOutline"
+            className="basis-2/3"
+            onClick={async () => {
+              await endCruiseMutation.mutateAsync();
+              setIsConfirmCruiseEndModalOpen(false);
+            }}
+            disabled={endCruiseMutation.isPending}
+          >
+            Oznacz rejs nr. {cruisesQuery.data?.number} jako zakończony
+          </AppButton>
+          <AppButton
+            variant="primaryOutline"
+            className="basis-1/3"
+            onClick={() => {
+              setIsConfirmCruiseEndModalOpen(false);
+            }}
+            disabled={endCruiseMutation.isPending}
           >
             Anuluj
           </AppButton>

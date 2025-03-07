@@ -69,3 +69,27 @@ export function useCreateCruiseMutation() {
     },
   });
 }
+
+export function useConfirmCruiseMutation(id: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async () => {
+      await client.put(`/api/Cruises/${id}/confirm`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cruises', id] });
+    },
+  });
+}
+
+export function useEndCruiseMutation(id: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async () => {
+      await client.put(`/api/Cruises/${id}/end`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cruises', id] });
+    },
+  });
+}
