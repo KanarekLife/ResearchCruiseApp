@@ -1,5 +1,7 @@
 import { FieldApi } from '@tanstack/react-form';
 import { ColumnDef } from '@tanstack/react-table';
+import { AnimatePresence, motion } from 'motion/react';
+import React from 'react';
 
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppAvatar } from '@/core/components/AppAvatar';
@@ -11,6 +13,8 @@ import { CruiseFormDto } from '@/cruise-schedule/models/CruiseFormDto';
 
 export function CruiseFormApplications() {
   const { form, cruiseApplications, isReadonly } = useCruiseForm();
+
+  const [expanded, setExpanded] = React.useState(false);
 
   const handleAddApplication = (
     field: FieldApi<CruiseFormDto, 'cruiseApplicationsIds', undefined, undefined, string[]>,
@@ -96,16 +100,37 @@ export function CruiseFormApplications() {
             <AppTable
               columns={getColumns(field, true)}
               data={cruiseApplications.filter((application) => field.state.value.includes(application.id))}
-              buttons={() => []}
+              buttons={() =>
+                isReadonly
+                  ? []
+                  : [
+                      <AppButton onClick={() => setExpanded((prev) => !prev)} key="addNewApplication">
+                        {expanded ? 'Zakończ dołączanie zgłoszeń' : 'Dodaj nowe zgłoszenie'}
+                      </AppButton>,
+                    ]
+              }
               emptyTableMessage="Brak załączonych zgłoszeń"
             />
 
-            <AppTable
-              columns={getColumns(field, false)}
-              data={cruiseApplications.filter((application) => !field.state.value.includes(application.id))}
-              buttons={() => []}
-              emptyTableMessage="Brak zgłoszeń możliwych do załączenia"
-            />
+            <AnimatePresence>
+              {expanded && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ ease: 'easeOut' }}
+                  className="mt-4"
+                >
+                  <div className="text-lg font-semibold">Zgłoszenia możliwe do załączenia</div>
+                  <AppTable
+                    columns={getColumns(field, false)}
+                    data={cruiseApplications.filter((application) => !field.state.value.includes(application.id))}
+                    buttons={() => []}
+                    emptyTableMessage="Brak zgłoszeń możliwych do załączenia"
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         )}
       />

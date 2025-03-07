@@ -89,7 +89,7 @@ function MainCruiseManagerCell({ managerId, fullName }: MainCruiseManagerCellPro
           <AppAvatar variant="small" fullName={fullName} /> <div>{fullName}</div>
         </>
       )}
-      {managerId === emptyGuid && <AppBadge variant="warning">{fullName}</AppBadge>}
+      {managerId === emptyGuid && <AppBadge variant="info">{fullName}</AppBadge>}
     </div>
   );
 }
@@ -99,7 +99,7 @@ type ApplicationsCellProps = {
 };
 function ApplicationsCell({ applications }: ApplicationsCellProps) {
   if (!applications || applications.length === 0) {
-    return <AppBadge variant="warning">Brak zgłoszeń</AppBadge>;
+    return <AppBadge variant="info">Brak zgłoszeń</AppBadge>;
   }
   return (
     <div className="flex flex-col gap-4  text-balance">

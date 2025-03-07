@@ -39,9 +39,6 @@ export function NewCruisePage() {
                 isReadonly: false,
               }}
             />
-            <button type="submit" onClick={() => console.log(form.state.values)}>
-              Submit
-            </button>
           </form>
         </Suspense>
       </AppLayout>
