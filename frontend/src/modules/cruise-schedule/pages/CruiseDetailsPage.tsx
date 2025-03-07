@@ -1,9 +1,10 @@
 import { useForm } from '@tanstack/react-form';
-import { getRouteApi } from '@tanstack/react-router';
+import { getRouteApi, useNavigate } from '@tanstack/react-router';
 import ArrowClockwiseIcon from 'bootstrap-icons/icons/arrow-clockwise.svg?react';
 import CheckLgIcon from 'bootstrap-icons/icons/check-lg.svg?react';
 import FloppyFillIcon from 'bootstrap-icons/icons/floppy-fill.svg?react';
 import PencilIcon from 'bootstrap-icons/icons/pencil.svg?react';
+import TrashIcon from 'bootstrap-icons/icons/trash.svg?react';
 import XLgIcon from 'bootstrap-icons/icons/x-lg.svg?react';
 import React, { Suspense } from 'react';
 
@@ -11,12 +12,16 @@ import { AppButton } from '@/core/components/AppButton';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { AppModal } from '@/core/components/AppModal';
+import { useAppContext } from '@/core/hooks/AppContextHook';
+import { removeEmptyValues } from '@/core/lib/utils';
 import { CruiseFrom } from '@/cruise-schedule/components/cruise-from/CruiseFrom';
 import {
   useConfirmCruiseMutation,
   useCruiseApplicationsForCruiseQuery,
   useCruiseQuery,
+  useDeleteCruiseMutation,
   useEndCruiseMutation,
+  useUpdateCruiseMutation,
 } from '@/cruise-schedule/hooks/CruisesApiHooks';
 import { CruiseDto } from '@/cruise-schedule/models/CruiseDto';
 import { CruiseFormDto } from '@/cruise-schedule/models/CruiseFormDto';
@@ -24,21 +29,53 @@ import { CruiseFormDto } from '@/cruise-schedule/models/CruiseFormDto';
 export function CruiseDetailsPage() {
   const { cruiseId } = getRouteApi('/cruises/$cruiseId/').useParams();
 
-  const cruisesQuery = useCruiseQuery(cruiseId);
+  const cruiseQuery = useCruiseQuery(cruiseId);
   const applicationQuery = useCruiseApplicationsForCruiseQuery();
+  const updateCruiseMutation = useUpdateCruiseMutation(cruiseId);
   const confirmCruiseMutation = useConfirmCruiseMutation(cruiseId);
+  const deleteCruiseMutation = useDeleteCruiseMutation();
   const endCruiseMutation = useEndCruiseMutation(cruiseId);
+
+  const appContext = useAppContext();
+  const navigate = useNavigate();
 
   const [editMode, setEditMode] = React.useState(false);
   const [isConfirmAcceptanceModalOpen, setIsConfirmAcceptanceModalOpen] = React.useState(false);
-  const [isConfirmCruiseEndModalOpen, setIsConfirmCruiseEndModalOpen] = React.useState(false);
+  const [isConfirmDeletionModalOpen, setIsConfirmDeletionModalOpen] = React.useState(false);
+  const [isConfirmEndModalOpen, setIsConfirmEndModalOpen] = React.useState(false);
 
   const form = useForm<CruiseFormDto>({
-    defaultValues: mapCruiseToForm(cruisesQuery.data),
+    defaultValues: mapCruiseToForm(cruiseQuery.data),
   });
 
+  function handleCruiseUpdate() {
+    const dto = removeEmptyValues(form.state.values, [
+      'managersTeam.mainCruiseManagerId',
+      'managersTeam.mainDeputyManagerId',
+    ]);
+
+    updateCruiseMutation.mutate(dto, {
+      onSuccess: () => {
+        setEditMode(false);
+        appContext.showAlert({
+          title: 'Zapisano formularz',
+          message: 'Rejs został zaktualizowany pomyślnie.',
+          variant: 'success',
+        });
+      },
+      onError: (error) => {
+        console.error(error);
+        appContext.showAlert({
+          title: 'Błąd zapisu',
+          message: 'Nie udało się zaktualizować rejsu. Sprawdź, czy wszystkie pola są wypełnione poprawnie.',
+          variant: 'danger',
+        });
+      },
+    });
+  }
+
   function getButtons() {
-    switch (cruisesQuery.data?.status) {
+    switch (cruiseQuery.data?.status) {
       case 'Nowy':
         return editMode ? (
           <>
@@ -61,7 +98,7 @@ export function CruiseDetailsPage() {
               <ArrowClockwiseIcon className="h-4 w-4" />
               Cofnij zmiany
             </AppButton>
-            <AppButton className="gap-4 !justify-center w-36 lg:w-48">
+            <AppButton className="gap-4 !justify-center w-36 lg:w-48" onClick={handleCruiseUpdate}>
               <FloppyFillIcon className="h-4 w-4" />
               Zapisz rejs
             </AppButton>
@@ -87,13 +124,20 @@ export function CruiseDetailsPage() {
         );
       case 'Potwierdzony':
         return (
-          <AppButton
-            className="gap-4 !justify-center w-64 lg:w-96"
-            onClick={() => setIsConfirmCruiseEndModalOpen(true)}
-          >
-            <CheckLgIcon className="h-4 w-4" />
-            Oznacz rejs jako zakończony
-          </AppButton>
+          <>
+            <AppButton
+              className="gap-4 !justify-center w-64 lg:w-96"
+              variant="dangerOutline"
+              onClick={() => setIsConfirmDeletionModalOpen(true)}
+            >
+              <TrashIcon className="h-4 w-4" />
+              Awaryjne usuwanie rejsu
+            </AppButton>
+            <AppButton className="gap-4 !justify-center w-64 lg:w-96" onClick={() => setIsConfirmEndModalOpen(true)}>
+              <CheckLgIcon className="h-4 w-4" />
+              Oznacz rejs jako zakończony
+            </AppButton>
+          </>
         );
       default:
         return null;
@@ -102,12 +146,12 @@ export function CruiseDetailsPage() {
 
   return (
     <>
-      <AppLayout title={`Szczegóły rejsu nr. ${cruisesQuery.data?.number}`}>
+      <AppLayout title={`Szczegóły rejsu nr. ${cruiseQuery.data?.number}`}>
         <Suspense fallback={<AppLoader />}>
           <CruiseFrom
             context={{
               form,
-              cruise: cruisesQuery.data,
+              cruise: cruiseQuery.data,
               cruiseApplications: applicationQuery.data,
               isReadonly: !editMode,
             }}
@@ -117,7 +161,7 @@ export function CruiseDetailsPage() {
       </AppLayout>
 
       <AppModal
-        title={`Czy na pewno chcesz zatwierdzić rejs nr. ${cruisesQuery.data?.number}?`}
+        title={`Czy na pewno chcesz zatwierdzić rejs nr. ${cruiseQuery.data?.number}?`}
         isOpen={isConfirmAcceptanceModalOpen}
         onClose={() => setIsConfirmAcceptanceModalOpen(false)}
       >
@@ -131,7 +175,7 @@ export function CruiseDetailsPage() {
             }}
             disabled={confirmCruiseMutation.isPending}
           >
-            Potwierdź rejs nr. {cruisesQuery.data?.number}
+            Potwierdź rejs nr. {cruiseQuery.data?.number}
           </AppButton>
           <AppButton
             variant="primaryOutline"
@@ -147,9 +191,40 @@ export function CruiseDetailsPage() {
       </AppModal>
 
       <AppModal
-        title={`Czy na pewno chcesz oznaczyć rejs nr. ${cruisesQuery.data?.number} jako zakończony?`}
-        isOpen={isConfirmCruiseEndModalOpen}
-        onClose={() => setIsConfirmCruiseEndModalOpen(false)}
+        title={`Czy na pewno chcesz awaryjnie usunąć rejs nr. ${cruiseQuery.data?.number}?`}
+        isOpen={isConfirmDeletionModalOpen}
+        onClose={() => setIsConfirmAcceptanceModalOpen(false)}
+      >
+        Do wszystkich kierowników zgłoszeń i ich zastępców zostanie wysłane powiadomienie o anulowaniu rejsu.
+        <div className="flex flex-row gap-4 mt-4">
+          <AppButton
+            variant="dangerOutline"
+            className="basis-2/3"
+            onClick={async () => {
+              await deleteCruiseMutation.mutateAsync(cruiseId);
+              navigate({ to: '/cruises' });
+            }}
+            disabled={deleteCruiseMutation.isPending}
+          >
+            Potwierdź usunięcie rejsu nr. {cruiseQuery.data?.number}
+          </AppButton>
+          <AppButton
+            variant="primaryOutline"
+            className="basis-1/3"
+            onClick={() => {
+              setIsConfirmDeletionModalOpen(false);
+            }}
+            disabled={deleteCruiseMutation.isPending}
+          >
+            Anuluj
+          </AppButton>
+        </div>
+      </AppModal>
+
+      <AppModal
+        title={`Czy na pewno chcesz oznaczyć rejs nr. ${cruiseQuery.data?.number} jako zakończony?`}
+        isOpen={isConfirmEndModalOpen}
+        onClose={() => setIsConfirmEndModalOpen(false)}
       >
         <div className="flex flex-row gap-4 mt-4">
           <AppButton
@@ -157,17 +232,17 @@ export function CruiseDetailsPage() {
             className="basis-2/3"
             onClick={async () => {
               await endCruiseMutation.mutateAsync();
-              setIsConfirmCruiseEndModalOpen(false);
+              setIsConfirmEndModalOpen(false);
             }}
             disabled={endCruiseMutation.isPending}
           >
-            Oznacz rejs nr. {cruisesQuery.data?.number} jako zakończony
+            Oznacz rejs nr. {cruiseQuery.data?.number} jako zakończony
           </AppButton>
           <AppButton
             variant="primaryOutline"
             className="basis-1/3"
             onClick={() => {
-              setIsConfirmCruiseEndModalOpen(false);
+              setIsConfirmEndModalOpen(false);
             }}
             disabled={endCruiseMutation.isPending}
           >

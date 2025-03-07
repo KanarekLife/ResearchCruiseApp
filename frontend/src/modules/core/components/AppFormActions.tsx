@@ -21,7 +21,7 @@ export function AppFormActions({ children }: Props) {
   return (
     <div
       className={cn(
-        'sticky bottom-4 flex gap-4 w-fit mx-auto rounded-2xl py-4 px-6',
+        'sticky bottom-4 flex gap-4 w-fit mx-auto rounded-2xl py-4 px-6 max-w-full',
         isSticky ? 'backdrop-blur-xs bg-white/30 shadow-2xl' : ''
       )}
     >
