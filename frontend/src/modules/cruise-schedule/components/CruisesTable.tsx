@@ -22,6 +22,7 @@ export function CruisesTable({ cruises, deleteCruise, buttons }: Props) {
       header: 'Numer',
       id: 'number',
       accessorFn: (row) => row.number,
+      sortingFn: (a, b) => compareCruiseNumber(a.original.number, b.original.number),
     },
     {
       header: 'Data rozpoczęcia',
@@ -133,4 +134,14 @@ function ActionsCell({ cruise, deleteCruise }: ActionsCellProps) {
       )}
     </div>
   );
+}
+
+function compareCruiseNumber(a: string, b: string) {
+  const [aYear, aNumber] = a.split('/').map(Number);
+  const [bYear, bNumber] = b.split('/').map(Number);
+
+  if (aYear !== bYear) {
+    return aYear - bYear;
+  }
+  return aNumber - bNumber;
 }

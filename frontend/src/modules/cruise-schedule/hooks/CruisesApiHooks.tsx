@@ -2,6 +2,7 @@ import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-q
 
 import { client } from '@/core/lib/api';
 import { CruiseDto } from '@/cruise-schedule/models/CruiseDto';
+import { CruiseFormDto } from '@/cruise-schedule/models/CruiseFormDto';
 
 export function useCruisesQuery() {
   return useSuspenseQuery({
@@ -50,6 +51,18 @@ export function useAutoAddCruisesMutation() {
   return useMutation({
     mutationFn: async () => {
       await client.put('/api/Cruises/autoAdded');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cruises'] });
+    },
+  });
+}
+
+export function useCreateCruiseMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (cruise: CruiseFormDto) => {
+      await client.post('/api/Cruises', cruise);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['cruises'] });

@@ -147,7 +147,7 @@ export function FormAPage() {
           console.error(err);
           appContext.showAlert({
             title: 'Wystąpił błąd',
-            message: 'Nie udało się zapisać formularza. Sprawdź czy wszystkie pola są wypełnione poprawnie.',
+            message: 'Nie udało się zapisać formularza. Sprawdź, czy wszystkie pola są wypełnione poprawnie.',
             variant: 'danger',
           });
         },
