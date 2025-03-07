@@ -1,20 +1,23 @@
-import { CruiseFormApplications } from '@/cruise-schedule/components/cruise-from/CruiseFormApplications';
-import { CruiseFormBasicInformation } from '@/cruise-schedule/components/cruise-from/CruiseFormBasicInformation';
-import { CruiseFormDateSelection } from '@/cruise-schedule/components/cruise-from/CruiseFormDateSelection';
-import { CruiseFormManagerSelection } from '@/cruise-schedule/components/cruise-from/CruiseFormManagerSelection';
+import { AppFormActions } from '@/core/components/AppFormActions';
+import { CruiseFormApplicationsSection } from '@/cruise-schedule/components/cruise-from/CruiseFormApplications';
+import { CruiseFormBasicInformationSection } from '@/cruise-schedule/components/cruise-from/CruiseFormBasicInformation';
+import { CruiseFormDateSelectionSection } from '@/cruise-schedule/components/cruise-from/CruiseFormDateSelection';
+import { CruiseFormManagerSelectionSection } from '@/cruise-schedule/components/cruise-from/CruiseFormManagerSelection';
 import { CruiseFormProvider, CruiseFromContextType } from '@/cruise-schedule/contexts/CruiseFormContext';
 
 type Props = {
   context: CruiseFromContextType;
+  buttons: React.ReactNode;
 };
 
-export function CruiseFrom({ context }: Props) {
+export function CruiseFrom({ context, buttons }: Props) {
   return (
     <CruiseFormProvider value={context}>
-      <CruiseFormBasicInformation />
-      <CruiseFormDateSelection />
-      <CruiseFormManagerSelection />
-      <CruiseFormApplications />
+      <CruiseFormBasicInformationSection />
+      <CruiseFormDateSelectionSection />
+      <CruiseFormManagerSelectionSection />
+      <CruiseFormApplicationsSection />
+      <AppFormActions children={buttons} />
     </CruiseFormProvider>
   );
 }

@@ -11,7 +11,7 @@ import { CruiseApplicationDto } from '@/cruise-applications/models/CruiseApplica
 import { FormUserDto } from '@/cruise-applications/models/FormUserDto';
 import { useCruiseForm } from '@/cruise-schedule/contexts/CruiseFormContext';
 
-export function CruiseFormManagerSelection() {
+export function CruiseFormManagerSelectionSection() {
   const { form, cruiseApplications, isReadonly } = useCruiseForm();
 
   const cruiseApplicationsIds = useStore(form.store, (state) => state.values.cruiseApplicationsIds);

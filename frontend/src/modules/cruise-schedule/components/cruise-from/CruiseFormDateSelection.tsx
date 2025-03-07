@@ -3,7 +3,7 @@ import { AppDatePickerInput } from '@/core/components/inputs/dates/AppDatePicker
 import { getErrors } from '@/core/lib/utils';
 import { useCruiseForm } from '@/cruise-schedule/contexts/CruiseFormContext';
 
-export function CruiseFormDateSelection() {
+export function CruiseFormDateSelectionSection() {
   const { form, isReadonly } = useCruiseForm();
 
   return (

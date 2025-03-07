@@ -3,7 +3,7 @@ import { AppAlert } from '@/core/components/AppAlert';
 import { CruiseStatusBadge } from '@/cruise-schedule/components/CruiseStatusBadge';
 import { useCruiseForm } from '@/cruise-schedule/contexts/CruiseFormContext';
 
-export function CruiseFormBasicInformation() {
+export function CruiseFormBasicInformationSection() {
   const { cruise } = useCruiseForm();
 
   return (

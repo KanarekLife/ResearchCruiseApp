@@ -11,7 +11,7 @@ import { CruiseApplicationDto } from '@/cruise-applications/models/CruiseApplica
 import { useCruiseForm } from '@/cruise-schedule/contexts/CruiseFormContext';
 import { CruiseFormDto } from '@/cruise-schedule/models/CruiseFormDto';
 
-export function CruiseFormApplications() {
+export function CruiseFormApplicationsSection() {
   const { form, cruiseApplications, isReadonly } = useCruiseForm();
 
   const [expanded, setExpanded] = React.useState(false);

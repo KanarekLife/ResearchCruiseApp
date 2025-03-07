@@ -1,6 +1,9 @@
 import { useForm } from '@tanstack/react-form';
+import ArrowClockwiseIcon from 'bootstrap-icons/icons/arrow-clockwise.svg?react';
+import FloppyFillIcon from 'bootstrap-icons/icons/floppy-fill.svg?react';
 import { Suspense } from 'react';
 
+import { AppButton } from '@/core/components/AppButton';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { CruiseFrom } from '@/cruise-schedule/components/cruise-from/CruiseFrom';
@@ -27,6 +30,19 @@ export function NewCruisePage() {
     console.log(form.state.values);
   }
 
+  const buttons = (
+    <>
+      <AppButton className="gap-4 !justify-center w-36 lg:w-64" variant="primaryOutline" onClick={() => form.reset()}>
+        <ArrowClockwiseIcon className="h-4 w-4" />
+        Wyczyść formularz
+      </AppButton>
+      <AppButton className="gap-4 !justify-center w-36 lg:w-64" type="submit">
+        <FloppyFillIcon className="h-4 w-4" />
+        Zapisz
+      </AppButton>
+    </>
+  );
+
   return (
     <>
       <AppLayout title="Nowy rejs">
@@ -38,6 +54,7 @@ export function NewCruisePage() {
                 cruiseApplications: cruiseApplicationsQuery.data,
                 isReadonly: false,
               }}
+              buttons={buttons}
             />
           </form>
         </Suspense>
