@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppTable } from '@/core/components/table/AppTable';
-import { ReadOnlyResearchTaskDetails } from '@/cruise-applications/components/readonly-research-task-details/ReadOnlyResearchTaskDetails';
+import { ReadOnlyResearchTaskDetails } from '@/cruise-applications/components/common/readonly-research-task-details/ReadOnlyResearchTaskDetails';
 import { useApplicationDetails } from '@/cruise-applications/contexts/ApplicationDetailsContext';
 import { EvaluationFormAResearchTask } from '@/cruise-applications/models/EvaluationDto';
 import { getTaskName } from '@/cruise-applications/models/ResearchTaskDto';
