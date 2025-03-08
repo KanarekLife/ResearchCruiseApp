@@ -17,7 +17,7 @@ export type FormBDto = {
   shortResearchEquipments: ShortResearchEquipmentDto[];
   longResearchEquipments: LongResearchEquipmentDto[];
   ports: PortDto[];
-  cruiseDayDetails: CruiseDayDetailsDto[];
+  cruiseDaysDetails: CruiseDayDetailsDto[];
   researchEquipments: ResearchEquipmentDto[];
   shipEquipmentsIds: string[];
 };
