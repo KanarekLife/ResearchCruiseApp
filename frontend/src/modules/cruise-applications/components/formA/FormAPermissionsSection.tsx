@@ -105,8 +105,6 @@ export function FormAPermissionsSection() {
                       field.pushValue({ description: '', executive: '' });
                       field.handleChange((prev) => prev);
                       field.handleBlur();
-                      field.form.validateAllFields('blur');
-                      field.form.validateAllFields('change');
                     }}
                     disabled={isReadonly}
                   >
