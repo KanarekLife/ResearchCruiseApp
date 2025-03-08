@@ -11,6 +11,7 @@ import { FormBPublicationsSection } from '@/cruise-applications/components/formB
 import { FormBResearchAreaSection } from '@/cruise-applications/components/formB/FormBResearchAreaSection';
 import { FormBResearchEquipmentsSection } from '@/cruise-applications/components/formB/FormBResearchEquipmentsSection';
 import { FormBResearchTasksSection } from '@/cruise-applications/components/formB/FormBResearchTasksSection';
+import { FormBShipEquipmentsSection } from '@/cruise-applications/components/formB/FormBShipEquipmentsSection';
 import { FormBShipUsageSection } from '@/cruise-applications/components/formB/FormBShipUsageSection';
 import { FormBSPUBTasksSection } from '@/cruise-applications/components/formB/FormBSPUBTasksSection';
 import { FormBContextType, FormBProvider } from '@/cruise-applications/contexts/FormBContext';
@@ -44,6 +45,7 @@ export function FormB({ context }: Props) {
         <FormBCruiseDetailsSection />
         <FormBCruiseDayDetailsSection />
         <FormBResearchEquipmentsSection />
+        <FormBShipEquipmentsSection />
         <FormBActionsSection onSaveDraft={context.onSaveDraft} />
       </form>
     </FormBProvider>
