@@ -64,6 +64,35 @@ export function FormBPublicationsSection() {
 
   return (
     <AppAccordion title="10. Publikacje" expandedByDefault>
+      <header className="text-center space-y-4 mb-8 max-w-2xl mx-auto">
+        <h3 className="text-xl">
+          Publikacje kategorii <span className="font-semibold">temat</span>
+        </h3>
+        <p className="text-sm">
+          Publikacje z ubiegłych 5 lat związane <span className="font-semibold">bezpośrednio</span> tematycznie z
+          zadaniami do realizacji na planowanym rejsie{' '}
+          <span className="font-semibold">
+            opublikowane przez zespoł zaangażowany w realizację rejsu – z afiliacją UG.
+          </span>
+        </p>
+        <h3 className="text-xl">
+          Publikacje kategorii <span className="font-semibold">dopisek</span>
+        </h3>
+        <p className="text-sm">
+          Publikacje autorstwa zespołu zaangażowanego w realizację rejsu, ALE zawierające dopisek w treści publikacji (w
+          wersji angielskiej lub w innym języku):{' '}
+          <span className="font-semibold">
+            „…the research/study was conducted onboard r/v Oceanograf (the research vessel owned by the University of
+            Gdańsk)…”
+          </span>
+          ,
+          <span className="font-semibold">
+            „… samples for the present study were collected during a research cruise onboard r/v Oceanograf…”{' '}
+          </span>
+          lub podobny, ale wskazujący jednoznacznie, że badania w ramach niniejszej publikacji były prowadzone z pokładu
+          jednostki RV Oceanograf.
+        </p>
+      </header>
       <div>
         <AppTable
           data={formA.publications}

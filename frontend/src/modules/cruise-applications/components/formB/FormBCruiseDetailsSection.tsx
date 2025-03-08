@@ -368,8 +368,7 @@ export function FormBCruiseDetailsSection() {
                     { value: 'put', label: 'Pozostawienie' },
                     { value: 'collect', label: 'Zabranie' },
                   ].map((option) => ({
-                    value: option.value,
-                    label: option.label,
+                    value: option.label,
                     onClick: () => {
                       field.pushValue({
                         action: option.value as LongResearchEquipmentDto['action'],
