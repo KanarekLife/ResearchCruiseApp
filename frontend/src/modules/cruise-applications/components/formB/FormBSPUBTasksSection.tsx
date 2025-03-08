@@ -41,7 +41,12 @@ export function FormBSPUBTasksSection() {
       title="11. Zadania SPUB, z którymi pokrywają się zadania planowane do realizacji na rejsie"
       expandedByDefault
     >
-      <AppTable data={formA.spubTasks} columns={columns} emptyTableMessage="Nie dodano żadnego zadania." />
+      <AppTable
+        data={formA.spubTasks}
+        columns={columns}
+        buttons={() => []}
+        emptyTableMessage="Nie dodano żadnego zadania."
+      />
     </AppAccordion>
   );
 }

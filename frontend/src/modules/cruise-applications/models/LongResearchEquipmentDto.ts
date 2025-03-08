@@ -1,5 +1,5 @@
 export type LongResearchEquipmentDto = {
   name: string;
-  action: string;
+  action: 'put' | 'collect';
   duration: string;
 };

@@ -1,6 +1,7 @@
 import { FormBActionsSection } from '@/cruise-applications/components/formB/FormBActionsSection';
 import { FormBAdditionalPermissionsSection } from '@/cruise-applications/components/formB/FormBAdditionalPermissionsSection';
 import { FormBContractsSection } from '@/cruise-applications/components/formB/FormBContractsSection';
+import { FormBCruiseDetailsSection } from '@/cruise-applications/components/formB/FormBCruiseDetailsSection';
 import { FormBCruiseGoalSection } from '@/cruise-applications/components/formB/FormBCruiseGoalSection';
 import { FormBCruiseInfoSection } from '@/cruise-applications/components/formB/FormBCruiseInfoSection';
 import { FormBCruiseManagerInfoSection } from '@/cruise-applications/components/formB/FormBCruiseManagerInfoSection';
@@ -38,6 +39,7 @@ export function FormB({ context }: Props) {
         <FormBMembersSection />
         <FormBPublicationsSection />
         <FormBSPUBTasksSection />
+        <FormBCruiseDetailsSection />
         <FormBActionsSection onSaveDraft={context.onSaveDraft} />
       </form>
     </FormBProvider>
