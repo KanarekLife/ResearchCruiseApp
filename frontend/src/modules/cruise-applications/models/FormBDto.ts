@@ -14,8 +14,8 @@ export type FormBDto = {
   ugTeams: UGTeamDto[];
   guestTeams: GuestTeamDto[];
   crewMembers: CrewMemberDto[];
-  shortResearchEquipment: ShortResearchEquipmentDto[];
-  longResearchEquipment: LongResearchEquipmentDto[];
+  shortResearchEquipments: ShortResearchEquipmentDto[];
+  longResearchEquipments: LongResearchEquipmentDto[];
   ports: PortDto[];
   cruiseDayDetails: CruiseDayDetailsDto[];
   researchEquipments: ResearchEquipmentDto[];
