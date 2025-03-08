@@ -6,34 +6,40 @@ import React from 'react';
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppAvatar } from '@/core/components/AppAvatar';
 import { AppButton } from '@/core/components/AppButton';
+import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputErrorsList';
 import { AppTable } from '@/core/components/table/AppTable';
+import { getErrors } from '@/core/lib/utils';
 import { CruiseApplicationDto } from '@/cruise-applications/models/CruiseApplicationDto';
 import { useCruiseForm } from '@/cruise-schedule/contexts/CruiseFormContext';
 import { CruiseFormDto } from '@/cruise-schedule/models/CruiseFormDto';
 
 export function CruiseFormApplicationsSection() {
-  const { form, cruiseApplications, isReadonly } = useCruiseForm();
+  const { form, cruiseApplications, isReadonly, hasFormBeenSubmitted } = useCruiseForm();
 
   const [expanded, setExpanded] = React.useState(false);
 
-  const handleAddApplication = (
+  function handleAddApplication(
     field: FieldApi<CruiseFormDto, 'cruiseApplicationsIds', undefined, undefined, string[]>,
     id: string
-  ) => {
+  ) {
     field.pushValue(id);
     field.handleChange((prev) => prev);
     field.handleBlur();
-  };
+    field.form.validateAllFields('blur');
+    field.form.validateAllFields('change');
+  }
 
-  const handleRemoveApplication = (
+  function handleRemoveApplication(
     field: FieldApi<CruiseFormDto, 'cruiseApplicationsIds', undefined, undefined, string[]>,
     id: string
-  ) => {
+  ) {
     const index = field.state.value.indexOf(id);
     field.removeValue(index);
     field.handleChange((prev) => prev);
     field.handleBlur();
-  };
+    field.form.validateAllFields('blur');
+    field.form.validateAllFields('change');
+  }
 
   function getColumns(
     field: FieldApi<CruiseFormDto, 'cruiseApplicationsIds', undefined, undefined, string[]>,
@@ -111,6 +117,8 @@ export function CruiseFormApplicationsSection() {
               }
               emptyTableMessage="Brak załączonych zgłoszeń"
             />
+
+            <AppInputErrorsList errors={getErrors(field.state.meta, hasFormBeenSubmitted)} />
 
             <AnimatePresence>
               {expanded && !isReadonly && (

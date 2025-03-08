@@ -10,6 +10,7 @@ export type CruiseFromContextType = {
   cruise?: CruiseDto;
   cruiseApplications: CruiseApplicationDto[];
   isReadonly: boolean;
+  hasFormBeenSubmitted?: boolean;
 };
 
 const CruiseFormContext = createContext<CruiseFromContextType | undefined>(undefined);

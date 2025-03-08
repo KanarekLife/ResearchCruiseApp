@@ -14,10 +14,11 @@ import { AppLoader } from '@/core/components/AppLoader';
 import { AppModal } from '@/core/components/AppModal';
 import { useAppContext } from '@/core/hooks/AppContextHook';
 import { removeEmptyValues } from '@/core/lib/utils';
+import { useCruiseApplicationsQuery } from '@/cruise-applications/hooks/CruiseApplicationsApiHooks';
 import { CruiseFrom } from '@/cruise-schedule/components/cruise-from/CruiseFrom';
+import { getCruiseFormValidationSchema } from '@/cruise-schedule/helpers/CruiseFormValidationSchema';
 import {
   useConfirmCruiseMutation,
-  useCruiseApplicationsForCruiseQuery,
   useCruiseQuery,
   useDeleteCruiseMutation,
   useEndCruiseMutation,
@@ -30,7 +31,7 @@ export function CruiseDetailsPage() {
   const { cruiseId } = getRouteApi('/cruises/$cruiseId/').useParams();
 
   const cruiseQuery = useCruiseQuery(cruiseId);
-  const applicationQuery = useCruiseApplicationsForCruiseQuery();
+  const applicationQuery = useCruiseApplicationsQuery();
   const updateCruiseMutation = useUpdateCruiseMutation(cruiseId);
   const confirmCruiseMutation = useConfirmCruiseMutation(cruiseId);
   const deleteCruiseMutation = useDeleteCruiseMutation();
@@ -46,9 +47,22 @@ export function CruiseDetailsPage() {
 
   const form = useForm<CruiseFormDto>({
     defaultValues: mapCruiseToForm(cruiseQuery.data),
+    validators: {
+      onChange: getCruiseFormValidationSchema(applicationQuery.data),
+    },
   });
 
   function handleCruiseUpdate() {
+    form.validateAllFields('change');
+    if (!form.state.isValid) {
+      appContext.showAlert({
+        title: 'Błąd walidacji formularza',
+        message: 'Formularz zawiera błędy. Sprawdź, czy wszystkie pola są wypełnione poprawnie.',
+        variant: 'danger',
+      });
+      return;
+    }
+
     const dto = removeEmptyValues(form.state.values, [
       'managersTeam.mainCruiseManagerId',
       'managersTeam.mainDeputyManagerId',

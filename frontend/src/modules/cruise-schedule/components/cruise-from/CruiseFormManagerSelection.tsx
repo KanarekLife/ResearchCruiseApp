@@ -12,7 +12,7 @@ import { FormUserDto } from '@/cruise-applications/models/FormUserDto';
 import { useCruiseForm } from '@/cruise-schedule/contexts/CruiseFormContext';
 
 export function CruiseFormManagerSelectionSection() {
-  const { form, cruiseApplications, isReadonly } = useCruiseForm();
+  const { form, cruiseApplications, isReadonly, hasFormBeenSubmitted } = useCruiseForm();
 
   const cruiseApplicationsIds = useStore(form.store, (state) => state.values.cruiseApplicationsIds);
   const allowedUsers = React.useMemo(() => {
@@ -55,7 +55,7 @@ export function CruiseFormManagerSelectionSection() {
               value={field.state.value}
               onChange={field.handleChange}
               onBlur={field.handleBlur}
-              errors={getErrors(field.state.meta)}
+              errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
               allOptions={allowedUsers}
               label="Kierownik główny"
               required
@@ -73,7 +73,7 @@ export function CruiseFormManagerSelectionSection() {
               value={field.state.value}
               onChange={field.handleChange}
               onBlur={field.handleBlur}
-              errors={getErrors(field.state.meta)}
+              errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
               allOptions={allowedUsers}
               label="Zastępca kierownika głównego"
               required

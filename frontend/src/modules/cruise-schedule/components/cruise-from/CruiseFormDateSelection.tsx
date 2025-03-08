@@ -4,7 +4,7 @@ import { getErrors } from '@/core/lib/utils';
 import { useCruiseForm } from '@/cruise-schedule/contexts/CruiseFormContext';
 
 export function CruiseFormDateSelectionSection() {
-  const { form, isReadonly } = useCruiseForm();
+  const { form, isReadonly, hasFormBeenSubmitted } = useCruiseForm();
 
   return (
     <AppAccordion title="2. Termin rejsu" expandedByDefault>
@@ -17,7 +17,7 @@ export function CruiseFormDateSelectionSection() {
               value={field.state.value}
               onChange={(value) => field.handleChange(value as string)}
               onBlur={field.handleBlur}
-              errors={getErrors(field.state.meta)}
+              errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
               label="Data rozpoczęcia rejsu"
               required
               placeholder="Wybierz datę rozpoczęcia rejsu"
@@ -34,7 +34,7 @@ export function CruiseFormDateSelectionSection() {
               value={field.state.value}
               onChange={(value) => field.handleChange(value as string)}
               onBlur={field.handleBlur}
-              errors={getErrors(field.state.meta)}
+              errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
               label="Data zakończenia rejsu"
               required
               placeholder="Wybierz datę zakończenia rejsu"
