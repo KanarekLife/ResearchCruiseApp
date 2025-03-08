@@ -184,8 +184,6 @@ const cruiseDayDetailsColumns = (
 export function FormBCruiseDayDetailsSection() {
   const { form, hasFormBeenSubmitted, isReadonly } = useFormB();
 
-  console.log(form.state.values);
-
   return (
     <AppAccordion title="13. Szczegółowy plan zadań do realizacji podczas rejsu" expandedByDefault>
       <form.Field
