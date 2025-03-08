@@ -5,6 +5,7 @@ import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { AppModal } from '@/core/components/AppModal';
 import { useAppContext } from '@/core/hooks/AppContextHook';
+import { CruiseExportForm } from '@/cruise-schedule/components/CruiseExportForm';
 import { CruisesTable } from '@/cruise-schedule/components/CruisesTable';
 import {
   useAutoAddCruisesMutation,
@@ -20,6 +21,7 @@ export function CruisesPage() {
   const appContext = useAppContext();
 
   const [cruiseSelectedForDeletion, setCruiseSelectedForDeletion] = useState<CruiseDto | undefined>(undefined);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
   async function autoAddCruises() {
     await autoAddCruisesMutation.mutateAsync(undefined, {
@@ -47,7 +49,7 @@ export function CruisesPage() {
     <AppButton key="newCruise" type="link" href="/cruises/new">
       Nowy rejs
     </AppButton>,
-    <AppButton key="exportCruises" variant="primaryOutline">
+    <AppButton key="exportCruises" onClick={() => setIsExportModalOpen(true)} variant="primaryOutline">
       Eksport
     </AppButton>,
   ];
@@ -68,7 +70,7 @@ export function CruisesPage() {
         Usunięcie rejsu jest nieodwracalne.
         <div className="flex flex-row gap-4 mt-4">
           <AppButton
-            variant="dangerOutline"
+            variant="danger"
             className="basis-2/3"
             onClick={async () => {
               await deleteCruiseMutation.mutateAsync(cruiseSelectedForDeletion!.id!);
@@ -89,6 +91,10 @@ export function CruisesPage() {
             Anuluj
           </AppButton>
         </div>
+      </AppModal>
+
+      <AppModal title={`Eksportuj rejsy`} isOpen={isExportModalOpen} onClose={() => setIsExportModalOpen(false)}>
+        <CruiseExportForm cruises={cruisesQuery.data} onDone={() => setIsExportModalOpen(false)} />
       </AppModal>
     </>
   );

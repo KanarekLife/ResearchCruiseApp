@@ -6,6 +6,7 @@ import React from 'react';
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppAvatar } from '@/core/components/AppAvatar';
 import { AppButton } from '@/core/components/AppButton';
+import { AppLink } from '@/core/components/AppLink';
 import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputErrorsList';
 import { AppTable } from '@/core/components/table/AppTable';
 import { getErrors } from '@/core/lib/utils';
@@ -65,6 +66,27 @@ export function CruiseFormApplicationsSection() {
             <AppAvatar variant="small" fullName={cell.getValue() as string} /> <div>{cell.getValue() as string}</div>
           </div>
         ),
+      },
+      {
+        header: 'Formularze',
+        enableColumnFilter: false,
+        enableSorting: false,
+        cell: (cell) => {
+          const application = cell.row.original;
+          return (
+            <div className="grid grid-cols-1 gap-1">
+              <AppLink href={`/applications/${application.id}/formA`} disabled={!application.hasFormA} target="_blank">
+                Formularz A
+              </AppLink>
+              <AppLink href={`/applications/${application.id}/formB`} disabled={!application.hasFormB} target="_blank">
+                Formularz B
+              </AppLink>
+              <AppLink href={`/applications/${application.id}/formC&`} disabled={!application.hasFormC} target="_blank">
+                Formularz C
+              </AppLink>
+            </div>
+          );
+        },
       },
       {
         header: 'Punkty',

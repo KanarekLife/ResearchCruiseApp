@@ -179,9 +179,9 @@ export function CruiseDetailsPage() {
         isOpen={isConfirmAcceptanceModalOpen}
         onClose={() => setIsConfirmAcceptanceModalOpen(false)}
       >
-        <div className="flex flex-row gap-4 mt-4">
+        <div className="flex flex-row gap-4 mt-8">
           <AppButton
-            variant="successOutline"
+            variant="primary"
             className="basis-2/3"
             onClick={async () => {
               await confirmCruiseMutation.mutateAsync();
@@ -207,12 +207,12 @@ export function CruiseDetailsPage() {
       <AppModal
         title={`Czy na pewno chcesz awaryjnie usunąć rejs nr. ${cruiseQuery.data?.number}?`}
         isOpen={isConfirmDeletionModalOpen}
-        onClose={() => setIsConfirmAcceptanceModalOpen(false)}
+        onClose={() => setIsConfirmDeletionModalOpen(false)}
       >
         Do wszystkich kierowników zgłoszeń i ich zastępców zostanie wysłane powiadomienie o anulowaniu rejsu.
         <div className="flex flex-row gap-4 mt-4">
           <AppButton
-            variant="dangerOutline"
+            variant="danger"
             className="basis-2/3"
             onClick={async () => {
               await deleteCruiseMutation.mutateAsync(cruiseId);
@@ -240,9 +240,9 @@ export function CruiseDetailsPage() {
         isOpen={isConfirmEndModalOpen}
         onClose={() => setIsConfirmEndModalOpen(false)}
       >
-        <div className="flex flex-row gap-4 mt-4">
+        <div className="flex flex-row gap-4 mt-8">
           <AppButton
-            variant="successOutline"
+            variant="primary"
             className="basis-2/3"
             onClick={async () => {
               await endCruiseMutation.mutateAsync();

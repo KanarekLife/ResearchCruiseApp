@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 
 import { client } from '@/core/lib/api';
+import { FileDto } from '@/cruise-applications/models/FileDto';
 import { CruiseDto } from '@/cruise-schedule/models/CruiseDto';
 import { CruiseFormDto } from '@/cruise-schedule/models/CruiseFormDto';
 
@@ -102,6 +103,21 @@ export function useEndCruiseMutation(id: string) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['cruises', id] });
+    },
+  });
+}
+
+export function useCruiseCsvExportMutation(onSuccess: (file: FileDto) => void) {
+  return useMutation({
+    mutationFn: async (year: string) => {
+      return (await client.get(`/api/Cruises/csv`, { params: { year } })).data;
+    },
+    onSuccess: (data) => {
+      const file = {
+        name: data.name,
+        content: data.content,
+      };
+      onSuccess(file);
     },
   });
 }
