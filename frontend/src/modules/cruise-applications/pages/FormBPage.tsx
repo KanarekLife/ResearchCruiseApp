@@ -29,7 +29,7 @@ export function FormBPage() {
       shortResearchEquipments: [],
       longResearchEquipments: [],
       ports: [],
-      cruiseDayDetails: [],
+      cruiseDaysDetails: [],
       researchEquipment: [],
       shipEquipmentsIds: [],
     },
