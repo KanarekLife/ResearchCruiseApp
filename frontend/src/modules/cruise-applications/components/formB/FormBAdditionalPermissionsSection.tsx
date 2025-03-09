@@ -88,7 +88,6 @@ export function FormBAdditionalPermissionsSection() {
                 onBlur={field.handleBlur}
                 errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                 disabled={isReadonly}
-                required
               />
             )}
           />

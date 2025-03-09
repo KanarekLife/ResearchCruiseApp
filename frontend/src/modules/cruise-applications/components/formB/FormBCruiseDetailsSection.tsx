@@ -142,8 +142,8 @@ const longResearchEquipmentColumns = (
             errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
             disabled={isReadonly}
             allOptions={[
-              { value: 'put', inlineLabel: 'Pozostawienie' },
-              { value: 'collect', inlineLabel: 'Zabranie' },
+              { value: 'Put', inlineLabel: 'Pozostawienie' },
+              { value: 'Collect', inlineLabel: 'Zabranie' },
             ]}
           />
         )}
