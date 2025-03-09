@@ -1,4 +1,4 @@
-import { AppFormActions } from '@/core/components/AppFormActions';
+import { AppActionsSection } from '@/core/components/AppActionsSection';
 import { CruiseFormApplicationsSection } from '@/cruise-schedule/components/cruise-from/CruiseFormApplications';
 import { CruiseFormBasicInformationSection } from '@/cruise-schedule/components/cruise-from/CruiseFormBasicInformation';
 import { CruiseFormDateSelectionSection } from '@/cruise-schedule/components/cruise-from/CruiseFormDateSelection';
@@ -17,7 +17,7 @@ export function CruiseFrom({ context, buttons }: Props) {
       <CruiseFormDateSelectionSection />
       <CruiseFormManagerSelectionSection />
       <CruiseFormApplicationsSection />
-      <AppFormActions children={buttons} />
+      <AppActionsSection children={buttons} />
     </CruiseFormProvider>
   );
 }

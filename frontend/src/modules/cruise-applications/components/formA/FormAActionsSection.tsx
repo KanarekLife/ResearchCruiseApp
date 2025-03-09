@@ -2,7 +2,7 @@ import FloppyFillIcon from 'bootstrap-icons/icons/floppy-fill.svg?react';
 import SendFillIcon from 'bootstrap-icons/icons/send-fill.svg?react';
 
 import { AppButton } from '@/core/components/AppButton';
-import { AppFormActions } from '@/core/components/AppFormActions';
+import { AppActionsSection } from '@/core/components/AppActionsSection';
 import { useFormA } from '@/cruise-applications/contexts/FormAContext';
 
 type Props = {
@@ -16,7 +16,7 @@ export function FormAActionsSection({ onSaveDraft }: Props) {
   }
 
   return (
-    <AppFormActions>
+    <AppActionsSection>
       <AppButton className="gap-4 !justify-center w-36 lg:w-48" variant="primaryOutline" onClick={onSaveDraft}>
         <FloppyFillIcon className="h-4 w-4" />
         Zapisz
@@ -25,6 +25,6 @@ export function FormAActionsSection({ onSaveDraft }: Props) {
         <SendFillIcon className="h-4 w-4" />
         Wyślij
       </AppButton>
-    </AppFormActions>
+    </AppActionsSection>
   );
 }

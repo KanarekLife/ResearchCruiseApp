@@ -2,7 +2,7 @@ import TrashFillIcon from 'bootstrap-icons/icons/trash-fill.svg?react';
 import React from 'react';
 
 import { AppButton } from '@/core/components/AppButton';
-import { AppFormActions } from '@/core/components/AppFormActions';
+import { AppActionsSection } from '@/core/components/AppActionsSection';
 import { useApplicationDetails } from '@/cruise-applications/contexts/ApplicationDetailsContext';
 import { CruiseApplicationStatus } from '@/cruise-applications/models/CruiseApplicationDto';
 
@@ -19,7 +19,7 @@ export function ApplicationDetailsActionsSection({ onReject }: Props) {
   }
 
   return (
-    <AppFormActions>
+    <AppActionsSection>
       {confirmationMode ? (
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-2 text-center text-sm font-semibold">
@@ -50,6 +50,6 @@ export function ApplicationDetailsActionsSection({ onReject }: Props) {
           </AppButton>
         </>
       )}
-    </AppFormActions>
+    </AppActionsSection>
   );
 }

@@ -1,11 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { AppActionsSection } from '@/core/components/AppActionsSection';
 import { AppButton } from '@/core/components/AppButton';
 
-import { AppFormActions } from '../../../modules/core/components/AppFormActions';
-
 const meta = {
-  component: AppFormActions,
+  component: AppActionsSection,
   args: {
     children: (
       <>
@@ -14,7 +13,7 @@ const meta = {
       </>
     ),
   },
-} satisfies Meta<typeof AppFormActions>;
+} satisfies Meta<typeof AppActionsSection>;
 
 export default meta;
 

@@ -6,7 +6,7 @@ import { cn } from '@/core/lib/utils';
 type Props = {
   children?: React.ReactNode;
 };
-export function AppFormActions({ children }: Props) {
+export function AppActionsSection({ children }: Props) {
   const [isSticky, setIsSticky] = React.useState(false);
   const { scrollYProgress } = useScroll();
 
