@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
 import { client } from '@/core/lib/api';
@@ -35,5 +35,29 @@ export function useFormBQuery(cruiseId: string) {
       return res.data as FormBDto;
     },
     retry: false,
+  });
+}
+
+type UpdateFormBProps = {
+  id: string;
+  form: FormBDto;
+  draft: boolean;
+};
+export function useUpdateFormBMutation() {
+  return useMutation({
+    mutationFn: async ({ id, form, draft }: UpdateFormBProps) => {
+      return client.put(`/api/CruiseApplications/${id}/FormB?isDraft=${draft}`, form);
+    },
+  });
+}
+
+type RevertFormBToEditProps = {
+  id: string;
+};
+export function useRevertFormBToEditMutation() {
+  return useMutation({
+    mutationFn: async ({ id }: RevertFormBToEditProps) => {
+      return client.put(`/api/CruiseApplications/${id}/FormB/Refill`);
+    },
   });
 }

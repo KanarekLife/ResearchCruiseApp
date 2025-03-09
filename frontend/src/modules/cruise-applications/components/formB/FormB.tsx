@@ -20,6 +20,7 @@ type Props = {
   context: FormBContextType & {
     onSubmit: () => void;
     onSaveDraft: () => void;
+    onRevertToEdit?: () => void;
   };
 };
 export function FormB({ context }: Props) {
@@ -46,7 +47,7 @@ export function FormB({ context }: Props) {
         <FormBCruiseDayDetailsSection />
         <FormBResearchEquipmentsSection />
         <FormBShipEquipmentsSection />
-        <FormBActionsSection onSaveDraft={context.onSaveDraft} />
+        <FormBActionsSection onSaveDraft={context.onSaveDraft} onRevertToEdit={context.onRevertToEdit} />
       </form>
     </FormBProvider>
   );

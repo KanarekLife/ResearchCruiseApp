@@ -15,7 +15,7 @@ import { getFormAValidationSchema } from '@/cruise-applications/helpers/FormAVal
 import {
   useFormAInitValuesQuery,
   useFormAQuery,
-  useSaveFormAMutation,
+  useUpdateFormAMutation,
 } from '@/cruise-applications/hooks/FormAApiHooks';
 import { FormADto } from '@/cruise-applications/models/FormADto';
 import { useUserContext } from '@/user/hooks/UserContextHook';
@@ -27,7 +27,7 @@ export function FormAPage() {
   const appContext = useAppContext();
   const userContext = useUserContext();
   const initialStateQuery = useFormAInitValuesQuery();
-  const saveMutation = useSaveFormAMutation();
+  const saveMutation = useUpdateFormAMutation();
   const formA = useFormAQuery(applicationId);
 
   const [editMode] = useState(false);
@@ -89,7 +89,7 @@ export function FormAPage() {
     }
 
     saveMutation.mutate(
-      { form: dto, draft: false },
+      { id: cruiseId, form: dto, draft: false },
       {
         onSuccess: () => {
           navigate({ to: '/' });
@@ -133,7 +133,7 @@ export function FormAPage() {
     }
 
     saveMutation.mutate(
-      { form: dto, draft: true },
+      { id: cruiseId, form: dto, draft: true },
       {
         onSuccess: () => {
           navigate({ to: '/' });
