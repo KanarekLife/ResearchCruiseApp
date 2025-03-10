@@ -57,3 +57,21 @@ export const WithPlaceholder: Story = {
     placeholder: 'Select a date (placeholder)',
   },
 };
+
+export const WithSelectionStart: Story = {
+  args: {
+    selectionStartDate: new Date(),
+  },
+};
+
+export const WithMinimum: Story = {
+  args: {
+    minimalDate: new Date(),
+  },
+};
+
+export const WithMaximum: Story = {
+  args: {
+    maximalDate: new Date(),
+  },
+};

@@ -1,3 +1,5 @@
+import { useStore } from '@tanstack/react-form';
+
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppDatePickerInput } from '@/core/components/inputs/dates/AppDatePickerInput';
 import { getErrors } from '@/core/lib/utils';
@@ -5,6 +7,9 @@ import { useCruiseForm } from '@/cruise-schedule/contexts/CruiseFormContext';
 
 export function CruiseFormDateSelectionSection() {
   const { form, isReadonly, hasFormBeenSubmitted } = useCruiseForm();
+
+  const cruiseStart = useStore(form.store, (state) => state.values.startDate);
+  const cruiseStartDate = cruiseStart !== '' ? new Date(cruiseStart) : undefined;
 
   return (
     <AppAccordion title="2. Termin rejsu" expandedByDefault>
@@ -39,6 +44,8 @@ export function CruiseFormDateSelectionSection() {
               required
               placeholder="Wybierz datę zakończenia rejsu"
               disabled={isReadonly}
+              minimalDate={cruiseStartDate}
+              selectionStartDate={cruiseStartDate}
             />
           )}
         />

@@ -30,6 +30,9 @@ type Props = {
   disabled?: boolean;
   helper?: React.ReactNode;
   placeholder?: string;
+  minimalDate?: Date;
+  maximalDate?: Date;
+  selectionStartDate?: Date;
 };
 export function AppDatePickerInput({
   name,
@@ -42,8 +45,12 @@ export function AppDatePickerInput({
   disabled,
   helper,
   placeholder = 'Wybierz datę',
+  minimalDate,
+  maximalDate,
+  selectionStartDate,
 }: Props) {
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(() => getDateFromValue(value));
+  const [hoveredDate, setHoveredDate] = React.useState<Date | undefined>(undefined);
   const [expanded, setExpanded] = React.useState(false);
   const [visibleMonth, setVisibleMonth] = React.useState({
     month: new Date().getMonth(),
@@ -170,25 +177,25 @@ export function AppDatePickerInput({
                 <ChevronRightIcon className="h-5 w-5" />
               </AppButton>
             </div>
-            <div className="grid grid-cols-7 p-2">
+            <div className="grid grid-cols-7 p-2" onMouseLeave={() => setHoveredDate(undefined)}>
               {weekDays.map((day) => (
-                <div key={day} className="font-semibold pb-2">
+                <div key={day} className="font-semibold pb-2 text-center">
                   {day}
                 </div>
               ))}
               {getDaysInMonth(visibleMonth).map((date) => (
-                <AppButton
+                <CalendarDateTile
                   key={date.getTime()}
-                  variant="plain"
-                  onClick={() => handleDateSelection(date)}
-                  className={cn(
-                    selectedDate?.getTime() === date.getTime() ? 'bg-primary-500 text-white' : '',
-                    'w-full text-center py-2 hover:bg-gray-100',
-                    date.getMonth() !== visibleMonth.month ? 'text-gray-400' : ''
-                  )}
-                >
-                  {date.getDate()}
-                </AppButton>
+                  date={date}
+                  selectedDate={selectedDate}
+                  selectionStartDate={selectionStartDate}
+                  hoveredDate={hoveredDate}
+                  minimalDate={minimalDate}
+                  maximalDate={maximalDate}
+                  visibleMonth={visibleMonth}
+                  setHoveredDate={setHoveredDate}
+                  handleDateSelection={handleDateSelection}
+                />
               ))}
             </div>
           </Modal>
@@ -236,6 +243,75 @@ function findClosestMondayBefore(date: Date): Date {
   const day = date.getDay();
   const diff = day === 0 ? 6 : day - 1;
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() - diff);
+}
+
+function dateToUtcDay(date: Date): number {
+  return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+type CalendarDateTileProps = {
+  date: Date;
+  selectedDate?: Date;
+  selectionStartDate?: Date;
+  hoveredDate?: Date;
+  minimalDate?: Date;
+  maximalDate?: Date;
+  visibleMonth: { month: number; year: number };
+  setHoveredDate: (date: Date | undefined) => void;
+  handleDateSelection: (date: Date) => void;
+};
+function CalendarDateTile({
+  date,
+  selectedDate,
+  selectionStartDate,
+  hoveredDate,
+  minimalDate,
+  maximalDate,
+  visibleMonth,
+  setHoveredDate,
+  handleDateSelection,
+}: CalendarDateTileProps) {
+  const dateUtc = dateToUtcDay(date),
+    selectedDateUtc = selectedDate && dateToUtcDay(selectedDate),
+    selectionStartDateUtc = selectionStartDate && dateToUtcDay(selectionStartDate),
+    hoveredDateUtc = hoveredDate && dateToUtcDay(hoveredDate);
+
+  const isFirstDayOfSelection = selectionStartDate && selectionStartDateUtc === dateUtc,
+    isSelected = selectedDateUtc === dateUtc,
+    isHovered = hoveredDate && dateUtc === hoveredDateUtc,
+    isHoveredBetweenSelection =
+      selectionStartDateUtc && hoveredDateUtc && dateUtc >= selectionStartDateUtc && dateUtc <= hoveredDateUtc,
+    isInSelectedRange =
+      selectionStartDateUtc && selectedDateUtc && dateUtc >= selectionStartDateUtc && dateUtc <= selectedDateUtc,
+    isAllowed = (!minimalDate || date >= minimalDate) && (!maximalDate || date <= maximalDate),
+    isVisibleMonth = date.getMonth() === visibleMonth.month;
+  return (
+    <div
+      key={date.getTime()}
+      className={cn(
+        isFirstDayOfSelection ? 'rounded-l-full' : '',
+        (isHovered && !selectedDate) || isSelected ? 'rounded-r-full' : '',
+        (!selectedDate && isHoveredBetweenSelection) || isInSelectedRange ? 'bg-gray-100' : '',
+        'mt-1'
+      )}
+      onMouseEnter={() => setHoveredDate(date)}
+      onClick={() => handleDateSelection(date)}
+    >
+      <AppButton
+        variant="plain"
+        className={cn(
+          isSelected ? 'bg-primary-500 !text-white' : 'hover:bg-gray-300',
+          isFirstDayOfSelection ? 'bg-primary-200' : '',
+          'w-full text-center py-2 rounded-full',
+          !isVisibleMonth || !isAllowed ? 'text-gray-400' : '',
+          !isAllowed ? 'hover:bg-gray-100' : ''
+        )}
+        disabled={!isAllowed}
+      >
+        {date.getDate()}
+      </AppButton>
+    </div>
+  );
 }
 
 type ModalProps = {
