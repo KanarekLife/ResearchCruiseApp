@@ -58,14 +58,19 @@ export function CruiseFormApplicationsSection() {
         enableColumnFilter: !attached,
       },
       {
+        id: 'cruiseManagerAvatar',
+        cell: ({ row }) => (
+          <AppAvatar
+            fullName={`${row.original.cruiseManagerFirstName} ${row.original.cruiseManagerLastName}`}
+            variant="small"
+          />
+        ),
+        size: 40,
+      },
+      {
         header: 'Kierownik',
         accessorFn: (row) => `${row.cruiseManagerFirstName} ${row.cruiseManagerLastName}`,
         enableColumnFilter: !attached,
-        cell: (cell) => (
-          <div className="flex items-center justify-center gap-2">
-            <AppAvatar variant="small" fullName={cell.getValue() as string} /> <div>{cell.getValue() as string}</div>
-          </div>
-        ),
       },
       {
         header: 'Formularze',

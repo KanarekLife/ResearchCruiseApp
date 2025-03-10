@@ -44,14 +44,22 @@ export function CruisesTable({ cruises, deleteCruise, buttons }: Props) {
       size: 10,
     },
     {
+      id: 'mainCruiseManagerAvatar',
+      cell: ({ row }) =>
+        row.original.mainCruiseManagerId !== emptyGuid ? (
+          <AppAvatar
+            fullName={`${row.original.mainCruiseManagerFirstName} ${row.original.mainCruiseManagerLastName}`}
+            variant="small"
+          />
+        ) : null,
+      size: 40,
+    },
+    {
       header: 'Kierownik główny',
       accessorFn: (row) =>
-        row.mainCruiseManagerId == emptyGuid
-          ? 'Nie przypisano'
-          : `${row.mainCruiseManagerFirstName} ${row.mainCruiseManagerLastName}`,
-      cell: (cell) => (
-        <MainCruiseManagerCell managerId={cell.row.original.mainCruiseManagerId} fullName={cell.getValue() as string} />
-      ),
+        row.mainCruiseManagerId !== emptyGuid
+          ? `${row.mainCruiseManagerFirstName} ${row.mainCruiseManagerLastName}`
+          : 'Nie przypisano',
     },
     {
       header: 'Zgłoszenia',
@@ -76,23 +84,6 @@ export function CruisesTable({ cruises, deleteCruise, buttons }: Props) {
         },
       ]}
     />
-  );
-}
-
-type MainCruiseManagerCellProps = {
-  managerId: string;
-  fullName: string;
-};
-function MainCruiseManagerCell({ managerId, fullName }: MainCruiseManagerCellProps) {
-  return (
-    <div className="flex items-center justify-center gap-2">
-      {managerId !== emptyGuid && (
-        <>
-          <AppAvatar variant="small" fullName={fullName} /> <div>{fullName}</div>
-        </>
-      )}
-      {managerId === emptyGuid && <AppBadge variant="info">{fullName}</AppBadge>}
-    </div>
   );
 }
 
