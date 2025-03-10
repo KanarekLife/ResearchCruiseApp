@@ -7,6 +7,7 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 
 import { AppButton } from '@/core/components/AppButton';
+import { AppDatePickerTimeInput } from '@/core/components/inputs/dates/AppDatePickerTimeInput';
 import { AppMonthPickerPopover } from '@/core/components/inputs/dates/AppMonthPickerPopover';
 import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputErrorsList';
 import { AppInputErrorTriangle } from '@/core/components/inputs/parts/AppInputErrorTriangle';
@@ -33,7 +34,16 @@ type Props = {
   minimalDate?: Date;
   maximalDate?: Date;
   selectionStartDate?: Date;
-};
+} & (
+  | {
+      type?: 'date';
+      minuteStep?: never;
+    }
+  | {
+      type: 'datetime';
+      minuteStep?: number;
+    }
+);
 export function AppDatePickerInput({
   name,
   value,
@@ -45,6 +55,8 @@ export function AppDatePickerInput({
   disabled,
   helper,
   placeholder = 'Wybierz datę',
+  type = 'date',
+  minuteStep,
   minimalDate,
   maximalDate,
   selectionStartDate,
@@ -112,7 +124,9 @@ export function AppDatePickerInput({
 
     setSelectedDate(newDate);
     onChange?.(getValueFromDate(newDate));
-    setExpanded(false);
+    if (type === 'date') {
+      setExpanded(false);
+    }
   }
 
   return (
@@ -131,7 +145,13 @@ export function AppDatePickerInput({
             )}
           >
             {selectedDate
-              ? selectedDate.toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit', year: 'numeric' })
+              ? selectedDate.toLocaleDateString('pl-PL', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                  hour: type === 'datetime' ? '2-digit' : undefined,
+                  minute: type === 'datetime' ? '2-digit' : undefined,
+                })
               : placeholder}
             <span className="flex gap-2 items-center">
               <AppInputErrorTriangle errors={errors} />
@@ -198,6 +218,16 @@ export function AppDatePickerInput({
                 />
               ))}
             </div>
+            {type === 'datetime' && (
+              <AppDatePickerTimeInput
+                selectedDate={selectedDate}
+                onChange={(x) => {
+                  setSelectedDate(x);
+                  onChange?.(getValueFromDate(x));
+                }}
+                minuteStep={minuteStep}
+              />
+            )}
           </Modal>
         )}
       </AnimatePresence>
@@ -271,6 +301,11 @@ function CalendarDateTile({
   setHoveredDate,
   handleDateSelection,
 }: CalendarDateTileProps) {
+  if (selectedDate) {
+    date.setHours(selectedDate.getHours());
+    date.setMinutes(selectedDate.getMinutes());
+  }
+
   const dateUtc = dateToUtcDay(date),
     selectedDateUtc = selectedDate && dateToUtcDay(selectedDate),
     selectionStartDateUtc = selectionStartDate && dateToUtcDay(selectionStartDate),

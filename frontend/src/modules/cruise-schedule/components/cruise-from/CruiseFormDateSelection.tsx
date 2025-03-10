@@ -26,6 +26,8 @@ export function CruiseFormDateSelectionSection() {
               label="Data rozpoczęcia rejsu"
               required
               placeholder="Wybierz datę rozpoczęcia rejsu"
+              type="datetime"
+              minuteStep={30}
               disabled={isReadonly}
             />
           )}
@@ -43,6 +45,8 @@ export function CruiseFormDateSelectionSection() {
               label="Data zakończenia rejsu"
               required
               placeholder="Wybierz datę zakończenia rejsu"
+              type="datetime"
+              minuteStep={30}
               disabled={isReadonly}
               minimalDate={cruiseStartDate}
               selectionStartDate={cruiseStartDate}

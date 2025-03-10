@@ -1,8 +1,8 @@
 import TrashFillIcon from 'bootstrap-icons/icons/trash-fill.svg?react';
 import React from 'react';
 
-import { AppButton } from '@/core/components/AppButton';
 import { AppActionsSection } from '@/core/components/AppActionsSection';
+import { AppButton } from '@/core/components/AppButton';
 import { useApplicationDetails } from '@/cruise-applications/contexts/ApplicationDetailsContext';
 import { CruiseApplicationStatus } from '@/cruise-applications/models/CruiseApplicationDto';
 

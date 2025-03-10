@@ -1,8 +1,8 @@
 import CheckIcon from 'bootstrap-icons/icons/check-square-fill.svg?react';
 import TrashFillIcon from 'bootstrap-icons/icons/trash-fill.svg?react';
 
-import { AppButton } from '@/core/components/AppButton';
 import { AppActionsSection } from '@/core/components/AppActionsSection';
+import { AppButton } from '@/core/components/AppButton';
 
 type Props = {
   onAccept?: () => void;

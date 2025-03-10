@@ -75,3 +75,16 @@ export const WithMaximum: Story = {
     maximalDate: new Date(),
   },
 };
+
+export const WithTime: Story = {
+  args: {
+    type: 'datetime',
+  },
+};
+
+export const WithTimeStep: Story = {
+  args: {
+    type: 'datetime',
+    minuteStep: 30,
+  },
+};
