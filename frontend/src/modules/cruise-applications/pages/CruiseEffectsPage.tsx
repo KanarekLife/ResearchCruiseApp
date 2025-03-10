@@ -30,7 +30,7 @@ export function CruiseEffectsPage() {
     },
     {
       header: 'Punkty',
-      cell: ({ row }) => row.original.points,
+      accessorFn: (row) => row.points,
       size: 10,
     },
     {
