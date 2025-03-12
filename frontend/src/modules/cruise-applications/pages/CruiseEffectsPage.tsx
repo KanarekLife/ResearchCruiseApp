@@ -31,8 +31,8 @@ export function CruiseEffectsPage() {
     },
     {
       header: 'Punkty',
-      accessorFn: (row) => row.points,
-      cell: ({ row }) => <AppBadge>{row.original.points}</AppBadge>,
+      accessorFn: (row) => `${row.points} pkt.`,
+      cell: ({ row }) => <AppBadge>{row.original.points} pkt.</AppBadge>,
       size: 10,
     },
     {
