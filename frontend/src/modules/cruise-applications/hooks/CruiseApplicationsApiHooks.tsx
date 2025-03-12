@@ -2,9 +2,8 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 
 import { client } from '@/core/lib/api';
 import { CruiseApplicationDto } from '@/cruise-applications/models/CruiseApplicationDto';
-
-import { EvaluationDto } from '../models/EvaluationDto';
-import { ResearchTaskEffectDto } from '../models/ResearchTaskEffectDto';
+import { EvaluationDto } from '@/cruise-applications/models/EvaluationDto';
+import { UserEffectDto } from '@/cruise-applications/models/UserEffectDto';
 
 export function useCruiseApplicationsQuery() {
   return useSuspenseQuery({
@@ -42,7 +41,7 @@ export function useEffectsEvaluationsQuery() {
     queryFn: async () => {
       return client.get('/api/CruiseApplications/effectsEvaluations');
     },
-    select: (res) => res.data as ResearchTaskEffectDto[],
+    select: (res) => res.data as UserEffectDto[],
   });
 }
 

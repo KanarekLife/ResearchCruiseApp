@@ -6,7 +6,7 @@ type TaskEffect = {
   deputyConditionMet: boolean;
 };
 
-export type ResearchTaskEffectDto = {
+export type UserEffectDto = {
   id: string;
   userId: string;
   effect: ResearchTaskDto & TaskEffect;

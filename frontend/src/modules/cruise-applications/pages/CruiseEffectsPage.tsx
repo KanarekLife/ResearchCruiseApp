@@ -9,12 +9,12 @@ import { useEffectsEvaluationsQuery } from '@/cruise-applications/hooks/CruiseAp
 
 import { ReadOnlyResearchTaskDetails } from '../components/application-details/research-task-details/ReadOnlyResearchTaskDetails';
 import { getTaskName } from '../models/ResearchTaskDto';
-import { ResearchTaskEffectDto } from '../models/ResearchTaskEffectDto';
+import { UserEffectDto } from '../models/UserEffectDto';
 
 export function CruiseEffectsPage() {
   const effectsQuery = useEffectsEvaluationsQuery();
 
-  const columns: ColumnDef<ResearchTaskEffectDto>[] = [
+  const columns: ColumnDef<UserEffectDto>[] = [
     {
       header: 'Lp.',
       cell: ({ row }) => `${row.index + 1}`,
@@ -49,7 +49,7 @@ export function CruiseEffectsPage() {
     <>
       <AppLayout title="Efekty rejsów">
         <Suspense fallback={<AppLoader />}>
-          <AppTable data={effectsQuery.data} columns={columns} buttons={(defaultButtons) => [...defaultButtons]} />
+          <AppTable data={effectsQuery.data} columns={columns} />
         </Suspense>
       </AppLayout>
     </>
