@@ -1,4 +1,4 @@
-import { ResearchTaskDto } from './ResearchTaskDto';
+import { ResearchTaskDto } from '@/cruise-applications/models/ResearchTaskDto';
 
 type TaskEffect = {
   done: boolean;

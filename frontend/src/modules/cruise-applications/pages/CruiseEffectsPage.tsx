@@ -6,11 +6,10 @@ import { AppLayout } from '@/core/components/AppLayout';
 import { AppLink } from '@/core/components/AppLink';
 import { AppLoader } from '@/core/components/AppLoader';
 import { AppTable } from '@/core/components/table/AppTable';
+import { ReadOnlyResearchTaskDetails } from '@/cruise-applications/components/application-details/research-task-details/ReadOnlyResearchTaskDetails';
 import { useEffectsEvaluationsQuery } from '@/cruise-applications/hooks/CruiseApplicationsApiHooks';
-
-import { ReadOnlyResearchTaskDetails } from '../components/application-details/research-task-details/ReadOnlyResearchTaskDetails';
-import { getTaskName } from '../models/ResearchTaskDto';
-import { UserEffectDto } from '../models/UserEffectDto';
+import { getTaskName } from '@/cruise-applications/models/ResearchTaskDto';
+import { UserEffectDto } from '@/cruise-applications/models/UserEffectDto';
 
 export function CruiseEffectsPage() {
   const effectsQuery = useEffectsEvaluationsQuery();
