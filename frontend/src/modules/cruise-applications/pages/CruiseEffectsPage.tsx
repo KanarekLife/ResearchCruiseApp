@@ -1,6 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Suspense } from 'react';
 
+import { AppBadge } from '@/core/components/AppBadge';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLink } from '@/core/components/AppLink';
 import { AppLoader } from '@/core/components/AppLoader';
@@ -32,6 +33,7 @@ export function CruiseEffectsPage() {
     {
       header: 'Punkty',
       accessorFn: (row) => row.points,
+      cell: ({ row }) => <AppBadge>{row.original.points}</AppBadge>,
       size: 10,
     },
     {
