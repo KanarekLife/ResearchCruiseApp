@@ -7,8 +7,8 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 
 import { AppButton } from '@/core/components/AppButton';
-import { AppDatePickerTimeInput } from '@/core/components/inputs/dates/AppDatePickerTimeInput';
 import { AppMonthPickerPopover } from '@/core/components/inputs/dates/AppMonthPickerPopover';
+import { AppDatePickerTimeInput } from '@/core/components/inputs/dates/AppTimePickerInput';
 import { AppInputErrorsList } from '@/core/components/inputs/parts/AppInputErrorsList';
 import { AppInputErrorTriangle } from '@/core/components/inputs/parts/AppInputErrorTriangle';
 import { AppInputHelper } from '@/core/components/inputs/parts/AppInputHelper';
@@ -133,7 +133,7 @@ export function AppDatePickerInput({
     <>
       <div className="flex flex-col">
         <AppInputLabel name={name} label={label} />
-        <div className={cn()} ref={inputRef}>
+        <div ref={inputRef}>
           <input type="hidden" name={name} value={value} required={required} disabled={disabled} />
           <AppButton
             variant="plain"
@@ -219,14 +219,27 @@ export function AppDatePickerInput({
               ))}
             </div>
             {type === 'datetime' && (
-              <AppDatePickerTimeInput
-                selectedDate={selectedDate}
-                onChange={(x) => {
-                  setSelectedDate(x);
-                  onChange?.(getValueFromDate(x));
-                }}
-                minuteStep={minuteStep}
-              />
+              <div className="p-2">
+                <AppDatePickerTimeInput
+                  name={name}
+                  value={
+                    selectedDate && {
+                      hours: selectedDate?.getHours(),
+                      minutes: selectedDate?.getMinutes(),
+                    }
+                  }
+                  placeholder="Wybierz godzinę"
+                  onChange={(x) => {
+                    const newDate = new Date(selectedDate ?? new Date());
+                    newDate.setHours(x?.hours ?? 0);
+                    newDate.setMinutes(x?.minutes ?? 0);
+                    setSelectedDate(newDate);
+                    onChange?.(getValueFromDate(newDate));
+                  }}
+                  onBlur={onBlur}
+                  minuteStep={minuteStep}
+                />
+              </div>
             )}
           </Modal>
         )}
@@ -336,7 +349,7 @@ function CalendarDateTile({
         variant="plain"
         className={cn(
           isSelected ? 'bg-primary-500 !text-white' : 'hover:bg-gray-300',
-          isFirstDayOfSelection ? 'bg-primary-200' : '',
+          isFirstDayOfSelection ? '!bg-primary-200 !text-inherit' : '',
           'w-full text-center py-2 rounded-full',
           !isVisibleMonth || !isAllowed ? 'text-gray-400' : '',
           !isAllowed ? 'hover:bg-gray-100' : ''
