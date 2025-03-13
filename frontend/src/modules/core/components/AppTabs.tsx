@@ -21,7 +21,7 @@ export function AppTabs({ children, tabNames }: Props) {
 
   return (
     <div>
-      <div className="flex text-center gap-8">
+      <div className="flex text-center gap-8 ml-2 mr-2">
         {tabNames.map((tabName, index) => (
           <AppButton
             className={cn(

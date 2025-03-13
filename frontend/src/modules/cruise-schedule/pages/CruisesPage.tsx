@@ -6,6 +6,7 @@ import { AppLoader } from '@/core/components/AppLoader';
 import { AppModal } from '@/core/components/AppModal';
 import { AppTabs } from '@/core/components/AppTabs';
 import { useAppContext } from '@/core/hooks/AppContextHook';
+import { CruiseCalendar } from '@/cruise-schedule/components/CruiseCalendar';
 import { CruiseExportForm } from '@/cruise-schedule/components/CruiseExportForm';
 import { CruisesTable } from '@/cruise-schedule/components/CruisesTable';
 import {
@@ -61,7 +62,7 @@ export function CruisesPage() {
         <Suspense fallback={<AppLoader />}>
           <AppTabs tabNames={['Lista rejsów', 'Kalendarz']}>
             <CruisesTable cruises={cruisesQuery.data} deleteCruise={setCruiseSelectedForDeletion} buttons={buttons} />
-            <div>TODO: Kalendarz</div>
+            <CruiseCalendar cruises={cruisesQuery.data} buttons={buttons} />
           </AppTabs>
         </Suspense>
       </AppLayout>
