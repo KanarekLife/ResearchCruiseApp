@@ -4,6 +4,7 @@ import { AppButton } from '@/core/components/AppButton';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { AppModal } from '@/core/components/AppModal';
+import { AppTabs } from '@/core/components/AppTabs';
 import { useAppContext } from '@/core/hooks/AppContextHook';
 import { CruiseExportForm } from '@/cruise-schedule/components/CruiseExportForm';
 import { CruisesTable } from '@/cruise-schedule/components/CruisesTable';
@@ -58,7 +59,10 @@ export function CruisesPage() {
     <>
       <AppLayout title="Rejsy">
         <Suspense fallback={<AppLoader />}>
-          <CruisesTable cruises={cruisesQuery.data} deleteCruise={setCruiseSelectedForDeletion} buttons={buttons} />
+          <AppTabs tabNames={['Lista rejsów', 'Kalendarz']}>
+            <CruisesTable cruises={cruisesQuery.data} deleteCruise={setCruiseSelectedForDeletion} buttons={buttons} />
+            <div>TODO: Kalendarz</div>
+          </AppTabs>
         </Suspense>
       </AppLayout>
 
