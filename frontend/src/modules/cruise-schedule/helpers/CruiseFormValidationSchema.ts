@@ -21,7 +21,6 @@ const ManagerAndDeputyValidationSchema = (cruiseApplications: CruiseApplicationD
   const emptyGuid = '00000000-0000-0000-0000-000000000000';
 
   function validateManagerId(val: string) {
-    console.log(val);
     return (
       val === '' ||
       val === emptyGuid ||
