@@ -7,10 +7,10 @@ type Props = {
 };
 export function CruiseCalendar({ cruises, buttons }: Props) {
   const events = cruises.map((cruise) => ({
-    title: `Rejs ${cruise.id}`,
+    title: cruise.id.substring(0, 5),
     start: new Date(cruise.startDate),
     end: new Date(cruise.endDate),
-    color: 'blue',
+    color: '#' + (((1 << 24) * Math.random()) | 0).toString(16).padStart(6, '0'),
   }));
 
   return <AppCalendar events={events} buttons={(predefinedButtons) => [buttons, ...predefinedButtons]} />;

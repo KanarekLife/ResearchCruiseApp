@@ -5,15 +5,17 @@ import React from 'react';
 import { AppButton } from '@/core/components/AppButton';
 import { AppCalendarTile } from '@/core/components/calendar/AppCalendarTile';
 import { AppMonthPickerPopover } from '@/core/components/inputs/dates/AppMonthPickerPopover';
+import { dateToUtcDay } from '@/core/lib/utils';
 
 export type CalendarEvent = {
   title: string;
   start: Date;
   end: Date;
-  color: string;
 
   onClick?: () => void;
 };
+
+export type CalendarEventWithRow = CalendarEvent & { row: number };
 
 const weekDays = ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota', 'Niedziela'];
 const months = [
@@ -91,7 +93,12 @@ export function AppCalendar({ events, buttons }: Props) {
           </div>
         ))}
         {getDaysInMonth(currentMonth).map((date) => (
-          <AppCalendarTile date={date} events={events} currentMonth={currentMonth} key={date.toString()} />
+          <AppCalendarTile
+            date={date}
+            eventsWithRows={assignEventsToRows(events)}
+            currentMonth={currentMonth}
+            key={date.toString()}
+          />
         ))}
       </div>
     </div>
@@ -120,4 +127,22 @@ function findClosestMondayBefore(date: Date): Date {
   const day = date.getDay();
   const diff = day === 0 ? 6 : day - 1;
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() - diff);
+}
+
+function assignEventsToRows(events: CalendarEvent[]): CalendarEventWithRow[] {
+  const eventsWithRows = events.map((event) => ({ ...event, row: 0 }));
+  eventsWithRows.sort((a, b) => a.start.getTime() - b.start.getTime());
+  for (let i = 0; i < eventsWithRows.length; i++) {
+    const event = eventsWithRows[i];
+    let row = 0;
+    while (eventsWithRows.slice(0, i).some((other) => other.row === row && isOverlapping(event, other))) {
+      row++;
+    }
+    eventsWithRows[i].row = row;
+  }
+  return eventsWithRows;
+}
+
+function isOverlapping(a: CalendarEvent, b: CalendarEvent): boolean {
+  return dateToUtcDay(a.start) < dateToUtcDay(b.end) && dateToUtcDay(a.end) > dateToUtcDay(b.start);
 }

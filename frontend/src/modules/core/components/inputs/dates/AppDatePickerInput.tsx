@@ -15,7 +15,7 @@ import { AppInputHelper } from '@/core/components/inputs/parts/AppInputHelper';
 import { AppInputLabel } from '@/core/components/inputs/parts/AppInputLabel';
 import { useDropdown } from '@/core/hooks/DropdownHook';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
-import { cn } from '@/core/lib/utils';
+import { cn, dateToUtcDay } from '@/core/lib/utils';
 
 const weekDays = ['Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'So', 'Nd'];
 
@@ -286,10 +286,6 @@ function findClosestMondayBefore(date: Date): Date {
   const day = date.getDay();
   const diff = day === 0 ? 6 : day - 1;
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() - diff);
-}
-
-function dateToUtcDay(date: Date): number {
-  return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
 type CalendarDateTileProps = {
