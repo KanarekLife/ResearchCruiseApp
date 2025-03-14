@@ -59,7 +59,7 @@ export function CalendarEventTiles({ date, eventsWithRows }: CalendarEventTilesP
       eventTiles.push(
         event.link ? (
           <AppLink href={event.link} variant="plain" className={className}>
-            {start ? event.title : ''}
+            <div className="bg-red-700 z-20 -mr-5">{start ? event.title : ''}</div>
           </AppLink>
         ) : (
           <div className={className}>{start ? event.title : ''}</div>

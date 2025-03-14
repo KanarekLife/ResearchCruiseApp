@@ -14,7 +14,7 @@ export function CruiseCalendar({ cruises, buttons }: Props) {
         title:
           cruise.mainCruiseManagerFirstName.length > 0
             ? `Kierownik: ${cruise.mainCruiseManagerFirstName} ${cruise.mainCruiseManagerLastName}`
-            : 'Rejs bez kierownika',
+            : 'Rejs bez kierownikaRejs bez kierownikaRejs bez kierownika',
         start: new Date(cruise.startDate),
         end: new Date(cruise.endDate),
         link: `/cruises/${cruise.id}`,

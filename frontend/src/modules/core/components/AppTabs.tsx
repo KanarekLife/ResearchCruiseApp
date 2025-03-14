@@ -5,19 +5,18 @@ import { AppButton } from '@/core/components/AppButton';
 import { cn } from '@/core/lib/utils';
 
 type Props = {
-  children: React.ReactNode;
+  children: React.ReactNode[];
   tabNames: string[];
 };
 export function AppTabs({ children, tabNames }: Props) {
   const [activeTab, setActiveTab] = useState(0);
-
-  if (!Array.isArray(children)) {
-    throw new Error('Children must be an array of elements');
-  }
+  const [previousTab, setPreviousTab] = useState(0);
 
   if (tabNames.length !== children.length) {
     throw new Error('The number of tab names must match the number of tab children');
   }
+
+  const animateDirection = activeTab > previousTab ? 'right' : 'left';
 
   return (
     <div>
@@ -29,27 +28,27 @@ export function AppTabs({ children, tabNames }: Props) {
               'w-full rounded-full transition'
             )}
             variant="plain"
-            onClick={() => setActiveTab(index)}
+            onClick={() => {
+              setPreviousTab(activeTab);
+              setActiveTab(index);
+            }}
             key={tabName}
           >
             {tabName}
           </AppButton>
         ))}
       </div>
-      {children.map((child, index) => (
-        // eslint-disable-next-line @eslint-react/no-array-index-key
-        <AnimatePresence key={index} initial={false}>
-          {activeTab === index && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-            >
-              {child}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      ))}
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, scaleX: 0, transformOrigin: animateDirection === 'left' ? '0% 50%' : '100% 50%' }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          exit={{ opacity: 0, scaleX: 0, transformOrigin: animateDirection === 'left' ? '0% 50%' : '100% 50%' }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
+          {children[activeTab]}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
