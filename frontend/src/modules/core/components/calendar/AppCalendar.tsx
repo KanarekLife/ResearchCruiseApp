@@ -43,6 +43,8 @@ export function AppCalendar({ events, buttons }: Props) {
     year: new Date().getFullYear(),
   });
 
+  const eventsWithRows = React.useMemo(() => assignEventsToRows(events), [events]);
+
   const defaultButtons = [
     <AppButton
       key="today"
@@ -86,7 +88,7 @@ export function AppCalendar({ events, buttons }: Props) {
         </AppButton>
       </div>
       <div className="flex justify-end flex-wrap gap-4 my-4">{buttons?.(defaultButtons) ?? defaultButtons}</div>
-      <div className="grid grid-cols-7">
+      <div className="grid grid-cols-7 gap-1">
         {weekDays.map((day) => (
           <div key={day} className="text-center truncate">
             {day}
@@ -95,7 +97,7 @@ export function AppCalendar({ events, buttons }: Props) {
         {getDaysInMonth(currentMonth).map((date) => (
           <AppCalendarTile
             date={date}
-            eventsWithRows={assignEventsToRows(events)}
+            eventsWithRows={eventsWithRows}
             currentMonth={currentMonth}
             key={date.toString()}
           />

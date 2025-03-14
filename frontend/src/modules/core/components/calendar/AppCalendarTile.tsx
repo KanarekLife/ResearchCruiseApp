@@ -18,7 +18,7 @@ export function AppCalendarTile({ date, eventsWithRows, currentMonth }: Props) {
         className={cn(
           !isCurrentMonth ? 'bg-gray-100' : '',
           isToday ? '!bg-primary-100 !border-primary-500' : '',
-          'border border-gray-300 min-h-30 h-full hover:bg-gray-100 transition mb-2'
+          'border rounded-xl border-gray-300 min-h-30 h-full hover:bg-gray-100 transition mb-3'
         )}
       >
         <div className="p-2 gap-1">
@@ -26,7 +26,7 @@ export function AppCalendarTile({ date, eventsWithRows, currentMonth }: Props) {
             {date.getDate()}
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-1 mt-2 -m-0.25">
+        <div className="grid grid-cols-1 gap-1 mt-2 -m-2">
           <CalendarEventTiles date={date} eventsWithRows={eventsWithRows} />
         </div>
       </div>
@@ -51,9 +51,9 @@ export function CalendarEventTiles({ date, eventsWithRows }: CalendarEventTilesP
       const end = date.getDay() === 0 || dateToUtcDay(event.end) === dateToUtcDay(date);
 
       const className = cn(
-        start ? 'rounded-l-lg' : '',
-        end ? 'rounded-r-lg' : '',
-        'bg-primary h-8 truncate text-white text-sm p-2'
+        start ? 'rounded-l-lg ml-3' : '',
+        end ? 'rounded-r-lg mr-3' : '',
+        'bg-primary h-8 truncate text-white text-sm p-2 z-10'
       );
 
       eventTiles.push(
