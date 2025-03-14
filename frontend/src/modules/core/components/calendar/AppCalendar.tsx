@@ -42,6 +42,25 @@ export function AppCalendar({ events, buttons }: Props) {
     month: new Date().getMonth(),
     year: new Date().getFullYear(),
   });
+  const calendarRef = React.useRef<HTMLDivElement>(null);
+  const [tileWidth, setTileWidth] = React.useState(0);
+
+  function updateTileWidth() {
+    const calendarWidth = calendarRef.current?.offsetWidth ?? 700;
+    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
+    setTileWidth(calendarWidth / 7);
+  }
+
+  React.useEffect(() => {
+    updateTileWidth();
+  }, [calendarRef.current?.clientWidth]);
+
+  React.useEffect(() => {
+    window.addEventListener('resize', updateTileWidth);
+    return () => {
+      window.removeEventListener('resize', updateTileWidth);
+    };
+  }, []);
 
   const eventsWithRows = React.useMemo(() => assignEventsToRows(events), [events]);
 
@@ -88,7 +107,7 @@ export function AppCalendar({ events, buttons }: Props) {
         </AppButton>
       </div>
       <div className="flex justify-end flex-wrap gap-4 my-4">{buttons?.(defaultButtons) ?? defaultButtons}</div>
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-1" ref={calendarRef}>
         {weekDays.map((day) => (
           <div key={day} className="text-center truncate">
             {day}
@@ -99,6 +118,7 @@ export function AppCalendar({ events, buttons }: Props) {
             date={date}
             eventsWithRows={eventsWithRows}
             currentMonth={currentMonth}
+            tileWidth={tileWidth}
             key={date.toString()}
           />
         ))}

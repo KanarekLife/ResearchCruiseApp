@@ -61,7 +61,7 @@ export function CruisesPage() {
       <AppLayout title="Rejsy">
         <Suspense fallback={<AppLoader />}>
           <AppTabs tabNames={['Lista rejsów', 'Kalendarz']}>
-            <CruisesTable cruises={cruisesQuery.data} deleteCruise={setCruiseSelectedForDeletion} buttons={buttons} />
+            <CruisesTable cruises={cruisesQuery.data} buttons={buttons} deleteCruise={setCruiseSelectedForDeletion} />
             <CruiseCalendar cruises={cruisesQuery.data} buttons={buttons} />
           </AppTabs>
         </Suspense>

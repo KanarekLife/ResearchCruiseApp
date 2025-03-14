@@ -10,7 +10,7 @@ type Props = {
 };
 export function AppTabs({ children, tabNames }: Props) {
   const [activeTab, setActiveTab] = useState(0);
-  const [previousTab, setPreviousTab] = useState(0);
+  const [previousTab, setPreviousTab] = useState(-1);
 
   if (tabNames.length !== children.length) {
     throw new Error('The number of tab names must match the number of tab children');
