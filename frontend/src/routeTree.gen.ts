@@ -20,14 +20,11 @@ import { Route as MypublicationsImport } from './routes/mypublications'
 import { Route as LoginImport } from './routes/login'
 import { Route as HelpImport } from './routes/help'
 import { Route as ForgotpasswordImport } from './routes/forgotpassword'
-import { Route as CruisesImport } from './routes/cruises'
 import { Route as CruiseeffectsImport } from './routes/cruiseeffects'
 import { Route as CruiseapprovalImport } from './routes/cruiseapproval'
 import { Route as ConfirmemailImport } from './routes/confirmemail'
 import { Route as AccountsettingsImport } from './routes/accountsettings'
 import { Route as IndexImport } from './routes/index'
-import { Route as ApplicationsIndexImport } from './routes/applications/index'
-import { Route as CruisesCruiseIdFormAImport } from './routes/cruises.$cruiseId/formA'
 import { Route as CruisesIndexImport } from './routes/cruises/index'
 import { Route as ApplicationsIndexImport } from './routes/applications/index'
 import { Route as CruisesNewImport } from './routes/cruises/new'
@@ -91,12 +88,6 @@ const ForgotpasswordRoute = ForgotpasswordImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const CruisesRoute = CruisesImport.update({
-  id: '/cruises',
-  path: '/cruises',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const CruiseeffectsRoute = CruiseeffectsImport.update({
   id: '/cruiseeffects',
   path: '/cruiseeffects',
@@ -137,12 +128,6 @@ const ApplicationsIndexRoute = ApplicationsIndexImport.update({
   id: '/applications/',
   path: '/applications/',
   getParentRoute: () => rootRoute,
-} as any)
-
-const CruisesCruiseIdFormARoute = CruisesCruiseIdFormAImport.update({
-  id: '/$cruiseId/formA',
-  path: '/$cruiseId/formA',
-  getParentRoute: () => CruisesRoute,
 } as any)
 
 const CruisesNewRoute = CruisesNewImport.update({
@@ -208,13 +193,6 @@ declare module '@tanstack/react-router' {
       path: '/cruiseeffects'
       fullPath: '/cruiseeffects'
       preLoaderRoute: typeof CruiseeffectsImport
-      parentRoute: typeof rootRoute
-    }
-    '/cruises': {
-      id: '/cruises'
-      path: '/cruises'
-      fullPath: '/cruises'
-      preLoaderRoute: typeof CruisesImport
       parentRoute: typeof rootRoute
     }
     '/forgotpassword': {
@@ -308,12 +286,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApplicationsApplicationIdDetailsImport
       parentRoute: typeof rootRoute
     }
-    '/cruises/$cruiseId/formA': {
-      id: '/cruises/$cruiseId/formA'
-      path: '/$cruiseId/formA'
-      fullPath: '/cruises/$cruiseId/formA'
-      preLoaderRoute: typeof CruisesCruiseIdFormAImport
-      parentRoute: typeof CruisesImport
     '/applications/$applicationId/formA': {
       id: '/applications/$applicationId/formA'
       path: '/applications/$applicationId/formA'
@@ -333,24 +305,12 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-interface CruisesRouteChildren {
-  CruisesCruiseIdFormARoute: typeof CruisesCruiseIdFormARoute
-}
-
-const CruisesRouteChildren: CruisesRouteChildren = {
-  CruisesCruiseIdFormARoute: CruisesCruiseIdFormARoute,
-}
-
-const CruisesRouteWithChildren =
-  CruisesRoute._addFileChildren(CruisesRouteChildren)
-
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accountsettings': typeof AccountsettingsRoute
   '/confirmemail': typeof ConfirmemailRoute
   '/cruiseapproval': typeof CruiseapprovalRoute
   '/cruiseeffects': typeof CruiseeffectsRoute
-  '/cruises': typeof CruisesRouteWithChildren
   '/forgotpassword': typeof ForgotpasswordRoute
   '/help': typeof HelpRoute
   '/login': typeof LoginRoute
@@ -360,9 +320,6 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/resetpassword': typeof ResetpasswordRoute
   '/usermanagement': typeof UsermanagementRoute
-  '/applications': typeof ApplicationsIndexRoute
-  '/applications/$applicationId/details': typeof ApplicationsApplicationIdDetailsRoute
-  '/cruises/$cruiseId/formA': typeof CruisesCruiseIdFormARoute
   '/cruises/new': typeof CruisesNewRoute
   '/applications': typeof ApplicationsIndexRoute
   '/cruises': typeof CruisesIndexRoute
@@ -377,7 +334,6 @@ export interface FileRoutesByTo {
   '/confirmemail': typeof ConfirmemailRoute
   '/cruiseapproval': typeof CruiseapprovalRoute
   '/cruiseeffects': typeof CruiseeffectsRoute
-  '/cruises': typeof CruisesRouteWithChildren
   '/forgotpassword': typeof ForgotpasswordRoute
   '/help': typeof HelpRoute
   '/login': typeof LoginRoute
@@ -387,9 +343,6 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/resetpassword': typeof ResetpasswordRoute
   '/usermanagement': typeof UsermanagementRoute
-  '/applications': typeof ApplicationsIndexRoute
-  '/applications/$applicationId/details': typeof ApplicationsApplicationIdDetailsRoute
-  '/cruises/$cruiseId/formA': typeof CruisesCruiseIdFormARoute
   '/cruises/new': typeof CruisesNewRoute
   '/applications': typeof ApplicationsIndexRoute
   '/cruises': typeof CruisesIndexRoute
@@ -405,7 +358,6 @@ export interface FileRoutesById {
   '/confirmemail': typeof ConfirmemailRoute
   '/cruiseapproval': typeof CruiseapprovalRoute
   '/cruiseeffects': typeof CruiseeffectsRoute
-  '/cruises': typeof CruisesRouteWithChildren
   '/forgotpassword': typeof ForgotpasswordRoute
   '/help': typeof HelpRoute
   '/login': typeof LoginRoute
@@ -415,9 +367,6 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/resetpassword': typeof ResetpasswordRoute
   '/usermanagement': typeof UsermanagementRoute
-  '/applications/': typeof ApplicationsIndexRoute
-  '/applications/$applicationId/details': typeof ApplicationsApplicationIdDetailsRoute
-  '/cruises/$cruiseId/formA': typeof CruisesCruiseIdFormARoute
   '/cruises/new': typeof CruisesNewRoute
   '/applications/': typeof ApplicationsIndexRoute
   '/cruises/': typeof CruisesIndexRoute
@@ -434,7 +383,6 @@ export interface FileRouteTypes {
     | '/confirmemail'
     | '/cruiseapproval'
     | '/cruiseeffects'
-    | '/cruises'
     | '/forgotpassword'
     | '/help'
     | '/login'
@@ -444,9 +392,6 @@ export interface FileRouteTypes {
     | '/register'
     | '/resetpassword'
     | '/usermanagement'
-    | '/applications'
-    | '/applications/$applicationId/details'
-    | '/cruises/$cruiseId/formA'
     | '/cruises/new'
     | '/applications'
     | '/cruises'
@@ -460,7 +405,6 @@ export interface FileRouteTypes {
     | '/confirmemail'
     | '/cruiseapproval'
     | '/cruiseeffects'
-    | '/cruises'
     | '/forgotpassword'
     | '/help'
     | '/login'
@@ -470,9 +414,6 @@ export interface FileRouteTypes {
     | '/register'
     | '/resetpassword'
     | '/usermanagement'
-    | '/applications'
-    | '/applications/$applicationId/details'
-    | '/cruises/$cruiseId/formA'
     | '/cruises/new'
     | '/applications'
     | '/cruises'
@@ -486,7 +427,6 @@ export interface FileRouteTypes {
     | '/confirmemail'
     | '/cruiseapproval'
     | '/cruiseeffects'
-    | '/cruises'
     | '/forgotpassword'
     | '/help'
     | '/login'
@@ -496,9 +436,6 @@ export interface FileRouteTypes {
     | '/register'
     | '/resetpassword'
     | '/usermanagement'
-    | '/applications/'
-    | '/applications/$applicationId/details'
-    | '/cruises/$cruiseId/formA'
     | '/cruises/new'
     | '/applications/'
     | '/cruises/'
@@ -514,7 +451,6 @@ export interface RootRouteChildren {
   ConfirmemailRoute: typeof ConfirmemailRoute
   CruiseapprovalRoute: typeof CruiseapprovalRoute
   CruiseeffectsRoute: typeof CruiseeffectsRoute
-  CruisesRoute: typeof CruisesRouteWithChildren
   ForgotpasswordRoute: typeof ForgotpasswordRoute
   HelpRoute: typeof HelpRoute
   LoginRoute: typeof LoginRoute
@@ -524,8 +460,6 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   ResetpasswordRoute: typeof ResetpasswordRoute
   UsermanagementRoute: typeof UsermanagementRoute
-  ApplicationsIndexRoute: typeof ApplicationsIndexRoute
-  ApplicationsApplicationIdDetailsRoute: typeof ApplicationsApplicationIdDetailsRoute
   CruisesNewRoute: typeof CruisesNewRoute
   ApplicationsIndexRoute: typeof ApplicationsIndexRoute
   CruisesIndexRoute: typeof CruisesIndexRoute
@@ -540,7 +474,6 @@ const rootRouteChildren: RootRouteChildren = {
   ConfirmemailRoute: ConfirmemailRoute,
   CruiseapprovalRoute: CruiseapprovalRoute,
   CruiseeffectsRoute: CruiseeffectsRoute,
-  CruisesRoute: CruisesRouteWithChildren,
   ForgotpasswordRoute: ForgotpasswordRoute,
   HelpRoute: HelpRoute,
   LoginRoute: LoginRoute,
@@ -550,8 +483,6 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   ResetpasswordRoute: ResetpasswordRoute,
   UsermanagementRoute: UsermanagementRoute,
-  ApplicationsIndexRoute: ApplicationsIndexRoute,
-  ApplicationsApplicationIdDetailsRoute: ApplicationsApplicationIdDetailsRoute,
   CruisesNewRoute: CruisesNewRoute,
   ApplicationsIndexRoute: ApplicationsIndexRoute,
   CruisesIndexRoute: CruisesIndexRoute,
@@ -575,7 +506,6 @@ export const routeTree = rootRoute
         "/confirmemail",
         "/cruiseapproval",
         "/cruiseeffects",
-        "/cruises",
         "/forgotpassword",
         "/help",
         "/login",
@@ -585,8 +515,6 @@ export const routeTree = rootRoute
         "/register",
         "/resetpassword",
         "/usermanagement",
-        "/applications/",
-        "/applications/$applicationId/details"
         "/cruises/new",
         "/applications/",
         "/cruises/",
@@ -609,12 +537,6 @@ export const routeTree = rootRoute
     },
     "/cruiseeffects": {
       "filePath": "cruiseeffects.tsx"
-    },
-    "/cruises": {
-      "filePath": "cruises.tsx",
-      "children": [
-        "/cruises/$cruiseId/formA"
-      ]
     },
     "/forgotpassword": {
       "filePath": "forgotpassword.tsx"
@@ -643,15 +565,6 @@ export const routeTree = rootRoute
     "/usermanagement": {
       "filePath": "usermanagement.tsx"
     },
-    "/applications/": {
-      "filePath": "applications/index.tsx"
-    },
-    "/applications/$applicationId/details": {
-      "filePath": "applications/$applicationId/details.tsx"
-    },
-    "/cruises/$cruiseId/formA": {
-      "filePath": "cruises.$cruiseId/formA.tsx",
-      "parent": "/cruises"
     "/cruises/new": {
       "filePath": "cruises/new.tsx"
     },

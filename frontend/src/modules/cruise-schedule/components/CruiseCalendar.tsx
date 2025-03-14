@@ -7,10 +7,13 @@ type Props = {
 };
 export function CruiseCalendar({ cruises, buttons }: Props) {
   const events = cruises.map((cruise) => ({
-    title: cruise.id.substring(0, 5),
+    title:
+      cruise.mainCruiseManagerFirstName.length > 0
+        ? `Rejs ${cruise.mainCruiseManagerFirstName} ${cruise.mainCruiseManagerLastName}`
+        : 'Rejs bez kierownika',
     start: new Date(cruise.startDate),
     end: new Date(cruise.endDate),
-    color: '#' + (((1 << 24) * Math.random()) | 0).toString(16).padStart(6, '0'),
+    link: `/cruises/${cruise.id}`,
   }));
 
   return <AppCalendar events={events} buttons={(predefinedButtons) => [buttons, ...predefinedButtons]} />;

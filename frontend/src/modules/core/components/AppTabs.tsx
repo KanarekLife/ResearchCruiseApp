@@ -38,7 +38,7 @@ export function AppTabs({ children, tabNames }: Props) {
       </div>
       {children.map((child, index) => (
         // eslint-disable-next-line @eslint-react/no-array-index-key
-        <AnimatePresence key={index}>
+        <AnimatePresence key={index} initial={false}>
           {activeTab === index && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}

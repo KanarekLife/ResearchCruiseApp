@@ -12,7 +12,7 @@ export type CalendarEvent = {
   start: Date;
   end: Date;
 
-  onClick?: () => void;
+  link?: string;
 };
 
 export type CalendarEventWithRow = CalendarEvent & { row: number };
@@ -86,7 +86,7 @@ export function AppCalendar({ events, buttons }: Props) {
         </AppButton>
       </div>
       <div className="flex justify-end flex-wrap gap-4 my-4">{buttons?.(defaultButtons) ?? defaultButtons}</div>
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7">
         {weekDays.map((day) => (
           <div key={day} className="text-center truncate">
             {day}
@@ -131,7 +131,7 @@ function findClosestMondayBefore(date: Date): Date {
 
 function assignEventsToRows(events: CalendarEvent[]): CalendarEventWithRow[] {
   const eventsWithRows = events.map((event) => ({ ...event, row: 0 }));
-  eventsWithRows.sort((a, b) => a.start.getTime() - b.start.getTime());
+  eventsWithRows.sort((a, b) => dateToUtcDay(a.start) - dateToUtcDay(b.start));
   for (let i = 0; i < eventsWithRows.length; i++) {
     const event = eventsWithRows[i];
     let row = 0;
@@ -144,5 +144,5 @@ function assignEventsToRows(events: CalendarEvent[]): CalendarEventWithRow[] {
 }
 
 function isOverlapping(a: CalendarEvent, b: CalendarEvent): boolean {
-  return dateToUtcDay(a.start) < dateToUtcDay(b.end) && dateToUtcDay(a.end) > dateToUtcDay(b.start);
+  return dateToUtcDay(a.start) <= dateToUtcDay(b.end) && dateToUtcDay(a.end) >= dateToUtcDay(b.start);
 }

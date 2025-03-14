@@ -1,3 +1,4 @@
+import { AppLink } from '@/core/components/AppLink';
 import { CalendarEventWithRow } from '@/core/components/calendar/AppCalendar';
 import { cn, dateToUtcDay } from '@/core/lib/utils';
 
@@ -17,13 +18,15 @@ export function AppCalendarTile({ date, eventsWithRows, currentMonth }: Props) {
         className={cn(
           !isCurrentMonth ? 'bg-gray-100' : '',
           isToday ? '!bg-primary-100 !border-primary-500' : '',
-          'border border-gray-300 min-h-30 h-full rounded-lg hover:bg-gray-100 transition'
+          'border border-gray-300 min-h-30 h-full hover:bg-gray-100 transition mb-2'
         )}
       >
-        <div className="flex flex-col p-2 gap-1">
+        <div className="p-2 gap-1">
           <div className={cn(!isCurrentMonth ? 'text-gray-500' : '', isSunday ? 'text-red-500' : '', 'text-end')}>
             {date.getDate()}
           </div>
+        </div>
+        <div className="grid grid-cols-1 gap-1 mt-2 -m-0.25">
           <CalendarEventTiles date={date} eventsWithRows={eventsWithRows} />
         </div>
       </div>
@@ -42,11 +45,30 @@ export function CalendarEventTiles({ date, eventsWithRows }: CalendarEventTilesP
   const eventTiles = [];
   for (let i = 0; i < rowCount; i++) {
     const eventsInRow = todaysEvents.filter((event) => event.row === i);
-    if (eventsInRow.length > 0) {
+    if (eventsInRow.length === 1) {
       const event = eventsInRow[0];
-      eventTiles.push(<div className="bg-primary h-8 truncate w-full text-white text-sm p-2">{event.title}</div>);
-    } else {
+      const start = date.getDay() === 1 || dateToUtcDay(event.start) === dateToUtcDay(date);
+      const end = date.getDay() === 0 || dateToUtcDay(event.end) === dateToUtcDay(date);
+
+      const className = cn(
+        start ? 'rounded-l-lg' : '',
+        end ? 'rounded-r-lg' : '',
+        'bg-primary h-8 truncate text-white text-sm p-2'
+      );
+
+      eventTiles.push(
+        event.link ? (
+          <AppLink href={event.link} variant="plain" className={className}>
+            {start ? event.title : ''}
+          </AppLink>
+        ) : (
+          <div className={className}>{start ? event.title : ''}</div>
+        )
+      );
+    } else if (eventsInRow.length === 0) {
       eventTiles.push(<div className="h-8" />);
+    } else {
+      throw new Error('Events in row must be either 0 or 1');
     }
   }
   return eventTiles;
