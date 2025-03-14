@@ -1,5 +1,5 @@
-import ChevronLeft from 'bootstrap-icons/icons/chevron-left.svg?react';
-import ChevronRight from 'bootstrap-icons/icons/chevron-right.svg?react';
+import ChevronLeftIcon from 'bootstrap-icons/icons/chevron-left.svg?react';
+import ChevronRightIcon from 'bootstrap-icons/icons/chevron-right.svg?react';
 import React from 'react';
 
 import { AppButton } from '@/core/components/AppButton';
@@ -90,7 +90,7 @@ export function AppCalendar({ events, buttons }: Props) {
     <div className="flex flex-col p-4 gap-4">
       <div className="flex justify-center items-center w-full">
         <AppButton variant="plain" onClick={() => handleMonthChange(-1)}>
-          <ChevronLeft className="w-8 h-8" />
+          <ChevronLeftIcon className="w-8 h-8" />
         </AppButton>
         <AppMonthPickerPopover
           value={currentMonth}
@@ -103,7 +103,7 @@ export function AppCalendar({ events, buttons }: Props) {
         />
 
         <AppButton variant="plain" onClick={() => handleMonthChange(1)}>
-          <ChevronRight className="w-8 h-8" />
+          <ChevronRightIcon className="w-8 h-8" />
         </AppButton>
       </div>
       <div className="flex justify-end flex-wrap gap-4 my-4">{buttons?.(defaultButtons) ?? defaultButtons}</div>

@@ -1,4 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
+import TrashIcon from 'bootstrap-icons/icons/trash.svg?react';
+import ZoomInIcon from 'bootstrap-icons/icons/zoom-in.svg?react';
 import dayjs from 'dayjs';
 
 import { AppAvatar } from '@/core/components/AppAvatar';
@@ -118,10 +120,12 @@ function ActionsCell({ cruise, deleteCruise }: ActionsCellProps) {
     <div className="grid grid-cols-1 gap-2 min-w-30">
       <AppButton type="link" href={`/cruises/${cruise.id}`}>
         Szczegóły
+        <ZoomInIcon className="w-4 h-4" />
       </AppButton>
       {cruise.status === 'Nowy' && (
         <AppButton variant="dangerOutline" onClick={() => deleteCruise(cruise)}>
           Usuń
+          <TrashIcon className="w-4 h-4" />
         </AppButton>
       )}
     </div>
