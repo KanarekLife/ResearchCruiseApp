@@ -1,5 +1,6 @@
 import ChevronLeftIcon from 'bootstrap-icons/icons/chevron-left.svg?react';
 import ChevronRightIcon from 'bootstrap-icons/icons/chevron-right.svg?react';
+import { AnimatePresence, motion } from 'motion/react';
 import React from 'react';
 
 import { AppButton } from '@/core/components/AppButton';
@@ -42,6 +43,7 @@ export function AppCalendar({ events, buttons }: Props) {
     month: new Date().getMonth(),
     year: new Date().getFullYear(),
   });
+  const [previousMonth, setPreviousMonth] = React.useState(currentMonth);
   const calendarRef = React.useRef<HTMLDivElement>(null);
   const [tileWidth, setTileWidth] = React.useState(0);
 
@@ -75,6 +77,7 @@ export function AppCalendar({ events, buttons }: Props) {
   function handleMonthChange(delta: 1 | -1) {
     const newYear = currentMonth.year;
     const newMonth = currentMonth.month + delta;
+    setPreviousMonth(currentMonth);
     if (newMonth < 0) {
       setCurrentMonth({ month: 11, year: newYear - 1 });
       return;
@@ -85,6 +88,9 @@ export function AppCalendar({ events, buttons }: Props) {
     }
     setCurrentMonth({ month: newMonth, year: newYear });
   }
+
+  const animateDirection =
+    currentMonth.year * 12 + currentMonth.month > previousMonth.year * 12 + previousMonth.month ? 'right' : 'left';
 
   return (
     <div className="flex flex-col p-4 gap-4">
@@ -107,22 +113,32 @@ export function AppCalendar({ events, buttons }: Props) {
         </AppButton>
       </div>
       <div className="flex justify-end flex-wrap gap-4 my-4">{buttons?.(defaultButtons) ?? defaultButtons}</div>
-      <div className="grid grid-cols-7 gap-1" ref={calendarRef}>
-        {weekDays.map((day) => (
-          <div key={day} className="text-center truncate">
-            {day}
-          </div>
-        ))}
-        {getDaysInMonth(currentMonth).map((date) => (
-          <AppCalendarTile
-            date={date}
-            eventsWithRows={eventsWithRows}
-            currentMonth={currentMonth}
-            tileWidth={tileWidth}
-            key={date.toString()}
-          />
-        ))}
-      </div>
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.div
+          className="grid grid-cols-7 gap-1"
+          ref={calendarRef}
+          key={currentMonth.month + currentMonth.year * 12}
+          initial={{ opacity: 0, scaleX: 0, transformOrigin: animateDirection === 'left' ? '0% 50%' : '100% 50%' }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          exit={{ opacity: 0, scaleX: 0, transformOrigin: animateDirection === 'left' ? '0% 50%' : '100% 50%' }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
+          {weekDays.map((day) => (
+            <div key={day} className="text-center truncate">
+              {day}
+            </div>
+          ))}
+          {getDaysInMonth(currentMonth).map((date) => (
+            <AppCalendarTile
+              date={date}
+              eventsWithRows={eventsWithRows}
+              currentMonth={currentMonth}
+              tileWidth={tileWidth}
+              key={date.toString()}
+            />
+          ))}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
