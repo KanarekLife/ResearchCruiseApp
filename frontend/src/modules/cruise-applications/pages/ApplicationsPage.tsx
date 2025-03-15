@@ -6,7 +6,7 @@ import { AppLink } from '@/core/components/AppLink';
 import { AppLoader } from '@/core/components/AppLoader';
 import { AppTable } from '@/core/components/table/AppTable';
 import { useCruiseApplicationsQuery } from '@/cruise-applications/hooks/CruiseApplicationsApiHooks';
-import { CruiseApplicationDto } from '@/cruise-applications/models/CruiseApplicationDto';
+import { CruiseApplicationDto, CruiseApplicationStatus } from '@/cruise-applications/models/CruiseApplicationDto';
 import { AppAvatar } from '@/core/components/AppAvatar';
 import { AppButton } from '@/core/components/AppButton';
 import { AppBadge } from '@/core/components/AppBadge';
@@ -64,6 +64,10 @@ export function ApplicationsPage() {
     {
       header: 'Status',
       accessorFn: (row) => `${row.status}`,
+      cell: ({ row }) => <>
+        <p className='italic'>{row.original.status}</p>
+        {row.original.status === CruiseApplicationStatus.FormBRequired && <AppButton type='link' href={`/cruises/${row.original.id}/formB?mode=edit`}>Wypełnij</AppButton>}
+      </>,
     },
     {
       header: 'Akcje',
