@@ -53,7 +53,7 @@ export function AppDropdownInput({
   const dropdownRef = React.useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = React.useState(false);
   const selectedOptionIndex = allOptions.findIndex((option) => option.value === value);
-  const [selectedOption, setSelectedValue] = React.useState<AppDropdownInputOption>(() =>
+  const [selectedOption, setSelectedOption] = React.useState<AppDropdownInputOption>(() =>
     selectedOptionIndex < 0 ? { value: defaultValue, inlineLabel: placeholder } : allOptions[selectedOptionIndex]
   );
   const allPossibleOptions = allowEmptyOption
@@ -71,12 +71,12 @@ export function AppDropdownInput({
     : allOptions;
 
   React.useEffect(() => {
-    if (value !== selectedValue.value) {
+    if (value !== selectedOption.value) {
       const selectedOption = allOptions.find((option) => option.value === value);
       // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
-      setSelectedValue(selectedOption ?? { value: defaultValue, inlineLabel: placeholder });
+      setSelectedOption(selectedOption ?? { value: defaultValue, inlineLabel: placeholder });
     }
-  }, [allOptions, defaultValue, placeholder, selectedValue.value, value]);
+  }, [allOptions, defaultValue, placeholder, selectedOption.value, value]);
 
   useOutsideClickDetection({
     refs: [inputRef, dropdownRef],
@@ -87,7 +87,7 @@ export function AppDropdownInput({
   });
 
   function selectOption(option: AppDropdownInputOption) {
-    setSelectedValue(option);
+    setSelectedOption(option);
     setExpanded(false);
     onChange?.(option.value);
     onBlur?.();
