@@ -94,7 +94,3 @@ export function removeEmptyValues<T extends object>(obj: T, excludeKeys: (keyof 
       })
   ) as T;
 }
-
-export function dateToUtcDay(date: Date): number {
-  return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
-}

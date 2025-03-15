@@ -16,7 +16,6 @@ import { CruiseFormDto } from '@/cruise-schedule/models/CruiseFormDto';
 
 export function CruiseFormApplicationsSection() {
   const { form, cruiseApplications, isReadonly, hasFormBeenSubmitted } = useCruiseForm();
-
   const [expanded, setExpanded] = React.useState(false);
 
   function handleAddApplication(
@@ -26,8 +25,6 @@ export function CruiseFormApplicationsSection() {
     field.pushValue(id);
     field.handleChange((prev) => prev);
     field.handleBlur();
-    field.form.validateAllFields('blur');
-    field.form.validateAllFields('change');
   }
 
   function handleRemoveApplication(
@@ -38,8 +35,6 @@ export function CruiseFormApplicationsSection() {
     field.removeValue(index);
     field.handleChange((prev) => prev);
     field.handleBlur();
-    field.form.validateAllFields('blur');
-    field.form.validateAllFields('change');
   }
 
   function getColumns(

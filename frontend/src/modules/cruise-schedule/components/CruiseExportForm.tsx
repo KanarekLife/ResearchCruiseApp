@@ -8,9 +8,9 @@ import { CruiseDto } from '@/cruise-schedule/models/CruiseDto';
 
 type Props = {
   cruises: CruiseDto[];
+
   onDone?: () => void;
 };
-
 export function CruiseExportForm({ cruises, onDone }: Props) {
   const possibleYears = React.useMemo(() => {
     return cruises

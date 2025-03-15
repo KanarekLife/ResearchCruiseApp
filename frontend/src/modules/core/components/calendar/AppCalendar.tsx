@@ -6,33 +6,25 @@ import React from 'react';
 import { AppButton } from '@/core/components/AppButton';
 import { AppCalendarTile } from '@/core/components/calendar/AppCalendarTile';
 import { AppMonthPickerPopover } from '@/core/components/inputs/dates/AppMonthPickerPopover';
-import { dateToUtcDay } from '@/core/lib/utils';
+import { dateToUtcDay, getDaysInMonth, months, weekDays } from '@/core/lib/calendarUtils';
 
-export type CalendarEvent = {
-  title: string;
-  start: Date;
-  end: Date;
+function assignEventsToRows(events: CalendarEvent[]): CalendarEventWithRow[] {
+  const eventsWithRows = events.map((event) => ({ ...event, row: 0 }));
+  eventsWithRows.sort((a, b) => dateToUtcDay(a.start) - dateToUtcDay(b.start));
+  for (let i = 0; i < eventsWithRows.length; i++) {
+    const event = eventsWithRows[i];
+    let row = 0;
+    while (eventsWithRows.slice(0, i).some((other) => other.row === row && isOverlapping(event, other))) {
+      row++;
+    }
+    eventsWithRows[i].row = row;
+  }
+  return eventsWithRows;
+}
 
-  link?: string;
-};
-
-export type CalendarEventWithRow = CalendarEvent & { row: number };
-
-const weekDays = ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota', 'Niedziela'];
-const months = [
-  'Styczeń',
-  'Luty',
-  'Marzec',
-  'Kwiecień',
-  'Maj',
-  'Czerwiec',
-  'Lipiec',
-  'Sierpień',
-  'Wrzesień',
-  'Październik',
-  'Listopad',
-  'Grudzień',
-];
+function isOverlapping(a: CalendarEvent, b: CalendarEvent): boolean {
+  return dateToUtcDay(a.start) <= dateToUtcDay(b.end) && dateToUtcDay(a.end) >= dateToUtcDay(b.start);
+}
 
 type Props = {
   events: CalendarEvent[];
@@ -74,6 +66,7 @@ export function AppCalendar({ events, buttons }: Props) {
       Wróć do obecnego miesiąca
     </AppButton>,
   ];
+
   function handleMonthChange(delta: 1 | -1) {
     const newYear = currentMonth.year;
     const newMonth = currentMonth.month + delta;
@@ -143,44 +136,12 @@ export function AppCalendar({ events, buttons }: Props) {
   );
 }
 
-function getDaysInMonth({ month, year }: { month: number; year: number }): Date[] {
-  const date = findClosestMondayBefore(new Date(year, month, 1));
-  const days = [];
-  while (
-    month > 0
-      ? date.getFullYear() <= year && date.getMonth() <= month
-      : date.getFullYear() < year || date.getMonth() < 1
-  ) {
-    days.push(new Date(date));
-    date.setDate(date.getDate() + 1);
-  }
-  while (date.getDay() > 1 || date.getDay() < 1) {
-    days.push(new Date(date));
-    date.setDate(date.getDate() + 1);
-  }
-  return days;
-}
+export type CalendarEvent = {
+  title: string;
+  start: Date;
+  end: Date;
 
-function findClosestMondayBefore(date: Date): Date {
-  const day = date.getDay();
-  const diff = day === 0 ? 6 : day - 1;
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate() - diff);
-}
+  link?: string;
+};
 
-function assignEventsToRows(events: CalendarEvent[]): CalendarEventWithRow[] {
-  const eventsWithRows = events.map((event) => ({ ...event, row: 0 }));
-  eventsWithRows.sort((a, b) => dateToUtcDay(a.start) - dateToUtcDay(b.start));
-  for (let i = 0; i < eventsWithRows.length; i++) {
-    const event = eventsWithRows[i];
-    let row = 0;
-    while (eventsWithRows.slice(0, i).some((other) => other.row === row && isOverlapping(event, other))) {
-      row++;
-    }
-    eventsWithRows[i].row = row;
-  }
-  return eventsWithRows;
-}
-
-function isOverlapping(a: CalendarEvent, b: CalendarEvent): boolean {
-  return dateToUtcDay(a.start) <= dateToUtcDay(b.end) && dateToUtcDay(a.end) >= dateToUtcDay(b.start);
-}
+export type CalendarEventWithRow = CalendarEvent & { row: number };

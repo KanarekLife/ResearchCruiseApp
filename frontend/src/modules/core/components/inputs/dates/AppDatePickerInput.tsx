@@ -15,9 +15,8 @@ import { AppInputHelper } from '@/core/components/inputs/parts/AppInputHelper';
 import { AppInputLabel } from '@/core/components/inputs/parts/AppInputLabel';
 import { useDropdown } from '@/core/hooks/DropdownHook';
 import { useOutsideClickDetection } from '@/core/hooks/OutsideClickDetectionHook';
-import { cn, dateToUtcDay } from '@/core/lib/utils';
-
-const weekDays = ['Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'So', 'Nd'];
+import { dateToUtcDay, getDaysInMonth, shortWeekDays } from '@/core/lib/calendarUtils';
+import { cn } from '@/core/lib/utils';
 
 type Props = {
   name: string;
@@ -198,7 +197,7 @@ export function AppDatePickerInput({
               </AppButton>
             </div>
             <div className="grid grid-cols-7 p-2" onMouseLeave={() => setHoveredDate(undefined)}>
-              {weekDays.map((day) => (
+              {shortWeekDays.map((day) => (
                 <div key={day} className="font-semibold pb-2 text-center">
                   {day}
                 </div>
@@ -262,30 +261,6 @@ function getValueFromDate(date: Date | undefined): string | undefined {
   }
 
   return date.toISOString();
-}
-
-function getDaysInMonth({ month, year }: { month: number; year: number }): Date[] {
-  const date = findClosestMondayBefore(new Date(year, month, 1));
-  const days = [];
-  while (
-    month > 0
-      ? date.getFullYear() <= year && date.getMonth() <= month
-      : date.getFullYear() < year || date.getMonth() < 1
-  ) {
-    days.push(new Date(date));
-    date.setDate(date.getDate() + 1);
-  }
-  while (date.getDay() > 1 || date.getDay() < 1) {
-    days.push(new Date(date));
-    date.setDate(date.getDate() + 1);
-  }
-  return days;
-}
-
-function findClosestMondayBefore(date: Date): Date {
-  const day = date.getDay();
-  const diff = day === 0 ? 6 : day - 1;
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate() - diff);
 }
 
 type CalendarDateTileProps = {
