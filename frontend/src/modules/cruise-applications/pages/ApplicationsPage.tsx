@@ -7,18 +7,34 @@ import { AppLoader } from '@/core/components/AppLoader';
 import { AppTable } from '@/core/components/table/AppTable';
 import { useCruiseApplicationsQuery } from '@/cruise-applications/hooks/CruiseApplicationsApiHooks';
 import { CruiseApplicationDto } from '@/cruise-applications/models/CruiseApplicationDto';
+import { AppAvatar } from '@/core/components/AppAvatar';
+import { AppButton } from '@/core/components/AppButton';
+import { AppBadge } from '@/core/components/AppBadge';
 
 export function ApplicationsPage() {
   const applicationsQuery = useCruiseApplicationsQuery();
 
   const columns: ColumnDef<CruiseApplicationDto>[] = [
     {
-      header: 'Numer/data',
-      accessorFn: (row) => `${row.number}/${row.date}`,
+      header: 'Numer',
+      accessorFn: (row) => `${row.number}`,
+      sortDescFirst: true,
+    },
+    {
+      header: 'Data',
+      accessorFn: (row) => `${row.date}`,
     },
     {
       header: 'Rok rejsu',
       accessorFn: (row) => `${row.year}`,
+    },
+    {
+      id: 'avatar',
+      header: undefined,
+      accessorFn: (row) => `${row.cruiseManagerFirstName} ${row.cruiseManagerLastName}`,
+      cell: (cell) => <AppAvatar fullName={cell.getValue() as string} variant="small" />,
+      enableColumnFilter: false,
+      enableSorting: false,
     },
     {
       header: 'Kierownik',
@@ -42,7 +58,8 @@ export function ApplicationsPage() {
     },
     {
       header: 'Punkty',
-      accessorFn: (row) => `${row.points}`,
+      accessorFn: (row) => `${row.points} pkt.`,
+      cell: ({ row }) => <AppBadge>{row.original.points} pkt.</AppBadge>,
     },
     {
       header: 'Status',
@@ -52,7 +69,7 @@ export function ApplicationsPage() {
       header: 'Akcje',
       cell: ({ row }) => (
         <>
-          <AppLink href={`/applications/${row.original.id}/details`}>Szczegóły</AppLink>
+          <AppButton type='link' href={`/applications/${row.original.id}/details`}>Szczegóły</AppButton>
         </>
       ),
     },

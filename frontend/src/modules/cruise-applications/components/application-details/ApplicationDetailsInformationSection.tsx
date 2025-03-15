@@ -1,6 +1,7 @@
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppLink } from '@/core/components/AppLink';
 import { AppInput } from '@/core/components/inputs/AppInput';
+import { AppNumberInput } from '@/core/components/inputs/AppNumberInput';
 import { useApplicationDetails } from '@/cruise-applications/contexts/ApplicationDetailsContext';
 
 export function ApplicationDetailsInformationSection() {
@@ -39,7 +40,7 @@ export function ApplicationDetailsInformationSection() {
           </AppLink>
         </div>
         <AppInput name="status" value={application.status} label="Status zgłoszenia:" required disabled />
-        <AppInput name="points" value={`${application.points}`} label="Punkty:" required disabled />
+        <AppNumberInput name="points" value={application.points} label="Punkty:" required disabled />
       </div>
     </AppAccordion>
   );
