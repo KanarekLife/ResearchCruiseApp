@@ -1,5 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Suspense } from 'react';
+import ZoomInIcon from 'bootstrap-icons/icons/zoom-in.svg?react';
 
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLink } from '@/core/components/AppLink';
@@ -38,6 +39,7 @@ export function ApplicationsPage() {
       cell: (cell) => <AppAvatar fullName={cell.getValue() as string} variant="small" />,
       enableColumnFilter: false,
       enableSorting: false,
+      size: 40,
     },
     {
       id: 'manager',
@@ -71,17 +73,26 @@ export function ApplicationsPage() {
       id: 'status',
       header: 'Status',
       accessorFn: (row) => `${row.status}`,
-      cell: ({ row }) => <>
-        <p className='italic'>{row.original.status}</p>
-        {row.original.status === CruiseApplicationStatus.FormBRequired && <AppButton type='link' href={`/cruises/${row.original.id}/formB?mode=edit`}>Wypełnij</AppButton>}
-      </>,
+      cell: ({ row }) => (
+        <>
+          <p className="italic">{row.original.status}</p>
+          {row.original.status === CruiseApplicationStatus.FormBRequired && (
+            <AppButton size="plain" type="link" href={`/cruises/${row.original.id}/formB?mode=edit`}>
+              Wypełnij
+            </AppButton>
+          )}
+        </>
+      ),
     },
     {
       id: 'actions',
       header: 'Akcje',
       cell: ({ row }) => (
         <>
-          <AppButton type='link' href={`/applications/${row.original.id}/details`}>Szczegóły</AppButton>
+          <AppButton type="link" href={`/applications/${row.original.id}/details`}>
+            Szczegóły
+            <ZoomInIcon className="w-4 h-4" />
+          </AppButton>
         </>
       ),
     },
