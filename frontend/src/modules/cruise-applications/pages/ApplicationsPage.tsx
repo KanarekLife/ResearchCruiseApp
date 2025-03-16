@@ -16,15 +16,18 @@ export function ApplicationsPage() {
 
   const columns: ColumnDef<CruiseApplicationDto>[] = [
     {
+      id: 'number',
       header: 'Numer',
       accessorFn: (row) => `${row.number}`,
       sortDescFirst: true,
     },
     {
+      id: 'date',
       header: 'Data',
       accessorFn: (row) => `${row.date}`,
     },
     {
+      id: 'year',
       header: 'Rok rejsu',
       accessorFn: (row) => `${row.year}`,
     },
@@ -37,10 +40,12 @@ export function ApplicationsPage() {
       enableSorting: false,
     },
     {
+      id: 'manager',
       header: 'Kierownik',
       accessorFn: (row) => `${row.cruiseManagerFirstName} ${row.cruiseManagerLastName}`,
     },
     {
+      id: 'forms',
       header: 'Formularze',
       cell: ({ row }) => (
         <div className="flex flex-col gap-1">
@@ -57,11 +62,13 @@ export function ApplicationsPage() {
       ),
     },
     {
+      id: 'points',
       header: 'Punkty',
       accessorFn: (row) => `${row.points} pkt.`,
       cell: ({ row }) => <AppBadge>{row.original.points} pkt.</AppBadge>,
     },
     {
+      id: 'status',
       header: 'Status',
       accessorFn: (row) => `${row.status}`,
       cell: ({ row }) => <>
@@ -70,6 +77,7 @@ export function ApplicationsPage() {
       </>,
     },
     {
+      id: 'actions',
       header: 'Akcje',
       cell: ({ row }) => (
         <>
@@ -79,11 +87,23 @@ export function ApplicationsPage() {
     },
   ];
 
+  const initialSortingState = [
+    {
+      id: 'number',
+      desc: true,
+    },
+  ];
+
   return (
     <>
       <AppLayout title="Zgłoszenia">
         <Suspense fallback={<AppLoader />}>
-          <AppTable data={applicationsQuery.data} columns={columns} buttons={(defaultButtons) => [...defaultButtons]} />
+          <AppTable
+            data={applicationsQuery.data}
+            columns={columns}
+            buttons={(defaultButtons) => [...defaultButtons]}
+            initialSortingState={initialSortingState}
+          />
         </Suspense>
       </AppLayout>
     </>
