@@ -34,7 +34,7 @@ export function ApplicationDetails({ application, evaluation }: Props) {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['cruiseApplications', application.id] });
         appContext.showAlert({
-          title: 'Formularz pomyślnie zaakceptowany',
+          title: 'Formularz został pomyślnie zaakceptowany',
           message: 'Formularz został zaakceptowany.',
           variant: 'success',
         });
@@ -55,7 +55,7 @@ export function ApplicationDetails({ application, evaluation }: Props) {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['cruiseApplications', application.id] });
         appContext.showAlert({
-          title: 'Formularz pomyślnie odrzucony',
+          title: 'Formularz został pomyślnie odrzucony',
           message: 'Formularz został odrzucony.',
           variant: 'success',
         });

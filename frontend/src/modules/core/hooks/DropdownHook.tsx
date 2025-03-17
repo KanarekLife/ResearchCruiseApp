@@ -44,7 +44,7 @@ export function useDropdown({
 
     const headerRect = openingItemRef.current.getBoundingClientRect();
     const dropdownRect = dropdownRef.current.getBoundingClientRect();
-    const rootHeaderHeight = document.getElementById('header')?.clientHeight ?? 0;
+    const rootHeaderHeight = document.querySelector('#header')?.clientHeight ?? 0;
 
     const direction = isOverflowingDownwards(headerRect, dropdownRect) ? 'down' : 'up';
 

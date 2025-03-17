@@ -19,18 +19,16 @@ export function ApplicationsPage() {
     {
       id: 'number',
       header: 'Numer',
-      accessorFn: (row) => `${row.number}`,
+      accessorFn: (row) => row.number,
       sortDescFirst: true,
     },
     {
-      id: 'date',
       header: 'Data',
-      accessorFn: (row) => `${row.date}`,
+      accessorFn: (row) => row.date,
     },
     {
-      id: 'year',
       header: 'Rok rejsu',
-      accessorFn: (row) => `${row.year}`,
+      accessorFn: (row) => row.year,
     },
     {
       id: 'avatar',
@@ -42,12 +40,10 @@ export function ApplicationsPage() {
       size: 40,
     },
     {
-      id: 'manager',
       header: 'Kierownik',
       accessorFn: (row) => `${row.cruiseManagerFirstName} ${row.cruiseManagerLastName}`,
     },
     {
-      id: 'forms',
       header: 'Formularze',
       cell: ({ row }) => {
         const isFormBReadOnly = row.original.status === CruiseApplicationStatus.Accepted;
@@ -66,15 +62,13 @@ export function ApplicationsPage() {
       );},
     },
     {
-      id: 'points',
       header: 'Punkty',
       accessorFn: (row) => `${row.points} pkt.`,
       cell: ({ row }) => <AppBadge>{row.original.points} pkt.</AppBadge>,
     },
     {
-      id: 'status',
       header: 'Status',
-      accessorFn: (row) => `${row.status}`,
+      accessorFn: (row) => row.status,
       cell: ({ row }) => (
         <>
           <p className="italic">{row.original.status}</p>
@@ -84,19 +78,18 @@ export function ApplicationsPage() {
             </AppButton>
           )}
           {row.original.status === CruiseApplicationStatus.Undertaken && (
-            <>
+            <div className="gird grid-cols-1 gap-2">
               <AppButton size="plain" type="link" href={`/cruises/${row.original.id}/formC?mode=edit`}>
                 Wypełnij formularz C
               </AppButton>
               <AppBadge variant="success">{row.original.effectsDoneRate} efektów</AppBadge>
-            </>
+            </div>
           )}
         </>
       ),
       size: 165,
     },
     {
-      id: 'actions',
       header: 'Akcje',
       cell: ({ row }) => (
         <>
