@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { AppActionsSection } from '@/core/components/AppActionsSection';
+import { ApplicationDetailsActionAccept } from '@/cruise-applications/components/application-details/actions-section-buttons/ApplicationDetailsActionAccept';
+import { ApplicationDetailsActionCancel } from '@/cruise-applications/components/application-details/actions-section-buttons/ApplicationDetailsActionCancel';
+import { ApplicationDetailsActionCancelConfirmation } from '@/cruise-applications/components/application-details/actions-section-buttons/ApplicationDetailsActionCancelConfirmation';
 import { useApplicationDetails } from '@/cruise-applications/contexts/ApplicationDetailsContext';
 import { CruiseApplicationStatus } from '@/cruise-applications/models/CruiseApplicationDto';
-import { ApplicationDetailsActionCancelConfirmation } from '@/cruise-applications/components/application-details/actions-section-buttons/ApplicationDetailsActionCancelConfirmation';
-import { ApplicationDetailsActionCancel } from '@/cruise-applications/components/application-details/actions-section-buttons/ApplicationDetailsActionCancel';
-import { ApplicationDetailsActionAccept } from '@/cruise-applications/components/application-details/actions-section-buttons/ApplicationDetailsActionAccept';
 
 type Props = {
   onAccept: () => void;
@@ -41,4 +41,3 @@ export function ApplicationDetailsActionsSection({ onAccept, onReject }: Props) 
       return null;
   }
 }
-

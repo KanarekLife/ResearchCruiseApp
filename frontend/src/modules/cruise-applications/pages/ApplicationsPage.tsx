@@ -1,16 +1,16 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { Suspense } from 'react';
 import ZoomInIcon from 'bootstrap-icons/icons/zoom-in.svg?react';
+import { Suspense } from 'react';
 
+import { AppAvatar } from '@/core/components/AppAvatar';
+import { AppBadge } from '@/core/components/AppBadge';
+import { AppButton } from '@/core/components/AppButton';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLink } from '@/core/components/AppLink';
 import { AppLoader } from '@/core/components/AppLoader';
 import { AppTable } from '@/core/components/table/AppTable';
 import { useCruiseApplicationsQuery } from '@/cruise-applications/hooks/CruiseApplicationsApiHooks';
 import { CruiseApplicationDto, CruiseApplicationStatus } from '@/cruise-applications/models/CruiseApplicationDto';
-import { AppAvatar } from '@/core/components/AppAvatar';
-import { AppButton } from '@/core/components/AppButton';
-import { AppBadge } from '@/core/components/AppBadge';
 
 export function ApplicationsPage() {
   const applicationsQuery = useCruiseApplicationsQuery();
@@ -48,18 +48,22 @@ export function ApplicationsPage() {
       cell: ({ row }) => {
         const isFormBReadOnly = row.original.status === CruiseApplicationStatus.Accepted;
         return (
-        <div className="flex flex-col gap-1">
-          <AppLink disabled={!row.original.hasFormA} href={`/applications/${row.original.id}/formA`}>
-            Formularz A
-          </AppLink>
-          <AppLink disabled={!row.original.hasFormB} href={`/applications/${row.original.id}/formB?mode=${isFormBReadOnly ? 'view' : 'preview'}`}>
-            Formularz B
-          </AppLink>
-          <AppLink disabled={!row.original.hasFormC} href={`/applications/${row.original.id}/formC`}>
-            Formularz C
-          </AppLink>
-        </div>
-      );},
+          <div className="flex flex-col gap-1">
+            <AppLink disabled={!row.original.hasFormA} href={`/applications/${row.original.id}/formA`}>
+              Formularz A
+            </AppLink>
+            <AppLink
+              disabled={!row.original.hasFormB}
+              href={`/applications/${row.original.id}/formB?mode=${isFormBReadOnly ? 'view' : 'preview'}`}
+            >
+              Formularz B
+            </AppLink>
+            <AppLink disabled={!row.original.hasFormC} href={`/applications/${row.original.id}/formC`}>
+              Formularz C
+            </AppLink>
+          </div>
+        );
+      },
     },
     {
       header: 'Punkty',
