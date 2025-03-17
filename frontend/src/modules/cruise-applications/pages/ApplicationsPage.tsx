@@ -49,19 +49,21 @@ export function ApplicationsPage() {
     {
       id: 'forms',
       header: 'Formularze',
-      cell: ({ row }) => (
+      cell: ({ row }) => {
+        const isFormBReadOnly = row.original.status === CruiseApplicationStatus.Accepted;
+        return (
         <div className="flex flex-col gap-1">
           <AppLink disabled={!row.original.hasFormA} href={`/applications/${row.original.id}/formA`}>
             Formularz A
           </AppLink>
-          <AppLink disabled={!row.original.hasFormB} href={`/applications/${row.original.id}/formB`}>
+          <AppLink disabled={!row.original.hasFormB} href={`/applications/${row.original.id}/formB?mode=${isFormBReadOnly ? 'view' : 'preview'}`}>
             Formularz B
           </AppLink>
           <AppLink disabled={!row.original.hasFormC} href={`/applications/${row.original.id}/formC`}>
             Formularz C
           </AppLink>
         </div>
-      ),
+      );},
     },
     {
       id: 'points',
@@ -81,8 +83,17 @@ export function ApplicationsPage() {
               Wypełnij
             </AppButton>
           )}
+          {row.original.status === CruiseApplicationStatus.Undertaken && (
+            <>
+              <AppButton size="plain" type="link" href={`/cruises/${row.original.id}/formC?mode=edit`}>
+                Wypełnij formularz C
+              </AppButton>
+              <AppBadge variant="success">{row.original.effectsDoneRate} efektów</AppBadge>
+            </>
+          )}
         </>
       ),
+      size: 165,
     },
     {
       id: 'actions',
