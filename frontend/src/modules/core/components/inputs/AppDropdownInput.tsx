@@ -115,9 +115,8 @@ export function AppDropdownInput({
           }}
           className={cn(
             'ring-2 ring-transparent w-full text-sm p-2.5',
-            !disabled
-              ? 'cursor-pointer focus:ring-blue-500 focus:border-blue-500 focus:rounded-lg focus:shadow focus:outline-none'
-              : '',
+            !disabled &&
+              'cursor-pointer focus:ring-blue-500 focus:border-blue-500 focus:rounded-lg focus:shadow focus:outline-none',
             'flex justify-between items-center'
           )}
           disabled={disabled}

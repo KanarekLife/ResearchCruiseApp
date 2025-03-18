@@ -189,7 +189,7 @@ export function FormAContractsSection() {
                 ]}
                 emptyTableMessage="Nie dodano żadnej umowy."
                 variant="form"
-                readOnly={isReadonly}
+                disabled={isReadonly}
               />
               <AppInputErrorsList errors={getErrors(field.state.meta, hasFormBeenSubmitted)} />
             </>

@@ -115,7 +115,7 @@ export function FormAPermissionsSection() {
                 ]}
                 emptyTableMessage="Nie dodano żadnego pozwolenia."
                 variant="form"
-                readOnly={isReadonly}
+                disabled={isReadonly}
               />
               <AppInputErrorsList errors={getErrors(field.state.meta)} />
             </>

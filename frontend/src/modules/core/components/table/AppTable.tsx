@@ -26,7 +26,7 @@ type Props<T> = {
   initialSortingState?: SortingState;
   getRowId?: (originalRow: T, index: number, parent?: Row<T>) => string;
   variant?: 'form' | 'table';
-  readOnly?: boolean;
+  disabled?: boolean;
 };
 
 export function AppTable<T>({
@@ -39,7 +39,7 @@ export function AppTable<T>({
   initialSortingState,
   getRowId,
   variant = 'table',
-  readOnly = false,
+  disabled = false,
 }: Props<T>) {
   const { width } = useWindowSize();
   const table = useReactTable<T>({
@@ -58,7 +58,7 @@ export function AppTable<T>({
     state: {
       rowSelection: rowSelectionState,
       columnVisibility: {
-        actions: !readOnly,
+        actions: !disabled,
       },
     },
     initialState: {
@@ -73,7 +73,7 @@ export function AppTable<T>({
   return (
     <TableComponent
       table={table}
-      buttons={!readOnly ? buttons : () => []}
+      buttons={!disabled ? buttons : () => []}
       emptyTableMessage={emptyTableMessage}
       variant={variant}
     />

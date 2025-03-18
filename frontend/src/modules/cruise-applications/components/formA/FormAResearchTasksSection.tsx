@@ -104,7 +104,7 @@ export function FormAResearchTasksSection() {
                 ]}
                 emptyTableMessage="Nie dodano żadnego zadania."
                 variant="form"
-                readOnly={isReadonly}
+                disabled={isReadonly}
               />
               <AppInputErrorsList errors={getErrors(field.state.meta, hasFormBeenSubmitted)} />
             </>
