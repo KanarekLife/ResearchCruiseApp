@@ -9,7 +9,8 @@ ResearchCruiseApp
 
 == Adresowany problem
 
-Projekt ResearchCruiseApp dostosowany jest do zarządzania rejsami badawczymi statku badawczego "Oceanograf" należącego do Instytutu Oceanografii Uniwersytetu Gdańskiego. Aplikacja ma na celu usprawnienie procesów związanych z rezerwacją, obsługą i organizacją rejsów badawczych, a także umożliwienie efektywnej komunikacji między różnymi interesariuszami. Projekt rozwijany jest od zeszłego roku i ma na celu dalsze usprawnienie i rozbudowę funkcjonalności aplikacji.
+Projekt ResearchCruiseApp dostosowany jest do zarządzania rejsami badawczymi statku badawczego "Oceanograf" należącego do Instytutu Oceanografii Uniwersytetu Gdańskiego. Aplikacja ma na celu usprawnienie procesów związanych z rezerwacją, obsługą i organizacją rejsów badawczych, a także umożliwienie efektywnej komunikacji między różnymi interesariuszami. Prace na aplikacją zostały rozpoczęte w zeszłym roku jako projekt grupowy oraz inżynierski poprzedniego zespołu.
+Są one kontynuowane przez obecny zespół w ramach własnego projektu grupowego oraz dwóch prac inżynierskich.
 
 == Obszar zastosowania i rynek
 
