@@ -19,18 +19,18 @@ import {
 import { FormBDto } from '@/cruise-applications/models/FormBDto';
 
 export function FormBPage() {
-  const routeApi = getRouteApi('/cruises/$cruiseId/formB');
-  const { cruiseId } = routeApi.useParams();
+  const routeApi = getRouteApi('/applications/$applicationId/formB');
+  const { applicationId } = routeApi.useParams();
   const mode = routeApi.useSearch().mode ?? 'preview';
 
   const navigate = useNavigate();
   const appContext = useAppContext();
 
-  const formA = useFormAQuery(cruiseId);
-  const formB = useFormBQuery(cruiseId);
+  const formA = useFormAQuery(applicationId);
+  const formB = useFormBQuery(applicationId);
   const formAInitValues = useFormAInitValuesQuery();
   const formBInitValues = useFormBInitValuesQuery();
-  const cruise = useCruiseForCruiseApplicationQuery(cruiseId);
+  const cruise = useCruiseForCruiseApplicationQuery(applicationId);
   const updateMutation = useUpdateFormBMutation();
   const revertToEditMutation = useRevertFormBToEditMutation();
 
@@ -63,7 +63,7 @@ export function FormBPage() {
     hasFormBeenSubmitted,
     onSubmit: handleSubmit,
     onSaveDraft: handleDraftSave,
-    onRevertToEdit: mode === 'view' ? handleRevertToEdit : undefined,
+    onRevertToEdit: mode === 'preview' ? handleRevertToEdit : undefined,
   };
 
   async function handleSubmit() {
@@ -76,7 +76,7 @@ export function FormBPage() {
 
     await updateMutation.mutateAsync(
       {
-        id: cruiseId,
+        id: applicationId,
         form: form.state.values,
         draft: false,
       },
@@ -115,7 +115,7 @@ export function FormBPage() {
   async function handleDraftSave() {
     await updateMutation.mutateAsync(
       {
-        id: cruiseId,
+        id: applicationId,
         form: form.state.values,
         draft: true,
       },
@@ -154,10 +154,10 @@ export function FormBPage() {
 
   async function handleRevertToEdit() {
     await revertToEditMutation.mutateAsync(
-      { id: cruiseId },
+      { id: applicationId },
       {
         onSuccess: async () => {
-          await navigate({ to: `/cruises/${cruiseId}/formB?mode=edit` });
+          await navigate({ to: `/applications/${applicationId}/formB?mode=edit` });
         },
       }
     );

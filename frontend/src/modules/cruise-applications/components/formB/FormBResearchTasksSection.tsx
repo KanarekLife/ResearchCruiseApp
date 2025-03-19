@@ -7,7 +7,7 @@ import { useFormB } from '@/cruise-applications/contexts/FormBContext';
 import { getTaskName, ResearchTaskDto } from '@/cruise-applications/models/ResearchTaskDto';
 
 export function FormBResearchTasksSection() {
-  const { formA } = useFormB();
+  const { formA, isReadonly } = useFormB();
 
   const columns: ColumnDef<ResearchTaskDto>[] = [
     {
@@ -34,6 +34,7 @@ export function FormBResearchTasksSection() {
         columns={columns}
         buttons={() => []}
         emptyTableMessage="Nie dodano żadnego zadania."
+        disabled={isReadonly}
       />
     </AppAccordion>
   );

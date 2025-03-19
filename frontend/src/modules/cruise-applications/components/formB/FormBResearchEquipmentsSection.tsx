@@ -150,6 +150,7 @@ export function FormBResearchEquipmentsSection() {
               </AppButton>,
             ]}
             variant="form"
+            disabled={isReadonly}
           />
         )}
       />

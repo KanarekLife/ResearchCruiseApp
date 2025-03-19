@@ -15,9 +15,8 @@ export function FormBCruiseInfoSection() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-2">
           <span className="font-semibold ">Numer rejsu:</span>
-          <span className="flex gap-4">
-            <span>{cruise.number}</span>
-            <CruiseStatusBadge status={cruise.status} />
+          <span className="flex gap-4 h-fit">
+            {cruise.number} <CruiseStatusBadge status={cruise.status} />
           </span>
           <span className="font-semibold mt-4 md:mt-0">Terminy rozpoczęcia i zakończenia:</span>
           <span className="inline-flex gap-2 text-nowrap">
@@ -31,7 +30,7 @@ export function FormBCruiseInfoSection() {
           </span>
         </div>
         <div className="grid place-items-center">
-          <AppButton href="/" variant="primaryOutline" className="gap-4 py-3">
+          <AppButton type="link" href={`/cruises/${cruise.id}`} variant="primaryOutline" className="grid gap-4 py-3">
             <SearchIcon className="w-4" /> Pokaż szczegóły rejsu
           </AppButton>
         </div>

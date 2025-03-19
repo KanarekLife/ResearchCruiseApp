@@ -78,7 +78,7 @@ export function AppDatePickerTimeInput({
   return (
     <>
       <div className="flex flex-col">
-        <AppInputLabel name={name} label={label} />
+        <AppInputLabel name={name} value={label} />
         <div ref={inputRef}>
           <input
             type="hidden"

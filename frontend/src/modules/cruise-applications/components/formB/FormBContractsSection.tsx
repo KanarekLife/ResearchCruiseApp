@@ -8,7 +8,7 @@ import { useFormB } from '@/cruise-applications/contexts/FormBContext';
 import { ContractDto, getContractCategoryName } from '@/cruise-applications/models/ContractDto';
 
 export function FormBContractsSection() {
-  const { formA } = useFormB();
+  const { formA, isReadonly } = useFormB();
 
   const columns: ColumnDef<ContractDto>[] = [
     {
@@ -81,6 +81,7 @@ export function FormBContractsSection() {
         buttons={() => []}
         columns={columns}
         emptyTableMessage="Nie dodano żadnej umowy."
+        disabled={isReadonly}
       />
     </AppAccordion>
   );

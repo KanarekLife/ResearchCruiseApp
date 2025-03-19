@@ -77,13 +77,18 @@ export function ApplicationsPage() {
         <>
           <p className="italic">{row.original.status}</p>
           {row.original.status === CruiseApplicationStatus.FormBRequired && (
-            <AppButton size="plain" type="link" href={`/cruises/${row.original.id}/formB?mode=edit`}>
+            <AppButton
+              className="inline-block mx-auto px-5 py-1"
+              size="plain"
+              type="link"
+              href={`/applications/${row.original.id}/formB?mode=edit`}
+            >
               Wypełnij
             </AppButton>
           )}
           {row.original.status === CruiseApplicationStatus.Undertaken && (
             <div className="gird grid-cols-1 gap-2">
-              <AppButton size="plain" type="link" href={`/cruises/${row.original.id}/formC?mode=edit`}>
+              <AppButton size="plain" type="link" href={`/applications/${row.original.id}/formC?mode=edit`}>
                 Wypełnij formularz C
               </AppButton>
               <AppBadge variant="success">{row.original.effectsDoneRate} efektów</AppBadge>

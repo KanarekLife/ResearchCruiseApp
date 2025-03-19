@@ -89,7 +89,7 @@ export function FormAPage() {
     }
 
     saveMutation.mutate(
-      { id: cruiseId, form: dto, draft: false },
+      { id: applicationId, form: dto, draft: false },
       {
         onSuccess: () => {
           navigate({ to: '/' });
@@ -133,7 +133,7 @@ export function FormAPage() {
     }
 
     saveMutation.mutate(
-      { id: cruiseId, form: dto, draft: true },
+      { id: applicationId, form: dto, draft: true },
       {
         onSuccess: () => {
           navigate({ to: '/' });
