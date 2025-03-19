@@ -347,6 +347,7 @@ export function FormBCruiseDetailsSection() {
                 </AppButton>,
               ]}
               variant="form"
+              disabled={isReadonly}
             />
           )}
         />
@@ -386,6 +387,7 @@ export function FormBCruiseDetailsSection() {
                 </CruiseApplicationDropdownElementSelectorButton>,
               ]}
               variant="form"
+              disabled={isReadonly}
             />
           )}
         />
@@ -417,6 +419,7 @@ export function FormBCruiseDetailsSection() {
                 </AppButton>,
               ]}
               variant="form"
+              disabled={isReadonly}
             />
           )}
         />

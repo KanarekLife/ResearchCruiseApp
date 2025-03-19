@@ -6,7 +6,7 @@ import { useFormB } from '@/cruise-applications/contexts/FormBContext';
 import { SpubTaskDto } from '@/cruise-applications/models/SpubTaskDto';
 
 export function FormBSPUBTasksSection() {
-  const { formA } = useFormB();
+  const { formA, isReadonly } = useFormB();
 
   const columns: ColumnDef<SpubTaskDto>[] = [
     {
@@ -46,6 +46,7 @@ export function FormBSPUBTasksSection() {
         columns={columns}
         buttons={() => []}
         emptyTableMessage="Nie dodano żadnego zadania."
+        disabled={isReadonly}
       />
     </AppAccordion>
   );

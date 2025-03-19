@@ -58,6 +58,7 @@ export function FormBShipEquipmentsSection() {
             columns={shipEquipmentColumns(form, hasFormBeenSubmitted, isReadonly)}
             buttons={() => []}
             variant="form"
+            disabled={isReadonly}
           />
         )}
       />
