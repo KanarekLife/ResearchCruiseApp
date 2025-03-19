@@ -35,19 +35,21 @@ export function FormBPage() {
   const revertToEditMutation = useRevertFormBToEditMutation();
 
   const form = useForm<FormBDto>({
-    defaultValues: formB.data ?? {
-      isCruiseManagerPresent: 'true',
-      permissions: formA.data.permissions,
-      ugTeams: formA.data.ugTeams,
-      guestTeams: formA.data.guestTeams,
-      crewMembers: [],
-      shortResearchEquipments: [],
-      longResearchEquipments: [],
-      ports: [],
-      cruiseDaysDetails: [],
-      researchEquipment: [],
-      shipEquipmentsIds: [],
-    },
+    defaultValues:
+      formB.data ??
+      ({
+        isCruiseManagerPresent: 'true',
+        permissions: formA.data.permissions,
+        ugTeams: formA.data.ugTeams,
+        guestTeams: formA.data.guestTeams,
+        crewMembers: [],
+        shortResearchEquipments: [],
+        longResearchEquipments: [],
+        ports: [],
+        cruiseDaysDetails: [],
+        researchEquipments: [],
+        shipEquipmentsIds: [],
+      } as FormBDto),
     validators: {
       onChange: getFormBValidationSchema(),
     },
