@@ -8,23 +8,19 @@ on:
       - task/ci-cd-pipeline # TODO: This should be removed after the task is completed
     tags:
       - "v*"
-    paths:
-      - "frontend/**"
-      - "backend/**"
-      - ".github/**"
   pull_request:
     branches:
       - main
       - task/frontend-refactor # TODO: This should be removed after the task is completed
-    paths:
-      - "frontend/**"
-      - "backend/**"
-      - ".github/**"
 
 jobs:
   build-and-push-images:
     name: Build and push images
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
 
     strategy:
       matrix:
