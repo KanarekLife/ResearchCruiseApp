@@ -2,13 +2,7 @@ name: Format & lint checks
 
 on:
   push:
-    paths:
-      - "frontend/**"
-      - "backend/**"
   pull_request:
-    paths:
-      - "frontend/**"
-      - "backend/**"
 
 jobs:
   frontend-checks:
