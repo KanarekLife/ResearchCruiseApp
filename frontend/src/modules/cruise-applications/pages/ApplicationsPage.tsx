@@ -50,7 +50,9 @@ export function ApplicationsPage() {
     {
       header: 'Formularze',
       cell: ({ row }) => {
-        const isFormBReadOnly = row.original.status === CruiseApplicationStatus.Accepted;
+        const isFormBReadOnly =
+          row.original.status !== CruiseApplicationStatus.FormBFilled &&
+          row.original.status !== CruiseApplicationStatus.Undertaken;
         return (
           <div className="flex flex-col gap-1">
             <AppLink disabled={!row.original.hasFormA} href={`/applications/${row.original.id}/formA`}>
