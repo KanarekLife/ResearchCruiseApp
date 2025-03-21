@@ -9,7 +9,7 @@ export function AppDesktopTable<T>({ table, buttons, emptyTableMessage }: TableP
   const allButtons = buttons ? buttons(defaultButtons) : defaultButtons;
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full overflow-x-auto mt-4">
       <table className="min-w-full table-fixed">
         <colgroup>
           {table.getAllColumns().map((column) => (
@@ -27,7 +27,7 @@ export function AppDesktopTable<T>({ table, buttons, emptyTableMessage }: TableP
                     .reduce((a, b) => a + b, 0)
                 )}
               >
-                <div className="flex justify-end flex-wrap gap-4 my-4">{allButtons}</div>
+                <div className="flex justify-end flex-wrap gap-4 mb-4">{allButtons}</div>
               </th>
             </tr>
           )}

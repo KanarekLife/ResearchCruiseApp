@@ -29,7 +29,7 @@ export function FormAPublicationsSection() {
       {
         header: 'Lp.',
         cell: ({ row }) => `${row.index + 1}. `,
-        size: 20,
+        size: 5,
       },
       {
         header: 'Kategoria',
@@ -56,7 +56,7 @@ export function FormAPublicationsSection() {
             )}
           />
         ),
-        size: 100,
+        size: 10,
       },
       {
         header: 'Informacje',
@@ -134,6 +134,7 @@ export function FormAPublicationsSection() {
             />
           </div>
         ),
+        size: 50,
       },
       {
         header: 'Rok wydania',
@@ -157,7 +158,7 @@ export function FormAPublicationsSection() {
             )}
           />
         ),
-        size: 80,
+        size: 10,
       },
       {
         header: 'Punkty ministerialne',
@@ -183,7 +184,7 @@ export function FormAPublicationsSection() {
             )}
           />
         ),
-        size: 80,
+        size: 10,
       },
       {
         id: 'actions',
@@ -199,7 +200,7 @@ export function FormAPublicationsSection() {
             />
           </div>
         ),
-        size: 20,
+        size: 5,
       },
     ];
   }

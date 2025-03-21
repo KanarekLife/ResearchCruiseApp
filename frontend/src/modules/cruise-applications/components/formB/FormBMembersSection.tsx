@@ -208,7 +208,7 @@ export function FormBMembersSection() {
         enableColumnFilter: false,
         enableSorting: false,
         cell: ({ row }) => `${row.index + 1}. `,
-        size: 10,
+        size: 5,
       },
       {
         header: 'Dane osobowe',
@@ -227,7 +227,6 @@ export function FormBMembersSection() {
                   onBlur={field.handleBlur}
                   errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Tytuł"
-                  placeholder="Wprowadź tytuł"
                   required
                   disabled={isReadonly}
                 />
@@ -244,7 +243,6 @@ export function FormBMembersSection() {
                   onBlur={field.handleBlur}
                   errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Imiona"
-                  placeholder="Wprowadź imiona"
                   containerClassName="col-span-2"
                   required
                   disabled={isReadonly}
@@ -262,7 +260,6 @@ export function FormBMembersSection() {
                   onBlur={field.handleBlur}
                   errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Nazwisko"
-                  placeholder="Wprowadź nazwisko"
                   containerClassName="col-span-2"
                   required
                   disabled={isReadonly}
@@ -289,7 +286,6 @@ export function FormBMembersSection() {
                   onBlur={field.handleBlur}
                   errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Miejsce urodzenia"
-                  placeholder="Wprowadź miejsce urodzenia"
                   required
                   disabled={isReadonly}
                 />
@@ -306,7 +302,6 @@ export function FormBMembersSection() {
                   onBlur={field.handleBlur}
                   errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Data urodzenia"
-                  placeholder="Wprowadź datę urodzenia"
                   required
                   disabled={isReadonly}
                 />
@@ -323,7 +318,6 @@ export function FormBMembersSection() {
                   onBlur={field.handleBlur}
                   errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Numer ID dokumentu"
-                  placeholder="Wprowadź numer ID dokumentu"
                   required
                   disabled={isReadonly}
                 />
@@ -340,7 +334,6 @@ export function FormBMembersSection() {
                   onBlur={field.handleBlur}
                   errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Data ważności dokumentu"
-                  placeholder="Wprowadź datę ważności dokumentu"
                   required
                   disabled={isReadonly}
                 />

@@ -23,7 +23,7 @@ export function FormBAdditionalPermissionsSection() {
       {
         header: 'Lp.',
         cell: ({ row }) => `${row.index + 1}. `,
-        size: 10,
+        size: 5,
       },
       {
         header: 'Treść pozwolenia',
@@ -46,7 +46,7 @@ export function FormBAdditionalPermissionsSection() {
             )}
           />
         ),
-        size: 40,
+        size: 20,
       },
       {
         header: 'Organ wydający',
@@ -69,7 +69,7 @@ export function FormBAdditionalPermissionsSection() {
             )}
           />
         ),
-        size: 35,
+        size: 20,
       },
       {
         header: 'Skan',

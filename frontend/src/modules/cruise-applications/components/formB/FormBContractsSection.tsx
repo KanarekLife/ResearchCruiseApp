@@ -14,12 +14,12 @@ export function FormBContractsSection() {
     {
       header: 'Lp.',
       cell: ({ row }) => `${row.index + 1}. `,
-      size: 10,
+      size: 5,
     },
     {
       header: 'Kategoria',
       cell: ({ row }) => getContractCategoryName(row.original.category) ?? 'Nieznany typ',
-      size: 25,
+      size: 10,
     },
     {
       header: 'Instytucja',
@@ -45,14 +45,14 @@ export function FormBContractsSection() {
           />
         </>
       ),
-      size: 25,
+      size: 20,
     },
     {
       header: 'Opis',
       cell: ({ row }) => (
         <AppInput name={`contracts[${row.index}].description`} value={row.original.description} label="Opis" disabled />
       ),
-      size: 30,
+      size: 20,
     },
     {
       header: 'Skan',
@@ -67,7 +67,7 @@ export function FormBContractsSection() {
           disabled
         />
       ),
-      size: 10,
+      size: 15,
     },
   ];
 

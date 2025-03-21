@@ -23,7 +23,7 @@ export function FormAContractsSection() {
       {
         header: 'Lp.',
         cell: ({ row }) => `${row.index + 1}. `,
-        size: 10,
+        size: 5,
       },
       {
         header: 'Kategoria',
@@ -34,7 +34,7 @@ export function FormAContractsSection() {
             children={(field) => getContractCategoryName(field.state.value)}
           />
         ),
-        size: 80,
+        size: 10,
       },
       {
         header: 'Instytucja',
@@ -91,6 +91,7 @@ export function FormAContractsSection() {
             />
           </>
         ),
+        size: 30,
       },
       {
         header: 'Opis',
@@ -113,6 +114,7 @@ export function FormAContractsSection() {
             )}
           />
         ),
+        size: 30,
       },
       {
         header: 'Skan',
@@ -136,6 +138,7 @@ export function FormAContractsSection() {
             )}
           />
         ),
+        size: 20,
       },
       {
         id: 'actions',
@@ -151,7 +154,7 @@ export function FormAContractsSection() {
             />
           </div>
         ),
-        size: 10,
+        size: 5,
       },
     ];
   }

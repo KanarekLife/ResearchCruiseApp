@@ -29,7 +29,7 @@ export function FormAResearchTasksSection() {
       {
         header: 'Lp.',
         cell: ({ row }) => `${row.index + 1}. `,
-        size: 10,
+        size: 5,
       },
       {
         header: 'Zadanie',
@@ -41,7 +41,7 @@ export function FormAResearchTasksSection() {
             children={(field) => getTaskName(field.state.value) ?? 'Nieznany typ'}
           />
         ),
-        size: 25,
+        size: 20,
       },
       {
         header: 'Szczegóły',
@@ -68,7 +68,7 @@ export function FormAResearchTasksSection() {
             />
           </div>
         ),
-        size: 10,
+        size: 5,
       },
     ];
   }
