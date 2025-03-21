@@ -262,20 +262,26 @@ const portColumns = (
         children={(field) => (
           <form.Subscribe
             selector={(state) => state.values.ports[row.index].startTime}
-            children={(state) => (
-              <AppDatePickerInput
-                name={field.name}
-                value={field.state.value}
-                onChange={(newValue) => field.handleChange(newValue ?? '')}
-                onBlur={field.handleBlur}
-                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
-                required
-                disabled={isReadonly}
-                type="datetime"
-                minimalDate={state ? new Date(state) : undefined}
-              />
-            )}
-          ></form.Subscribe>
+            children={(state) => {
+              if (state > field.state.value && field.state.value !== '') {
+                field.handleChange(state);
+              }
+              return (
+                <AppDatePickerInput
+                  name={field.name}
+                  value={field.state.value}
+                  onChange={(newValue) => field.handleChange(newValue ?? '')}
+                  onBlur={field.handleBlur}
+                  errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
+                  required
+                  disabled={isReadonly}
+                  type="datetime"
+                  selectionStartDate={state ? new Date(state) : undefined}
+                  minimalDate={state ? new Date(state) : undefined}
+                />
+              );
+            }}
+          />
         )}
       />
     ),
