@@ -24,7 +24,7 @@ export function FormASPUBTasksSection() {
       {
         header: 'Lp.',
         cell: ({ row }) => `${row.index + 1}.`,
-        size: 10,
+        size: 5,
       },
       {
         header: 'Rok rozpoczęcia',
@@ -47,7 +47,7 @@ export function FormASPUBTasksSection() {
             )}
           />
         ),
-        size: 80,
+        size: 20,
       },
       {
         header: 'Rok zakończenia',
@@ -70,7 +70,7 @@ export function FormASPUBTasksSection() {
             )}
           />
         ),
-        size: 80,
+        size: 20,
       },
       {
         header: 'Nazwa zadania',
@@ -93,6 +93,7 @@ export function FormASPUBTasksSection() {
             )}
           />
         ),
+        size: 50,
       },
       {
         id: 'actions',
@@ -108,7 +109,7 @@ export function FormASPUBTasksSection() {
             />
           </div>
         ),
-        size: 10,
+        size: 5,
       },
     ];
   }

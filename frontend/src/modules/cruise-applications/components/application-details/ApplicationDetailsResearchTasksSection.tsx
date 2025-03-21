@@ -14,13 +14,13 @@ export function ApplicationDetailsResearchTasksSection() {
     {
       header: 'Lp.',
       cell: ({ row }) => `${row.index + 1}. `,
-      size: 10,
+      size: 5,
     },
     {
       header: 'Zadanie',
       accessorFn: (row) => getTaskName(row.researchTask.type),
       cell: ({ row }) => getTaskName(row.original.researchTask.type) ?? 'Nieznany typ',
-      size: 25,
+      size: 20,
     },
     {
       header: 'Szczegóły',
@@ -41,6 +41,7 @@ export function ApplicationDetailsResearchTasksSection() {
           columns={columns}
           buttons={(defaultButtons) => [...defaultButtons]}
           emptyTableMessage="Nie dodano żadnego zadania."
+          disabled
         />
       </div>
     </AppAccordion>

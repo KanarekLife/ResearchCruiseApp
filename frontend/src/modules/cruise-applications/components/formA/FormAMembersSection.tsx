@@ -26,12 +26,15 @@ export function FormAMembersSection() {
       {
         header: 'Lp.',
         cell: ({ row }) => `${row.index + 1}. `,
-        size: 10,
+        size: 5,
       },
       {
         header: 'Jednostka',
         accessorFn: (row) => row.ugUnitId,
         cell: ({ row }) => initValues.ugUnits.find((unit) => unit.id === row.original.ugUnitId)?.name,
+        size: 50,
+        enableColumnFilter: false,
+        enableSorting: false,
       },
       {
         header: 'Liczba pracowników',
@@ -57,6 +60,9 @@ export function FormAMembersSection() {
             )}
           />
         ),
+        size: 20,
+        enableColumnFilter: false,
+        enableSorting: false,
       },
       {
         header: 'Liczba studentów',
@@ -82,6 +88,9 @@ export function FormAMembersSection() {
             )}
           />
         ),
+        size: 20,
+        enableColumnFilter: false,
+        enableSorting: false,
       },
       {
         id: 'actions',
@@ -98,7 +107,7 @@ export function FormAMembersSection() {
             />
           </div>
         ),
-        size: 10,
+        size: 5,
       },
     ];
   }
@@ -111,7 +120,7 @@ export function FormAMembersSection() {
       {
         header: 'Lp.',
         cell: ({ row }) => `${row.index + 1}. `,
-        size: 10,
+        size: 5,
       },
       {
         header: 'Instytucja',
@@ -133,6 +142,9 @@ export function FormAMembersSection() {
             )}
           />
         ),
+        size: 70,
+        enableColumnFilter: false,
+        enableSorting: false,
       },
       {
         header: 'Liczba osób',
@@ -158,6 +170,9 @@ export function FormAMembersSection() {
             )}
           />
         ),
+        size: 20,
+        enableColumnFilter: false,
+        enableSorting: false,
       },
       {
         id: 'actions',
@@ -174,7 +189,7 @@ export function FormAMembersSection() {
             />
           </div>
         ),
-        size: 10,
+        size: 5,
       },
     ];
   }

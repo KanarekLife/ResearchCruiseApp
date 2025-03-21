@@ -21,7 +21,9 @@ import { FormADto } from '@/cruise-applications/models/FormADto';
 import { useUserContext } from '@/user/hooks/UserContextHook';
 
 export function FormAPage() {
-  const { applicationId } = getRouteApi('/applications/$applicationId/formA').useParams();
+  const routeApi = getRouteApi('/applications/$applicationId/formA');
+  const { applicationId } = routeApi.useParams();
+  const mode = routeApi.useSearch().mode ?? 'view';
 
   const navigate = useNavigate();
   const appContext = useAppContext();
@@ -30,7 +32,7 @@ export function FormAPage() {
   const saveMutation = useUpdateFormAMutation();
   const formA = useFormAQuery(applicationId);
 
-  const [editMode] = useState(false);
+  const [editMode] = useState(mode === 'edit');
   const [hasFormBeenSubmitted, setHasFormBeenSubmitted] = useState(false);
   const [isSaveDraftModalOpen, setIsSaveDraftModalOpen] = useState(false);
 

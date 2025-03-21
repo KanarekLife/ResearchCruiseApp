@@ -244,6 +244,7 @@ const portColumns = (
             errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
             required
             disabled={isReadonly}
+            type="datetime"
           />
         )}
       />
@@ -267,6 +268,7 @@ const portColumns = (
             errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
             required
             disabled={isReadonly}
+            type="datetime"
           />
         )}
       />
@@ -366,8 +368,8 @@ export function FormBCruiseDetailsSection() {
                 <CruiseApplicationDropdownElementSelectorButton
                   key="new"
                   options={[
-                    { value: 'put', label: 'Pozostawienie' },
-                    { value: 'collect', label: 'Zabranie' },
+                    { value: 'Put', label: 'Pozostawienie' },
+                    { value: 'Collect', label: 'Zabranie' },
                   ].map((option) => ({
                     value: option.label,
                     onClick: () => {
