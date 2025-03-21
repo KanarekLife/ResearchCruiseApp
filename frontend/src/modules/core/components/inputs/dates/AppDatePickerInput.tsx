@@ -238,6 +238,22 @@ export function AppDatePickerInput({
                   }}
                   onBlur={onBlur}
                   minuteStep={minuteStep}
+                  minimalTime={
+                    minimalDate
+                      ? {
+                          hours: minimalDate?.getHours(),
+                          minutes: minimalDate?.getMinutes(),
+                        }
+                      : undefined
+                  }
+                  maximalTime={
+                    maximalDate
+                      ? {
+                          hours: maximalDate?.getHours(),
+                          minutes: maximalDate?.getMinutes(),
+                        }
+                      : undefined
+                  }
                 />
               </div>
             )}
@@ -303,7 +319,8 @@ function CalendarDateTile({
       selectionStartDateUtc && hoveredDateUtc && dateUtc >= selectionStartDateUtc && dateUtc <= hoveredDateUtc,
     isInSelectedRange =
       selectionStartDateUtc && selectedDateUtc && dateUtc >= selectionStartDateUtc && dateUtc <= selectedDateUtc,
-    isAllowed = (!minimalDate || date >= minimalDate) && (!maximalDate || date <= maximalDate),
+    isAllowed =
+      (!minimalDate || dateUtc >= dateToUtcDay(minimalDate)) && (!maximalDate || dateUtc <= dateToUtcDay(maximalDate)),
     isVisibleMonth = date.getMonth() === visibleMonth.month;
   return (
     <div
