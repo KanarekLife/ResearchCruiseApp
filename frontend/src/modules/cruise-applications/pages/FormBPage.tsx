@@ -86,8 +86,8 @@ export function FormBPage() {
         onSuccess: () => {
           navigate({ to: '/applications' });
           appContext.showAlert({
-            title: 'Zapisano formularz',
-            message: 'Formularz został zapisany.',
+            title: 'Formularz wysłany pomyślnie',
+            message: 'Formularz został wysłany pomyślnie.',
             variant: 'success',
           });
         },
@@ -105,8 +105,9 @@ export function FormBPage() {
 
           console.error(err);
           appContext.showAlert({
-            title: 'Wystąpił błąd',
-            message: 'Nie udało się zapisać formularza. Sprawdź czy wszystkie pola są wypełnione poprawnie.',
+            title: 'Wystąpił błąd podczas wysyłania formularza',
+            message:
+              'Nie udało się wysłać formularza. Sprawdź czy wszystkie pola są wypełnione poprawnie i spróbuj ponownie.',
             variant: 'danger',
           });
         },
@@ -125,8 +126,8 @@ export function FormBPage() {
         onSuccess: () => {
           navigate({ to: '/applications' });
           appContext.showAlert({
-            title: 'Zapisano wersję roboczą',
-            message: 'Wersja robocza formularza została zapisana.',
+            title: 'Wersja robocza zapisana',
+            message: 'Wersja robocza formularza została zapisana pomyślnie.',
             variant: 'success',
           });
         },
@@ -144,9 +145,8 @@ export function FormBPage() {
 
           console.error(err);
           appContext.showAlert({
-            title: 'Wystąpił błąd',
-            message:
-              'Nie udało się zapisać wersji roboczej formularza. Sprawdź czy wszystkie pola są wypełnione poprawnie.',
+            title: 'Wystąpił błąd podczas zapisywania wersji roboczej',
+            message: 'Nie udało się zapisać wersji roboczej formularza. Spróbuj ponownie.',
             variant: 'danger',
           });
         },
