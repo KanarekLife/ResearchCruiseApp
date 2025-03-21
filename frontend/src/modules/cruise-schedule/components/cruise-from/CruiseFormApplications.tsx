@@ -129,7 +129,7 @@ export function CruiseFormApplicationsSection() {
         name="cruiseApplicationsIds"
         mode="array"
         children={(field) => (
-          <div className="my-4">
+          <div>
             <AppTable
               columns={getColumns(field, true)}
               data={cruiseApplications.filter((application) => field.state.value.includes(application.id))}
