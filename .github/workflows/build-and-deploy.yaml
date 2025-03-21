@@ -92,7 +92,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: kustomize
+        working-directory: kustomize/staging
 
     steps:
       - name: Checkout repository
@@ -117,7 +117,7 @@ jobs:
 
       - name: Configure secrets
         run: |
-          echo "ConnectionStrings__Database=${{ secrets.DB }}" >> backend/.env
+          echo "ConnectionStrings__Database=${{ secrets.DB }}" >> ../base/backend/.env
 
       - name: Deploy to staging
         run: |
