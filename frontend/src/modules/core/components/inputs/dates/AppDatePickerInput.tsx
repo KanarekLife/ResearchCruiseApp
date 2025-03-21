@@ -121,6 +121,12 @@ export function AppDatePickerInput({
       return;
     }
 
+    if (minimalDate && newDate < minimalDate) {
+      newDate = minimalDate;
+    } else if (maximalDate && newDate > maximalDate) {
+      newDate = maximalDate;
+    }
+
     setSelectedDate(newDate);
     onChange?.(getValueFromDate(newDate));
     if (type === 'date') {
