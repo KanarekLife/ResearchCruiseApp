@@ -75,12 +75,12 @@ export function UserManagementPage() {
       cell: (cell) => <AppAvatar fullName={cell.getValue() as string} variant="small" />,
       enableColumnFilter: false,
       enableSorting: false,
-      size: 10,
+      size: 5,
     },
     {
       accessorFn: (row) => `${row.firstName} ${row.lastName}`,
       header: 'Imię i nazwisko',
-      size: 25,
+      size: 30,
     },
     {
       accessorFn: (row) => row.email,
