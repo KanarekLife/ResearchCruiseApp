@@ -260,16 +260,22 @@ const portColumns = (
       <form.Field
         name={`ports[${row.index}].endTime`}
         children={(field) => (
-          <AppDatePickerInput
-            name={field.name}
-            value={field.state.value}
-            onChange={(newValue) => field.handleChange(newValue ?? '')}
-            onBlur={field.handleBlur}
-            errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
-            required
-            disabled={isReadonly}
-            type="datetime"
-          />
+          <form.Subscribe
+            selector={(state) => state.values.ports[row.index].startTime}
+            children={(state) => (
+              <AppDatePickerInput
+                name={field.name}
+                value={field.state.value}
+                onChange={(newValue) => field.handleChange(newValue ?? '')}
+                onBlur={field.handleBlur}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
+                required
+                disabled={isReadonly}
+                type="datetime"
+                minimalDate={state ? new Date(state) : undefined}
+              />
+            )}
+          ></form.Subscribe>
         )}
       />
     ),
