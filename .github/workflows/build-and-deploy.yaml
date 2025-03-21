@@ -8,10 +8,14 @@ on:
       - task/ci-cd-pipeline # TODO: This should be removed after the task is completed
     tags:
       - "v*"
+    paths-ignore:
+      - docs
   pull_request:
     branches:
       - main
       - task/frontend-refactor # TODO: This should be removed after the task is completed
+    paths-ignore:
+      - docs
 
 jobs:
   build-and-push-images:
