@@ -75,7 +75,7 @@ jobs:
       - name: Set image tag output
         id: set-output
         run: |
-          SHA_TAG=$(echo "${{ steps.meta.outputs.tags }}" | grep sha)
+          SHA_TAG=$(echo "${{ steps.meta.outputs.tags }}" | grep -E 'sha-[a-fA-F0-9]{7}')
           echo "${{ matrix.directory }}-tag=$SHA_TAG" >> $GITHUB_OUTPUT
           echo Tagged image: $SHA_TAG
 
@@ -92,7 +92,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: kustomize/staging
+        working-directory: kustomize/overlays/staging
 
     steps:
       - name: Checkout repository
@@ -117,7 +117,7 @@ jobs:
 
       - name: Configure secrets
         run: |
-          echo "ConnectionStrings__Database=${{ secrets.DB }}" >> ../base/backend/.env
+          echo "ConnectionStrings__Database=${{ secrets.DB }}" >> ../../base/backend/.env
 
       - name: Deploy to staging
         run: |

@@ -3,5 +3,5 @@ kind: Kustomization
 metadata:
   name: research-cruise-app-staging
 resources:
-  - ../base
+  - ../../base
   - ingress.yaml

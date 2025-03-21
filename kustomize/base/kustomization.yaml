@@ -14,8 +14,3 @@ secretGenerator:
     name: research-cruise-app-backend-secret
     options:
       disableNameSuffixHash: true
-images:
-  - name: research-cruise-app-backend
-    newName: ghcr.io/kanareklife/researchcruiseapp/backend
-  - name: research-cruise-app-frontend
-    newName: ghcr.io/kanareklife/researchcruiseapp/frontend
