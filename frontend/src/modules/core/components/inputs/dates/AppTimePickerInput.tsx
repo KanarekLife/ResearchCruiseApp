@@ -151,7 +151,7 @@ export function AppDatePickerTimeInput({
                     const isAllowed =
                       totalMinutes >= timeToMinutes(minimalTime ?? { hours: 0, minutes: 0 }) &&
                       totalMinutes <= timeToMinutes(maximalTime ?? { hours: 23, minutes: 59 });
-                    if (!isAllowed && !!time) {
+                    if (!isAllowed) {
                       return null;
                     }
 

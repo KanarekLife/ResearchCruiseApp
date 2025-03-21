@@ -245,7 +245,7 @@ export function AppDatePickerInput({
                   onBlur={onBlur}
                   minuteStep={minuteStep}
                   minimalTime={
-                    minimalDate
+                    minimalDate && selectedDate && dateToUtcDay(minimalDate) === dateToUtcDay(selectedDate)
                       ? {
                           hours: minimalDate?.getHours(),
                           minutes: minimalDate?.getMinutes(),
@@ -253,7 +253,7 @@ export function AppDatePickerInput({
                       : undefined
                   }
                   maximalTime={
-                    maximalDate
+                    maximalDate && selectedDate && dateToUtcDay(maximalDate) === dateToUtcDay(selectedDate)
                       ? {
                           hours: maximalDate?.getHours(),
                           minutes: maximalDate?.getMinutes(),
