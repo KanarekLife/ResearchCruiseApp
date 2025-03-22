@@ -70,9 +70,16 @@ export function FormBPage() {
 
   async function handleSubmit() {
     setHasFormBeenSubmitted(true);
+
     await form.validate('change');
 
     if (!form.state.canSubmit) {
+      appContext.showAlert({
+        title: 'Wystąpił błąd podczas wysyłania formularza',
+        message:
+          'Nie udało się wysłać formularza. Sprawdź czy wszystkie pola są wypełnione poprawnie i spróbuj ponownie.',
+        variant: 'danger',
+      });
       return;
     }
 
@@ -96,7 +103,7 @@ export function FormBPage() {
             appContext.showAlert({
               title: 'Błędny status formularza',
               message:
-                'Aplikacja nie znajduje się w odpowiednim stanie, aby zapisać wersję roboczą formularza. Spróbuj cofnąć się do listy aplikacji i ponownie wybrać aplikację.',
+                'Aplikacja nie znajduje się w odpowiednim stanie, aby przesłać formularz. Spróbuj cofnąć się do listy aplikacji i ponownie wybrać aplikację.',
               variant: 'danger',
             });
             navigate({ to: '/applications' });
