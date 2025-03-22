@@ -14,8 +14,7 @@ export function FormC({ context }: Props) {
 
   return (
     <FormCProvider value={context}>
-      <form className="space-y-8" onSubmit={onSubmit}>
-      </form>
+      <form className="space-y-8" onSubmit={onSubmit}></form>
     </FormCProvider>
   );
 }
