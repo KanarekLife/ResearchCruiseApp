@@ -3,6 +3,7 @@ import { FormCCruiseGoalSection } from '@/cruise-applications/components/formC/F
 import { FormCCruiseInfoSection } from '@/cruise-applications/components/formC/FormCCruiseInfoSection';
 import { FormCCruiseManagerInfoSection } from '@/cruise-applications/components/formC/FormCCruiseManagerInfoSection';
 import { FormCResearchAreaSection } from '@/cruise-applications/components/formC/FormCResearchAreaSection';
+import { FormCResearchTasksSection } from '@/cruise-applications/components/formC/FormCResearchTasksEffectsSection';
 import { FormCShipUsageSection } from '@/cruise-applications/components/formC/FormCShipUsageSection';
 import { FormCContextType, FormCProvider } from '@/cruise-applications/contexts/FormCContext';
 
@@ -27,6 +28,7 @@ export function FormC({ context }: Props) {
         <FormCAdditionalPermissionsSection />
         <FormCResearchAreaSection />
         <FormCCruiseGoalSection />
+        <FormCResearchTasksSection />
       </form>
     </FormCProvider>
   );
