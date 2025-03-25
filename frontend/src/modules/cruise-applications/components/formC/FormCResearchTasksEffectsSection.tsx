@@ -1,4 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
+import { useState } from 'react';
 
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppCheckbox } from '@/core/components/inputs/AppCheckbox';
@@ -11,6 +12,15 @@ import { ResearchTaskEffectDto } from '@/cruise-applications/models/ResearchTask
 
 export function FormCResearchTasksSection() {
   const { form, isReadonly, hasFormBeenSubmitted } = useFormC();
+  const [readOnlyPointsCheckboxes, setReadOnlyPointsCheckboxes] = useState(
+    new Array(form.state.values.researchTasksEffects.length)
+      .fill(false)
+      .map(
+        (_, i) =>
+          form.state.values.researchTasksEffects[i].done === 'false' ||
+          form.state.values.researchTasksEffects[i].done === undefined
+      )
+  );
 
   const columns: ColumnDef<ResearchTaskEffectDto>[] = [
     {
@@ -35,6 +45,20 @@ export function FormCResearchTasksSection() {
           <div className="flex justify-center">
             <form.Field
               name={`researchTasksEffects[${row.index}].done`}
+              validators={{
+                onChange: ({ value, fieldApi }) => {
+                  if (value === 'false') {
+                    fieldApi.form.setFieldValue(`researchTasksEffects[${row.index}].managerConditionMet`, 'false');
+                    fieldApi.form.setFieldValue(`researchTasksEffects[${row.index}].deputyConditionMet`, 'false');
+                  }
+                  setReadOnlyPointsCheckboxes((prev) => {
+                    const newValues = [...prev];
+                    newValues[row.index] = value === 'false';
+                    return newValues;
+                  });
+                  return undefined;
+                },
+              }}
               children={(field) => (
                 <AppCheckbox
                   size="md"
@@ -70,7 +94,7 @@ export function FormCResearchTasksSection() {
                   onBlur={field.handleBlur}
                   errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Czy naliczyć punkty kierownikowi?"
-                  disabled={isReadonly}
+                  disabled={isReadonly || readOnlyPointsCheckboxes[row.index]}
                 />
               )}
             />
@@ -85,7 +109,7 @@ export function FormCResearchTasksSection() {
                   onBlur={field.handleBlur}
                   errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
                   label="Czy naliczyć punkty zastępcy?"
-                  disabled={isReadonly}
+                  disabled={isReadonly || readOnlyPointsCheckboxes[row.index]}
                 />
               )}
             />
