@@ -67,7 +67,7 @@ export function FormCPage() {
         photos: [],
       } as FormCDto),
     validators: {
-      //onChange: getFormBValidationSchema(), TODO schemas
+      // onChange: getFormCValidationSchema(formAInitValues.data), TODO schemas
     },
   });
   const [hasFormBeenSubmitted, setHasFormBeenSubmitted] = useState(false);
