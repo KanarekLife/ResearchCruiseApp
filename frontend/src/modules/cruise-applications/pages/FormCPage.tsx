@@ -44,7 +44,15 @@ export function FormCPage() {
         researchAreaId: formA.data.researchAreaId,
         ugTeams: formB.data.ugTeams,
         guestTeams: formB.data.guestTeams,
-        researchTasksEffects: formA.data.researchTasks as ResearchTaskEffectDto[],
+        researchTasksEffects: formA.data.researchTasks.map(
+          (task) =>
+            ({
+              ...task,
+              done: 'false',
+              managerConditionMet: 'false',
+              deputyConditionMet: 'false',
+            }) as ResearchTaskEffectDto
+        ),
         contracts: formA.data.contracts,
         spubTasks: formA.data.spubTasks,
         shortResearchEquipments: formB.data.shortResearchEquipments,

@@ -1,5 +1,4 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { useState } from 'react';
 
 import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppCheckbox } from '@/core/components/inputs/AppCheckbox';
@@ -12,15 +11,6 @@ import { ResearchTaskEffectDto } from '@/cruise-applications/models/ResearchTask
 
 export function FormCResearchTasksSection() {
   const { form, isReadonly, hasFormBeenSubmitted } = useFormC();
-  const [readOnlyPointsCheckboxes, setReadOnlyPointsCheckboxes] = useState(
-    new Array(form.state.values.researchTasksEffects.length)
-      .fill(false)
-      .map(
-        (_, i) =>
-          form.state.values.researchTasksEffects[i].done === 'false' ||
-          form.state.values.researchTasksEffects[i].done === undefined
-      )
-  );
 
   const columns: ColumnDef<ResearchTaskEffectDto>[] = [
     {
@@ -45,20 +35,6 @@ export function FormCResearchTasksSection() {
           <div className="flex justify-center">
             <form.Field
               name={`researchTasksEffects[${row.index}].done`}
-              validators={{
-                onChange: ({ value, fieldApi }) => {
-                  if (value === 'false') {
-                    fieldApi.form.setFieldValue(`researchTasksEffects[${row.index}].managerConditionMet`, 'false');
-                    fieldApi.form.setFieldValue(`researchTasksEffects[${row.index}].deputyConditionMet`, 'false');
-                  }
-                  setReadOnlyPointsCheckboxes((prev) => {
-                    const newValues = [...prev];
-                    newValues[row.index] = value === 'false';
-                    return newValues;
-                  });
-                  return undefined;
-                },
-              }}
               children={(field) => (
                 <AppCheckbox
                   size="md"
@@ -83,34 +59,51 @@ export function FormCResearchTasksSection() {
       cell: ({ row }) => {
         return (
           <div className="grid grid-cols-2 gap-3">
-            <form.Field
-              name={`researchTasksEffects[${row.index}].managerConditionMet`}
-              children={(field) => (
-                <AppCheckbox
-                  size="md"
-                  name={field.name}
-                  checked={field.state.value === 'true'}
-                  onChange={(value) => field.handleChange(value ? 'true' : 'false')}
-                  onBlur={field.handleBlur}
-                  errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
-                  label="Czy naliczyć punkty kierownikowi?"
-                  disabled={isReadonly || readOnlyPointsCheckboxes[row.index]}
-                />
-              )}
-            />
-            <form.Field
-              name={`researchTasksEffects[${row.index}].deputyConditionMet`}
-              children={(field) => (
-                <AppCheckbox
-                  size="md"
-                  name={field.name}
-                  checked={field.state.value === 'true'}
-                  onChange={(value) => field.handleChange(value ? 'true' : 'false')}
-                  onBlur={field.handleBlur}
-                  errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
-                  label="Czy naliczyć punkty zastępcy?"
-                  disabled={isReadonly || readOnlyPointsCheckboxes[row.index]}
-                />
+            <form.Subscribe
+              selector={(state) => state.values.researchTasksEffects[row.index].done}
+              children={(taskDone) => (
+                <>
+                  <form.Field
+                    name={`researchTasksEffects[${row.index}].managerConditionMet`}
+                    children={(field) => {
+                      if (field.state.value !== 'false' && taskDone === 'false') {
+                        field.handleChange('false');
+                      }
+                      return (
+                        <AppCheckbox
+                          size="md"
+                          name={field.name}
+                          checked={field.state.value === 'true'}
+                          onChange={(value) => field.handleChange(value ? 'true' : 'false')}
+                          onBlur={field.handleBlur}
+                          errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
+                          label="Czy naliczyć punkty kierownikowi?"
+                          disabled={isReadonly || taskDone === 'false'}
+                        />
+                      );
+                    }}
+                  />
+                  <form.Field
+                    name={`researchTasksEffects[${row.index}].deputyConditionMet`}
+                    children={(field) => {
+                      if (field.state.value !== 'false' && taskDone === 'false') {
+                        field.handleChange('false');
+                      }
+                      return (
+                        <AppCheckbox
+                          size="md"
+                          name={field.name}
+                          checked={field.state.value === 'true'}
+                          onChange={(value) => field.handleChange(value ? 'true' : 'false')}
+                          onBlur={field.handleBlur}
+                          errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
+                          label="Czy naliczyć punkty zastępcy?"
+                          disabled={isReadonly || taskDone === 'false'}
+                        />
+                      );
+                    }}
+                  />
+                </>
               )}
             />
           </div>
