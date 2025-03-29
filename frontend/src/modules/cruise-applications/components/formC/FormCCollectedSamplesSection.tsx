@@ -126,7 +126,7 @@ export function FormCCollectedSamplesSection() {
                 onClick={() => {
                   field.pushValue({
                     type: '',
-                    amount: '',
+                    amount: '0',
                     analysis: '',
                     publishing: '',
                   } as CollectedSampleDto);
@@ -138,6 +138,7 @@ export function FormCCollectedSamplesSection() {
               </AppButton>,
             ]}
             variant="form"
+            emptyTableMessage="Nie dodano żadnej próbki"
             disabled={isReadonly}
           />
         )}

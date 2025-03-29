@@ -36,6 +36,8 @@ export function FormCAdditionalDescriptionSection() {
             name="photos"
             value={field.state.value}
             label="Załączniki"
+            onChange={field.handleChange}
+            onBlur={field.handleBlur}
             errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
             disabled={isReadonly}
             allowMultiple
