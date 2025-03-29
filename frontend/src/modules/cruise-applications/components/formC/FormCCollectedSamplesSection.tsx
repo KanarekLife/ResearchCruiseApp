@@ -47,7 +47,7 @@ const collectedSamplesColumns = (
         children={(field) => (
           <AppNumberInput
             name={field.name}
-            value={parseInt(field.state.value, 10)}
+            value={parseInt(field.state.value, 10) || 0}
             onChange={(value) => field.handleChange(value.toString())}
             onBlur={field.handleBlur}
             errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
