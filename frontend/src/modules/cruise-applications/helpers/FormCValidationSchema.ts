@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { groupBy } from '@/core/lib/utils';
+import { CollectedSampleDtoValidationSchema } from '@/cruise-applications/models/CollectedSampleDto';
 import { ContractDtoValidationSchema } from '@/cruise-applications/models/ContractDto';
 import { CruiseDayDetailsDtoValidationSchema } from '@/cruise-applications/models/CruiseDayDetailsDto';
 import { FormAInitValuesDto } from '@/cruise-applications/models/FormAInitValuesDto';
@@ -73,8 +74,12 @@ const OtherValidationSchema = (initValues: FormAInitValuesDto) =>
     cruiseDaysDetails: CruiseDayDetailsDtoValidationSchema.array(),
     researchEquipments: ResearchEquipmentDtoValidationSchema.array(),
     shipEquipmentsIds: z.array(z.string()),
+    collectedSamples: CollectedSampleDtoValidationSchema.array(),
+    spubReportData: z.string().max(1024, 'Maksymalna długość to 1024 znaki'),
+    additionalDescription: z.string().max(1024, 'Maksymalna długość to 1024 znaki'),
+    photos: z.array(z.string()),
   });
 
 export function getFormCValidationSchema(initValues: FormAInitValuesDto) {
-  return ShipUsageValidationSchema.and(ShipUsageValidationSchema).and(OtherValidationSchema(initValues));
+  return ShipUsageValidationSchema.and(OtherValidationSchema(initValues));
 }
