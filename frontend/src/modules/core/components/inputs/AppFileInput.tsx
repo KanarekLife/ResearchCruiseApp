@@ -63,10 +63,8 @@ export function AppFileInput({
     setFiles(newFiles);
     if (allowMultiple) {
       onChange?.(newFiles);
-      console.log('newFiles', newFiles);
     } else {
-      onChange?.(newFiles[0]);
-      console.log('newFiles', newFiles[0]);
+      onChange?.(newFiles[0] ?? null);
     }
 
     onBlur?.();
