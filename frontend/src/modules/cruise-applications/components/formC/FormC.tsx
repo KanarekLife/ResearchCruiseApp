@@ -1,3 +1,4 @@
+import { FormCActionsSection } from '@/cruise-applications/components/formC/FormCActionsSection';
 import { FormCAdditionalDescriptionSection } from '@/cruise-applications/components/formC/FormCAdditionalDescriptionSection';
 import { FormCAdditionalPermissionsSection } from '@/cruise-applications/components/formC/FormCAdditionalPermissionsSection';
 import { FormCCollectedSamplesSection } from '@/cruise-applications/components/formC/FormCCollectedSamplesSection';
@@ -51,6 +52,7 @@ export function FormC({ context }: Props) {
         <FormCCollectedSamplesSection />
         <FormCSPUBReportDataSection />
         <FormCAdditionalDescriptionSection />
+        <FormCActionsSection onSaveDraft={context.onSaveDraft} />
       </form>
     </FormCProvider>
   );
