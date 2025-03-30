@@ -42,7 +42,13 @@ public class AddFormCHandler(
             return verificationResult;
 
         var result = await unitOfWork.ExecuteIsolated(
-            () => AddNewFormC(request.FormCDto, request.IsDraft, cruiseApplication, cancellationToken),
+            () =>
+                AddNewFormC(
+                    request.FormCDto,
+                    request.IsDraft,
+                    cruiseApplication,
+                    cancellationToken
+                ),
             cancellationToken
         );
 

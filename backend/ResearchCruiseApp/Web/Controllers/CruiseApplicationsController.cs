@@ -201,7 +201,9 @@ public class CruiseApplicationsController(IMediator mediator) : ControllerBase
         [FromQuery] bool isDraft
     )
     {
-        var result = await mediator.Send(new AddFormCCommand(cruiseApplicationId, formCDto, isDraft));
+        var result = await mediator.Send(
+            new AddFormCCommand(cruiseApplicationId, formCDto, isDraft)
+        );
         return result.IsSuccess ? Created() : this.CreateError(result);
     }
 
