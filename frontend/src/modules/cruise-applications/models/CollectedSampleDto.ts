@@ -14,8 +14,8 @@ export const CollectedSampleDtoValidationSchema = z.object({
     .max(1024, 'Typ próbki nie może być dłuższy niż 1024 znaki'),
   amount: z.string().refine((val) => {
     const parsed = parseInt(val, 10);
-    return !isNaN(parsed) && parsed >= 0;
-  }, 'Ilość musi być liczbą nieujemną'),
+    return !isNaN(parsed) && parsed > 0;
+  }, 'Ilość musi być liczbą dodatnią'),
   analysis: z
     .string()
     .nonempty('Analiza próbki nie może być pusta')
