@@ -7,6 +7,7 @@ import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { useAppContext } from '@/core/hooks/AppContextHook';
 import { FormC } from '@/cruise-applications/components/formC/FormC';
+import { getFormCValidationSchema } from '@/cruise-applications/helpers/FormCValidationSchema';
 import { useCruiseForCruiseApplicationQuery } from '@/cruise-applications/hooks/CruiseApplicationsApiHooks';
 import { useFormAInitValuesQuery, useFormAQuery } from '@/cruise-applications/hooks/FormAApiHooks';
 import { useFormBInitValuesQuery, useFormBQuery } from '@/cruise-applications/hooks/FormBApiHooks';
@@ -67,7 +68,7 @@ export function FormCPage() {
         photos: [],
       } as FormCDto),
     validators: {
-      // onChange: getFormCValidationSchema(formAInitValues.data), TODO schemas
+      onChange: getFormCValidationSchema(formAInitValues.data),
     },
   });
   const [hasFormBeenSubmitted, setHasFormBeenSubmitted] = useState(false);

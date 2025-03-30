@@ -4,10 +4,11 @@ import { groupBy } from '@/core/lib/utils';
 import { CollectedSampleDtoValidationSchema } from '@/cruise-applications/models/CollectedSampleDto';
 import { ContractDtoValidationSchema } from '@/cruise-applications/models/ContractDto';
 import { CruiseDayDetailsDtoValidationSchema } from '@/cruise-applications/models/CruiseDayDetailsDto';
+import { FileDtoValidationSchema } from '@/cruise-applications/models/FileDto';
 import { FormAInitValuesDto } from '@/cruise-applications/models/FormAInitValuesDto';
 import { GuestTeamDtoValidationSchema } from '@/cruise-applications/models/GuestTeamDto';
 import { LongResearchEquipmentDtoValidationSchema } from '@/cruise-applications/models/LongResearchEquipmentDto';
-import { PermissionDtoValidationSchema } from '@/cruise-applications/models/PermissionDto';
+import { PermissionDtoWithFileValidationSchema } from '@/cruise-applications/models/PermissionDto';
 import { PortDtoValidationSchema } from '@/cruise-applications/models/PortDto';
 import { ResearchEquipmentDtoValidationSchema } from '@/cruise-applications/models/ResearchEquipmentDto';
 import { ResearchTaskEffectDtoValidationSchema } from '@/cruise-applications/models/ResearchTaskEffectDto';
@@ -15,31 +16,15 @@ import { ShortResearchEquipmentDtoValidationSchema } from '@/cruise-applications
 import { SpubTaskDtoValidationSchema } from '@/cruise-applications/models/SpubTaskDto';
 import { UGTeamDtoValidationSchema } from '@/cruise-applications/models/UGTeamDto';
 
-const ShipUsageValidationSchema = z
-  .object({
-    shipUsage: z
-      .enum(['0', '1', '2', '3', '4'], {
-        message: 'Wymagane jest wskazanie sposobu korzystania z statku',
-      })
-      .optional(),
-    differentUsage: z.string(),
-  })
-  .superRefine(({ shipUsage, differentUsage }, ctx) => {
-    if (shipUsage === '4' && !differentUsage) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'w przypadku wyboru "inne" należy podać informacje o sposobie korzystania z statku',
-        path: ['differentUsage'],
-      });
-    }
-  });
+const ShipUsageValidationSchema = z.object({
+  shipUsage: z.enum(['0', '1', '2', '3', '4'], {
+    message: 'Wymagane jest wskazanie sposobu korzystania z statku',
+  }),
+});
 
 const OtherValidationSchema = (initValues: FormAInitValuesDto) =>
   z.object({
-    permissions: PermissionDtoValidationSchema.array().refine(
-      (val) => val.every((x) => !x.scan),
-      'Skan nie może być dostarczony na tym etapie'
-    ),
+    permissions: PermissionDtoWithFileValidationSchema.array(),
     researchAreaId: z
       .string()
       .refine(
@@ -77,7 +62,7 @@ const OtherValidationSchema = (initValues: FormAInitValuesDto) =>
     collectedSamples: CollectedSampleDtoValidationSchema.array(),
     spubReportData: z.string().max(1024, 'Maksymalna długość to 1024 znaki'),
     additionalDescription: z.string().max(1024, 'Maksymalna długość to 1024 znaki'),
-    photos: z.array(z.string()),
+    photos: FileDtoValidationSchema.array(),
   });
 
 export function getFormCValidationSchema(initValues: FormAInitValuesDto) {
