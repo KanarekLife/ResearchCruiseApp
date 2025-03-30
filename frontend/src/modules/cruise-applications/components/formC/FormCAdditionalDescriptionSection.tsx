@@ -21,6 +21,8 @@ export function FormCAdditionalDescriptionSection() {
             value={field.state.value ?? ''}
             onChange={field.setValue}
             onBlur={field.handleBlur}
+            type="textarea"
+            className="h-48"
             errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
             label="Dodatkowy opis"
             placeholder="Dodatkowy opis"

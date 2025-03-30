@@ -22,6 +22,8 @@ export function FormCSPUBReportDataSection() {
             value={field.state.value ?? ''}
             onChange={field.handleChange}
             onBlur={field.handleBlur}
+            type="textarea"
+            className="h-48"
             errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
             placeholder="Wpisz dodatkowe dane do raportu SPUB"
             required
