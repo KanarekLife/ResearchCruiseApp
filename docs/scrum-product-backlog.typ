@@ -7,9 +7,54 @@
 
 = 2. Persony użytkowników
 
-- *Persona 1: Kierownik Naukowy* - pracownik Uniwersytetu Gdańskiego, który odpowiada za organizację rejsu badawczego dla interesariuszy. Wypełnia on w aplikacji wszystkie wymagane formularze, które następnie są przesyłane do Biura Armatora.
+- *Persona 1: Kierownik Naukowy* - pracownik Uniwersytetu Gdańskiego, który odpowiada za organizację rejsu badawczego dla interesariuszy. Wypełnia on w aplikacji wszystkie wymagane formularze, które następnie są przesyłane do Biura Armatora. Zgłaszają się do niego studenci chcący wziąć udział w rejsie, w celach naukowych, pisania pracy inżynierskiej, magisterskiej lub doktoranckiej.
+- Imię i nazwisko: Jan Kowalski
+- Wykształcenie: wyższe
+- Stanowisko: Kierownik Katedry na wydziale Oceanografii Uniwersytetu Gdańskiego
+- stan cywilny: żonaty, 2 dzieci
+- wiek: 58 lat
+- zainteresowania: kolarstwo, wyścigi samochodowe
+- zaawansowanie w korzystaniu z IT: umiarkowane
+- problemy: 
+  - pracochłonny proces wypełniania formularzy
+  - obawa, że ktoś się pod niego podszyje i wypełni formularze w jego imieniu
+  - boi się że interfejs aplikacji będzie zbyt skomplikowany i nie będzie potrafił z niego korzystać
+- potrzeby: 
+  - prosty i intuicyjny interfejs
+  - możliwość wypełnienia formularzy w aplikacji i przesłania ich do Biura Armatora
+
 - *Persona 2: Amator* - pracownik biura Armatora Uniwersytetu Gdańskiego, który zarządza rejsami statku i chce mieć możliwość dodawania nowych rejsów oraz edytowania istniejących. Ma dostęp do aplikacji i może przeglądać wszystkie rejsy, które są w systemie.
+- Imię i nazwisko: Anna Nowak
+- Wykształcenie: wyższe
+- Stanowisko: Pracownik biura Armatora Uniwersytetu Gdańskiego
+- stan cywilny: mężatka, 1 dziecko
+- wiek: 35 lat
+- zainteresowania: podróże, jazda na nartach
+- zaawansowanie w korzystaniu z IT: średnio zaawansowane
+- problemy: 
+  - brak scentralizowanego systemu do zarządzania rejsami
+  - trudności w przeszukiwaniu i edytowaniu rejsów
+- potrzeby:
+  - szybki w obsłudze interfejs
+  - możliwość dodawania nowych rejsów oraz edytowania istniejących
+  - wygodny dostęp do harmonogramu rejsu 
+  - możliwość przeszukiwania rejsów według różnych kryteriów (np. daty, celu rejsu, liczby uczestników)
+
 - *Persona 3: Administrator* - pracownik, który zarządza aplikacją i odpowiada za jej prawidłowe działanie. Ma dostęp do wszystkich funkcji aplikacji i może zarządzać użytkownikami oraz ich uprawnieniami.
+- Imię i nazwisko: Piotr Wiśniewski
+- Wykształcenie: wyższe
+- Stanowisko: Administrator systemu
+- stan cywilny: kawaler
+- wiek: 50 lat
+- zainteresowania: informatyka, programowanie
+- zaawansowanie w korzystaniu z IT: bardzo wysokie
+- problemy: 
+  - aplikacja jest zbyt trudna w utrzymaniu 
+  - brak dokumentacji do aplikacji
+- potrzeby:
+  - bezpieczeństwo i stabilność aplikacji
+  - dokumentacja do aplikacji
+  - możliwość zarządzania użytkownikami i ich uprawnieniami
 
 = 3. Scenariusz użycia produktu
 
