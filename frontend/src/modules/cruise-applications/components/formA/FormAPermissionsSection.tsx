@@ -104,7 +104,7 @@ export function FormAPermissionsSection() {
                   <AppButton
                     key="permissions.add-btn"
                     onClick={() => {
-                      field.pushValue({ description: '', executive: '' });
+                      field.pushValue({ description: '', executive: '', scan: undefined } as PermissionDto);
                       field.handleChange((prev) => prev);
                       field.handleBlur();
                     }}

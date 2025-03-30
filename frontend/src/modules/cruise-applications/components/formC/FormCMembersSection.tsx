@@ -283,7 +283,8 @@ export function FormCMembersSection() {
                   <CruiseApplicationDropdownElementSelectorButton
                     key="new"
                     options={formAInitValues.ugUnits.map((unit) => ({
-                      value: unit.name,
+                      value: unit.id,
+                      content: unit.name,
                       onClick: () => {
                         field.pushValue({ ugUnitId: unit.id, noOfEmployees: '0', noOfStudents: '0' });
                         field.handleChange((prev) => prev);

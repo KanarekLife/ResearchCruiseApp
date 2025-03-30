@@ -1,4 +1,7 @@
+import { FormCActionsSection } from '@/cruise-applications/components/formC/FormCActionsSection';
+import { FormCAdditionalDescriptionSection } from '@/cruise-applications/components/formC/FormCAdditionalDescriptionSection';
 import { FormCAdditionalPermissionsSection } from '@/cruise-applications/components/formC/FormCAdditionalPermissionsSection';
+import { FormCCollectedSamplesSection } from '@/cruise-applications/components/formC/FormCCollectedSamplesSection';
 import { FormCContractsSection } from '@/cruise-applications/components/formC/FormCContractsSection';
 import { FormCCruiseDayDetailsSection } from '@/cruise-applications/components/formC/FormCCruiseDayDetailsSection';
 import { FormCCruiseDetailsSection } from '@/cruise-applications/components/formC/FormCCruiseDetailsSection';
@@ -12,6 +15,7 @@ import { FormCResearchEquipmentsSection } from '@/cruise-applications/components
 import { FormCResearchTasksSection } from '@/cruise-applications/components/formC/FormCResearchTasksEffectsSection';
 import { FormCShipEquipmentsSection } from '@/cruise-applications/components/formC/FormCShipEquipmentsSection';
 import { FormCShipUsageSection } from '@/cruise-applications/components/formC/FormCShipUsageSection';
+import { FormCSPUBReportDataSection } from '@/cruise-applications/components/formC/FormCSPUBReportDataSection';
 import { FormCSPUBTasksSection } from '@/cruise-applications/components/formC/FormCSPUBTasksSection';
 import { FormCContextType, FormCProvider } from '@/cruise-applications/contexts/FormCContext';
 
@@ -45,6 +49,10 @@ export function FormC({ context }: Props) {
         <FormCCruiseDayDetailsSection />
         <FormCResearchEquipmentsSection />
         <FormCShipEquipmentsSection />
+        <FormCCollectedSamplesSection />
+        <FormCSPUBReportDataSection />
+        <FormCAdditionalDescriptionSection />
+        <FormCActionsSection onSaveDraft={context.onSaveDraft} />
       </form>
     </FormCProvider>
   );
