@@ -76,7 +76,12 @@ export function AppFileInput({
 
     const filesList = evt.dataTransfer.files;
     if (!disabled && filesList) {
-      updateFiles(await loadFileList(filesList));
+      if (allowMultiple) {
+        const newFiles = await loadFileList(filesList);
+        updateFiles([...files, ...newFiles]);
+      } else {
+        updateFiles(await loadFileList(filesList));
+      }
     }
   }
 
