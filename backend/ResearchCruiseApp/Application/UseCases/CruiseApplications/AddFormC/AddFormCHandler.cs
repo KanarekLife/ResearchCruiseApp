@@ -67,7 +67,7 @@ public class AddFormCHandler(
 
     private async Task<Result> AddNewFormC(
         FormCDto formCDto,
-        bool isDratf,
+        bool isDraft,
         CruiseApplication cruiseApplication,
         CancellationToken cancellationToken
     )
@@ -80,7 +80,7 @@ public class AddFormCHandler(
 
         cruiseApplication.FormC = newFormCResult.Data!;
 
-        if (!isDratf)
+        if (!isDraft)
             cruiseApplication.Status = CruiseApplicationStatus.Reported;
 
         await unitOfWork.Complete(cancellationToken);
@@ -88,7 +88,8 @@ public class AddFormCHandler(
         if (oldFormC is not null)
             await formsService.DeleteFormC(oldFormC, cancellationToken);
 
-        await effectsService.EvaluateEffects(cruiseApplication, cancellationToken);
+        if (!isDraft)
+            await effectsService.EvaluateEffects(cruiseApplication, cancellationToken);
 
         await unitOfWork.Complete(cancellationToken);
         return Result.Empty;
