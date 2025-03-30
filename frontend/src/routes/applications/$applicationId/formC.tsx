@@ -8,6 +8,6 @@ export const Route = createFileRoute('/applications/$applicationId/formC')({
   component: FormCPage,
   beforeLoad: allowOnly.authenticated(),
   validateSearch: z.object({
-    mode: z.optional(z.enum(['edit', 'view', 'preview'])),
+    mode: z.optional(z.enum(['edit', 'view'])),
   }),
 });

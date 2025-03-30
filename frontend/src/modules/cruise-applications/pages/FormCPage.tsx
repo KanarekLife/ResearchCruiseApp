@@ -11,11 +11,7 @@ import { getFormCValidationSchema } from '@/cruise-applications/helpers/FormCVal
 import { useCruiseForCruiseApplicationQuery } from '@/cruise-applications/hooks/CruiseApplicationsApiHooks';
 import { useFormAInitValuesQuery, useFormAQuery } from '@/cruise-applications/hooks/FormAApiHooks';
 import { useFormBInitValuesQuery, useFormBQuery } from '@/cruise-applications/hooks/FormBApiHooks';
-import {
-  useFormCQuery,
-  useRevertFormCToEditMutation,
-  useUpdateFormCMutation,
-} from '@/cruise-applications/hooks/FormCApiHooks';
+import { useFormCQuery, useUpdateFormCMutation } from '@/cruise-applications/hooks/FormCApiHooks';
 import { FormCDto } from '@/cruise-applications/models/FormCDto';
 import { ResearchTaskEffectDto } from '@/cruise-applications/models/ResearchTaskEffectDto';
 
@@ -34,7 +30,6 @@ export function FormCPage() {
   const formBInitValues = useFormBInitValuesQuery();
   const cruise = useCruiseForCruiseApplicationQuery(applicationId);
   const updateMutation = useUpdateFormCMutation();
-  const revertToEditMutation = useRevertFormCToEditMutation();
 
   const form = useForm<FormCDto>({
     defaultValues:
@@ -83,7 +78,6 @@ export function FormCPage() {
     hasFormBeenSubmitted,
     onSubmit: handleSubmit,
     onSaveDraft: handleDraftSave,
-    onRevertToEdit: mode === 'preview' ? handleRevertToEdit : undefined,
   };
 
   async function handleSubmit() {
@@ -174,17 +168,6 @@ export function FormCPage() {
             message: 'Nie udało się zapisać wersji roboczej formularza. Spróbuj ponownie.',
             variant: 'danger',
           });
-        },
-      }
-    );
-  }
-
-  async function handleRevertToEdit() {
-    await revertToEditMutation.mutateAsync(
-      { id: applicationId },
-      {
-        onSuccess: async () => {
-          await navigate({ to: `/applications/${applicationId}/formB?mode=edit` });
         },
       }
     );
