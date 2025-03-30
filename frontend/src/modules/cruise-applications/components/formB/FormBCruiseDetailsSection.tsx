@@ -59,14 +59,26 @@ const shortResearchEquipmentColumns = (
       <form.Field
         name={`shortResearchEquipments[${row.index}].endDate`}
         children={(field) => (
-          <AppDatePickerInput
-            name={field.name}
-            value={field.state.value}
-            onChange={(newValue) => field.handleChange(newValue ?? '')}
-            onBlur={field.handleBlur}
-            errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
-            required
-            disabled={isReadonly}
+          <form.Subscribe
+            selector={(state) => state.values.shortResearchEquipments[row.index].startDate}
+            children={(state) => {
+              if (state && field.state.value && state > field.state.value) {
+                field.handleChange(state);
+              }
+              return (
+                <AppDatePickerInput
+                  name={field.name}
+                  value={field.state.value}
+                  onChange={(newValue) => field.handleChange(newValue ?? '')}
+                  onBlur={field.handleBlur}
+                  errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
+                  required
+                  disabled={isReadonly}
+                  selectionStartDate={state ? new Date(state) : undefined}
+                  minimalDate={state ? new Date(state) : undefined}
+                />
+              );
+            }}
           />
         )}
       />

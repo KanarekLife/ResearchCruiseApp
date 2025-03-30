@@ -66,14 +66,26 @@ const researchEquipmentsColumns = (
         <form.Field
           name={`researchEquipments[${row.index}].insuranceEndDate`}
           children={(field) => (
-            <AppDatePickerInput
-              name={field.name}
-              value={field.state.value ?? ''}
-              onChange={(e) => field.handleChange(e ?? '')}
-              onBlur={field.handleBlur}
-              errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
-              label="Data zakończenia ubezpieczenia"
-              disabled={isReadonly}
+            <form.Subscribe
+              selector={(state) => state.values.researchEquipments[row.index].insuranceStartDate}
+              children={(state) => {
+                if (state && field.state.value && state > field.state.value) {
+                  field.handleChange(state);
+                }
+                return (
+                  <AppDatePickerInput
+                    name={field.name}
+                    value={field.state.value ?? ''}
+                    onChange={(e) => field.handleChange(e ?? '')}
+                    onBlur={field.handleBlur}
+                    errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
+                    label="Data zakończenia ubezpieczenia"
+                    disabled={isReadonly}
+                    selectionStartDate={state ? new Date(state) : undefined}
+                    minimalDate={state ? new Date(state) : undefined}
+                  />
+                );
+              }}
             />
           )}
         />
