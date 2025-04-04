@@ -14,7 +14,7 @@ import { UGTeamDto } from '@/cruise-applications/models/UGTeamDto';
 
 export type FormCDto = {
   shipUsage: string; // Max length 1
-  // TODO: missing DifferentUsage in backend
+  differentUsage: string; // Max length 1024
   permissions: PermissionDto[];
   researchAreaId: string;
   ugTeams: UGTeamDto[];

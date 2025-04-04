@@ -16,11 +16,22 @@ import { ShortResearchEquipmentDtoValidationSchema } from '@/cruise-applications
 import { SpubTaskDtoValidationSchema } from '@/cruise-applications/models/SpubTaskDto';
 import { UGTeamDtoValidationSchema } from '@/cruise-applications/models/UGTeamDto';
 
-const ShipUsageValidationSchema = z.object({
-  shipUsage: z.enum(['0', '1', '2', '3', '4'], {
-    message: 'Wymagane jest wskazanie sposobu korzystania z statku',
-  }),
-});
+const ShipUsageValidationSchema = z
+  .object({
+    shipUsage: z.enum(['0', '1', '2', '3', '4'], {
+      message: 'Wymagane jest wskazanie sposobu korzystania z statku',
+    }),
+    differentUsage: z.string(),
+  })
+  .superRefine(({ shipUsage, differentUsage }, ctx) => {
+    if (shipUsage === '4' && !differentUsage) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'w przypadku wyboru "inne" należy podać informacje o sposobie korzystania z statku',
+        path: ['differentUsage'],
+      });
+    }
+  });
 
 const OtherValidationSchema = (initValues: FormAInitValuesDto) =>
   z.object({

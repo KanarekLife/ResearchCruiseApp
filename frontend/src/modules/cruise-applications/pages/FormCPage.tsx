@@ -36,6 +36,7 @@ export function FormCPage() {
       formC.data ??
       ({
         shipUsage: formA.data.shipUsage, // Max length 1
+        differentUsage: formA.data.differentUsage,
         permissions: formB.data.permissions,
         researchAreaId: formA.data.researchAreaId,
         ugTeams: formB.data.ugTeams,
