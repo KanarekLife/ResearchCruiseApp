@@ -9,6 +9,7 @@ import XLgIcon from 'bootstrap-icons/icons/x-lg.svg?react';
 import React, { Suspense } from 'react';
 
 import { AppButton } from '@/core/components/AppButton';
+import { AppGuard } from '@/core/components/AppGuard';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { AppModal } from '@/core/components/AppModal';
@@ -118,7 +119,7 @@ export function CruiseDetailsPage() {
             </AppButton>
           </>
         ) : (
-          <>
+          <AppGuard allowedRoles={[]}>
             <AppButton
               className="gap-4 !justify-center w-36 lg:w-64"
               variant="primaryOutline"
@@ -134,7 +135,7 @@ export function CruiseDetailsPage() {
               <CheckLgIcon className="h-4 w-4" />
               Zatwierdź rejs
             </AppButton>
-          </>
+          </AppGuard>
         );
       case 'Potwierdzony':
         return (

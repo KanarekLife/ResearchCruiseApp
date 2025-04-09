@@ -44,7 +44,7 @@ export function ConfirmEmailPage() {
           {result === 'error' && (
             <>
               Wystąpił błąd podczas potwierdzania emaila. Proszę skontaktować się z pomocą{' '}
-              <AppLink href="mailto:help@rejsy.ug.edu.pl">help@rejsy.ug.edu.pl</AppLink>
+              <AppLink href="mailto:rejsy.help@ug.edu.pl">rejsy.help@ug.edu.pl</AppLink>
             </>
           )}
         </div>

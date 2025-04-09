@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import { AppAvatar } from '@/core/components/AppAvatar';
 import { AppBadge } from '@/core/components/AppBadge';
 import { AppButton } from '@/core/components/AppButton';
+import { AppGuard } from '@/core/components/AppGuard';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLink } from '@/core/components/AppLink';
 import { AppLoader } from '@/core/components/AppLoader';
@@ -109,14 +110,16 @@ export function ApplicationsPage() {
           )}
           {row.original.status === CruiseApplicationStatus.Undertaken && (
             <div className="flex flex-col gap-2 items-center">
-              <AppButton
-                className="inline-block mx-auto px-4 py-0.5 mt-1"
-                size="plain"
-                type="link"
-                href={`/applications/${row.original.id}/formC?mode=edit`}
-              >
-                Wypełnij formularz C
-              </AppButton>
+              <AppGuard allowedUserIds={[row.original.cruiseManagerId, row.original.deputyManagerId]}>
+                <AppButton
+                  className="inline-block mx-auto px-4 py-0.5 mt-1"
+                  size="plain"
+                  type="link"
+                  href={`/applications/${row.original.id}/formC?mode=edit`}
+                >
+                  Wypełnij formularz C
+                </AppButton>
+              </AppGuard>
               <AppBadge variant="success">{row.original.effectsDoneRate} efektów</AppBadge>
             </div>
           )}

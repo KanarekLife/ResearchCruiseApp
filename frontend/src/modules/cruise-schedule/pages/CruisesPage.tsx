@@ -3,6 +3,7 @@ import PlusLgIcon from 'bootstrap-icons/icons/plus-lg.svg?react';
 import { Suspense, useState } from 'react';
 
 import { AppButton } from '@/core/components/AppButton';
+import { AppGuard } from '@/core/components/AppGuard';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLoader } from '@/core/components/AppLoader';
 import { AppModal } from '@/core/components/AppModal';
@@ -47,17 +48,23 @@ export function CruisesPage() {
   }
 
   const buttons = [
-    <AppButton key="autoAddCruises" onClick={autoAddCruises} variant="primaryOutline">
-      Dodaj rejsy automatycznie
-    </AppButton>,
-    <AppButton key="newCruise" type="link" href="/cruises/new">
-      Nowy rejs
-      <PlusLgIcon className="ml-2 w-6 h-6" />
-    </AppButton>,
-    <AppButton key="exportCruises" onClick={() => setIsExportModalOpen(true)} variant="primaryOutline">
-      Eksport
-      <BoxArrowUpRightIcon className="ml-2 w-4 h-4" />
-    </AppButton>,
+    <AppGuard key="autoAddCruises" allowedRoles={[]}>
+      <AppButton onClick={autoAddCruises} variant="primaryOutline">
+        Dodaj rejsy automatycznie
+      </AppButton>
+    </AppGuard>,
+    <AppGuard key="newCruise" allowedRoles={[]}>
+      <AppButton type="link" href="/cruises/new">
+        Nowy rejs
+        <PlusLgIcon className="ml-2 w-6 h-6" />
+      </AppButton>
+    </AppGuard>,
+    <AppGuard key="exportCruises" allowedRoles={[]}>
+      <AppButton onClick={() => setIsExportModalOpen(true)} variant="primaryOutline">
+        Eksport
+        <BoxArrowUpRightIcon className="ml-2 w-4 h-4" />
+      </AppButton>
+    </AppGuard>,
   ];
 
   return (

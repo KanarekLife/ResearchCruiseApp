@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { AppAvatar } from '@/core/components/AppAvatar';
 import { AppBadge } from '@/core/components/AppBadge';
 import { AppButton } from '@/core/components/AppButton';
+import { AppGuard } from '@/core/components/AppGuard';
 import { AppTable } from '@/core/components/table/AppTable';
 import { CruiseStatusBadge } from '@/cruise-schedule/components/CruiseStatusBadge';
 import { CruiseApplicationShortInfoDto, CruiseDto } from '@/cruise-schedule/models/CruiseDto';
@@ -122,16 +123,18 @@ type ActionsCellProps = {
 function ActionsCell({ cruise, deleteCruise }: ActionsCellProps) {
   return (
     <div className="grid grid-cols-1 gap-2 min-w-30">
-      <AppButton type="link" href={`/cruises/${cruise.id}`}>
+      <AppButton variant="primary" type="link" href={`/cruises/${cruise.id}`}>
         Szczegóły
         <ZoomInIcon className="ml-2 w-4 h-4" />
       </AppButton>
-      {cruise.status === 'Nowy' && (
-        <AppButton variant="dangerOutline" onClick={() => deleteCruise(cruise)}>
-          Usuń
-          <TrashIcon className="w-4 h-4" />
-        </AppButton>
-      )}
+      <AppGuard allowedRoles={[]}>
+        {cruise.status === 'Nowy' && (
+          <AppButton variant="dangerOutline" onClick={() => deleteCruise(cruise)}>
+            Usuń
+            <TrashIcon className="w-4 h-4" />
+          </AppButton>
+        )}
+      </AppGuard>
     </div>
   );
 }
