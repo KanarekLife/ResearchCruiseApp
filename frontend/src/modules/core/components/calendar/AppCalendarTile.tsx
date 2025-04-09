@@ -6,7 +6,9 @@ import { cn } from '@/core/lib/utils';
 function getEventsForDate(date: Date, eventsWithRows: CalendarEventWithRow[]): CalendarEventWithRow[] {
   const dayUtc = dateToUtcDay(date);
   const todaysEvents = eventsWithRows.filter(
-    (event) => dateToUtcDay(event.start) <= dayUtc && dateToUtcDay(event.end) >= dayUtc
+    (event) =>
+      (dateToUtcDay(event.start) <= dayUtc && dateToUtcDay(event.end) > dayUtc) ||
+      (dateToUtcDay(event.end) === dayUtc && (event.end.getHours() !== 0 || event.end.getMinutes() !== 0))
   );
   return todaysEvents;
 }
@@ -24,9 +26,16 @@ function CalendarEventTiles({ date, eventsWithRows, tileWidth }: CalendarEventTi
   for (let i = 0; i < rowCount; i++) {
     const eventsInRow = todaysEvents.filter((event) => event.row === i);
     if (eventsInRow.length === 1) {
+      const nextDay = new Date(date);
+      nextDay.setDate(date.getDate() + 1);
       const event = eventsInRow[0];
       const start = date.getDay() === 1 || dateToUtcDay(event.start) === dateToUtcDay(date);
-      const end = date.getDay() === 0 || dateToUtcDay(event.end) === dateToUtcDay(date);
+      const end =
+        date.getDay() === 0 ||
+        dateToUtcDay(event.end) === dateToUtcDay(date) ||
+        (dateToUtcDay(event.end) === dateToUtcDay(nextDay) &&
+          event.end.getHours() === 0 &&
+          event.end.getMinutes() === 0);
 
       const className = cn(
         start ? 'rounded-l-lg ml-3' : '',
