@@ -39,6 +39,7 @@ const routeApi = getRouteApi('/resetpassword');
 export function ResetPasswordPage() {
   const { emailBase64, resetCode } = routeApi.useSearch();
   const [result, setResult] = React.useState<Result | undefined>(undefined);
+  const [hasFormBeenSubmitted, setHasFormBeenSubmitted] = React.useState(false);
   const { mutateAsync } = useResetPasswordMutation({ setResult });
   const form = useForm({
     defaultValues: {
@@ -49,6 +50,13 @@ export function ResetPasswordPage() {
       onChange: validationSchema,
     },
     onSubmit: async ({ value }) => {
+      setHasFormBeenSubmitted(true);
+
+      await form.validate('change');
+      if (!form.state.isValid) {
+        return;
+      }
+
       if (!emailBase64 || !resetCode) {
         throw new Error('Not all fields are filled despite validation');
       }
@@ -84,7 +92,7 @@ export function ResetPasswordPage() {
             )}
           </div>
         </div>
-        <AppButton href="/login" className="w-full mt-6">
+        <AppButton type="link" href="/login" className="w-full mt-6">
           Przejdź do logowania
         </AppButton>
       </AppLayout>
@@ -110,7 +118,7 @@ export function ResetPasswordPage() {
               type="password"
               onBlur={field.handleBlur}
               onChange={field.handleChange}
-              errors={getErrors(field.state.meta)}
+              errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
               label="Hasło"
               required
             />
@@ -126,7 +134,7 @@ export function ResetPasswordPage() {
               type="password"
               onBlur={field.handleBlur}
               onChange={field.handleChange}
-              errors={getErrors(field.state.meta)}
+              errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
               label="Potwierdź hasło"
               required
             />

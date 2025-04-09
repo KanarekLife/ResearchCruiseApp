@@ -49,7 +49,7 @@ export function ConfirmEmailPage() {
           )}
         </div>
       </div>
-      <AppButton href="/" className="w-full mt-6">
+      <AppButton type="link" href="/login" className="w-full mt-6">
         Wróć do logowania
       </AppButton>
     </AppLayout>
