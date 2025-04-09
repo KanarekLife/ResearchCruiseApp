@@ -8,6 +8,7 @@ import { AppBadge } from '@/core/components/AppBadge';
 import { AppButton } from '@/core/components/AppButton';
 import { AppGuard } from '@/core/components/AppGuard';
 import { AppTable } from '@/core/components/table/AppTable';
+import { Role } from '@/core/models/Role';
 import { CruiseStatusBadge } from '@/cruise-schedule/components/CruiseStatusBadge';
 import { CruiseApplicationShortInfoDto, CruiseDto } from '@/cruise-schedule/models/CruiseDto';
 
@@ -127,7 +128,7 @@ function ActionsCell({ cruise, deleteCruise }: ActionsCellProps) {
         Szczegóły
         <ZoomInIcon className="ml-2 w-4 h-4" />
       </AppButton>
-      <AppGuard allowedRoles={[]}>
+      <AppGuard allowedRoles={[Role.Administrator, Role.ShipOwner]}>
         {cruise.status === 'Nowy' && (
           <AppButton variant="dangerOutline" onClick={() => deleteCruise(cruise)}>
             Usuń

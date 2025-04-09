@@ -9,6 +9,7 @@ import { AppLoader } from '@/core/components/AppLoader';
 import { AppModal } from '@/core/components/AppModal';
 import { AppTabs } from '@/core/components/AppTabs';
 import { useAppContext } from '@/core/hooks/AppContextHook';
+import { Role } from '@/core/models/Role';
 import { CruiseCalendar } from '@/cruise-schedule/components/CruiseCalendar';
 import { CruiseExportForm } from '@/cruise-schedule/components/CruiseExportForm';
 import { CruisesTable } from '@/cruise-schedule/components/CruisesTable';
@@ -48,18 +49,18 @@ export function CruisesPage() {
   }
 
   const buttons = [
-    <AppGuard key="autoAddCruises" allowedRoles={[]}>
+    <AppGuard key="autoAddCruises" allowedRoles={[Role.ShipOwner, Role.Administrator]}>
       <AppButton onClick={autoAddCruises} variant="primaryOutline">
         Dodaj rejsy automatycznie
       </AppButton>
     </AppGuard>,
-    <AppGuard key="newCruise" allowedRoles={[]}>
+    <AppGuard key="newCruise" allowedRoles={[Role.ShipOwner, Role.Administrator]}>
       <AppButton type="link" href="/cruises/new">
         Nowy rejs
         <PlusLgIcon className="ml-2 w-6 h-6" />
       </AppButton>
     </AppGuard>,
-    <AppGuard key="exportCruises" allowedRoles={[]}>
+    <AppGuard key="exportCruises" allowedRoles={[Role.ShipOwner, Role.Administrator]}>
       <AppButton onClick={() => setIsExportModalOpen(true)} variant="primaryOutline">
         Eksport
         <BoxArrowUpRightIcon className="ml-2 w-4 h-4" />
