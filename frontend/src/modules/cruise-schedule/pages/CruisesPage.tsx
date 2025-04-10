@@ -1,11 +1,10 @@
 import BoxArrowUpRightIcon from 'bootstrap-icons/icons/box-arrow-up-right.svg?react';
 import PlusLgIcon from 'bootstrap-icons/icons/plus-lg.svg?react';
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 
 import { AppButton } from '@/core/components/AppButton';
 import { AppGuard } from '@/core/components/AppGuard';
 import { AppLayout } from '@/core/components/AppLayout';
-import { AppLoader } from '@/core/components/AppLoader';
 import { AppModal } from '@/core/components/AppModal';
 import { AppTabs } from '@/core/components/AppTabs';
 import { useAppContext } from '@/core/hooks/AppContextHook';
@@ -71,12 +70,10 @@ export function CruisesPage() {
   return (
     <>
       <AppLayout title="Rejsy">
-        <Suspense fallback={<AppLoader />}>
-          <AppTabs tabNames={['Lista rejsów', 'Kalendarz']}>
-            <CruisesTable cruises={cruisesQuery.data} buttons={buttons} deleteCruise={setCruiseSelectedForDeletion} />
-            <CruiseCalendar cruises={cruisesQuery.data} buttons={buttons} />
-          </AppTabs>
-        </Suspense>
+        <AppTabs tabNames={['Lista rejsów', 'Kalendarz']}>
+          <CruisesTable cruises={cruisesQuery.data} buttons={buttons} deleteCruise={setCruiseSelectedForDeletion} />
+          <CruiseCalendar cruises={cruisesQuery.data} buttons={buttons} />
+        </AppTabs>
       </AppLayout>
 
       <AppModal

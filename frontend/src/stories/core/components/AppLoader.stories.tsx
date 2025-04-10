@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { AppLoader } from '@/core/components/AppLoader';
 import AppBackground from '@/core/components/layout/AppBackground';
+import { AppLoader } from '@/core/components/layout/AppLoader';
 
 const meta = {
   component: AppLoader,

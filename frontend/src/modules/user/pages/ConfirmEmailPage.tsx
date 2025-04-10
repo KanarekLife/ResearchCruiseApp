@@ -6,7 +6,7 @@ import React from 'react';
 import { AppButton } from '@/core/components/AppButton';
 import { AppLayout } from '@/core/components/AppLayout';
 import { AppLink } from '@/core/components/AppLink';
-import { AppLoader } from '@/core/components/AppLoader';
+import { AppLoader } from '@/core/components/layout/AppLoader';
 import { useConfirmEmailMutation } from '@/user/hooks/UserApiHooks';
 import { Result } from '@/user/models/Results';
 
