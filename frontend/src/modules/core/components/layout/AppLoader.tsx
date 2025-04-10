@@ -2,7 +2,7 @@ export function AppLoader() {
   return (
     <div className="absolute top-0 h-full w-full flex items-center justify-center">
       <div className="flex flex-col gap-8">
-        <div className="inline-block h-32 w-32 animate-spin fill-primary-200" role="status">
+        <div className="inline-block h-32 w-32 animate-spin fill-primary-200 drop-shadow-lg" role="status">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 456.527 456.527">
             <path
               d="M455.768,310.971c-5.397-38.312-99.612-46.241-166-43.953c0.251-8.286-0.87-16.753-3.551-25.096

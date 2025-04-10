@@ -55,7 +55,7 @@ function CalendarEventTiles({ date, eventsWithRows, tileWidth }: CalendarEventTi
 
       eventTiles.push(
         event.link ? (
-          <AppLink href={event.link} variant="plain" className={className} key={`${event.title}-${event.link}`}>
+          <AppLink href={event.link} variant="plain" className={className} key={`${event.title}-${i}`}>
             {textComponent}
           </AppLink>
         ) : (
@@ -63,7 +63,7 @@ function CalendarEventTiles({ date, eventsWithRows, tileWidth }: CalendarEventTi
         )
       );
     } else if (eventsInRow.length === 0) {
-      eventTiles.push(<div className="h-8" key="empty" />);
+      eventTiles.push(<div className="h-8" key={`empty-${i}`} />);
     } else {
       throw new Error('Events in row must be either 0 or 1');
     }
