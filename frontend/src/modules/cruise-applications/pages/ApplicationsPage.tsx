@@ -99,14 +99,16 @@ export function ApplicationsPage() {
             </div>
           )}
           {row.original.status === CruiseApplicationStatus.FormBRequired && (
-            <AppButton
-              className="inline-block mx-auto px-5 py-1"
-              size="plain"
-              type="link"
-              href={`/applications/${row.original.id}/formB?mode=edit`}
-            >
-              Wypełnij
-            </AppButton>
+            <AppGuard allowedUserIds={[row.original.cruiseManagerId, row.original.deputyManagerId]}>
+              <AppButton
+                className="inline-block mx-auto px-5 py-1"
+                size="plain"
+                type="link"
+                href={`/applications/${row.original.id}/formB?mode=edit`}
+              >
+                Wypełnij
+              </AppButton>
+            </AppGuard>
           )}
           {row.original.status === CruiseApplicationStatus.Undertaken && (
             <div className="flex flex-col gap-2 items-center">
