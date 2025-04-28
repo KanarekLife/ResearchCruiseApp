@@ -19,8 +19,7 @@ jobs:
     name: Release version (${{ github.event.inputs.increment }})
     runs-on: ubuntu-latest
 
-    # TODO: change to main
-    if: github.ref_name == 'task/versioning-pipeline'
+    if: github.ref_name == 'main'
 
     permissions:
       contents: write
