@@ -8,6 +8,7 @@ import { AppAlertDisplayer } from '@/core/components/layout/AppAlertDisplayer';
 import AppBackground from '@/core/components/layout/AppBackground';
 import { AppNavbar } from '@/core/components/layout/AppNavbar';
 import { AppNetworkDisconnectAlert } from '@/core/components/layout/AppNetworkDisconnectAlert';
+import { AppVersion } from '@/core/components/layout/AppVersion';
 
 export function RootLayout() {
   const routerState = useRouterState();
@@ -35,6 +36,7 @@ export function RootLayout() {
         </motion.div>
       </main>
       <div id="fab-root">
+        <AppVersion />
         {config.dev && <TanStackRouterDevtools />}
         {config.dev && <ReactQueryDevtools />}
       </div>
