@@ -9,7 +9,9 @@ public class VersionController : ControllerBase
 {
     private static string? _version = typeof(Program)
         .Assembly.GetCustomAttribute<AssemblyFileVersionAttribute>()
-        ?.Version;
+        ?.Version.Split('.')
+        .Take(3)
+        .Aggregate((current, next) => $"{current}.{next}");
 
     [HttpGet]
     public IActionResult GetVersion()

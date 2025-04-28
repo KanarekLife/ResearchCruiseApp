@@ -109,13 +109,11 @@ export function HelpPage() {
             <AppLink href="mail:office.oceanograf@ug.edu.pl">office.oceanograf@ug.edu.pl</AppLink>
           </CompanyInfoCard>
           <CompanyInfoCard icon={<WindowStackIcon />} title="Wersja aplikacji">
-            <div className="text-sm text-gray-500">
-              <div>
-                Wersja frontendu: <span className="font-bold text-black">{APP_VERSION}</span>
-              </div>
-              <div>
-                Wersja backendu: <span className="font-bold text-black">{backendVersion.data}</span>
-              </div>
+            <div className="text-sm text-gray-500 grid grid-cols-2 gap-1">
+              <div>Wersja frontendu:</div>
+              <div className="font-bold text-black">{APP_VERSION}</div>
+              <div>Wersja backendu:</div>
+              <div className="font-bold text-black">{backendVersion.data}</div>
             </div>
           </CompanyInfoCard>
         </div>
