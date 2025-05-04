@@ -5,6 +5,17 @@ datasources:
     type: loki
     access: proxy
     url: http://loki:3100
+    jsonData:
+      derivedFields:
+        - name: traceID
+          matcherRegex: "traceid[\": ]*(\\w+)"
+          url: "$${__value.raw}"
+          datasourceUid: Tempo
+        - name: traceid
+          matcherRegex: traceid
+          matcherType: label
+          url: "$${__value.raw}"
+          datasourceUid: Tempo
   - name: Tempo
     type: tempo
     uid: tempo
@@ -15,8 +26,19 @@ datasources:
         datasourceUid: prometheus
       serviceMap:
         datasourceUid: prometheus
+      tracesToLogsV2:
+        datasourceUid: loki
+        spanStartTimeShift: -10m
+        spanEndTimeShift: 10m
+        tags: []
+        filterByTraceID: true
+        filterBySpanID: false
   - name: Prometheus
     type: prometheus
     uid: prometheus
     access: proxy
     url: http://prometheus:9090
+    jsonData:
+      exemplarTraceIdDestinations:
+        - name: traceID
+          datasourceUid: tempo
