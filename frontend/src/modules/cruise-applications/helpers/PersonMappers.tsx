@@ -19,3 +19,7 @@ export function mapPersonToLabel(person: FormUserDto): AppDropdownInputOption {
     ),
   };
 }
+
+export function mapPersonToText(person: FormUserDto): string {
+  return `${person.firstName} ${person.lastName} (${person.email})`;
+}
