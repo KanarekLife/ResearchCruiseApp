@@ -46,7 +46,7 @@ Możliwe przejścia między stanami:
         - → Jest to zazwyczaj stan końcowy, z którego nie ma standardowych przejść do innych aktywnych etapów pracy.
 
 = 3. Limity WIP (Work In Progress)
-Dla każdej kolumny tablicy Kanban przewidziano limit 8 kart (Poza To Do i Done).
+Dla każdej kolumny tablicy Kanban przewidziano limit 5 kart (Poza To Do i Done).
 Wartość ta została wybrana ze względu na 5 uczestników (minimalny limit powinien być co najmniej 5).
 Wzięty został margines na wypadek zadań blokujących.
 
