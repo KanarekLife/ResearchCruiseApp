@@ -40,15 +40,16 @@ Możliwe przejścia między stanami:
     In Review:
         - → Done: Zadanie zostało pomyślnie zweryfikowane i zaakceptowane.
         - → In Progress: Przegląd wykazał konieczność wprowadzenia zmian deweloperskich.
-        - → Test: Przegląd wykazał drobne problemy wymagające ponownego przetestowania po niewielkich korektach (które niekoniecznie wymagają pełnego powrotu do "In Progress").
         - → Blocked: Zidentyfikowano przeszkodę uniemożliwiającą zakończenie przeglądu.
     Done:
         - → Jest to zazwyczaj stan końcowy, z którego nie ma standardowych przejść do innych aktywnych etapów pracy.
 
+#image("kanban-board/mermaid.png")
+
 = 3. Limity WIP (Work In Progress)
-Dla każdej kolumny tablicy Kanban przewidziano limit 5 kart (Poza To Do i Done).
+Dla każdej kolumny tablicy Kanban przewidziano limit 8 kart (Poza To Do i Done).
 Wartość ta została wybrana ze względu na 5 uczestników (minimalny limit powinien być co najmniej 5).
-Wzięty został margines na wypadek zadań blokujących.
+Co drugi programista może mieć dwa zadania w jednym momencie w trakcie wykonwywania (5 + 5/2 = 7.5). 
 
 = 4. Tablica Kanban
 Link do tablicy Kanban: #link("https://dev.azure.com/kanareklife/ResearchCruiseApp/_boards/board/t/ResearchCruiseApp%20Team/Issues")[`https://dev.azure.com/kanareklife/ResearchCruiseApp`]\
@@ -61,3 +62,6 @@ Link do tablicy Kanban: #link("https://dev.azure.com/kanareklife/ResearchCruiseA
 - Przepustowość
 - Wskaźnik ukończenia zadań
 - Czas przetwarzania w stanie
+
+Dashboard z metrykami:
+#link("https://dev.azure.com/kanareklife/ResearchCruiseApp/_dashboards/dashboard/faed5d6f-a6d8-4972-b703-6877fb3c7005")[`https://dev.azure.com/kanareklife/ResearchCruiseApp/dashboards/dashboard`]
