@@ -444,13 +444,13 @@ export function FormCPrintTemplate({ ref }: Props) {
       <PrintingPageSection title="18. Krótki opis podsumowujący dany rejs">
         <div className="mx-6 text-justify">{values.additionalDescription}</div>
         <div className="text-center text-xl">Załączniki</div>
-        <div className="grid grid-cols-6 gap-4">
+        <div className="grid grid-cols-9 gap-4">
           <div className="mb-2 font-semibold col-span-1 text-center">Lp.</div>
-          <div className="mb-2 font-semibold col-span-5 text-center">Nazwa pliku</div>
+          <div className="mb-2 font-semibold col-span-8 text-center">Nazwa pliku</div>
           {values.photos.map((x, i) => (
             <Fragment key={i}>
               <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-1 grid place-items-center')}>{i + 1}.</div>
-              <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-5 grid place-items-center')}>{x.name}</div>
+              <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-8 grid place-items-center')}>{x.name}</div>
             </Fragment>
           ))}
         </div>
