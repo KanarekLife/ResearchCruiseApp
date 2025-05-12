@@ -16,7 +16,13 @@ import { FormASPUBTasksSection } from '@/cruise-applications/components/formA/Fo
 import { FormASupervisorInfoSection } from '@/cruise-applications/components/formA/FormASupervisorInfoSection';
 import { FormAContextType, FormAProvider } from '@/cruise-applications/contexts/FormAContext';
 
-export function FormA({ context, onSaveDraft }: { context: FormAContextType; onSaveDraft?: () => void }) {
+type Props = {
+  context: FormAContextType & {
+    onSubmit: () => void;
+    onSaveDraft: () => void;
+  };
+};
+export function FormA({ context }: Props) {
   const componentRef = useRef(null);
 
   const reactToPrintContent = () => {
@@ -25,22 +31,28 @@ export function FormA({ context, onSaveDraft }: { context: FormAContextType; onS
 
   const handlePrint = useReactToPrint({});
 
+  function onSubmit(evt: React.FormEvent<HTMLFormElement>) {
+    evt.preventDefault();
+    context.onSubmit();
+  }
+
   return (
     <>
       <FormAProvider value={context}>
-        <FormACruiseManagerInfoSection />
-        <FormACruiseLengthSection />
-        <FormAPermissionsSection />
-        <FormAResearchAreaSection />
-        <FormACruiseGoalSection />
-        <FormAResearchTasksSection />
-        <FormAContractsSection />
-        <FormAMembersSection />
-        <FormAPublicationsSection />
-        <FormASPUBTasksSection />
-        <FormASupervisorInfoSection />
-        <FormAActionsSection onSaveDraft={onSaveDraft} onPrint={() => handlePrint(reactToPrintContent)} />
-
+        <form className="space-y-8" onSubmit={onSubmit}>
+          <FormACruiseManagerInfoSection />
+          <FormACruiseLengthSection />
+          <FormAPermissionsSection />
+          <FormAResearchAreaSection />
+          <FormACruiseGoalSection />
+          <FormAResearchTasksSection />
+          <FormAContractsSection />
+          <FormAMembersSection />
+          <FormAPublicationsSection />
+          <FormASPUBTasksSection />
+          <FormASupervisorInfoSection />
+          <FormAActionsSection onSaveDraft={context.onSaveDraft} onPrint={() => handlePrint(reactToPrintContent)} />
+        </form>
         <FormAPrintTemplate ref={componentRef} />
       </FormAProvider>
     </>
