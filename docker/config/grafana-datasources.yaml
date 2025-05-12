@@ -1,5 +1,14 @@
 apiVersion: 1
 datasources:
+  - name: Prometheus
+    type: prometheus
+    uid: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    jsonData:
+      exemplarTraceIdDestinations:
+        - name: traceID
+          datasourceUid: tempo
   - name: Loki
     uid: loki
     type: loki
@@ -33,12 +42,3 @@ datasources:
         tags: []
         filterByTraceID: true
         filterBySpanID: false
-  - name: Prometheus
-    type: prometheus
-    uid: prometheus
-    access: proxy
-    url: http://prometheus:9090
-    jsonData:
-      exemplarTraceIdDestinations:
-        - name: traceID
-          datasourceUid: tempo
