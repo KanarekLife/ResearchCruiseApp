@@ -24,9 +24,9 @@ export function FormAPrintTemplate({ ref }: Props) {
       <PrintingPageSection title="1. Kierownik zgłaszanego rejsu">
         <div className="grid grid-cols-2 gap-x-4 gap-y-1">
           <span>Kierownik rejsu: </span>
-          <span>{mapPersonToText(initValues.cruiseManagers.filter((x) => x.id === values.cruiseManagerId)[0])}</span>
+          <span>{mapPersonToText(initValues.cruiseManagers.find((x) => x.id === values.cruiseManagerId))}</span>
           <span>Zastępca kierownika rejsu: </span>
-          <span>{mapPersonToText(initValues.deputyManagers.filter((x) => x.id === values.deputyManagerId)[0])}</span>
+          <span>{mapPersonToText(initValues.deputyManagers.find((x) => x.id === values.deputyManagerId))}</span>
           <span>Rok: </span>
           <span>{values.year}</span>
         </div>
@@ -47,7 +47,7 @@ export function FormAPrintTemplate({ ref }: Props) {
           <span>Uwagi dotyczące terminu:</span>
           <span>{values.periodNotes}</span>
           <span>Sposób wykorzystania statku:</span>
-          <span>{initValues?.shipUsages.filter((_, i) => i === parseInt(values.shipUsage!))}</span>
+          <span>{initValues?.shipUsages.find((_, i) => i === parseInt(values.shipUsage!))}</span>
           <span>Inny sposób użycia:</span>
           <span>{values.differentUsage}</span>
         </div>
@@ -71,7 +71,7 @@ export function FormAPrintTemplate({ ref }: Props) {
       <PrintingPageSection title="4. Rejon prowadzenia badań">
         <div className="grid grid-cols-2 gap-x-4 gap-y-1">
           <span>Rejon prowadzenia badań: </span>
-          <span>{initValues.researchAreas.filter((x) => x.id === values.researchAreaId)[0].name}</span>
+          <span>{initValues.researchAreas.find((x) => x.id === values.researchAreaId)?.name}</span>
           <span>Informacje dodatkowe: </span>
           <span>{values.researchAreaInfo}</span>
         </div>
@@ -80,7 +80,7 @@ export function FormAPrintTemplate({ ref }: Props) {
       <PrintingPageSection title="5. Cel rejsu">
         <div className="grid grid-cols-2 gap-x-4 gap-y-1">
           <span>Cel rejsu: </span>
-          <span>{initValues.cruiseGoals.filter((_, i) => i === parseInt(values.cruiseGoal))[0]}</span>
+          <span>{initValues.cruiseGoals.find((_, i) => i === parseInt(values.cruiseGoal))}</span>
           <span>Opis: </span>
           <span>{values.cruiseGoalDescription}</span>
         </div>
@@ -158,7 +158,7 @@ export function FormAPrintTemplate({ ref }: Props) {
               <Fragment key={i}>
                 <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-1 grid place-items-center')}>{i + 1}.</div>
                 <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-3 grid place-items-center')}>
-                  {initValues.ugUnits.filter(({ id }) => id === x.ugUnitId)[0].name}
+                  {initValues.ugUnits.find(({ id }) => id === x.ugUnitId)?.name}
                 </div>
                 <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-3 grid place-items-center')}>{x.noOfEmployees}</div>
                 <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-2 grid place-items-center')}>{x.noOfStudents}</div>

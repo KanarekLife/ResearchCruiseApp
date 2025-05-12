@@ -27,7 +27,7 @@ function getAction(action: 'Put' | 'Collect'): string {
 type Props = {
   ref: RefObject<HTMLDivElement | null>;
 };
-export function FromCPrintTemplate({ ref }: Props) {
+export function FormCPrintTemplate({ ref }: Props) {
   const { formAInitValues, formBInitValues, form, formA, formB, cruise } = useFormC();
   const values = form.state.values;
 
@@ -47,13 +47,9 @@ export function FromCPrintTemplate({ ref }: Props) {
       <PrintingPageSection title="2. Kierownik zgłaszanego rejsu">
         <div className="grid grid-cols-2 gap-x-4 gap-y-1">
           <span>Kierownik rejsu: </span>
-          <span>
-            {mapPersonToText(formAInitValues.cruiseManagers.filter((x) => x.id === formA.cruiseManagerId)[0])}
-          </span>
+          <span>{mapPersonToText(formAInitValues.cruiseManagers.find((x) => x.id === formA.cruiseManagerId))}</span>
           <span>Zastępca kierownika rejsu: </span>
-          <span>
-            {mapPersonToText(formAInitValues.deputyManagers.filter((x) => x.id === formA.deputyManagerId)[0])}
-          </span>
+          <span>{mapPersonToText(formAInitValues.deputyManagers.find((x) => x.id === formA.deputyManagerId))}</span>
           <span>Rok: </span>
           <span>{formA.year}</span>
         </div>
@@ -62,7 +58,7 @@ export function FromCPrintTemplate({ ref }: Props) {
       <PrintingPageSection title="3. Sposób wykorzystania statku">
         <div className="grid grid-cols-2 gap-x-4 gap-y-1">
           <span>Sposób wykorzystania statku:</span>
-          <span>{formAInitValues?.shipUsages.filter((_, i) => i === parseInt(values.shipUsage))}</span>
+          <span>{formAInitValues?.shipUsages.find((_, i) => i === parseInt(values.shipUsage))}</span>
           <span>Inny sposób użycia:</span>
           <span>{values.differentUsage}</span>
         </div>
@@ -88,7 +84,7 @@ export function FromCPrintTemplate({ ref }: Props) {
       <PrintingPageSection title="5. Rejon prowadzenia badań">
         <div className="grid grid-cols-2 gap-x-4 gap-y-1">
           <span>Rejon prowadzenia badań: </span>
-          <span>{formAInitValues.researchAreas.filter((x) => x.id === values.researchAreaId)[0].name}</span>
+          <span>{formAInitValues.researchAreas.find((x) => x.id === values.researchAreaId)?.name}</span>
           <span>Informacje dodatkowe: </span>
           <span>{formA.researchAreaInfo}</span>
         </div>
@@ -97,7 +93,7 @@ export function FromCPrintTemplate({ ref }: Props) {
       <PrintingPageSection title="6. Cel rejsu">
         <div className="grid grid-cols-2 gap-x-4 gap-y-1">
           <span>Cel rejsu: </span>
-          <span>{formAInitValues.cruiseGoals.filter((_, i) => i === parseInt(formA.cruiseGoal))[0]}</span>
+          <span>{formAInitValues.cruiseGoals.find((_, i) => i === parseInt(formA.cruiseGoal))}</span>
           <span>Opis: </span>
           <span>{formA.cruiseGoalDescription}</span>
         </div>
@@ -185,7 +181,7 @@ export function FromCPrintTemplate({ ref }: Props) {
             <Fragment key={i}>
               <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-1 grid place-items-center')}>{i + 1}.</div>
               <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-3 grid place-items-center')}>
-                {formAInitValues.ugUnits.filter(({ id }) => id === x.ugUnitId)[0].name}
+                {formAInitValues.ugUnits.find(({ id }) => id === x.ugUnitId)?.name}
               </div>
               <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-3 grid place-items-center')}>{x.noOfEmployees}</div>
               <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-2 grid place-items-center')}>{x.noOfStudents}</div>

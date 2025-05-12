@@ -12,6 +12,7 @@ import { FormCCruiseGoalSection } from '@/cruise-applications/components/formC/F
 import { FormCCruiseInfoSection } from '@/cruise-applications/components/formC/FormCCruiseInfoSection';
 import { FormCCruiseManagerInfoSection } from '@/cruise-applications/components/formC/FormCCruiseManagerInfoSection';
 import { FormCMembersSection } from '@/cruise-applications/components/formC/FormCMembersSection';
+import { FormCPrintTemplate } from '@/cruise-applications/components/formC/FormCPrintTemplate';
 import { FormCPublicationsSection } from '@/cruise-applications/components/formC/FormCPublicationsSection';
 import { FormCResearchAreaSection } from '@/cruise-applications/components/formC/FormCResearchAreaSection';
 import { FormCResearchEquipmentsSection } from '@/cruise-applications/components/formC/FormCResearchEquipmentsSection';
@@ -21,8 +22,6 @@ import { FormCShipUsageSection } from '@/cruise-applications/components/formC/Fo
 import { FormCSPUBReportDataSection } from '@/cruise-applications/components/formC/FormCSPUBReportDataSection';
 import { FormCSPUBTasksSection } from '@/cruise-applications/components/formC/FormCSPUBTasksSection';
 import { FormCContextType, FormCProvider } from '@/cruise-applications/contexts/FormCContext';
-
-import { FromCPrintTemplate } from './FromCPrintTemplate';
 
 type Props = {
   context: FormCContextType & {
@@ -66,9 +65,8 @@ export function FormC({ context }: Props) {
         <FormCSPUBReportDataSection />
         <FormCAdditionalDescriptionSection />
         <FormCActionsSection onSaveDraft={context.onSaveDraft} onPrint={() => handlePrint(reactToPrintContent)} />
-
-        <FromCPrintTemplate ref={componentRef} />
       </form>
+      <FormCPrintTemplate ref={componentRef} />
     </FormCProvider>
   );
 }
