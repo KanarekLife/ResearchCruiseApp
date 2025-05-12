@@ -5,9 +5,11 @@ type Props = {
 };
 export function PrintableOtherResearchTaskDetails({ data }: Props) {
   return (
-    <div className="grid grid-cols-2 gap-x-4">
-      <span>Opis zadania:</span>
-      <span>{data.description}</span>
+    <div>
+      <div className="flex justify-between items-center">
+        <span>Opis zadania:</span>
+        <span>{data.description}</span>
+      </div>
     </div>
   );
 }

@@ -5,11 +5,15 @@ type Props = {
 };
 export function PrintableThesisResearchTaskDetails({ data }: Props) {
   return (
-    <div className="grid grid-cols-2 gap-x-4">
-      <span>Autor: </span>
-      <span>{data.author}</span>
-      <span>Tytuł:</span>
-      <span>{data.title}</span>
+    <div>
+      <div className="flex justify-between items-center">
+        <span>Autor: </span>
+        <span>{data.author}</span>
+      </div>
+      <div className="flex justify-between items-center">
+        <span>Tytuł:</span>
+        <span>{data.title}</span>
+      </div>
     </div>
   );
 }
