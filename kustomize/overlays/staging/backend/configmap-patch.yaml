@@ -4,5 +4,5 @@ metadata:
   name: research-cruise-app-backend-config
 data:
   FrontendUrl: https://rca.nasus.dev
-  OTEL_SERVICE_NAME: research-cruise-app-backend
-  OTEL_EXPORTER_OTLP_ENDPOINT: http://k8s-monitoring-alloy-receiver.monitoring:4318
+  UseOtlpExporter: "true"
+  OtlpExporterEndpoint: http://k8s-monitoring-alloy-receiver.monitoring:4318

@@ -12,8 +12,8 @@ services:
       - Database__LogUserPasswordsWhenSeeding=true
       - ConnectionStrings__Database=Server=db,1433;Database=ResearchCruiseApp;User Id=sa;Password=p@ssw0rd;Encrypt=False
       - FrontendUrl=http://localhost:8080
-      - OTEL_SERVICE_NAME=research-cruise-app-backend
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://alloy:4318
+      - UseOtlpExporter=true
+      - OtlpExporterEndpoint=http://alloy:4318
     depends_on:
       db:
         condition: service_healthy

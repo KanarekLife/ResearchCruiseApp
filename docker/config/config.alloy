@@ -17,6 +17,7 @@ otelcol.processor.batch "default" {
   output {
     traces = [otelcol.exporter.otlp.tempo.input]
     logs = [otelcol.exporter.loki.loki.input]
+    metrics = [otelcol.exporter.prometheus.prometheus.input]
   }
 }
 
@@ -34,6 +35,7 @@ otelcol.exporter.loki "loki" {
 }
 
 otelcol.exporter.prometheus "prometheus" {
+  add_metric_suffixes = true
   forward_to = [prometheus.remote_write.prometheus.receiver]
 }
 
