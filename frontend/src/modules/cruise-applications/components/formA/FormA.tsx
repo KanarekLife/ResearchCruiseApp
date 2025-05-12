@@ -40,9 +40,9 @@ export function FormA({ context, onSaveDraft }: { context: FormAContextType; onS
         <FormASPUBTasksSection />
         <FormASupervisorInfoSection />
         <FormAActionsSection onSaveDraft={onSaveDraft} onPrint={() => handlePrint(reactToPrintContent)} />
-      </FormAProvider>
 
-      <FormAPrintTemplate initValues={context.initValues} values={context.form.state.values} ref={componentRef} />
+        <FormAPrintTemplate ref={componentRef} />
+      </FormAProvider>
     </>
   );
 }

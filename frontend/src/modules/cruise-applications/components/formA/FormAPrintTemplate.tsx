@@ -4,19 +4,19 @@ import { Fragment, RefObject } from 'react';
 import { cn } from '@/core/lib/utils';
 import { getExplanationForPeriod } from '@/cruise-applications/components/common/cruisePeriodExplanation';
 import { PrintableResearchTaskDetails } from '@/cruise-applications/components/common/printable-research-task-details/PrintableResearchTaskDetails';
+import { useFormA } from '@/cruise-applications/contexts/FormAContext';
 import { mapPersonToText } from '@/cruise-applications/helpers/PersonMappers';
 import { getContractCategoryName } from '@/cruise-applications/models/ContractDto';
-import { FormADto } from '@/cruise-applications/models/FormADto';
-import { FormAInitValuesDto } from '@/cruise-applications/models/FormAInitValuesDto';
 import { getPublicationCategoryLabel } from '@/cruise-applications/models/PublicationDto';
 import { getTaskName } from '@/cruise-applications/models/ResearchTaskDto';
 
 type Props = {
-  initValues: FormAInitValuesDto;
-  values: FormADto;
   ref: RefObject<HTMLDivElement | null>;
 };
-export function FormAPrintTemplate({ initValues, values, ref }: Props) {
+export function FormAPrintTemplate({ ref }: Props) {
+  const { initValues, form } = useFormA();
+  const values = form.state.values;
+
   return (
     <div ref={ref} className="not-print:hidden bg-white mx-auto w-[21cm] px-[1cm] py-[0.5cm] space-y-8">
       <h1 className="text-3xl text-center">Formularz A</h1>
@@ -44,13 +44,13 @@ export function FormAPrintTemplate({ initValues, values, ref }: Props) {
           <span>{getExplanationForPeriod(parseInt(values.optimalPeriod[0]), parseInt(values.optimalPeriod[1]))}</span>
           <span>Liczba planowanych dób rejsowych: </span>
           <span>{parseInt(values.cruiseHours) / 24}</span>
-          <span>Liczba planowanych godzin rejsowych</span>
+          <span>Liczba planowanych godzin rejsowych:</span>
           <span>{values.cruiseHours} h</span>
-          <span>Uwagi dotyczące terminu</span>
+          <span>Uwagi dotyczące terminu:</span>
           <span>{values.periodNotes}</span>
-          <span>Statek na potrzeby badań będzie wykorzystywany</span>
+          <span>Sposób wykorzystania statku:</span>
           <span>{initValues?.shipUsages.filter((_, i) => i === parseInt(values.shipUsage!))}</span>
-          <span>Inny sposób użycia</span>
+          <span>Inny sposób użycia:</span>
           <span>{values.differentUsage}</span>
         </div>
       </section>
