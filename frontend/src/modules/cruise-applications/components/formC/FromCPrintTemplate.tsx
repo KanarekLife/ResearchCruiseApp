@@ -6,7 +6,7 @@ import { cn } from '@/core/lib/utils';
 import { PrintableResearchTaskDetails } from '@/cruise-applications/components/common/printable-research-task-details/PrintableResearchTaskDetails';
 import { PrintingPage } from '@/cruise-applications/components/common/printing/PrintingPage';
 import { PrintingPageSection } from '@/cruise-applications/components/common/printing/PrintingPageSection';
-import { useFormB } from '@/cruise-applications/contexts/FormBContext';
+import { useFormC } from '@/cruise-applications/contexts/FormCContext';
 import { mapPersonToText } from '@/cruise-applications/helpers/PersonMappers';
 import { getContractCategoryName } from '@/cruise-applications/models/ContractDto';
 import { getPublicationCategoryLabel } from '@/cruise-applications/models/PublicationDto';
@@ -27,12 +27,12 @@ function getAction(action: 'Put' | 'Collect'): string {
 type Props = {
   ref: RefObject<HTMLDivElement | null>;
 };
-export function FormBPrintTemplate({ ref }: Props) {
-  const { cruise, formAInitValues, formBInitValues, formA, form } = useFormB();
+export function FromCPrintTemplate({ ref }: Props) {
+  const { formAInitValues, formBInitValues, form, formA, formB, cruise } = useFormC();
   const values = form.state.values;
 
   return (
-    <PrintingPage ref={ref} title="Formularz B">
+    <PrintingPage ref={ref} title="Formularz C">
       <PrintingPageSection title="1. Informacje o rejsie">
         <div className="grid grid-cols-2 gap-x-4 gap-y-1">
           <span>Numer rejsu: </span>
@@ -54,21 +54,21 @@ export function FormBPrintTemplate({ ref }: Props) {
           <span>
             {mapPersonToText(formAInitValues.deputyManagers.filter((x) => x.id === formA.deputyManagerId)[0])}
           </span>
-          <span>Czy kierownik jest obecny na rejsie: </span>
-          <span>{values.isCruiseManagerPresent ? 'Tak' : 'Nie'}</span>
+          <span>Rok: </span>
+          <span>{formA.year}</span>
         </div>
       </PrintingPageSection>
 
       <PrintingPageSection title="3. Sposób wykorzystania statku">
         <div className="grid grid-cols-2 gap-x-4 gap-y-1">
           <span>Sposób wykorzystania statku:</span>
-          <span>{formAInitValues?.shipUsages.filter((_, i) => i === parseInt(formA.shipUsage!))}</span>
+          <span>{formAInitValues?.shipUsages.filter((_, i) => i === parseInt(values.shipUsage))}</span>
           <span>Inny sposób użycia:</span>
-          <span>{formA.differentUsage}</span>
+          <span>{values.differentUsage}</span>
         </div>
       </PrintingPageSection>
 
-      <PrintingPageSection title="4. Dodatkowe pozwolenia do planowanych podczas rejsu badań">
+      <PrintingPageSection title="4. Dodatkowe pozwolenia do przeprowadzonych w trakcie rejsu badań">
         <div className="grid grid-cols-10 gap-x-4">
           <div className="mb-4 font-semibold col-span-1 text-center">Lp.</div>
           <div className="mb-4 font-semibold col-span-3 text-center">Treść pozwolenia</div>
@@ -88,7 +88,7 @@ export function FormBPrintTemplate({ ref }: Props) {
       <PrintingPageSection title="5. Rejon prowadzenia badań">
         <div className="grid grid-cols-2 gap-x-4 gap-y-1">
           <span>Rejon prowadzenia badań: </span>
-          <span>{formAInitValues.researchAreas.filter((x) => x.id === formA.researchAreaId)[0].name}</span>
+          <span>{formAInitValues.researchAreas.filter((x) => x.id === values.researchAreaId)[0].name}</span>
           <span>Informacje dodatkowe: </span>
           <span>{formA.researchAreaInfo}</span>
         </div>
@@ -103,12 +103,13 @@ export function FormBPrintTemplate({ ref }: Props) {
         </div>
       </PrintingPageSection>
 
-      <PrintingPageSection title="7. Zadania do zrealizowania w trakcie rejsu">
+      <PrintingPageSection title="7. Zadania przypisane do rejsu - efekty rejsu">
         <div className="grid grid-cols-9 gap-x-8">
           <div className="mb-4 font-semibold col-span-1 text-center">Lp.</div>
           <div className="mb-4 font-semibold col-span-2 text-center">Zadanie</div>
-          <div className="mb-4 font-semibold col-span-6 text-center">Szczegóły</div>
-          {formA.researchTasks.map((x, i) => (
+          <div className="mb-4 font-semibold col-span-3 text-center">Szczegóły</div>
+          <div className="mb-4 font-semibold col-span-3 text-center" />
+          {values.researchTasksEffects.map((x, i) => (
             <Fragment key={i}>
               <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-1 grid place-items-center')}>
                 <div>{i + 1}.</div>
@@ -116,20 +117,30 @@ export function FormBPrintTemplate({ ref }: Props) {
               <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-2 flex items-center')}>
                 <div>{getTaskName(x.type)}</div>
               </div>
-              <span className={cn(i > 0 ? 'mt-4' : '', 'col-span-6')}>
-                <PrintableResearchTaskDetails data={x} />
+              <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-3 flex items-center')}>
+                <div className="w-full">
+                  <PrintableResearchTaskDetails data={x} />
+                </div>
+              </div>
+              <span className={cn(i > 0 ? 'mt-4' : '', 'col-span-3 grid grid-cols-4')}>
+                <div className="col-span-3">Zrealizowane: </div>
+                <div>{x.done === 'true' ? 'Tak' : 'Nie'}</div>
+                <div className="col-span-3">Punkty naliczone kierownikowi: </div>
+                <div>{x.managerConditionMet === 'true' ? 'Tak' : 'Nie'}</div>
+                <div className="col-span-3">Punkty naliczone zastępcy: </div>
+                <div>{x.deputyConditionMet === 'true' ? 'Tak' : 'Nie'}</div>
               </span>
             </Fragment>
           ))}
         </div>
       </PrintingPageSection>
 
-      <PrintingPageSection title="8. Umowy regulujące współpracę, w ramach której miałyby być realizowane zadania badawcze">
+      <PrintingPageSection title="8. Umowy regulujące współpracę, w ramach której zostały zrealizowane zadania badawcze">
         <div className="grid grid-cols-9 gap-x-8">
           <span className="mb-2 font-semibold col-span-1 text-center">Lp.</span>
           <span className="mb-2 font-semibold col-span-2 text-center">Kategoria</span>
           <span className="mb-2 font-semibold col-span-6 text-center">Pozostałe szczegóły</span>
-          {formA.contracts.map((x, i) => (
+          {values.contracts.map((x, i) => (
             <Fragment key={i}>
               <div className={cn(i > 0 ? 'mt-8' : '', 'col-span-1 grid place-items-center')}>
                 <span>{i + 1}.</span>
@@ -164,7 +175,7 @@ export function FormBPrintTemplate({ ref }: Props) {
         </div>
       </PrintingPageSection>
 
-      <PrintingPageSection title="9. Zespoły badawcze, które miałyby uczestniczyć w rejsie">
+      <PrintingPageSection title="9. Zespoły badawcze, które uczestniczyły w rejsie">
         <div className="grid grid-cols-9 gap-x-8 mb-16">
           <div className="mb-4 font-semibold col-span-1 text-center">Lp.</div>
           <div className="mb-4 font-semibold col-span-3 text-center">Jednostka</div>
@@ -200,7 +211,7 @@ export function FormBPrintTemplate({ ref }: Props) {
           <div className="mb-2 font-semibold col-span-2 text-center">Dane osobowe</div>
           <div className="mb-2 font-semibold col-span-4 text-center">Dokument tożsamości</div>
           <div className="mb-2 font-semibold col-span-2 text-center">Nazwa jednostki</div>
-          {values.crewMembers.map((x, i) => (
+          {formB.crewMembers.map((x, i) => (
             <Fragment key={i}>
               <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-1 grid place-items-center')}>{i + 1}.</div>
               <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-2 grid place-items-center')}>
@@ -270,13 +281,13 @@ export function FormBPrintTemplate({ ref }: Props) {
         </div>
       </PrintingPageSection>
 
-      <PrintingPageSection title="11. Zadania SPUB, z którymi pokrywają się zadania planowane do realizacji na rejsie">
+      <PrintingPageSection title="11. Zadania SPUB, z którymi pokrywają się zadania zrealizowane na rejsie">
         <div className="grid grid-cols-9 gap-x-8">
           <div className="mb-2 font-semibold col-span-1 text-center">Lp.</div>
           <div className="mb-2 font-semibold col-span-2 text-center">Rok rozpoczęcia</div>
           <div className="mb-2 font-semibold col-span-2 text-center">Rok zakończenia</div>
           <div className="mb-2 font-semibold col-span-4 text-center">Nazwa zadania</div>
-          {formA.spubTasks.map((x, i) => (
+          {values.spubTasks.map((x, i) => (
             <Fragment key={i}>
               <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-1 grid place-items-center')}>{i + 1}.</div>
               <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-2 grid place-items-center')}>{x.yearFrom}</div>
@@ -353,7 +364,7 @@ export function FormBPrintTemplate({ ref }: Props) {
         </div>
       </PrintingPageSection>
 
-      <PrintingPageSection title="13. Szczegółowy plan zadań do realizacji podczas rejsu">
+      <PrintingPageSection title="13. Szczegółowy plan zadań zrealizowanych podczas rejsu">
         <div className="grid grid-cols-6 gap-x-8">
           <div className="mb-2 font-semibold col-span-1 text-center">Dzień</div>
           <div className="mb-2 font-semibold col-span-1 text-center">Liczba godzin</div>
@@ -374,7 +385,7 @@ export function FormBPrintTemplate({ ref }: Props) {
         </div>
       </PrintingPageSection>
 
-      <PrintingPageSection title="14. Lista sprzętu i aparatury badawczej planowanej do użycia podczas rejsu">
+      <PrintingPageSection title="14. Lista sprzętu i aparatury badawczej użytej podczas rejsu">
         <div className="grid grid-cols-9 gap-x-8">
           <div className="mb-2 font-semibold col-span-1 text-center">Lp.</div>
           <div className="mb-2 font-semibold col-span-3 text-center">Nazwa sprzętu / aparatury</div>
@@ -408,6 +419,42 @@ export function FormBPrintTemplate({ ref }: Props) {
               <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-2 grid place-items-center')}>
                 {values.shipEquipmentsIds.filter((id) => id === x.id).length > 0 ? 'Tak' : 'Nie'}
               </div>
+            </Fragment>
+          ))}
+        </div>
+      </PrintingPageSection>
+
+      <PrintingPageSection title="16. Lista próbek pobranych i poddanych analizie podczas rejsu">
+        <div className="grid grid-cols-10 gap-x-8">
+          <div className="mb-2 font-semibold col-span-2 text-center">Rodzaj materiału badawczego</div>
+          <div className="mb-2 font-semibold col-span-1 text-center">Ilość</div>
+          <div className="mb-2 font-semibold col-span-4 text-center">Analizy przeprowadzone na zebranym materiale</div>
+          <div className="mb-2 font-semibold col-span-3 text-center">Publiczność danych</div>
+          {values.collectedSamples.map((x, i) => (
+            <Fragment key={i}>
+              <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-2 grid place-items-center')}>{x.type}</div>
+              <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-1 grid place-items-center')}>{x.amount}</div>
+              <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-4 grid place-items-center')}>{x.analysis}</div>
+              <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-3 grid place-items-center')}>{x.publishing}</div>
+            </Fragment>
+          ))}
+        </div>
+      </PrintingPageSection>
+
+      <PrintingPageSection title="17. Dodatkowe dane do raportu SPUB">
+        <div className="mx-6 text-justify">{values.spubReportData}</div>
+      </PrintingPageSection>
+
+      <PrintingPageSection title="18. Krótki opis podsumowujący dany rejs">
+        <div className="mx-6 text-justify">{values.additionalDescription}</div>
+        <div className="text-center text-xl">Załączniki</div>
+        <div className="grid grid-cols-6 gap-4">
+          <div className="mb-2 font-semibold col-span-1 text-center">Lp.</div>
+          <div className="mb-2 font-semibold col-span-5 text-center">Nazwa pliku</div>
+          {values.photos.map((x, i) => (
+            <Fragment key={i}>
+              <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-1 grid place-items-center')}>{i + 1}.</div>
+              <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-5 grid place-items-center')}>{x.name}</div>
             </Fragment>
           ))}
         </div>
