@@ -124,7 +124,7 @@ export function FormAPrintTemplate({ ref }: Props) {
                 <div className="font-semibold">Szczegóły</div>
                 <div className="mb-4">
                   <div className="flex justify-between items-center">
-                    <span>Nazwa insytucji:</span>
+                    <span>Nazwa instytucji:</span>
                     <span>{x.institutionName}</span>
                   </div>
                   <div className="flex justify-between items-center">

@@ -1,3 +1,6 @@
+import { useRef } from 'react';
+import { useReactToPrint } from 'react-to-print';
+
 import { FormCActionsSection } from '@/cruise-applications/components/formC/FormCActionsSection';
 import { FormCAdditionalDescriptionSection } from '@/cruise-applications/components/formC/FormCAdditionalDescriptionSection';
 import { FormCAdditionalPermissionsSection } from '@/cruise-applications/components/formC/FormCAdditionalPermissionsSection';
@@ -19,6 +22,8 @@ import { FormCSPUBReportDataSection } from '@/cruise-applications/components/for
 import { FormCSPUBTasksSection } from '@/cruise-applications/components/formC/FormCSPUBTasksSection';
 import { FormCContextType, FormCProvider } from '@/cruise-applications/contexts/FormCContext';
 
+import { FromCPrintTemplate } from './FromCPrintTemplate';
+
 type Props = {
   context: FormCContextType & {
     onSubmit: () => void;
@@ -30,6 +35,14 @@ export function FormC({ context }: Props) {
     evt.preventDefault();
     context.onSubmit();
   }
+
+  const componentRef = useRef(null);
+
+  const reactToPrintContent = () => {
+    return componentRef.current;
+  };
+
+  const handlePrint = useReactToPrint({});
 
   return (
     <FormCProvider value={context}>
@@ -52,7 +65,9 @@ export function FormC({ context }: Props) {
         <FormCCollectedSamplesSection />
         <FormCSPUBReportDataSection />
         <FormCAdditionalDescriptionSection />
-        <FormCActionsSection onSaveDraft={context.onSaveDraft} />
+        <FormCActionsSection onSaveDraft={context.onSaveDraft} onPrint={() => handlePrint(reactToPrintContent)} />
+
+        <FromCPrintTemplate ref={componentRef} />
       </form>
     </FormCProvider>
   );
