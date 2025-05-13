@@ -7,19 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@grafana/faro-web-sdk':
-        specifier: ^1.17.2
-        version: 1.17.2
-      '@grafana/faro-web-tracing':
-        specifier: ^1.17.2
-        version: 1.17.2
-      dayjs:
-        specifier: ^1.11.13
-        version: 1.11.13
-      react-to-print:
-        specifier: ^3.1.0
-        version: 3.1.0(react@19.0.0)
     devDependencies:
       '@chromatic-com/storybook':
         specifier: ^3.2.4
@@ -30,6 +17,12 @@ importers:
       '@eslint/js':
         specifier: ^9.18.0
         version: 9.18.0
+      '@grafana/faro-web-sdk':
+        specifier: ^1.17.2
+        version: 1.17.2
+      '@grafana/faro-web-tracing':
+        specifier: ^1.17.2
+        version: 1.17.2
       '@storybook/addon-essentials':
         specifier: ^8.5.3
         version: 8.5.3(@types/react@19.0.8)(storybook@8.5.3(prettier@3.4.2))
@@ -111,6 +104,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      dayjs:
+        specifier: ^1.11.13
+        version: 1.11.13
       eslint:
         specifier: ^9.18.0
         version: 9.18.0(jiti@2.4.2)
@@ -144,6 +140,9 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
+      react-to-print:
+        specifier: ^3.1.0
+        version: 3.1.0(react@19.0.0)
       storybook:
         specifier: ^8.5.3
         version: 8.5.3(prettier@3.4.2)
