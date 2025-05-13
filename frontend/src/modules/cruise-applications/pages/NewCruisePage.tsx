@@ -54,10 +54,16 @@ export function NewCruisePage() {
       onChange: getFormAValidationSchema(initialStateQuery.data),
     },
   });
+  const context = {
+    form,
+    initValues: initialStateQuery.data,
+    isReadonly: false,
+    hasFormBeenSubmitted,
+    onSubmit: handleSubmitting,
+    onSaveDraft: () => setIsSaveDraftModalOpen(true),
+  };
 
-  async function handleSubmitting(evt: React.FormEvent<HTMLFormElement>) {
-    evt.preventDefault();
-
+  async function handleSubmitting() {
     setHasFormBeenSubmitted(true);
 
     await form.validate('change');
@@ -161,12 +167,7 @@ export function NewCruisePage() {
   return (
     <>
       <AppLayout title="Formularz A">
-        <form className="space-y-8" onSubmit={handleSubmitting}>
-          <FormA
-            context={{ form, initValues: initialStateQuery.data, isReadonly: false, hasFormBeenSubmitted }}
-            onSaveDraft={() => setIsSaveDraftModalOpen(true)}
-          />
-        </form>
+        <FormA context={context} />
       </AppLayout>
 
       <AppModal title="Zapisz Formularz A" isOpen={isSaveDraftModalOpen} onClose={() => setIsSaveDraftModalOpen(false)}>
