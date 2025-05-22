@@ -18,7 +18,7 @@ Dodatkowowo z uwagi na to, że każdy każdy z deweloperów nie pracuje na pełe
 następuje jedynie na wspólnych spotkaniach. Deweloperzy mają różny poziom doświadczenia w pracy z Scrumem.
 Jedyni (Stanisław Nieradko, Krzysztof Nasuta) pracują od kilku lat inni dopiero od początku tego projektu (Paweł Pstrągowski, Filip Dawidowski, Bartłomiej Krawisz).
 #show link: it => underline(text(fill: blue)[#it])
-- Link do wirtualnej tablicy retrospektywy #link("https://miro.com/app/board/uXjVIx2pFCQ=/")[https://miro.com/uXjVIx2pFCQ]
+- Link do wirtualnej tablicy retrospektywy #link("https://miro.com/welcomeonboard/NDNGT2dVWUZNdXl1SGcxUm1ma3I2NHF1U01CRkI4Yjl2a3o5c1JkWWlmYVEybnc4TjhpT2pXU0xHdlZUT0FadVJNRHRNTUxIYzlQZVR3VVZHdFJvRU4wTWF4M3FPT2hMb09lMGtnU2lVbnVRMG1rVERDMmhJaHFaQm80Uk5tQkZnbHpza3F6REdEcmNpNEFOMmJXWXBBPT0hdjE=?share_link_id=37454474098")[https://miro.com/uXjVIx2pFCQ]
 
 = 3. Przebieg i wyniki retrospektywy
 Retrospektywa odbyła się zdalnie ostatniego dnia sprintu czyli w piątek 09.05.2025, trwała godzinę.
