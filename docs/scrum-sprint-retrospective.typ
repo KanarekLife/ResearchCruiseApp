@@ -37,21 +37,22 @@ Gdy wszyscy wrzucili do tablicy wybrane memy, zespół po kolei je przedyskutowa
     === Nieudane aspekty projektu:
         - Brak jasnych wymagań od klienta powoduje trudności implementacji.
         - Trudności w synchronizacji pracy ze względu na nienormowany czas pracy każdego z deweloperów.
-        - Problemy z dostępem do środowiska stagingowego dla nowych członków zespołu.
+        - Problemy z dostępem i destrukcyjnymi zmianamami w środowisku stagingowym przez członka zespołu.
     === Propozycje poprawy sytuacji:
         - Regularne spotkania z klientem w celu doprecyzowania wymagań.
         - Ustalenie stałych godzin pracy dla każdego z deweloperów (nawet częściowo).
         - Ograniczenie dostępu do środowiska stagingowego dla niewdrożonych członków zespołu lub/i 
           utrudnienie możliwości skasowania konta użytkownika przez jego samego.
     === Emocje:
+        - Jednomyślna (poza sprawcą) krytyka spowodowania awarii środowiska stagingowego.
         - Frustracja spowodowana niejasnymi wymaganiami i brakiem odzewu od klienta.
         - Oczekiwanie na opiekuna projektu aby móc ustalić dogodny termin spotkania. 
     === Oceny:
-        Ogólna ocena sprintu: 7/10 (głównie przez problemy z wymaganiami i ).
+        Ogólna ocena sprintu: 7/10 (głównie przez problemy z wymaganiami i awarią środowiska stagingowego).
 
     === Żale:
         - Brak czasu na dokładniejsze testowanie przed wdrożeniem.
-        - Paweł Pstrągowski za mało czasu poświecił na zapoznanie się z środowiskiem stagingowym i frontendem.
+        - Paweł Pstrągowski za mało czasu poświecił na zapoznanie się z środowiskiem stagingowym i frontendem oraz za spowodowanie awarii.
 
     === Podziękowania:
         - Podziękowania dla Bartłomieja Krawisza za przygotowanie testów na czas.
