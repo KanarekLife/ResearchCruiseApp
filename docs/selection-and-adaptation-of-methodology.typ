@@ -1,5 +1,5 @@
 #import "template.typ": template
-#show: template.with("Dobór i adaptacja metodyki", "1.0.0", datetime(day: 06, month: 6, year: 2025))
+#show: template.with("Dobór i adaptacja metodyki", "1.0.0", datetime(day: 05, month: 6, year: 2025))
 
 = 1. O projekcie i produkcie
 - *Projekt*: System zarządzania rejsami statku RV Oceanograf biura Armatora Uniwersytetu Gdańskiego.
@@ -61,9 +61,9 @@ Podsumowanie oceny uproszczonej: Projekt dobrze pasuje do metodyk zwinnych, szcz
 
 == 3.2 Zarządzanie
   === Komunikacja (Communication):
-  - Ocena projektu: Efektywna komunikacja z Biurem Armatora (główny interesariusz) oraz przedstawicielami pracowników uczelni (użytkownicy końcowi) będzie kluczowa dla sukcesu aplikacji.
+  - Ocena projektu: Efektywna komunikacja z Biurem Armatora (główny interesariusz) oraz przedstawicielami pracowników uczelni (użytkownicy końcowi) będzie kluczowa dla sukcesu aplikacji. Ze względu na dużo obowiązków ze strony klienta, komunikacja z nim oraz spotkania występują rzadko. Omawiane są na nich zagadnienia z różnych dziedzin dotyczących produktu.
   - Uzasadnienie: Regularna informacja zwrotna, demonstracje postępów i wspólne rozwiązywanie problemów są niezbędne do stworzenia użytecznego narzędzia.
-  - Dopasowanie: Metodyki zwinne, kładące nacisk na częstą i bezpośrednią komunikację z klientem/użytkownikami.
+  - Dopasowanie: W stronę metodyk zwinnych, które kładą nacisk na częstą i bezpośrednią komunikację z klientem/użytkownikami (w tym przypadku nie tak częsta komunikacja).
 
 == 3.3 Techniczne
   === Wymagania (Requirements):
@@ -122,7 +122,7 @@ Sugerowana metodyka wspierająca model przyrostowy: Metodyki zwinne takie jak Sc
 - Kanban sprawdza się w zespole gdzie każdy członek zna swoje zadania, a formalne role są zbędne (poza wybranym przedstawicielem do komunikacji z klientem dla wspólnego stanowiska zespołu).
 - Pozwala na większą samodzielność i elastyczność w pracy.
 
-Kanban okazuje się lepszym rozwiązaniem w przypadku tego projektu niż Scrum. Pozwala jeszcze lepsze dostosowywanie prioritetów, nie wymaga czasochłonnego szacowania i planowania sprintów.
+Kanban okazuje się lepszym rozwiązaniem w przypadku tego projektu niż Scrum. Pozwala jeszcze lepsze dostosowywanie priorytetów, nie wymaga czasochłonnego szacowania i planowania sprintów.
 Dzięki temu zespół może klientowi dostarczyć zauważalnie lepszy i bardziej dopracowany produkt niż w przypadku Scruma.
 
 = 5. Metodyka i jej adaptacja
@@ -149,7 +149,7 @@ Mimo ogólnego dopasowania do Kanban, projekt posiada cechy, które wymagają ś
   - Organizowanie dodatkowych, formalnych spotkań przeglądowych dla szerszego grona interesariuszy po kluczowych kamieniach milowych.
 
 == Dostępność użytkowników (pracownicy uczelni):
-  Niedopasowanie: Regularne zaangażowanie szerokiej grupy pracowników uczelni (nie są zbyt zainteresowani produktem) może być trudne do osiągnięcia.
+  Niedopasowanie: Regularne zaangażowanie szerokiej grupy pracowników uczelni może być trudne do osiągnięcia ze względu na dużą ilość obowiązków z ich strony.
   Adaptacja:
   - Product Owner (z Biura Armatora) pełni rolę głównego reprezentanta potrzeb użytkowników.
 
