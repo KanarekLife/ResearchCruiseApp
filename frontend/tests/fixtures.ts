@@ -8,14 +8,11 @@ const dirname = path.dirname(filename);
 export const API_URL = 'http://localhost:3000';
 export const ASSETS_DIR = path.join(dirname, './assets');
 
-type MyFixtures = {
-  
-};
+type MyFixtures = {};
 
 export const test = base.extend<{ forEachTest: void } & MyFixtures>({
   forEachTest: [
     async ({ page }, use) => {
-
       // By default raise an error if the API is not mocked
       page.route(`${API_URL}/**`, (route) => {
         throw new Error(`API call not mocked: ${route.request().url()}`);

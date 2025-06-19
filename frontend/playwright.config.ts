@@ -37,11 +37,12 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'],
+      use: {
+        ...devices['Desktop Chrome'],
         bypassCSP: true,
         launchOptions: {
-          args: ['--disable-web-security']
-        }
+          args: ['--disable-web-security'],
+        },
       },
     },
 

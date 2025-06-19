@@ -4,8 +4,7 @@ import path from 'path';
 import { test, API_URL, ASSETS_DIR } from './fixtures';
 
 test('valid form A', async ({ page }) => {
-
-  const test_pdf_file = path.join(ASSETS_DIR, './test-pdf-file.pdf')
+  const test_pdf_file = path.join(ASSETS_DIR, './test-pdf-file.pdf');
 
   // mock apis
   page.routeFromHAR(path.join(ASSETS_DIR, './api-mocks/api_forms_InitValues_A.har'), {
@@ -21,7 +20,7 @@ test('valid form A', async ({ page }) => {
     lastName: 'Adminowy',
     roles: ['Administrator'],
     emailConfirmed: true,
-    accepted: true
+    accepted: true,
   };
   page.route(`${API_URL}/account`, (route) => {
     route.fulfill({
@@ -47,7 +46,7 @@ test('valid form A', async ({ page }) => {
 
   await page.evaluate((authDetails) => {
     console.log('setting storage');
-    window.localStorage.setItem("authDetails", authDetails);
+    window.localStorage.setItem('authDetails', authDetails);
     console.log('storage set!');
   }, authDetails);
 
@@ -69,9 +68,24 @@ test('valid form A', async ({ page }) => {
   await page.locator('span:nth-child(7)').first().click();
   await page.locator('div:nth-child(2) > .relative > span:nth-child(6)').click();
   await page.locator('div:nth-child(2) > .relative > span:nth-child(13)').click();
-  await page.locator('div').filter({ hasText: /^Liczba planowanych dób rejsowych$/ }).getByRole('button').nth(1).click();
-  await page.locator('div').filter({ hasText: /^Liczba planowanych dób rejsowych$/ }).getByRole('button').nth(1).click();
-  await page.locator('div').filter({ hasText: /^Liczba planowanych dób rejsowych$/ }).getByRole('button').nth(1).click();
+  await page
+    .locator('div')
+    .filter({ hasText: /^Liczba planowanych dób rejsowych$/ })
+    .getByRole('button')
+    .nth(1)
+    .click();
+  await page
+    .locator('div')
+    .filter({ hasText: /^Liczba planowanych dób rejsowych$/ })
+    .getByRole('button')
+    .nth(1)
+    .click();
+  await page
+    .locator('div')
+    .filter({ hasText: /^Liczba planowanych dób rejsowych$/ })
+    .getByRole('button')
+    .nth(1)
+    .click();
   await page.getByRole('textbox', { name: 'np. "Rejs w okresie' }).click();
   await page.getByRole('textbox', { name: 'np. "Rejs w okresie' }).fill('Rejs w okresie wakacyjnym');
   await page.getByRole('button', { name: 'Wybierz' }).first().click();
@@ -85,7 +99,11 @@ test('valid form A', async ({ page }) => {
   await page.locator('input[name="permissions\\[0\\]\\.executive"]').fill('Pozwalający organ');
 
   // sekcja 4
-  await page.locator('div').filter({ hasText: /^Rejon prowadzenia badańWybierz$/ }).getByRole('button').click();
+  await page
+    .locator('div')
+    .filter({ hasText: /^Rejon prowadzenia badańWybierz$/ })
+    .getByRole('button')
+    .click();
   await page.getByRole('menuitem', { name: 'Głębia Gdańska' }).click();
   await page.getByRole('textbox', { name: 'np. szczegóły dotyczące regionu' }).click();
   await page.getByRole('textbox', { name: 'np. szczegóły dotyczące regionu' }).fill('dodatkowe info');

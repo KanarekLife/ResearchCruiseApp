@@ -34,7 +34,7 @@ test('error appears and disappears depending on server availability', async ({ p
     });
   });
   await expect(page.getByText('Brak połączenia z serwerem')).toBeHidden();
-  
+
   // Again simulate a connection error
   page.route('http://localhost:3000/health', (route) => {
     route.abort();
