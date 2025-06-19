@@ -8,9 +8,7 @@ const dirname = path.dirname(filename);
 export const API_URL = 'http://localhost:3000';
 export const ASSETS_DIR = path.join(dirname, './assets');
 
-type MyFixtures = {};
-
-export const test = base.extend<{ forEachTest: void } & MyFixtures>({
+export const test = base.extend<{ forEachTest: void }>({
   forEachTest: [
     async ({ page }, use) => {
       // By default raise an error if the API is not mocked

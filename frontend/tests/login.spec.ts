@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 
-import { test, API_URL } from './fixtures';
+import { API_URL, test } from './fixtures';
 
 test('login page is accessible', async ({ page }) => {
   await page.goto('/login');

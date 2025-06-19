@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 
-import { test, API_URL } from './fixtures';
+import { API_URL, test } from './fixtures';
 
 test('connection error when server is not available', async ({ page }) => {
   // Mock the server health check to simulate a connection error
