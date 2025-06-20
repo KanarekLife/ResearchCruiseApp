@@ -12,11 +12,13 @@ import { ShortResearchEquipmentDto } from '@/cruise-applications/models/ShortRes
 import { SpubTaskDto } from '@/cruise-applications/models/SpubTaskDto';
 import { UGTeamDto } from '@/cruise-applications/models/UGTeamDto';
 
+import { ResearchAreaDescriptionDto } from './ResearchAreaDescriptionDto';
+
 export type FormCDto = {
   shipUsage: string; // Max length 1
   differentUsage: string; // Max length 1024
   permissions: PermissionDto[];
-  researchAreaId: string;
+  researchAreaDescriptions: ResearchAreaDescriptionDto[];
   ugTeams: UGTeamDto[];
   guestTeams: GuestTeamDto[];
   researchTasksEffects: ResearchTaskEffectDto[];

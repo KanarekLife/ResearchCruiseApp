@@ -38,7 +38,7 @@ export function FormCPage() {
         shipUsage: formA.data.shipUsage, // Max length 1
         differentUsage: formA.data.differentUsage,
         permissions: formB.data.permissions,
-        researchAreaId: formA.data.researchAreaId,
+        researchAreaDescriptions: formA.data.researchAreaDescriptions,
         ugTeams: formB.data.ugTeams,
         guestTeams: formB.data.guestTeams,
         researchTasksEffects: formA.data.researchTasks.map(
@@ -64,7 +64,7 @@ export function FormCPage() {
         photos: [],
       } as FormCDto),
     validators: {
-      onChange: getFormCValidationSchema(formAInitValues.data),
+      onChange: getFormCValidationSchema(),
     },
   });
   const [hasFormBeenSubmitted, setHasFormBeenSubmitted] = useState(false);

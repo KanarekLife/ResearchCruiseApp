@@ -8,6 +8,8 @@ import { ResearchTaskDto } from '@/cruise-applications/models/ResearchTaskDto';
 import { SpubTaskDto } from '@/cruise-applications/models/SpubTaskDto';
 import { UGTeamDto } from '@/cruise-applications/models/UGTeamDto';
 
+import { ResearchAreaDescriptionDto } from './ResearchAreaDescriptionDto';
+
 export type FormADto = {
   id?: string | undefined;
   cruiseManagerId: string;
@@ -20,8 +22,7 @@ export type FormADto = {
   shipUsage?: string;
   differentUsage: string;
   permissions: PermissionDto[];
-  researchAreaId: string | '';
-  researchAreaInfo: string | '';
+  researchAreaDescriptions: ResearchAreaDescriptionDto[];
   cruiseGoal: CruiseGoal | '';
   cruiseGoalDescription: string;
   researchTasks: ResearchTaskDto[];

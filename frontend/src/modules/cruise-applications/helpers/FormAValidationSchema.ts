@@ -11,6 +11,8 @@ import { ResearchTaskDtoValidationSchema } from '@/cruise-applications/models/Re
 import { SpubTaskDtoValidationSchema } from '@/cruise-applications/models/SpubTaskDto';
 import { UGTeamDtoValidationSchema } from '@/cruise-applications/models/UGTeamDto';
 
+import { ResearchAreaDescriptionDtoValidationSchema } from '../models/ResearchAreaDescriptionDto';
+
 const ManagerAndDeputyManagerValidationSchema = (initValues: FormAInitValuesDto) =>
   z
     .object({
@@ -98,13 +100,10 @@ const OtherValidationSchema = (initValues: FormAInitValuesDto) =>
         (val) => val.every((x) => !x.scan),
         'Skan nie może być dostarczony na tym etapie'
       ),
-      researchAreaId: z
-        .string()
-        .refine(
-          (val) => !!val && initValues.researchAreas.map((x) => x.id).includes(val),
-          'Obszar badań musi być jednym z dostępnych obszarów badań'
-        ),
-      researchAreaInfo: z.string(),
+      researchAreaDescriptions: ResearchAreaDescriptionDtoValidationSchema.array().min(
+        1,
+        'Co najmniej jeden rejon badań jest wymagany'
+      ),
       researchTasks: ResearchTaskDtoValidationSchema.array().min(1, 'Co najmniej jedno zadanie badawcze jest wymagane'),
       contracts: ContractDtoValidationSchema.array(),
       ugTeams: UGTeamDtoValidationSchema.array()
