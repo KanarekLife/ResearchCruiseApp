@@ -1,13 +1,11 @@
 import { z } from 'zod';
 
 export type ResearchAreaDescriptionDto = {
-  id: string;
-  alternativeName: string | null;
+  name: string;
   info: string;
 };
 
 export const ResearchAreaDescriptionDtoValidationSchema = z.object({
-  id: z.string().nonempty('Id jest wymagane'),
-  alternativeName: z.string().nonempty().nullable(),
+  name: z.string().nonempty('Nazwa rejonu nie może być pusta'),
   info: z.string(),
 });

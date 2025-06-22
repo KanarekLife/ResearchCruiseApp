@@ -10,7 +10,6 @@ import { getErrors } from '@/core/lib/utils';
 import { useFormC } from '@/cruise-applications/contexts/FormCContext';
 import { FormCDto } from '@/cruise-applications/models/FormCDto';
 import { ResearchAreaDescriptionDto } from '@/cruise-applications/models/ResearchAreaDescriptionDto';
-import { getResearchAreaName } from '@/cruise-applications/models/ResearchAreaDto';
 
 import { CruiseApplicationDropdownElementSelectorButton } from '../common/CruiseApplicationDropdownElementSelectorButton';
 
@@ -28,36 +27,23 @@ export function FormCResearchAreaSection() {
       },
       {
         header: 'Rejon prowadzenia badań',
-        cell: ({ row }) =>
-          getResearchAreaName(formAInitValues.researchAreas, row.original.id) == null ? (
-            <>
-              <form.Field name={`researchAreaDescriptions[${row.index}].id`} children={() => null} />
-              <form.Field
-                name={`researchAreaDescriptions[${row.index}].alternativeName`}
-                children={(field) => (
-                  <AppInput
-                    name={field.name}
-                    value={field.state.value ?? ''}
-                    onChange={field.handleChange}
-                    onBlur={field.handleBlur}
-                    errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
-                    label="Nazwa rejonu"
-                    placeholder="np. Trójkąt Bermudzki"
-                    disabled={isReadonly}
-                    required
-                  />
-                )}
+        cell: ({ row }) => (
+          <form.Field
+            name={`researchAreaDescriptions[${row.index}].name`}
+            children={(field) => (
+              <AppInput
+                name={field.name}
+                value={field.state.value ?? ''}
+                onChange={field.handleChange}
+                onBlur={field.handleBlur}
+                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
+                placeholder="Nazwa rejonu"
+                disabled={isReadonly}
+                required
               />
-            </>
-          ) : (
-            <>
-              <form.Field
-                name={`researchAreaDescriptions[${row.index}].id`}
-                children={() => getResearchAreaName(formAInitValues.researchAreas, row.original.id)}
-              />
-              <form.Field name={`researchAreaDescriptions[${row.index}].alternativeName`} children={() => null} />
-            </>
-          ),
+            )}
+          />
+        ),
         size: 30,
       },
       {
@@ -72,7 +58,6 @@ export function FormCResearchAreaSection() {
                 onChange={field.handleChange}
                 onBlur={field.handleBlur}
                 errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
-                label="Opis"
                 placeholder="np. szczegóły dotyczące celu rejsu"
                 disabled={isReadonly}
                 required
@@ -117,8 +102,7 @@ export function FormCResearchAreaSection() {
                     value: area.name,
                     onClick: () => {
                       field.pushValue({
-                        id: area.id,
-                        alternativeName: null,
+                        name: area.id != '' ? area.name : '',
                         info: '',
                       });
                       field.handleChange((prev) => prev);
