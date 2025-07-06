@@ -27,10 +27,7 @@ internal class FormCDtoProfile : Profile
 
         CreateMap<FormC, FormCDto>()
             .ForMember(dest => dest.Permissions, options => options.Ignore()) // In progress
-            .ForMember(
-                dest => dest.ResearchAreaId,
-                options => options.MapFrom(src => src.ResearchArea.Id)
-            )
+            .ForMember(dest => dest.ResearchAreaDescriptions, options => options.MapFrom(src => src.ResearchAreaDescriptions))
             .ForMember(dest => dest.UgTeams, options => options.MapFrom(src => src.FormCUgUnits))
             .ForMember(
                 dest => dest.GuestTeams,

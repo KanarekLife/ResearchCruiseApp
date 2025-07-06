@@ -36,11 +36,8 @@ internal class FormADtoProfile : Profile
             )
             .ForMember(dest => dest.Permissions, options => options.Ignore()) // Member requires complex logic
             .ForMember(
-                dest => dest.ResearchAreaId,
-                options =>
-                    options.MapFrom(src =>
-                        src.ResearchArea == null ? (Guid?)null : src.ResearchArea.Id
-                    )
+                dest => dest.ResearchAreaDescriptions,
+                options => options.MapFrom(src => src.ResearchAreaDescriptions)
             )
             .ForMember(
                 dest => dest.ResearchTasks,
@@ -85,7 +82,7 @@ internal class FormADtoProfile : Profile
                 options =>
                     options.MapFrom(src => src.OptimalPeriod.Select(int.Parse).Max().ToString())
             )
-            .ForMember(dest => dest.ResearchArea, options => options.Ignore()) // Member requires complex logic
+            .ForMember(dest => dest.ResearchAreaDescriptions, options => options.Ignore()) // Member requires complex logic
             .ForMember(dest => dest.Permissions, options => options.Ignore()) // Member requires complex logic
             .ForMember(dest => dest.FormAResearchTasks, options => options.Ignore()) // Member requires complex logic
             .ForMember(dest => dest.FormAContracts, options => options.Ignore()) // Member requires complex logic

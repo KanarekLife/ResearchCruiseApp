@@ -1,11 +1,28 @@
 import { z } from 'zod';
+import { FormAInitValuesDto } from './FormAInitValuesDto';
 
 export type ResearchAreaDescriptionDto = {
-  name: string;
+  areaId: string | null;
+  differentName: string | null;
   info: string;
 };
 
-export const ResearchAreaDescriptionDtoValidationSchema = z.object({
-  name: z.string().nonempty('Nazwa rejonu nie może być pusta'),
-  info: z.string(),
-});
+export function getResearchAreaDescriptionDtoValidationSchema(formAInitValues: FormAInitValuesDto) {
+  return z.object({
+    areaId: z.string().nullable().refine(
+      (val) => !val || formAInitValues.researchAreas.map((x) => x.id).includes(val),
+          'Niepoprawne ID rejonu badań'
+    ),
+    differentName: z.string().nullable(),
+    info: z.string(),
+  })
+  .superRefine(({ areaId, differentName }, ctx) => {
+    if (!areaId && !differentName) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Nazwa rejonu badań nie może być pusta',
+        path: ['differentName'],
+      });
+    }
+  });
+}

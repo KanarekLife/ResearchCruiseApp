@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ResearchCruiseApp.Application.Models.DTOs.CruiseApplications;
 
 namespace ResearchCruiseApp.Domain.Entities;
 
@@ -37,10 +38,7 @@ public class FormA : Entity
 
     public List<Permission> Permissions { get; init; } = [];
 
-    public ResearchArea? ResearchArea { get; set; }
-
-    [MaxLength(1024)]
-    public string? ResearchAreaInfo { get; init; }
+    public List<ResearchAreaDescription> ResearchAreaDescriptions { get; init; } = [];
 
     [StringLength(1024)]
     public string? CruiseGoal { get; init; }

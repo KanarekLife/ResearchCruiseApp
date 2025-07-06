@@ -12,6 +12,7 @@ import { FormCDto } from '@/cruise-applications/models/FormCDto';
 import { ResearchAreaDescriptionDto } from '@/cruise-applications/models/ResearchAreaDescriptionDto';
 
 import { CruiseApplicationDropdownElementSelectorButton } from '../common/CruiseApplicationDropdownElementSelectorButton';
+import { getResearchAreaName } from '@/cruise-applications/models/ResearchAreaDto';
 
 export function FormCResearchAreaSection() {
   const { form, isReadonly, formAInitValues, hasFormBeenSubmitted } = useFormC();
@@ -28,21 +29,34 @@ export function FormCResearchAreaSection() {
       {
         header: 'Rejon prowadzenia badań',
         cell: ({ row }) => (
-          <form.Field
-            name={`researchAreaDescriptions[${row.index}].name`}
-            children={(field) => (
-              <AppInput
-                name={field.name}
-                value={field.state.value ?? ''}
-                onChange={field.handleChange}
-                onBlur={field.handleBlur}
-                errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
-                placeholder="Nazwa rejonu"
-                disabled={isReadonly}
-                required
-              />
-            )}
-          />
+          <>
+            <form.Field
+              name={`researchAreaDescriptions[${row.index}].areaId`}
+              children={(field) => (
+                <input
+                  type="hidden"
+                  name={field.name}
+                  value=""
+                  readOnly
+                />
+              )}
+            />
+            <form.Field
+              name={`researchAreaDescriptions[${row.index}].differentName`}
+              children={(field) => (
+                <AppInput
+                  name={field.name}
+                  value={field.state.value ?? getResearchAreaName(formAInitValues.researchAreas, row.original.areaId ?? '') ?? ''}
+                  onChange={field.handleChange}
+                  onBlur={field.handleBlur}
+                  errors={getErrors(field.state.meta, hasFormBeenSubmitted)}
+                  placeholder="Nazwa rejonu"
+                  disabled={isReadonly}
+                  required
+                />
+              )}
+            />
+          </>
         ),
         size: 30,
       },
@@ -102,7 +116,8 @@ export function FormCResearchAreaSection() {
                     value: area.name,
                     onClick: () => {
                       field.pushValue({
-                        name: area.id != '' ? area.name : '',
+                        areaId: '',
+                        differentName: area.id != '' ? area.name : '',
                         info: '',
                       });
                       field.handleChange((prev) => prev);

@@ -15,7 +15,8 @@ import { ShortResearchEquipmentDtoValidationSchema } from '@/cruise-applications
 import { SpubTaskDtoValidationSchema } from '@/cruise-applications/models/SpubTaskDto';
 import { UGTeamDtoValidationSchema } from '@/cruise-applications/models/UGTeamDto';
 
-import { ResearchAreaDescriptionDtoValidationSchema } from '../models/ResearchAreaDescriptionDto';
+import { getResearchAreaDescriptionDtoValidationSchema } from '../models/ResearchAreaDescriptionDto';
+import { FormAInitValuesDto } from '../models/FormAInitValuesDto';
 
 const ShipUsageValidationSchema = z
   .object({
@@ -34,10 +35,10 @@ const ShipUsageValidationSchema = z
     }
   });
 
-const OtherValidationSchema = () =>
+const OtherValidationSchema = (formAInitValues: FormAInitValuesDto) =>
   z.object({
     permissions: PermissionDtoWithFileValidationSchema.array(),
-    researchAreaDescriptions: ResearchAreaDescriptionDtoValidationSchema.array().min(
+    researchAreaDescriptions: getResearchAreaDescriptionDtoValidationSchema(formAInitValues).array().min(
       1,
       'Co najmniej jeden rejon badań jest wymagany'
     ),
@@ -75,6 +76,6 @@ const OtherValidationSchema = () =>
     photos: FileDtoValidationSchema.array(),
   });
 
-export function getFormCValidationSchema() {
-  return ShipUsageValidationSchema.and(OtherValidationSchema());
+export function getFormCValidationSchema(formAInitValues: FormAInitValuesDto) {
+  return ShipUsageValidationSchema.and(OtherValidationSchema(formAInitValues));
 }

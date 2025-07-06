@@ -4,9 +4,10 @@ import { AppAccordion } from '@/core/components/AppAccordion';
 import { AppTable } from '@/core/components/table/AppTable';
 import { useFormB } from '@/cruise-applications/contexts/FormBContext';
 import { ResearchAreaDescriptionDto } from '@/cruise-applications/models/ResearchAreaDescriptionDto';
+import { getResearchAreaName } from '@/cruise-applications/models/ResearchAreaDto';
 
 export function FormBResearchAreaSection() {
-  const { formA, isReadonly } = useFormB();
+  const { formA, formAInitValues, isReadonly } = useFormB();
 
   const columns: ColumnDef<ResearchAreaDescriptionDto>[] = [
     {
@@ -16,7 +17,7 @@ export function FormBResearchAreaSection() {
     },
     {
       header: 'Rejon prowadzenia badań',
-      cell: ({ row }) => `${row.original.name}`,
+      cell: ({ row }) => `${row.original.differentName ?? getResearchAreaName(formAInitValues.researchAreas, row.original.areaId!)!}`,
       size: 30,
     },
     {

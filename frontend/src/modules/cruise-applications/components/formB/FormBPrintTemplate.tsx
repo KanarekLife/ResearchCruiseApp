@@ -11,6 +11,7 @@ import { mapPersonToText } from '@/cruise-applications/helpers/PersonMappers';
 import { getContractCategoryName } from '@/cruise-applications/models/ContractDto';
 import { getPublicationCategoryLabel } from '@/cruise-applications/models/PublicationDto';
 import { getTaskName } from '@/cruise-applications/models/ResearchTaskDto';
+import { getResearchAreaName } from '@/cruise-applications/models/ResearchAreaDto';
 
 function getAction(action: 'Put' | 'Collect'): string {
   if (action === 'Put') {
@@ -84,17 +85,17 @@ export function FormBPrintTemplate({ ref }: Props) {
       <PrintingPageSection title="5. Rejony prowadzenia badań">
         <div className="grid grid-cols-9 gap-x-8">
           <div className="mb-4 font-semibold col-span-1 text-center">Lp.</div>
-          <div className="mb-4 font-semibold col-span-2 text-center">Rejon prowadzenia badań</div>
-          <div className="mb-4 font-semibold col-span-3 text-center">Informacje dodatkowe</div>
+          <div className="mb-4 font-semibold col-span-4 text-center">Rejon prowadzenia badań</div>
+          <div className="mb-4 font-semibold col-span-4 text-center">Informacje dodatkowe</div>
           {formA.researchAreaDescriptions.map((x, i) => (
             <Fragment key={i}>
               <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-1 grid place-items-center')}>
                 <div>{i + 1}.</div>
               </div>
-              <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-2 flex items-center')}>
-                <div>{x.name}</div>
+              <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-4 flex items-center')}>
+                <div>{x.areaId ? getResearchAreaName(formAInitValues.researchAreas, x.areaId) : x.differentName}</div>
               </div>
-              <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-3 flex items-center')}>
+              <div className={cn(i > 0 ? 'mt-4' : '', 'col-span-4 flex items-center')}>
                 <div>{x.info}</div>
               </div>
             </Fragment>
