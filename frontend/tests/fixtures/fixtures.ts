@@ -1,7 +1,8 @@
 import { test as base } from '@playwright/test';
-import { API_URL } from '@tests/fixtures/consts';
+import { API_URL, TESTED_FORM_ID } from '@tests/fixtures/consts';
 
 import { FormAPage } from './pages/formA/formAPage';
+import { FormBPage } from './pages/formB/formBPage';
 import { LoginPage } from './pages/loginPage';
 export { API_URL, ASSETS_DIR } from '@tests/fixtures/consts';
 
@@ -35,16 +36,23 @@ export const loginTest = test.extend<{ loginPage: LoginPage }>({
       await loginPage.goto();
       await use(loginPage);
     },
-    { auto: true },
+    { auto: false },
   ],
 });
 
-export const formTest = test.extend<{ formAPage: FormAPage }>({
+export const formTest = test.extend<{ formAPage: FormAPage; formBPage: FormBPage }>({
   formAPage: [
     async ({ page }, use) => {
       const formAPage = await FormAPage.create(page);
       await use(formAPage);
     },
-    { auto: true },
+    { auto: false },
+  ],
+  formBPage: [
+    async ({ page }, use) => {
+      const formBPage = await FormBPage.create(page, TESTED_FORM_ID);
+      await use(formBPage);
+    },
+    { auto: false },
   ],
 });
