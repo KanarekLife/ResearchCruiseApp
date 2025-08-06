@@ -1,4 +1,4 @@
-import type { Locator, Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 import { API_URL } from '@tests/fixtures/consts';
 import { getAdminAccountPayload, getAuthDetailsPayload, getInitValuesAPayload } from '@tests/fixtures/mockPayloads';
 
@@ -76,20 +76,32 @@ export class FormAPage {
     this.submitButton = this.page.getByRole('button', { name: 'Wyślij' });
   }
 
-  public async fillForm(except: (keyof FormAPage['sections'])[] = []) {
+  public async fillForm({ except }: { except?: (keyof FormAPage['sections'])[] } = {}) {
+    except ??= [];
     const sections = Object.entries(this.sections);
-    let i = 1;
+    let i = 0;
     for (const [key, section] of sections) {
+      i++;
       if (except.includes(key as keyof FormAPage['sections'])) {
+        console.log(`Skipping ${key} (${i}/${sections.length})`);
         continue;
       }
       console.log(`Filling ${key} (${i}/${sections.length})`);
       await section.defaultFill();
-      i++;
     }
   }
 
-  public async submitForm() {
+  public async submitForm({ expectedResult }: { expectedResult?: 'valid' | 'invalid' } = {}) {
     await this.submitButton.click();
+
+    switch (expectedResult) {
+      case 'valid':
+        await expect(this.page.getByRole('heading', { name: 'Formularz przyjęty' })).toBeVisible();
+        break;
+      case 'invalid':
+        await expect(this.page.getByRole('heading', { name: 'Wykryto błąd w formularzu' })).toBeVisible();
+        await this.page.mouse.click(100, 100);  // dismiss the dialog box
+        break;
+    }
   }
 }
