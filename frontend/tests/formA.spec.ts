@@ -95,3 +95,27 @@ test.describe('cruise length section tests', () => {
     await formAPage.submitForm({ expectedResult: 'valid' });
   });
 });
+
+test.describe('permissions section tests', () => {
+  test.beforeEach(async ({ formAPage }) => {
+    await formAPage.fillForm({ except: ['permissionsSection'] });
+  });
+
+  test('No permissions', async ({ formAPage }) => {
+    await formAPage.submitForm({ expectedResult: 'valid' });
+  });
+
+  test('Empty permission', async ({ formAPage }) => {
+    const permissionsSection = formAPage.sections.permissionsSection;
+    await permissionsSection.addPermission('', '');
+    await formAPage.submitForm({ expectedResult: 'invalid' });
+    await expect(permissionsSection.permissionDescriptionRequiredMessage).toBeVisible();
+    await expect(permissionsSection.permissionExecutiveRequiredMessage).toBeVisible();
+
+    await permissionsSection.permissionDesctiptionInput('first').fill('jakiś opis');
+    await expect(permissionsSection.permissionDescriptionRequiredMessage).toBeHidden();
+    await permissionsSection.permissionExecutiveInput('first').fill('jakiś organ');
+    await expect(permissionsSection.permissionExecutiveRequiredMessage).toBeHidden();
+    await formAPage.submitForm({ expectedResult: 'valid' });
+  });
+});

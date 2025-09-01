@@ -13,16 +13,21 @@ export class FormAPermissionsSection {
     'Organ wydający': 1,
   };
 
+  public readonly permissionDescriptionRequiredMessage: Locator;
+  public readonly permissionExecutiveRequiredMessage: Locator;
+
   constructor(formPage: FormAPage) {
     this.formPage = formPage;
     this.page = formPage.page;
     this.sectionDiv = locateSectionDiv(formPage.page, '3. Dodatkowe pozwolenia do planowanych podczas rejsu badań');
     this.addPermissionButton = this.sectionDiv.getByRole('button', { name: 'Dodaj pozwolenie' });
+    this.permissionDescriptionRequiredMessage = this.sectionDiv.getByText('Treść pozwolenia jest wymagany').first();
+    this.permissionExecutiveRequiredMessage = this.sectionDiv.getByText('Organ wydający jest wymagany').first();
   }
 
   public permissionRow(index: 'first' | 'last' | number) {
     const rowsLocator = this.sectionDiv.getByRole('row');
-    return index === 'first' ? rowsLocator.nth(1) : index === 'last' ? rowsLocator.last() : rowsLocator.nth(1 + index);
+    return index === 'first' ? rowsLocator.nth(2) : index === 'last' ? rowsLocator.last() : rowsLocator.nth(2 + index);
   }
 
   public permissionDesctiptionInput(index: 'first' | 'last' | number) {
