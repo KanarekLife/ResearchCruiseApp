@@ -1,5 +1,6 @@
 import { expect } from '@playwright/test';
 
+import { MOCK_PDF_FILEPATH } from './fixtures/consts';
 import { formTest as test } from './fixtures/fixtures';
 
 test('valid form A', async ({ formAPage }) => {
@@ -199,6 +200,62 @@ test.describe('research tasks section tests', () => {
     await expect(researchTasksSection.emptyAuthorMessage).toBeHidden();
     await researchTasksSection.titleInput('first').fill('Jakiś tytuł');
     await expect(researchTasksSection.emptyTitleMessage).toBeHidden();
+
+    await formAPage.submitForm({ expectedResult: 'valid' });
+  });
+});
+
+test.describe('contracts section tests', () => {
+  test.beforeEach(async ({ formAPage }) => {
+    await formAPage.fillForm({ except: ['contractsSection'] });
+  });
+
+  test('no contracts', async ({ formAPage }) => {
+    await formAPage.submitForm({ expectedResult: 'valid' });
+  });
+
+  test('missing data', async ({ formAPage }) => {
+    const contractsSection = formAPage.sections.contractsSection;
+    await contractsSection.addNewContractDropdown.selectOption('Międzynarodowa');
+
+    await formAPage.submitForm();
+    await expect(formAPage.submissionApprovedMessage, 'form should not be approved').toBeHidden();
+
+    // for the 'empty' message to appear, the field must be detected as touched, so it is filled with some value at first
+    const inputFields = [
+      contractsSection.institutionNameInput('first'),
+      contractsSection.institutionUnitInput('first'),
+      contractsSection.institutionLocationInput('first'),
+      contractsSection.descriptionInput('first'),
+    ];
+    for (const inputField of inputFields) {
+      await inputField.fill('a');
+      await inputField.fill('');
+    }
+
+    await expect(contractsSection.emptyInstitutionNameMessage).toBeVisible();
+    await expect(contractsSection.emptyInstitutionUnitMessage).toBeVisible();
+    await expect(contractsSection.emptyInstitutionLocationMessage).toBeVisible();
+    await expect(contractsSection.emptyDescriptionMessage).toBeVisible();
+
+    await contractsSection.institutionNameInput('first').fill('Jakaś nazwa');
+    await expect(contractsSection.emptyInstitutionNameMessage).toBeHidden();
+
+    await contractsSection.institutionUnitInput('first').fill('Jakaś jednostka');
+    await expect(contractsSection.emptyInstitutionUnitMessage).toBeHidden();
+
+    await contractsSection.institutionLocationInput('first').fill('Jakaś lokalizacja');
+    await expect(contractsSection.emptyInstitutionLocationMessage).toBeHidden();
+
+    await contractsSection.descriptionInput('first').fill('Jakiś opis');
+    await expect(contractsSection.emptyDescriptionMessage).toBeHidden();
+
+    await formAPage.submitForm({ expectedResult: 'invalid' });
+
+    await expect(contractsSection.missingFileMessage).toBeVisible();
+
+    await contractsSection.sendScan('first', MOCK_PDF_FILEPATH);
+    await expect(contractsSection.missingFileMessage).toBeHidden();
 
     await formAPage.submitForm({ expectedResult: 'valid' });
   });

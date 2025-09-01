@@ -11,6 +11,12 @@ export class FormAContractsSection {
   public readonly addNewContractDropdown: FormDropdown;
   public readonly addHistoricalContractDropdown: FormDropdown;
 
+  public readonly emptyInstitutionNameMessage: Locator;
+  public readonly emptyInstitutionUnitMessage: Locator;
+  public readonly emptyInstitutionLocationMessage: Locator;
+  public readonly emptyDescriptionMessage: Locator;
+  public readonly missingFileMessage: Locator;
+
   constructor(formPage: FormAPage) {
     this.formPage = formPage;
     this.page = formPage.page;
@@ -25,6 +31,11 @@ export class FormAContractsSection {
     this.addHistoricalContractDropdown = new FormDropdown(
       this.sectionDiv.locator('button', { hasText: 'Dodaj historyczną umowę' })
     );
+    this.emptyInstitutionNameMessage = this.sectionDiv.getByText('Nazwa instytucji jest wymagana');
+    this.emptyInstitutionUnitMessage = this.sectionDiv.getByText('Jednostka jest wymagana');
+    this.emptyInstitutionLocationMessage = this.sectionDiv.getByText('Lokalizacja instytucji jest wymagana');
+    this.emptyDescriptionMessage = this.sectionDiv.getByText('Opis jest wymagany');
+    this.missingFileMessage = this.sectionDiv.getByText('Plik jest wymagany');
   }
 
   public institutionNameInput(index: 'first' | 'last' | number) {
@@ -37,7 +48,7 @@ export class FormAContractsSection {
     return index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
   }
 
-  public institutionLocalizationInput(index: 'first' | 'last' | number) {
+  public institutionLocationInput(index: 'first' | 'last' | number) {
     const locator = this.sectionDiv.locator('input:below(:text("Lokalizacja instytucji"))');
     return index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
   }
@@ -61,7 +72,7 @@ export class FormAContractsSection {
     await this.addNewContractDropdown.selectOption('Krajowa');
     await this.institutionNameInput('first').fill('Instytut Badawczy');
     await this.institutionUnitInput('first').fill('Jednostka Badawcza');
-    await this.institutionLocalizationInput('first').fill('Gdańsk, Polska');
+    await this.institutionLocationInput('first').fill('Gdańsk, Polska');
     await this.descriptionInput('first').fill('Opis umowy badawczej');
     await this.sendScan('first', MOCK_PDF_FILEPATH);
   }
