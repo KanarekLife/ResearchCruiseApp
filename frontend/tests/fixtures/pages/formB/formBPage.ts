@@ -145,16 +145,16 @@ export class FormBPage {
   }
 
   public async submitForm({ expectedResult }: { expectedResult?: 'valid' | 'invalid' } = {}) {
-      await this.submitButton.click();
-  
-      switch (expectedResult) {
-        case 'valid':
-          await expect(this.page.getByRole('heading', { name: 'Formularz wysłany pomyślnie' })).toBeVisible();
-          break;
-        case 'invalid':
-          await expect(this.page.getByRole('heading', { name: 'Wykryto błąd w formularzu' })).toBeVisible();
-          await this.page.mouse.click(100, 100);  // dismiss the dialog box
-          break;
-      }
+    await this.submitButton.click();
+
+    switch (expectedResult) {
+      case 'valid':
+        await expect(this.page.getByRole('heading', { name: 'Formularz wysłany pomyślnie' })).toBeVisible();
+        break;
+      case 'invalid':
+        await expect(this.page.getByRole('heading', { name: 'Wykryto błąd w formularzu' })).toBeVisible();
+        await this.page.mouse.click(100, 100); // dismiss the dialog box
+        break;
     }
+  }
 }

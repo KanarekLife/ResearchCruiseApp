@@ -93,18 +93,20 @@ export class FormAPage {
       console.log(`Filling ${key} (${i}/${sections.length})`);
       await section.defaultFill();
     }
-
   }
-  public async submitForm({ expectedResult, message }: { expectedResult?: 'valid' | 'invalid', message?: string } = {}) {
+  public async submitForm({
+    expectedResult,
+    message,
+  }: { expectedResult?: 'valid' | 'invalid'; message?: string } = {}) {
     await this.submitButton.click();
 
     switch (expectedResult) {
       case 'valid':
-        await expect(this.submissionApprovedMessage, {message: message}).toBeVisible();
+        await expect(this.submissionApprovedMessage, { message: message }).toBeVisible();
         break;
       case 'invalid':
-        await expect(this.validationErrorMessage, {message: message}).toBeVisible();
-        await this.page.mouse.click(100, 100);  // dismiss the dialog box
+        await expect(this.validationErrorMessage, { message: message }).toBeVisible();
+        await this.page.mouse.click(100, 100); // dismiss the dialog box
         break;
     }
   }

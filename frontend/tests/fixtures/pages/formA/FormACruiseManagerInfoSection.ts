@@ -24,7 +24,9 @@ export class FormACruiseManagerInfoSection {
       this.sectionDiv.locator('button:below(:text("Zastępca kierownika rejsu"))').first()
     );
     this.yearDropdown = new FormDropdown(this.sectionDiv.locator('button:below(:text("Rok"))').first());
-    this.missingDeputyManagerMessage = this.sectionDiv.getByText('Zastępca kierownika rejsu musi być jednym z dostępnych zastępców kierownika rejsu');
+    this.missingDeputyManagerMessage = this.sectionDiv.getByText(
+      'Zastępca kierownika rejsu musi być jednym z dostępnych zastępców kierownika rejsu'
+    );
   }
 
   public async defaultFill() {
