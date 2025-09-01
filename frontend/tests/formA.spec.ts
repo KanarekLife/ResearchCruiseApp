@@ -101,11 +101,11 @@ test.describe('permissions section tests', () => {
     await formAPage.fillForm({ except: ['permissionsSection'] });
   });
 
-  test('No permissions', async ({ formAPage }) => {
+  test('no permissions', async ({ formAPage }) => {
     await formAPage.submitForm({ expectedResult: 'valid' });
   });
 
-  test('Empty permission', async ({ formAPage }) => {
+  test('empty permission', async ({ formAPage }) => {
     const permissionsSection = formAPage.sections.permissionsSection;
     await permissionsSection.addPermission('', '');
     await formAPage.submitForm({ expectedResult: 'invalid' });
@@ -125,7 +125,7 @@ test.describe('research area section tests', () => {
     await formAPage.fillForm({ except: ['researchAreaSection'] });
   });
 
-  test('No research area chosen', async ({ formAPage }) => {
+  test('no research area chosen', async ({ formAPage }) => {
     await formAPage.submitForm({ expectedResult: 'invalid' });
     await expect(formAPage.sections.researchAreaSection.noResearchAreaChosenMessage).toBeVisible();
 
@@ -140,7 +140,7 @@ test.describe('cruise goal section tests', () => {
     await formAPage.fillForm({ except: ['cruiseGoalSection'] });
   });
 
-  test('No cruise goal chosen', async ({ formAPage }) => {
+  test('no cruise goal chosen', async ({ formAPage }) => {
     await formAPage.submitForm({ expectedResult: 'invalid' });
     await expect(formAPage.sections.cruiseGoalSection.noCruiseGoalChosenMessage).toBeVisible();
 
@@ -148,7 +148,7 @@ test.describe('cruise goal section tests', () => {
     await expect(formAPage.sections.cruiseGoalSection.noCruiseGoalChosenMessage).toBeHidden();
   });
 
-  test('Empty goal description', async ({ formAPage }) => {
+  test('empty goal description', async ({ formAPage }) => {
     const cruiseGoalSection = formAPage.sections.cruiseGoalSection;
     await cruiseGoalSection.cruiseGoalDropdown.selectOption('Komercyjny');
 
@@ -162,6 +162,44 @@ test.describe('cruise goal section tests', () => {
 
     await cruiseGoalSection.cruiseGoalDescriptionInput.fill('Jakiś opis');
     await expect(cruiseGoalSection.noCruiseGoalDescriptionMessage).toBeHidden();
+    await formAPage.submitForm({ expectedResult: 'valid' });
+  });
+});
+
+test.describe('research tasks section tests', () => {
+  test.beforeEach(async ({ formAPage }) => {
+    await formAPage.fillForm({ except: ['researchTasksSection'] });
+  });
+
+  test('no research tasks', async ({ formAPage }) => {
+    await formAPage.submitForm({ expectedResult: 'invalid' });
+    await expect(formAPage.sections.researchTasksSection.noResearchTasksMessage).toBeVisible();
+
+    await formAPage.sections.researchTasksSection.addNewTaskDropdown.selectOption('Praca magisterska');
+    await expect(formAPage.sections.researchTasksSection.noResearchTasksMessage).toBeHidden();
+  });
+
+  test('no author and title', async ({ formAPage }) => {
+    const researchTasksSection = formAPage.sections.researchTasksSection;
+    await researchTasksSection.addNewTaskDropdown.selectOption('Praca doktorska');
+
+    // for the 'empty' message to appear, the field must be detected as touched, so it is filled with some value at first
+    await researchTasksSection.authorInput('first').fill('a');
+    await researchTasksSection.authorInput('first').fill('');
+    await researchTasksSection.titleInput('first').fill('a');
+    await researchTasksSection.titleInput('first').fill('');
+
+    await expect(researchTasksSection.emptyAuthorMessage).toBeVisible();
+    await expect(researchTasksSection.emptyTitleMessage).toBeVisible();
+
+    await formAPage.submitForm();
+    await expect(formAPage.submissionApprovedMessage, 'form should not be approved').toBeHidden();
+
+    await researchTasksSection.authorInput('first').fill('Jakiś autor');
+    await expect(researchTasksSection.emptyAuthorMessage).toBeHidden();
+    await researchTasksSection.titleInput('first').fill('Jakiś tytuł');
+    await expect(researchTasksSection.emptyTitleMessage).toBeHidden();
+
     await formAPage.submitForm({ expectedResult: 'valid' });
   });
 });
