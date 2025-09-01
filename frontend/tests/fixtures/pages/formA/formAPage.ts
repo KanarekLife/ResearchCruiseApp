@@ -18,6 +18,8 @@ export class FormAPage {
   public readonly page: Page;
   public readonly sections;
   public readonly submitButton: Locator;
+  public readonly submissionApprovedMessage: Locator;
+  public readonly validationErrorMessage: Locator;
 
   public static async create(page: Page): Promise<FormAPage> {
     page.route(`${API_URL}/forms/InitValues/A`, (route) => {
@@ -74,6 +76,8 @@ export class FormAPage {
     } as const;
 
     this.submitButton = this.page.getByRole('button', { name: 'Wyślij' });
+    this.submissionApprovedMessage = this.page.getByRole('heading', { name: 'Formularz przyjęty' });
+    this.validationErrorMessage = this.page.getByRole('heading', { name: 'Wykryto błąd w formularzu' });
   }
 
   public async fillForm({ except }: { except?: (keyof FormAPage['sections'])[] } = {}) {
@@ -89,17 +93,17 @@ export class FormAPage {
       console.log(`Filling ${key} (${i}/${sections.length})`);
       await section.defaultFill();
     }
-  }
 
-  public async submitForm({ expectedResult }: { expectedResult?: 'valid' | 'invalid' } = {}) {
+  }
+  public async submitForm({ expectedResult, message }: { expectedResult?: 'valid' | 'invalid', message?: string } = {}) {
     await this.submitButton.click();
 
     switch (expectedResult) {
       case 'valid':
-        await expect(this.page.getByRole('heading', { name: 'Formularz przyjęty' })).toBeVisible();
+        await expect(this.submissionApprovedMessage, {message: message}).toBeVisible();
         break;
       case 'invalid':
-        await expect(this.page.getByRole('heading', { name: 'Wykryto błąd w formularzu' })).toBeVisible();
+        await expect(this.validationErrorMessage, {message: message}).toBeVisible();
         await this.page.mouse.click(100, 100);  // dismiss the dialog box
         break;
     }

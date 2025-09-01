@@ -17,6 +17,9 @@ export class FormACruiseLengthSection {
   public readonly shipUsageDropdown: FormDropdown;
   public readonly alternativeShipUsageInput: Locator;
 
+  public readonly invalidCruiseDurationMessage: Locator;
+  public readonly emptyAlternativeShipUsageMessage: Locator;
+
   constructor(formPage: FormAPage) {
     this.formPage = formPage;
     this.page = formPage.page;
@@ -36,6 +39,8 @@ export class FormACruiseLengthSection {
       this.sectionDiv.locator('button:below(:text("Statek na potrzeby badań będzie wykorzystywany"))').first()
     );
     this.alternativeShipUsageInput = this.sectionDiv.locator('input:below(:text("Inny sposób użycia"))').first();
+    this.invalidCruiseDurationMessage = this.sectionDiv.getByText('Rejs musi trwać co najmniej godzinę i nie dłużej niż 60 dni (1440 godzin)').first();
+    this.emptyAlternativeShipUsageMessage = this.sectionDiv.getByText('w przypadku wyboru "inne" należy podać informacje o sposobie korzystania z statku');
   }
 
   public async defaultFill() {
