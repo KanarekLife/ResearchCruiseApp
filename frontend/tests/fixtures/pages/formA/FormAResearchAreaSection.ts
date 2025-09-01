@@ -10,6 +10,8 @@ export class FormAResearchAreaSection {
   public readonly researchAreaDropdown: FormDropdown;
   public readonly additionalInfoInput: Locator;
 
+  public readonly noResearchAreaChosenMessage: Locator;
+
   constructor(formPage: FormAPage) {
     this.formPage = formPage;
     this.page = formPage.page;
@@ -18,6 +20,9 @@ export class FormAResearchAreaSection {
       this.sectionDiv.locator('button:below(:text("Rejon prowadzenia badań"))').first()
     );
     this.additionalInfoInput = this.sectionDiv.locator('input:below(:text("Informacje dodatkowe"))').first();
+    this.noResearchAreaChosenMessage = this.sectionDiv
+      .getByText('Obszar badań musi być jednym z dostępnych obszarów badań')
+      .first();
   }
 
   public async defaultFill() {

@@ -10,6 +10,9 @@ export class FormACruiseGoalSection {
   public readonly cruiseGoalDropdown: FormDropdown;
   public readonly cruiseGoalDescriptionInput: Locator;
 
+  public readonly noCruiseGoalChosenMessage: Locator;
+  public readonly noCruiseGoalDescriptionMessage: Locator;
+
   constructor(formPage: FormAPage) {
     this.formPage = formPage;
     this.page = formPage.page;
@@ -18,6 +21,8 @@ export class FormACruiseGoalSection {
       this.sectionDiv.locator('button:below(label:text("Cel rejsu"))').first()
     );
     this.cruiseGoalDescriptionInput = this.sectionDiv.locator('input:below(:text("Opis"))').first();
+    this.noCruiseGoalChosenMessage = this.sectionDiv.getByText('Cel rejsu musi być jednym z dostępnych celów rejsu');
+    this.noCruiseGoalDescriptionMessage = this.sectionDiv.getByText('Opis celu rejsu jest wymagany');
   }
 
   public async defaultFill() {

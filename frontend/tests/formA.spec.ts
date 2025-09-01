@@ -119,3 +119,49 @@ test.describe('permissions section tests', () => {
     await formAPage.submitForm({ expectedResult: 'valid' });
   });
 });
+
+test.describe('research area section tests', () => {
+  test.beforeEach(async ({ formAPage }) => {
+    await formAPage.fillForm({ except: ['researchAreaSection'] });
+  });
+
+  test('No research area chosen', async ({ formAPage }) => {
+    await formAPage.submitForm({ expectedResult: 'invalid' });
+    await expect(formAPage.sections.researchAreaSection.noResearchAreaChosenMessage).toBeVisible();
+
+    await formAPage.sections.researchAreaSection.researchAreaDropdown.selectOption('Ujście Wisły');
+    await expect(formAPage.sections.researchAreaSection.noResearchAreaChosenMessage).toBeHidden();
+    await formAPage.submitForm({ expectedResult: 'valid' });
+  });
+});
+
+test.describe('cruise goal section tests', () => {
+  test.beforeEach(async ({ formAPage }) => {
+    await formAPage.fillForm({ except: ['cruiseGoalSection'] });
+  });
+
+  test('No cruise goal chosen', async ({ formAPage }) => {
+    await formAPage.submitForm({ expectedResult: 'invalid' });
+    await expect(formAPage.sections.cruiseGoalSection.noCruiseGoalChosenMessage).toBeVisible();
+
+    await formAPage.sections.cruiseGoalSection.cruiseGoalDropdown.selectOption('Komercyjny');
+    await expect(formAPage.sections.cruiseGoalSection.noCruiseGoalChosenMessage).toBeHidden();
+  });
+
+  test('Empty goal description', async ({ formAPage }) => {
+    const cruiseGoalSection = formAPage.sections.cruiseGoalSection;
+    await cruiseGoalSection.cruiseGoalDropdown.selectOption('Komercyjny');
+
+    // for the 'empty' message to appear, the field must be detected as touched, so it is filled with some value at first
+    await cruiseGoalSection.cruiseGoalDescriptionInput.fill('a');
+    await cruiseGoalSection.cruiseGoalDescriptionInput.fill('');
+    await expect(cruiseGoalSection.noCruiseGoalDescriptionMessage).toBeVisible();
+
+    await formAPage.submitForm();
+    await expect(formAPage.submissionApprovedMessage, 'form should not be approved').toBeHidden();
+
+    await cruiseGoalSection.cruiseGoalDescriptionInput.fill('Jakiś opis');
+    await expect(cruiseGoalSection.noCruiseGoalDescriptionMessage).toBeHidden();
+    await formAPage.submitForm({ expectedResult: 'valid' });
+  });
+});
