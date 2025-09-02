@@ -29,7 +29,9 @@ export class FormAMembersSection {
       this.sectionDiv.getByRole('button', { name: 'Dodaj historyczny zespół' })
     );
     this.noUGUnitsMessage = this.sectionDiv.getByText('Co najmniej jeden zespół UG jest wymagany');
-    this.invalidUGNofMembersMessage = this.sectionDiv.getByText('Zespół UG musi składać się z co najmniej jednej osoby');
+    this.invalidUGNofMembersMessage = this.sectionDiv.getByText(
+      'Zespół UG musi składać się z co najmniej jednej osoby'
+    );
     this.emptyGuestTeamNameMessage = this.sectionDiv.getByText('Instytucja jest wymagana');
     this.invalidGuestTeamCountMessage = this.sectionDiv.getByText('Liczba osób musi być liczbą większą od 0');
   }

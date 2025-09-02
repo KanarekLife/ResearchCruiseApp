@@ -10,6 +10,12 @@ export class FormAPublicationsSection {
   public readonly addPublicationDropdown: FormDropdown;
   public readonly addHistoricalPublicationDropdown: FormDropdown;
 
+  public readonly emptyDoiMessage: Locator;
+  public readonly emptyTitleMessage: Locator;
+  public readonly emptyAuthorsMessage: Locator;
+  public readonly emptyMagazineMessage: Locator;
+  public readonly emptyYearMessage: Locator;
+
   constructor(formPage: FormAPage) {
     this.formPage = formPage;
     this.page = formPage.page;
@@ -21,6 +27,11 @@ export class FormAPublicationsSection {
     this.addHistoricalPublicationDropdown = new FormDropdown(
       this.sectionDiv.getByRole('button', { name: 'Dodaj historyczną publikację' })
     );
+    this.emptyDoiMessage = this.sectionDiv.getByText('DOI jest wymagane');
+    this.emptyTitleMessage = this.sectionDiv.getByText('Tytuł jest wymagany');
+    this.emptyAuthorsMessage = this.sectionDiv.getByText('Autorzy są wymagani');
+    this.emptyMagazineMessage = this.sectionDiv.getByText('Czasopismo jest wymagane');
+    this.emptyYearMessage = this.sectionDiv.getByText('Rok jest wymagany');
   }
 
   public doiInput(index: 'first' | 'last' | number) {
@@ -33,7 +44,7 @@ export class FormAPublicationsSection {
     return index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
   }
 
-  public AuthorsInput(index: 'first' | 'last' | number) {
+  public authorsInput(index: 'first' | 'last' | number) {
     const locator = this.sectionDiv.locator('input:below(:text("Autorzy"))');
     return index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
   }
@@ -59,7 +70,7 @@ export class FormAPublicationsSection {
     await this.addPublicationDropdown.selectOption('Temat');
     await this.doiInput('first').fill('10.1234/example.doi');
     await this.titleInput('first').fill('Przykładowy tytuł publikacji');
-    await this.AuthorsInput('first').fill('Jan Kowalski, Anna Nowak');
+    await this.authorsInput('first').fill('Jan Kowalski, Anna Nowak');
     await this.magazineInput('first').fill('Czasopismo Naukowe');
     await this.chooseYearDropdown('first').selectOption('2025');
     await this.pointsInput('first').fill('20');

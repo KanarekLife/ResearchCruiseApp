@@ -268,7 +268,7 @@ test.describe('members section tests', () => {
 
   test('missing UG team', async ({ formAPage }) => {
     const membersSection = formAPage.sections.membersSection;
-    await formAPage.submitForm({expectedResult: 'invalid'});
+    await formAPage.submitForm({ expectedResult: 'invalid' });
     await expect(membersSection.noUGUnitsMessage).toBeVisible();
 
     await membersSection.addUGUnitDropdown.selectOption('Biuro Prawne (0300)');
@@ -276,10 +276,10 @@ test.describe('members section tests', () => {
   });
 
   ['employees', 'students'].forEach((whoToIncrease) => {
-    test(`invalid UG team members count - ${whoToIncrease}`, async ({formAPage}) => {
+    test(`invalid UG team members count - ${whoToIncrease}`, async ({ formAPage }) => {
       const membersSection = formAPage.sections.membersSection;
       await membersSection.addUGUnitDropdown.selectOption('Biuro Prawne (0300)');
-      await formAPage.submitForm({expectedResult: 'invalid'});
+      await formAPage.submitForm({ expectedResult: 'invalid' });
       await expect(membersSection.invalidUGNofMembersMessage).toBeVisible();
 
       if (whoToIncrease == 'employees') {
@@ -289,11 +289,11 @@ test.describe('members section tests', () => {
       }
 
       await expect(membersSection.invalidUGNofMembersMessage).toBeHidden();
-      await formAPage.submitForm({expectedResult: 'valid'});
+      await formAPage.submitForm({ expectedResult: 'valid' });
     });
   });
 
-  test('guest team input', async ({formAPage}) => {
+  test('guest team input', async ({ formAPage }) => {
     const membersSection = formAPage.sections.membersSection;
     await membersSection.addUGUnitDropdown.selectOption('Biuro Prawne (0300)');
     await membersSection.noOfEmployeesInput('first').fill('1');
@@ -307,11 +307,65 @@ test.describe('members section tests', () => {
     await membersSection.guestTeamNameInput('first').fill('Jakiś zeespół');
     await expect(membersSection.emptyGuestTeamNameMessage).toBeHidden();
 
-    await formAPage.submitForm({expectedResult: 'invalid'});
+    await formAPage.submitForm({ expectedResult: 'invalid' });
     await expect(membersSection.invalidGuestTeamCountMessage).toBeVisible();
 
     await membersSection.guestTeamNoOfPersonsInput('first').fill('1');
     await expect(membersSection.invalidGuestTeamCountMessage).toBeHidden();
-    await formAPage.submitForm({expectedResult: 'valid'});
+    await formAPage.submitForm({ expectedResult: 'valid' });
+  });
+});
+
+test.describe('publications section tests', () => {
+  test.beforeEach(async ({ formAPage }) => {
+    await formAPage.fillForm({ except: ['publicationsSection'] });
+  });
+
+  test('no publications', async ({ formAPage }) => {
+    await formAPage.submitForm({ expectedResult: 'valid' });
+  });
+
+  test('missing publication data', async ({ formAPage }) => {
+    const publicationsSection = formAPage.sections.publicationsSection;
+    await publicationsSection.addPublicationDropdown.selectOption('Temat');
+
+    await formAPage.submitForm();
+    await expect(formAPage.submissionApprovedMessage, 'form should not be approved').toBeHidden();
+
+    // for the 'empty' message to appear, the field must be detected as touched, so it is filled with some value at first
+    const inputFields = [
+      publicationsSection.doiInput('first'),
+      publicationsSection.titleInput('first'),
+      publicationsSection.authorsInput('first'),
+      publicationsSection.magazineInput('first'),
+    ];
+    for (const inputField of inputFields) {
+      await inputField.fill('a');
+      await inputField.fill('');
+    }
+
+    await expect(publicationsSection.emptyDoiMessage).toBeVisible();
+    await expect(publicationsSection.emptyTitleMessage).toBeVisible();
+    await expect(publicationsSection.emptyAuthorsMessage).toBeVisible();
+    await expect(publicationsSection.emptyMagazineMessage).toBeVisible();
+
+    await publicationsSection.doiInput('first').fill('Jakieś doi');
+    await expect(publicationsSection.emptyDoiMessage).toBeHidden();
+
+    await publicationsSection.titleInput('first').fill('Jakiś tytuł');
+    await expect(publicationsSection.emptyTitleMessage).toBeHidden();
+
+    await publicationsSection.authorsInput('first').fill('Jakiś autor');
+    await expect(publicationsSection.emptyAuthorsMessage).toBeHidden();
+
+    await publicationsSection.magazineInput('first').fill('Jakiś magazyn');
+    await expect(publicationsSection.emptyMagazineMessage).toBeHidden();
+
+    await formAPage.submitForm({ expectedResult: 'invalid' });
+    await expect(publicationsSection.emptyYearMessage).toBeVisible();
+
+    await publicationsSection.chooseYearDropdown('first').selectOption('2025');
+    await expect(publicationsSection.emptyYearMessage).toBeHidden();
+    await formAPage.submitForm({ expectedResult: 'valid' });
   });
 });
