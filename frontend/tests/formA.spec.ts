@@ -403,3 +403,42 @@ test.describe('SPUB tasks section tests', () => {
     await formAPage.submitForm({ expectedResult: 'valid' });
   });
 });
+
+test.describe('supervisor info section tests', () => {
+  test.beforeEach(async ({ formAPage }) => {
+    await formAPage.fillForm({ except: ['supervisorInfoSection'] });
+  });
+
+  test('missing supervisor email', async ({ formAPage }) => {
+    const supervisorInfoSection = formAPage.sections.supervisorInfoSection;
+    await formAPage.submitForm({ expectedResult: 'invalid' });
+    await expect(supervisorInfoSection.missingEmailMessage).toBeVisible();
+
+    await supervisorInfoSection.supervisorEmailInput.fill('mail@gmail.com');
+    await expect(supervisorInfoSection.missingEmailMessage).toBeHidden();
+    await formAPage.submitForm({ expectedResult: 'valid' });
+  });
+
+  test.describe('email validation', () => {
+    const cases: [string, boolean][] = [
+      ['abcd', false],
+      ['abcd@', false],
+      ['abcd@gmail', false],
+      ['abcd@gmail.com', true],
+      ['abcd@wp.pl', true],
+      ['abc+def@gmail.com', true],
+    ];
+    cases.forEach(([email, isValid]) => {
+      test(`email validation - ${email}`, async ({ formAPage }) => {
+        const supervisorInfoSection = formAPage.sections.supervisorInfoSection;
+        await supervisorInfoSection.supervisorEmailInput.fill(email);
+        if (isValid) {
+          await formAPage.submitForm({ expectedResult: 'valid' });
+        } else {
+          await formAPage.submitForm();
+          await expect(formAPage.submissionApprovedMessage, 'form should not be approved').toBeHidden();
+        }
+      });
+    });
+  });
+});
