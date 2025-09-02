@@ -66,13 +66,5 @@ export class FormAPublicationsSection {
     return index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
   }
 
-  public async defaultFill() {
-    await this.addPublicationDropdown.selectOption('Temat');
-    await this.doiInput('first').fill('10.1234/example.doi');
-    await this.titleInput('first').fill('Przykładowy tytuł publikacji');
-    await this.authorsInput('first').fill('Jan Kowalski, Anna Nowak');
-    await this.magazineInput('first').fill('Czasopismo Naukowe');
-    await this.chooseYearDropdown('first').selectOption('2025');
-    await this.pointsInput('first').fill('20');
-  }
+  public async defaultFill() {} // Optional section
 }

@@ -46,8 +46,5 @@ export class FormAPermissionsSection {
     await (await this.permissionExecutiveInput('last')).fill(executive);
   }
 
-  public async defaultFill() {
-    await this.addPermission('Pozwolenie na badania w strefie ochronnej', 'Ministerstwo Środowiska');
-    await this.addPermission('Pozwolenie na badania w obszarze Natura 2000', 'Regionalny Dyrektor Ochrony Środowiska');
-  }
+  public async defaultFill() {} // Optional section
 }

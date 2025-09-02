@@ -1,5 +1,4 @@
 import type { Locator, Page } from '@playwright/test';
-import { MOCK_PDF_FILEPATH } from '@tests/fixtures/consts';
 import { FormDropdown, locateSectionDiv } from '@tests/utils/form-filling-utils';
 
 import { FormAPage } from './formAPage';
@@ -38,29 +37,34 @@ export class FormAContractsSection {
     this.missingFileMessage = this.sectionDiv.getByText('Plik jest wymagany');
   }
 
+  public contractRow(index: 'first' | 'last' | number) {
+    const rowsLocator = this.sectionDiv.getByRole('row');
+    return index === 'first' ? rowsLocator.nth(2) : index === 'last' ? rowsLocator.last() : rowsLocator.nth(2 + index);
+  }
+
   public institutionNameInput(index: 'first' | 'last' | number) {
-    const locator = this.sectionDiv.locator('input:below(:text("Nazwa instytucji"))');
-    return index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
+    const rowLocator = this.contractRow(index);
+    return rowLocator.locator('input:below(:text("Nazwa instytucji"))').first();
   }
 
   public institutionUnitInput(index: 'first' | 'last' | number) {
-    const locator = this.sectionDiv.locator('input:below(:text("Jednostka"))');
-    return index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
+    const rowLocator = this.contractRow(index);
+    return rowLocator.locator('input:below(:text("Jednostka"))').first();
   }
 
   public institutionLocationInput(index: 'first' | 'last' | number) {
-    const locator = this.sectionDiv.locator('input:below(:text("Lokalizacja instytucji"))');
-    return index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
+    const rowLocator = this.contractRow(index);
+    return rowLocator.locator('input:below(:text("Lokalizacja instytucji"))').first();
   }
 
   public descriptionInput(index: 'first' | 'last' | number) {
-    const locator = this.sectionDiv.locator('input:below(:text("Opis"))');
-    return index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
+    const rowLocator = this.contractRow(index);
+    return rowLocator.locator('input:below(:text("Opis"))').first();
   }
 
   public async sendScan(index: 'first' | 'last' | number, filePath: string) {
-    const locator = this.sectionDiv.getByText('Kliknij lub przeciągnij plik');
-    const sendButton = index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
+    const rowLocator = this.contractRow(index);
+    const sendButton = rowLocator.locator(':below(:text("Skan"))').first();
 
     const fileChooserPromise = this.page.waitForEvent('filechooser');
     await sendButton.click();
@@ -68,12 +72,5 @@ export class FormAContractsSection {
     await fileChooser.setFiles(filePath);
   }
 
-  public async defaultFill() {
-    await this.addNewContractDropdown.selectOption('Krajowa');
-    await this.institutionNameInput('first').fill('Instytut Badawczy');
-    await this.institutionUnitInput('first').fill('Jednostka Badawcza');
-    await this.institutionLocationInput('first').fill('Gdańsk, Polska');
-    await this.descriptionInput('first').fill('Opis umowy badawczej');
-    await this.sendScan('first', MOCK_PDF_FILEPATH);
-  }
+  public async defaultFill() {} // Optional section
 }

@@ -58,10 +58,6 @@ export class FormAMembersSection {
 
   public async defaultFill() {
     await this.addUGUnitDropdown.selectOption('Rektor (0000)');
-    await this.noOfEmployeesInput('first').fill('5');
-    await this.noOfStudentsInput('first').fill('3');
-    await this.addNewGuestTeamButton.click();
-    await this.guestTeamNameInput('first').fill('Instytut Badawczy');
-    await this.guestTeamNoOfPersonsInput('first').fill('10');
+    await this.noOfEmployeesInput('first').fill('1');
   }
 }
