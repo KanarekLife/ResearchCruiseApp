@@ -11,6 +11,11 @@ export class FormAMembersSection {
   public readonly addNewGuestTeamButton: Locator;
   public readonly addHistoricalTeamDropdown: FormDropdown;
 
+  public readonly noUGUnitsMessage: Locator;
+  public readonly invalidUGNofMembersMessage: Locator;
+  public readonly emptyGuestTeamNameMessage: Locator;
+  public readonly invalidGuestTeamCountMessage: Locator;
+
   constructor(formPage: FormAPage) {
     this.formPage = formPage;
     this.page = formPage.page;
@@ -23,6 +28,10 @@ export class FormAMembersSection {
     this.addHistoricalTeamDropdown = new FormDropdown(
       this.sectionDiv.getByRole('button', { name: 'Dodaj historyczny zespół' })
     );
+    this.noUGUnitsMessage = this.sectionDiv.getByText('Co najmniej jeden zespół UG jest wymagany');
+    this.invalidUGNofMembersMessage = this.sectionDiv.getByText('Zespół UG musi składać się z co najmniej jednej osoby');
+    this.emptyGuestTeamNameMessage = this.sectionDiv.getByText('Instytucja jest wymagana');
+    this.invalidGuestTeamCountMessage = this.sectionDiv.getByText('Liczba osób musi być liczbą większą od 0');
   }
 
   public noOfEmployeesInput(index: 'first' | 'last' | number) {

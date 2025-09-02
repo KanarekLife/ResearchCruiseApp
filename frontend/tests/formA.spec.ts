@@ -260,3 +260,58 @@ test.describe('contracts section tests', () => {
     await formAPage.submitForm({ expectedResult: 'valid' });
   });
 });
+
+test.describe('members section tests', () => {
+  test.beforeEach(async ({ formAPage }) => {
+    await formAPage.fillForm({ except: ['membersSection'] });
+  });
+
+  test('missing UG team', async ({ formAPage }) => {
+    const membersSection = formAPage.sections.membersSection;
+    await formAPage.submitForm({expectedResult: 'invalid'});
+    await expect(membersSection.noUGUnitsMessage).toBeVisible();
+
+    await membersSection.addUGUnitDropdown.selectOption('Biuro Prawne (0300)');
+    await expect(membersSection.noUGUnitsMessage).toBeHidden();
+  });
+
+  ['employees', 'students'].forEach((whoToIncrease) => {
+    test(`invalid UG team members count - ${whoToIncrease}`, async ({formAPage}) => {
+      const membersSection = formAPage.sections.membersSection;
+      await membersSection.addUGUnitDropdown.selectOption('Biuro Prawne (0300)');
+      await formAPage.submitForm({expectedResult: 'invalid'});
+      await expect(membersSection.invalidUGNofMembersMessage).toBeVisible();
+
+      if (whoToIncrease == 'employees') {
+        await membersSection.noOfEmployeesInput('first').fill('1');
+      } else {
+        await membersSection.noOfStudentsInput('first').fill('1');
+      }
+
+      await expect(membersSection.invalidUGNofMembersMessage).toBeHidden();
+      await formAPage.submitForm({expectedResult: 'valid'});
+    });
+  });
+
+  test('guest team input', async ({formAPage}) => {
+    const membersSection = formAPage.sections.membersSection;
+    await membersSection.addUGUnitDropdown.selectOption('Biuro Prawne (0300)');
+    await membersSection.noOfEmployeesInput('first').fill('1');
+    await membersSection.addNewGuestTeamButton.click();
+
+    // for the 'empty' message to appear, the field must be detected as touched, so it is filled with some value at first
+    await membersSection.guestTeamNameInput('first').fill('a');
+    await membersSection.guestTeamNameInput('first').fill('');
+    await expect(membersSection.emptyGuestTeamNameMessage).toBeVisible();
+
+    await membersSection.guestTeamNameInput('first').fill('Jakiś zeespół');
+    await expect(membersSection.emptyGuestTeamNameMessage).toBeHidden();
+
+    await formAPage.submitForm({expectedResult: 'invalid'});
+    await expect(membersSection.invalidGuestTeamCountMessage).toBeVisible();
+
+    await membersSection.guestTeamNoOfPersonsInput('first').fill('1');
+    await expect(membersSection.invalidGuestTeamCountMessage).toBeHidden();
+    await formAPage.submitForm({expectedResult: 'valid'});
+  });
+});
