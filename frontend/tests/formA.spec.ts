@@ -369,3 +369,37 @@ test.describe('publications section tests', () => {
     await formAPage.submitForm({ expectedResult: 'valid' });
   });
 });
+
+test.describe('SPUB tasks section tests', () => {
+  test.beforeEach(async ({ formAPage }) => {
+    await formAPage.fillForm({ except: ['spubTasksSection'] });
+  });
+
+  test('no SPUB tasks', async ({ formAPage }) => {
+    await formAPage.submitForm({ expectedResult: 'valid' });
+  });
+
+  test('missing SPUB task data', async ({ formAPage }) => {
+    const spubTasksSection = formAPage.sections.spubTasksSection;
+    await spubTasksSection.addNewTaskButton.click();
+
+    await spubTasksSection.taskNameInput('first').fill('a');
+    await spubTasksSection.taskNameInput('first').fill('');
+    await expect(spubTasksSection.emptyTaskNameMessage).toBeVisible();
+
+    await spubTasksSection.taskNameInput('first').fill('Jakieś zadanie');
+    await expect(spubTasksSection.emptyTaskNameMessage).toBeHidden();
+
+    await formAPage.submitForm({ expectedResult: 'invalid' });
+    await expect(spubTasksSection.misingStartYearMessage).toBeVisible();
+    await expect(spubTasksSection.misingEndYearMessage).toBeVisible();
+
+    await spubTasksSection.chooseStartYearDropdown('first').selectOption('2023');
+    await expect(spubTasksSection.misingStartYearMessage).toBeHidden();
+
+    await spubTasksSection.chooseEndYearDropdown('first').selectOption('2025');
+    await expect(spubTasksSection.misingEndYearMessage).toBeHidden();
+
+    await formAPage.submitForm({ expectedResult: 'valid' });
+  });
+});

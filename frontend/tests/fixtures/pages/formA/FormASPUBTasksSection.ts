@@ -10,6 +10,10 @@ export class FormASPUBTasksSection {
   public readonly addNewTaskButton: Locator;
   public readonly addHistoricalTaskDropdown: FormDropdown;
 
+  public readonly misingStartYearMessage: Locator;
+  public readonly misingEndYearMessage: Locator;
+  public readonly emptyTaskNameMessage: Locator;
+
   constructor(formPage: FormAPage) {
     this.formPage = formPage;
     this.page = formPage.page;
@@ -17,20 +21,27 @@ export class FormASPUBTasksSection {
       formPage.page,
       '10. Zadania SPUB, z którymi pokrywają się zadania planowane do realizacji na rejsie'
     );
-    this.addNewTaskButton = this.sectionDiv.getByRole('button', { name: 'Dodaj' });
+    this.addNewTaskButton = this.sectionDiv.getByRole('button', { name: 'Dodaj' }).first();
     this.addHistoricalTaskDropdown = new FormDropdown(
-      this.sectionDiv.getByRole('button', { name: 'Dodaj historyczne zadanie SPUB' })
+      this.sectionDiv.getByRole('button', { name: 'Dodaj historyczne zadanie' })
     );
+    this.misingStartYearMessage = this.sectionDiv.getByText('Rok rozpoczęcia jest wymagany');
+    this.misingEndYearMessage = this.sectionDiv.getByText('Rok zakończenia jest wymagany');
+    this.emptyTaskNameMessage = this.sectionDiv.getByText('Nazwa jest wymagana');
   }
 
-  public chooseStartYearButton(index: 'first' | 'last' | number) {
-    const locator = this.sectionDiv.locator('button:below(:text("Rok rozpoczęcia"))');
-    return index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
+  public chooseStartYearDropdown(index: 'first' | 'last' | number) {
+    const allLocator = this.sectionDiv.locator('button:below(:text("Rok rozpoczęcia"))');
+    const singleLocator =
+      index === 'first' ? allLocator.first() : index === 'last' ? allLocator.last() : allLocator.nth(index);
+    return new FormDropdown(singleLocator, 'menu-with-buttons');
   }
 
-  public chooseEndYearButton(index: 'first' | 'last' | number) {
-    const locator = this.sectionDiv.locator('button:below(:text("Rok zakończenia"))');
-    return index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
+  public chooseEndYearDropdown(index: 'first' | 'last' | number) {
+    const allLocator = this.sectionDiv.locator('button:below(:text("Rok zakończenia"))');
+    const singleLocator =
+      index === 'first' ? allLocator.first() : index === 'last' ? allLocator.last() : allLocator.nth(index);
+    return new FormDropdown(singleLocator, 'menu-with-buttons');
   }
 
   public taskNameInput(index: 'first' | 'last' | number) {
