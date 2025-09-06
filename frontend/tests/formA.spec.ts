@@ -110,13 +110,13 @@ test.describe('permissions section tests', () => {
     const permissionsSection = formAPage.sections.permissionsSection;
     await permissionsSection.addPermission('', '');
     await formAPage.submitForm({ expectedResult: 'invalid' });
-    await expect(permissionsSection.permissionDescriptionRequiredMessage).toBeVisible();
-    await expect(permissionsSection.permissionExecutiveRequiredMessage).toBeVisible();
+    await expect(permissionsSection.descriptionRequiredMessage).toBeVisible();
+    await expect(permissionsSection.executiveRequiredMessage).toBeVisible();
 
-    await permissionsSection.permissionDesctiptionInput('first').fill('jakiś opis');
-    await expect(permissionsSection.permissionDescriptionRequiredMessage).toBeHidden();
-    await permissionsSection.permissionExecutiveInput('first').fill('jakiś organ');
-    await expect(permissionsSection.permissionExecutiveRequiredMessage).toBeHidden();
+    await permissionsSection.desctiptionInput('first').fill('jakiś opis');
+    await expect(permissionsSection.descriptionRequiredMessage).toBeHidden();
+    await permissionsSection.executiveInput('first').fill('jakiś organ');
+    await expect(permissionsSection.executiveRequiredMessage).toBeHidden();
     await formAPage.submitForm({ expectedResult: 'valid' });
   });
 });

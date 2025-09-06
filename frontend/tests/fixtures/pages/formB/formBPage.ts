@@ -132,7 +132,7 @@ export class FormBPage {
   public async fillForm({ except }: { except?: (keyof FormBPage['sections'])[] } = {}) {
     except ??= [];
     const sections = Object.entries(this.sections);
-    let i = 1;
+    let i = 0;
     for (const [key, section] of sections) {
       i++;
       if (except.includes(key as keyof FormBPage['sections'])) {
@@ -152,7 +152,7 @@ export class FormBPage {
         await expect(this.page.getByRole('heading', { name: 'Formularz wysłany pomyślnie' })).toBeVisible();
         break;
       case 'invalid':
-        await expect(this.page.getByRole('heading', { name: 'Wykryto błąd w formularzu' })).toBeVisible();
+        await expect(this.page.getByRole('heading', { name: 'Wystąpił błąd podczas wysyłania formularza' })).toBeVisible();
         await this.page.mouse.click(100, 100); // dismiss the dialog box
         break;
     }
