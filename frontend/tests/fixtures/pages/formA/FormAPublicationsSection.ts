@@ -22,7 +22,7 @@ export class FormAPublicationsSection {
     this.sectionDiv = locateSectionDiv(formPage.page, '9. Publikacje');
     this.addPublicationDropdown = new FormDropdown(
       this.sectionDiv.getByRole('button', { name: 'Dodaj nową publikację' }),
-      'menu-with-buttons'
+      { variant: 'menu-with-buttons' }
     );
     this.addHistoricalPublicationDropdown = new FormDropdown(
       this.sectionDiv.getByRole('button', { name: 'Dodaj historyczną publikację' })
@@ -58,7 +58,7 @@ export class FormAPublicationsSection {
     const allLocator = this.sectionDiv.locator('button:below(:text("Rok"))');
     const singleLocator =
       index === 'first' ? allLocator.first() : index === 'last' ? allLocator.last() : allLocator.nth(index);
-    return new FormDropdown(singleLocator, 'menu-with-buttons');
+    return new FormDropdown(singleLocator, { variant: 'menu-with-buttons' });
   }
 
   public pointsInput(index: 'first' | 'last' | number) {

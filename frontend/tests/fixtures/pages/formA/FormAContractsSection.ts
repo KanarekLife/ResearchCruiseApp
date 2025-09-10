@@ -25,7 +25,7 @@ export class FormAContractsSection {
     );
     this.addNewContractDropdown = new FormDropdown(
       this.sectionDiv.locator('button', { hasText: 'Dodaj nowy kontrakt' }),
-      'menu-with-buttons'
+      { variant: 'menu-with-buttons' }
     );
     this.addHistoricalContractDropdown = new FormDropdown(
       this.sectionDiv.locator('button', { hasText: 'Dodaj historyczną umowę' })

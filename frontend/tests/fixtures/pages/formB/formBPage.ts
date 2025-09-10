@@ -30,6 +30,8 @@ export class FormBPage {
   public readonly formId: string;
   public readonly sections;
   public readonly submitButton: Locator;
+  public readonly submissionApprovedMessage: Locator;
+  public readonly validationErrorMessage: Locator;
 
   public static async create(page: Page, formId: string = TESTED_FORM_ID): Promise<FormBPage> {
     page.route(`${API_URL}/forms/InitValues/A`, (route) => {
@@ -127,6 +129,10 @@ export class FormBPage {
     } as const;
 
     this.submitButton = this.page.getByRole('button', { name: 'Wyślij' });
+    this.submissionApprovedMessage = this.page.getByRole('heading', { name: 'Formularz wysłany pomyślnie' });
+    this.validationErrorMessage = this.page.getByRole('heading', {
+      name: 'Wystąpił błąd podczas wysyłania formularza',
+    });
   }
 
   public async fillForm({ except }: { except?: (keyof FormBPage['sections'])[] } = {}) {
@@ -149,10 +155,10 @@ export class FormBPage {
 
     switch (expectedResult) {
       case 'valid':
-        await expect(this.page.getByRole('heading', { name: 'Formularz wysłany pomyślnie' })).toBeVisible();
+        await expect(this.submissionApprovedMessage).toBeVisible();
         break;
       case 'invalid':
-        await expect(this.page.getByRole('heading', { name: 'Wystąpił błąd podczas wysyłania formularza' })).toBeVisible();
+        await expect(this.validationErrorMessage).toBeVisible();
         await this.page.mouse.click(100, 100); // dismiss the dialog box
         break;
     }

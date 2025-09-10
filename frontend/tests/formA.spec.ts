@@ -2,6 +2,7 @@ import { expect } from '@playwright/test';
 
 import { MOCK_PDF_FILEPATH } from './fixtures/consts';
 import { formTest as test } from './fixtures/fixtures';
+import { touchInput } from './utils/form-filling-utils';
 
 test('valid form A', async ({ formAPage }) => {
   await formAPage.fillForm(); // Fill the form with default values
@@ -83,9 +84,7 @@ test.describe('cruise length section tests', () => {
     await formAPage.sections.cruiseLengthSection.defaultFill();
     await formAPage.sections.cruiseLengthSection.shipUsageDropdown.selectOption('w inny sposób');
 
-    // for the 'empty' message to appear, the field must be detected as touched, so it is filled with some value at first
-    await formAPage.sections.cruiseLengthSection.alternativeShipUsageInput.fill('a');
-    await formAPage.sections.cruiseLengthSection.alternativeShipUsageInput.fill('');
+    await touchInput(formAPage.sections.cruiseLengthSection.alternativeShipUsageInput);
     await expect(formAPage.sections.cruiseLengthSection.emptyAlternativeShipUsageMessage).toBeVisible();
 
     await formAPage.submitForm();
@@ -153,9 +152,7 @@ test.describe('cruise goal section tests', () => {
     const cruiseGoalSection = formAPage.sections.cruiseGoalSection;
     await cruiseGoalSection.cruiseGoalDropdown.selectOption('Komercyjny');
 
-    // for the 'empty' message to appear, the field must be detected as touched, so it is filled with some value at first
-    await cruiseGoalSection.cruiseGoalDescriptionInput.fill('a');
-    await cruiseGoalSection.cruiseGoalDescriptionInput.fill('');
+    await touchInput(cruiseGoalSection.cruiseGoalDescriptionInput);
     await expect(cruiseGoalSection.noCruiseGoalDescriptionMessage).toBeVisible();
 
     await formAPage.submitForm();
@@ -185,10 +182,8 @@ test.describe('research tasks section tests', () => {
     await researchTasksSection.addNewTaskDropdown.selectOption('Praca doktorska');
 
     // for the 'empty' message to appear, the field must be detected as touched, so it is filled with some value at first
-    await researchTasksSection.authorInput('first').fill('a');
-    await researchTasksSection.authorInput('first').fill('');
-    await researchTasksSection.titleInput('first').fill('a');
-    await researchTasksSection.titleInput('first').fill('');
+    await touchInput(researchTasksSection.authorInput('first'));
+    await touchInput(researchTasksSection.titleInput('first'));
 
     await expect(researchTasksSection.emptyAuthorMessage).toBeVisible();
     await expect(researchTasksSection.emptyTitleMessage).toBeVisible();
@@ -229,8 +224,7 @@ test.describe('contracts section tests', () => {
       contractsSection.descriptionInput('first'),
     ];
     for (const inputField of inputFields) {
-      await inputField.fill('a');
-      await inputField.fill('');
+      await touchInput(inputField);
     }
 
     await expect(contractsSection.emptyInstitutionNameMessage).toBeVisible();
@@ -283,9 +277,9 @@ test.describe('members section tests', () => {
       await expect(membersSection.invalidUGNofMembersMessage).toBeVisible();
 
       if (whoToIncrease == 'employees') {
-        await membersSection.noOfEmployeesInput('first').fill('1');
+        await membersSection.ugUnitRow('first').noOfEmployeesInput.fill('1');
       } else {
-        await membersSection.noOfStudentsInput('first').fill('1');
+        await membersSection.ugUnitRow('first').noOfStudentsInput.fill('1');
       }
 
       await expect(membersSection.invalidUGNofMembersMessage).toBeHidden();
@@ -296,21 +290,19 @@ test.describe('members section tests', () => {
   test('guest team input', async ({ formAPage }) => {
     const membersSection = formAPage.sections.membersSection;
     await membersSection.addUGUnitDropdown.selectOption('Biuro Prawne (0300)');
-    await membersSection.noOfEmployeesInput('first').fill('1');
+    await membersSection.ugUnitRow('first').noOfEmployeesInput.fill('1');
     await membersSection.addNewGuestTeamButton.click();
 
-    // for the 'empty' message to appear, the field must be detected as touched, so it is filled with some value at first
-    await membersSection.guestTeamNameInput('first').fill('a');
-    await membersSection.guestTeamNameInput('first').fill('');
+    await touchInput(membersSection.guestTeamRow('first').teamNameInput);
     await expect(membersSection.emptyGuestTeamNameMessage).toBeVisible();
 
-    await membersSection.guestTeamNameInput('first').fill('Jakiś zeespół');
+    await membersSection.guestTeamRow('first').teamNameInput.fill('Jakiś zespół');
     await expect(membersSection.emptyGuestTeamNameMessage).toBeHidden();
 
     await formAPage.submitForm({ expectedResult: 'invalid' });
     await expect(membersSection.invalidGuestTeamCountMessage).toBeVisible();
 
-    await membersSection.guestTeamNoOfPersonsInput('first').fill('1');
+    await membersSection.guestTeamRow('first').noOfPeopleInput.fill('1');
     await expect(membersSection.invalidGuestTeamCountMessage).toBeHidden();
     await formAPage.submitForm({ expectedResult: 'valid' });
   });
@@ -340,8 +332,7 @@ test.describe('publications section tests', () => {
       publicationsSection.magazineInput('first'),
     ];
     for (const inputField of inputFields) {
-      await inputField.fill('a');
-      await inputField.fill('');
+      await touchInput(inputField);
     }
 
     await expect(publicationsSection.emptyDoiMessage).toBeVisible();
@@ -383,8 +374,7 @@ test.describe('SPUB tasks section tests', () => {
     const spubTasksSection = formAPage.sections.spubTasksSection;
     await spubTasksSection.addNewTaskButton.click();
 
-    await spubTasksSection.taskNameInput('first').fill('a');
-    await spubTasksSection.taskNameInput('first').fill('');
+    await touchInput(spubTasksSection.taskNameInput('first'));
     await expect(spubTasksSection.emptyTaskNameMessage).toBeVisible();
 
     await spubTasksSection.taskNameInput('first').fill('Jakieś zadanie');

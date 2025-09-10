@@ -20,10 +20,9 @@ export class FormAMembersSection {
     this.formPage = formPage;
     this.page = formPage.page;
     this.sectionDiv = locateSectionDiv(formPage.page, '8. Zespoły badawcze, które miałyby uczestniczyć w rejsie');
-    this.addUGUnitDropdown = new FormDropdown(
-      this.sectionDiv.getByRole('button', { name: 'Dodaj jednostkę UG' }),
-      'menu-with-buttons'
-    );
+    this.addUGUnitDropdown = new FormDropdown(this.sectionDiv.getByRole('button', { name: 'Dodaj jednostkę UG' }), {
+      variant: 'menu-with-buttons',
+    });
     this.addNewGuestTeamButton = this.sectionDiv.getByRole('button', { name: 'Dodaj nowy zespół' });
     this.addHistoricalTeamDropdown = new FormDropdown(
       this.sectionDiv.getByRole('button', { name: 'Dodaj historyczny zespół' })
@@ -36,28 +35,34 @@ export class FormAMembersSection {
     this.invalidGuestTeamCountMessage = this.sectionDiv.getByText('Liczba osób musi być liczbą większą od 0');
   }
 
-  public noOfEmployeesInput(index: 'first' | 'last' | number) {
-    const locator = this.sectionDiv.locator('input:below(:text("Liczba pracowników"))');
-    return index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
+  public ugUnitRowLocator(index: 'first' | 'last' | number) {
+    const rowsLocator = this.sectionDiv.locator('table').nth(0).getByRole('row');
+    return index === 'first' ? rowsLocator.nth(2) : index === 'last' ? rowsLocator.last() : rowsLocator.nth(2 + index);
   }
 
-  public noOfStudentsInput(index: 'first' | 'last' | number) {
-    const locator = this.sectionDiv.locator('input:below(:text("Liczba studentów"))');
-    return index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
+  public ugUnitRow(index: 'first' | 'last' | number) {
+    const rowLocator = this.ugUnitRowLocator(index);
+    return {
+      noOfEmployeesInput: rowLocator.getByRole('textbox').nth(0),
+      noOfStudentsInput: rowLocator.getByRole('textbox').nth(1),
+    };
   }
 
-  public guestTeamNameInput(index: 'first' | 'last' | number) {
-    const locator = this.sectionDiv.locator('input:below(:text("Instytucja"))');
-    return index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
+  public guestTeamRowLocator(index: 'first' | 'last' | number) {
+    const rowsLocator = this.sectionDiv.locator('table').nth(1).getByRole('row');
+    return index === 'first' ? rowsLocator.nth(2) : index === 'last' ? rowsLocator.last() : rowsLocator.nth(2 + index);
   }
 
-  public guestTeamNoOfPersonsInput(index: 'first' | 'last' | number) {
-    const locator = this.sectionDiv.locator('input:below(:text("Liczba osób"))');
-    return index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
+  public guestTeamRow(index: 'first' | 'last' | number) {
+    const rowLocator = this.guestTeamRowLocator(index);
+    return {
+      teamNameInput: rowLocator.getByRole('textbox').nth(0),
+      noOfPeopleInput: rowLocator.getByRole('textbox').nth(1),
+    };
   }
 
   public async defaultFill() {
     await this.addUGUnitDropdown.selectOption('Rektor (0000)');
-    await this.noOfEmployeesInput('first').fill('1');
+    await this.ugUnitRow('first').noOfEmployeesInput.fill('1');
   }
 }

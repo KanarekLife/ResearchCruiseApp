@@ -34,14 +34,14 @@ export class FormASPUBTasksSection {
     const allLocator = this.sectionDiv.locator('button:below(:text("Rok rozpoczęcia"))');
     const singleLocator =
       index === 'first' ? allLocator.first() : index === 'last' ? allLocator.last() : allLocator.nth(index);
-    return new FormDropdown(singleLocator, 'menu-with-buttons');
+    return new FormDropdown(singleLocator, { variant: 'menu-with-buttons' });
   }
 
   public chooseEndYearDropdown(index: 'first' | 'last' | number) {
     const allLocator = this.sectionDiv.locator('button:below(:text("Rok zakończenia"))');
     const singleLocator =
       index === 'first' ? allLocator.first() : index === 'last' ? allLocator.last() : allLocator.nth(index);
-    return new FormDropdown(singleLocator, 'menu-with-buttons');
+    return new FormDropdown(singleLocator, { variant: 'menu-with-buttons' });
   }
 
   public taskNameInput(index: 'first' | 'last' | number) {

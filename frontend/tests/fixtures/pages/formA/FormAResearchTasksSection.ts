@@ -19,10 +19,9 @@ export class FormAResearchTasksSection {
     this.page = formPage.page;
     this.sectionDiv = locateSectionDiv(formPage.page, '6. Zadania do zrealizowania w trakcie rejsu');
 
-    this.addNewTaskDropdown = new FormDropdown(
-      this.sectionDiv.getByRole('button', { name: 'Dodaj nowe zadanie' }),
-      'menu-with-buttons'
-    );
+    this.addNewTaskDropdown = new FormDropdown(this.sectionDiv.getByRole('button', { name: 'Dodaj nowe zadanie' }), {
+      variant: 'menu-with-buttons',
+    });
     this.addHistoricalTaskDropdown = new FormDropdown(
       this.sectionDiv.getByRole('button', { name: 'Dodaj historyczne zadanie' })
     );
