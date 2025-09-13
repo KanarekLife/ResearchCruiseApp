@@ -5,8 +5,8 @@ export function locateSectionDiv(page: Page, title: string) {
   return page.locator(`main form div:below(:text("${title}"))`).first();
 }
 
-type FormDropdownVartiant = 'menuitems' | 'menu-with-buttons';
-export class FormDropdown<TErrors extends Record<string, Locator> = {}> {
+type FormDropdownVartiant = 'menuitems' | 'menu-with-buttons' | 'datetime-picker';
+export class FormDropdown<TErrors extends Record<string, Locator> = Record<string, Locator>> {
   public readonly page: Page;
   public readonly dropdown: Locator;
   public readonly variant: FormDropdownVartiant;
@@ -27,11 +27,16 @@ export class FormDropdown<TErrors extends Record<string, Locator> = {}> {
     } else if (this.variant === 'menu-with-buttons') {
       await this.page.getByRole('menu').getByRole('button', { name: itemText }).click();
       await expect(this.page.getByRole('menu')).toHaveCount(0);
+    } else if (this.variant === 'datetime-picker') {
+      // for now, only day selection is supported
+      await this.page.getByRole('menu').getByRole('button', { name: itemText }).click();
+      await this.dropdown.click(); // to close the datetime picker
+      await expect(this.page.getByRole('menu')).toHaveCount(0);
     }
   }
 }
 
-export class FormInput<TErrors extends Record<string, Locator> = {}> {
+export class FormInput<TErrors extends Record<string, Locator> = Record<string, Locator>> {
   public readonly input: Locator;
   public readonly errors: TErrors;
 
