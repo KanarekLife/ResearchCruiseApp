@@ -83,14 +83,10 @@ export class FormAPage {
   public async fillForm({ except }: { except?: (keyof FormAPage['sections'])[] } = {}) {
     except ??= [];
     const sections = Object.entries(this.sections);
-    let i = 0;
     for (const [key, section] of sections) {
-      i++;
       if (except.includes(key as keyof FormAPage['sections'])) {
-        // console.log(`Skipping ${key} (${i}/${sections.length})`);
         continue;
       }
-      // console.log(`Filling ${key} (${i}/${sections.length})`);
       await section.defaultFill();
     }
   }

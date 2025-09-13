@@ -222,7 +222,7 @@ test.describe('contracts section tests', () => {
       contractRow.institutionNameInput,
       contractRow.institutionUnitInput,
       contractRow.institutionLocationInput,
-      contractRow.descriptionInput
+      contractRow.descriptionInput,
     ];
     for (const inputField of inputFields) {
       await touchInput(inputField);

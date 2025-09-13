@@ -72,7 +72,7 @@ export class FormCPage {
         body: JSON.stringify(getFormBPayload()),
       });
     });
-    
+
     // Form C is not yet created, so we mock a 404 response
     page.route(`${API_URL}/api/CruiseApplications/${formId}/formC`, (route) => {
       route.fulfill({
@@ -152,14 +152,10 @@ export class FormCPage {
   public async fillForm({ except }: { except?: (keyof FormCPage['sections'])[] } = {}) {
     except ??= [];
     const sections = Object.entries(this.sections);
-    let i = 0;
     for (const [key, section] of sections) {
-      i++;
       if (except.includes(key as keyof FormCPage['sections'])) {
-        console.log(`Skipping ${key} (${i}/${sections.length})`);
         continue;
       }
-      console.log(`Filling ${key} (${i}/${sections.length})`);
       await section.defaultFill();
     }
   }

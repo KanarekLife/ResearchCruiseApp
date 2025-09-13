@@ -62,5 +62,5 @@ export const formTest = test.extend<{ formAPage: FormAPage; formBPage: FormBPage
       await use(formCPage);
     },
     { auto: false },
-  ]
+  ],
 });

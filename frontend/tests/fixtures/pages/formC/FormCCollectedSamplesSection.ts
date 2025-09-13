@@ -24,10 +24,18 @@ export class FormCCollectedSamplesSection {
   public sampleRow(index: 'first' | 'last' | number) {
     const rowLocator = this.sampleRowLocator(index);
     return {
-      typeInput: new FormInput(rowLocator.locator('td').nth(0).getByRole('textbox').first(), {errors: { required: rowLocator.getByText('Typ próbki nie może być pusty') }}),
-      quantityInput: new FormInput(rowLocator.locator('td').nth(1).getByRole('textbox').first(), {errors: { invalidValue: rowLocator.getByText('Ilość musi być liczbą dodatnią') }}),
-      analysisInput: new FormInput(rowLocator.locator('td').nth(2).getByRole('textbox').first(), {errors: { required: rowLocator.getByText('Analiza próbki nie może być pusta') }}),
-      publishingInput: new FormInput(rowLocator.locator('td').nth(3).getByRole('textbox').first(), {errors: { required: rowLocator.getByText('Publikacja próbki nie może być pusta') }}),
+      typeInput: new FormInput(rowLocator.locator('td').nth(0).getByRole('textbox').first(), {
+        errors: { required: rowLocator.getByText('Typ próbki nie może być pusty') },
+      }),
+      quantityInput: new FormInput(rowLocator.locator('td').nth(1).getByRole('textbox').first(), {
+        errors: { invalidValue: rowLocator.getByText('Ilość musi być liczbą dodatnią') },
+      }),
+      analysisInput: new FormInput(rowLocator.locator('td').nth(2).getByRole('textbox').first(), {
+        errors: { required: rowLocator.getByText('Analiza próbki nie może być pusta') },
+      }),
+      publishingInput: new FormInput(rowLocator.locator('td').nth(3).getByRole('textbox').first(), {
+        errors: { required: rowLocator.getByText('Publikacja próbki nie może być pusta') },
+      }),
     };
   }
 

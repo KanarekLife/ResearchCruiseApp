@@ -20,7 +20,7 @@ export const getFormAPayload = () => {
 
 export const getFormBPayload = () => {
   return formBPayload;
-}
+};
 
 export const getInitValuesAPayload = () => {
   return initValuesAPayload;

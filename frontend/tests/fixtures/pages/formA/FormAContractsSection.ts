@@ -34,10 +34,19 @@ export class FormAContractsSection {
   public contractRow(index: 'first' | 'last' | number) {
     const rowLocator = this.contractRowLocator(index);
     return {
-      institutionNameInput: new FormInput(rowLocator.locator('input:below(:text("Nazwa instytucji"))').first(), {errors: { required: rowLocator.getByText('Nazwa instytucji jest wymagana') }}),
-      institutionUnitInput: new FormInput(rowLocator.locator('input:below(:text("Jednostka"))').first(), {errors: { required: rowLocator.getByText('Jednostka jest wymagana') }}),
-      institutionLocationInput: new FormInput(rowLocator.locator('input:below(:text("Lokalizacja instytucji"))').first(), {errors: { required: rowLocator.getByText('Lokalizacja instytucji jest wymagana') }}),
-      descriptionInput: new FormInput(rowLocator.locator('input:below(:text("Opis"))').first(), {errors: { required: rowLocator.getByText('Opis jest wymagany') }}),
+      institutionNameInput: new FormInput(rowLocator.locator('input:below(:text("Nazwa instytucji"))').first(), {
+        errors: { required: rowLocator.getByText('Nazwa instytucji jest wymagana') },
+      }),
+      institutionUnitInput: new FormInput(rowLocator.locator('input:below(:text("Jednostka"))').first(), {
+        errors: { required: rowLocator.getByText('Jednostka jest wymagana') },
+      }),
+      institutionLocationInput: new FormInput(
+        rowLocator.locator('input:below(:text("Lokalizacja instytucji"))').first(),
+        { errors: { required: rowLocator.getByText('Lokalizacja instytucji jest wymagana') } }
+      ),
+      descriptionInput: new FormInput(rowLocator.locator('input:below(:text("Opis"))').first(), {
+        errors: { required: rowLocator.getByText('Opis jest wymagany') },
+      }),
       scanFileInput: {
         send: async (filePath: string) => this.sendScan(rowLocator, filePath),
         errors: { required: rowLocator.getByText('Plik jest wymagany') },

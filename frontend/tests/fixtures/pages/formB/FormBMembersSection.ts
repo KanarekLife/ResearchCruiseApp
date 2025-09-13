@@ -32,7 +32,9 @@ export class FormBMembersSection {
     this.invalidUGNofMembersMessage = this.sectionDiv.getByText(
       'Zespół UG musi składać się z co najmniej jednej osoby'
     );
-    this.duplicateFacultyMessage = this.sectionDiv.getByText('Nie można dodać dwóch zespołów UG z tego samego wydziału');
+    this.duplicateFacultyMessage = this.sectionDiv.getByText(
+      'Nie można dodać dwóch zespołów UG z tego samego wydziału'
+    );
   }
 
   public ugUnitRowLocator(index: 'first' | 'last' | number) {
@@ -57,8 +59,12 @@ export class FormBMembersSection {
   public guestTeamRow(index: 'first' | 'last' | number) {
     const rowLocator = this.guestTeamRowLocator(index);
     return {
-      teamNameInput: new FormInput(rowLocator.getByRole('textbox').nth(0), {errors: { required: rowLocator.getByText('Instytucja jest wymagana') }}),
-      noOfPeopleInput: new FormInput(rowLocator.getByRole('textbox').nth(1), {errors: { invalidValue: rowLocator.getByText('Liczba osób musi być liczbą większą od 0') }}),
+      teamNameInput: new FormInput(rowLocator.getByRole('textbox').nth(0), {
+        errors: { required: rowLocator.getByText('Instytucja jest wymagana') },
+      }),
+      noOfPeopleInput: new FormInput(rowLocator.getByRole('textbox').nth(1), {
+        errors: { invalidValue: rowLocator.getByText('Liczba osób musi być liczbą większą od 0') },
+      }),
     };
   }
 
