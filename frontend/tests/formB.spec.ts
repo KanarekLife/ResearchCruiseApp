@@ -194,3 +194,31 @@ test.describe('cruise details section tests', () => {
     await formBPage.submitForm({ expectedResult: 'valid' });
   });
 });
+
+test.describe('cruise day details section tests', () => {
+  test.beforeEach(async ({ formBPage }) => {
+    await formBPage.fillForm({ except: ['cruiseDayDetailsSection'] });
+  });
+
+  test('task input', async ({ formBPage }) => {
+    const cruiseDayDetailsSection = formBPage.sections.cruiseDayDetailsSection;
+    await cruiseDayDetailsSection.addTaskButton.click();
+    const taskRow = cruiseDayDetailsSection.taskRow('first');
+    await formBPage.submitForm();
+    await expect(formBPage.submissionApprovedMessage).toBeHidden();
+
+    const inputFields = [taskRow.nameInput, taskRow.regionInput, taskRow.positionInput, taskRow.commentInput];
+
+    for (const inputField of inputFields) {
+      await touchInput(inputField);
+      await expect(inputField.errors.required).toBeVisible();
+    }
+
+    for (const inputField of inputFields) {
+      await inputField.fill('Wartość');
+      await expect(inputField.errors.required).toBeHidden();
+    }
+
+    await formBPage.submitForm({ expectedResult: 'valid' });
+  });
+});
