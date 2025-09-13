@@ -3,6 +3,7 @@ import { API_URL, TESTED_FORM_ID } from '@tests/fixtures/consts';
 
 import { FormAPage } from './pages/formA/formAPage';
 import { FormBPage } from './pages/formB/formBPage';
+import { FormCPage } from './pages/formC/formCPage';
 import { LoginPage } from './pages/loginPage';
 export { API_URL, ASSETS_DIR } from '@tests/fixtures/consts';
 
@@ -40,7 +41,7 @@ export const loginTest = test.extend<{ loginPage: LoginPage }>({
   ],
 });
 
-export const formTest = test.extend<{ formAPage: FormAPage; formBPage: FormBPage }>({
+export const formTest = test.extend<{ formAPage: FormAPage; formBPage: FormBPage; formCPage: FormCPage }>({
   formAPage: [
     async ({ page }, use) => {
       const formAPage = await FormAPage.create(page);
@@ -55,4 +56,11 @@ export const formTest = test.extend<{ formAPage: FormAPage; formBPage: FormBPage
     },
     { auto: false },
   ],
+  formCPage: [
+    async ({ page }, use) => {
+      const formCPage = await FormCPage.create(page, TESTED_FORM_ID);
+      await use(formCPage);
+    },
+    { auto: false },
+  ]
 });
