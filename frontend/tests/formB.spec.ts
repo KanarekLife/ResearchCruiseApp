@@ -222,3 +222,26 @@ test.describe('cruise day details section tests', () => {
     await formBPage.submitForm({ expectedResult: 'valid' });
   });
 });
+
+test.describe('research equipments section tests', () => {
+  test.beforeEach(async ({ formBPage }) => {
+    await formBPage.fillForm({ except: ['researchEquipmentsSection'] });
+  });
+
+  test('equipment input', async ({ formBPage }) => {
+    const researchEquipmentsSection = formBPage.sections.researchEquipmentsSection;
+    await researchEquipmentsSection.addEquipmentButton.click();
+    const equipmentRow = researchEquipmentsSection.equipmentRow('first');
+
+    await formBPage.submitForm();
+    await expect(formBPage.submissionApprovedMessage).toBeHidden();
+
+    touchInput(equipmentRow.nameInput);
+    await expect(equipmentRow.nameInput.errors.required).toBeVisible();
+
+    await equipmentRow.nameInput.fill('Jakiś sprzęt');
+    await expect(equipmentRow.nameInput.errors.required).toBeHidden();
+
+    await formBPage.submitForm({ expectedResult: 'valid' });
+  });
+});

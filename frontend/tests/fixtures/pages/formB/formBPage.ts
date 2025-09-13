@@ -124,7 +124,7 @@ export class FormBPage {
       SPUBTasksSection: new FormBSPUBTasksSection(this),
       cruiseDetailsSection: new FormBCruiseDetailsSection(this),
       cruiseDayDetailsSection: new FormBCruiseDayDetailsSection(this),
-      researchEquipmentSection: new FormBResearchEquipmentsSection(this),
+      researchEquipmentsSection: new FormBResearchEquipmentsSection(this),
       shipEquipmentSection: new FormBShipEquipmentsSection(this),
     } as const;
 
