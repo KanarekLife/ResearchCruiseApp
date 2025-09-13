@@ -87,10 +87,10 @@ export class FormAPage {
     for (const [key, section] of sections) {
       i++;
       if (except.includes(key as keyof FormAPage['sections'])) {
-        console.log(`Skipping ${key} (${i}/${sections.length})`);
+        // console.log(`Skipping ${key} (${i}/${sections.length})`);
         continue;
       }
-      console.log(`Filling ${key} (${i}/${sections.length})`);
+      // console.log(`Filling ${key} (${i}/${sections.length})`);
       await section.defaultFill();
     }
   }

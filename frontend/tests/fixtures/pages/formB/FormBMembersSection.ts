@@ -14,8 +14,7 @@ export class FormBMembersSection {
 
   public readonly noUGUnitsMessage: Locator;
   public readonly invalidUGNofMembersMessage: Locator;
-  public readonly emptyGuestTeamNameMessage: Locator;
-  public readonly invalidGuestTeamCountMessage: Locator;
+  public readonly duplicateFacultyMessage: Locator;
 
   constructor(formPage: FormBPage) {
     this.formPage = formPage;
@@ -33,8 +32,7 @@ export class FormBMembersSection {
     this.invalidUGNofMembersMessage = this.sectionDiv.getByText(
       'Zespół UG musi składać się z co najmniej jednej osoby'
     );
-    this.emptyGuestTeamNameMessage = this.sectionDiv.getByText('Instytucja jest wymagana');
-    this.invalidGuestTeamCountMessage = this.sectionDiv.getByText('Liczba osób musi być liczbą większą od 0');
+    this.duplicateFacultyMessage = this.sectionDiv.getByText('Nie można dodać dwóch zespołów UG z tego samego wydziału');
   }
 
   public ugUnitRowLocator(index: 'first' | 'last' | number) {
@@ -47,6 +45,7 @@ export class FormBMembersSection {
     return {
       noOfEmployeesInput: rowLocator.getByRole('textbox').nth(0),
       noOfStudentsInput: rowLocator.getByRole('textbox').nth(1),
+      deleteButton: rowLocator.locator('td').nth(4).getByRole('button'),
     };
   }
 
@@ -58,8 +57,8 @@ export class FormBMembersSection {
   public guestTeamRow(index: 'first' | 'last' | number) {
     const rowLocator = this.guestTeamRowLocator(index);
     return {
-      teamNameInput: rowLocator.getByRole('textbox').nth(0),
-      noOfPeopleInput: rowLocator.getByRole('textbox').nth(1),
+      teamNameInput: new FormInput(rowLocator.getByRole('textbox').nth(0), {errors: { required: rowLocator.getByText('Instytucja jest wymagana') }}),
+      noOfPeopleInput: new FormInput(rowLocator.getByRole('textbox').nth(1), {errors: { invalidValue: rowLocator.getByText('Liczba osób musi być liczbą większą od 0') }}),
     };
   }
 

@@ -57,22 +57,39 @@ test.describe('members section tests', () => {
     await formBPage.fillForm({ except: ['membersSection'] });
   });
 
+  test('duplicate faculty', async ({ formBPage }) => {
+    const membersSection = formBPage.sections.membersSection;
+    await membersSection.addUGUnitDropdown.selectOption('Szkoły Doktorskie (0C00)');
+    await membersSection.ugUnitRow('last').noOfEmployeesInput.fill('1');
+    await membersSection.addUGUnitDropdown.selectOption('Szkoły Doktorskie (0C00)');
+    await membersSection.ugUnitRow('last').noOfEmployeesInput.fill('2');
+    await expect(membersSection.duplicateFacultyMessage).toBeVisible();
+
+    await formBPage.submitForm({ expectedResult: 'invalid' });
+
+    await membersSection.ugUnitRow('last').deleteButton.click();
+    await expect(membersSection.duplicateFacultyMessage).toBeHidden();
+
+    await formBPage.submitForm({ expectedResult: 'valid' });
+  });
+
   test('guest team input', async ({ formBPage }) => {
     const membersSection = formBPage.sections.membersSection;
     await membersSection.addNewGuestTeamButton.click();
+    const guestTeamRow = membersSection.guestTeamRow('first');
 
     // for the 'empty' message to appear, the field must be detected as touched, so it is filled with some value at first
-    await touchInput(membersSection.guestTeamRow('first').teamNameInput);
-    await expect(membersSection.emptyGuestTeamNameMessage).toBeVisible();
+    await touchInput(guestTeamRow.teamNameInput);
+    await expect(guestTeamRow.teamNameInput.errors.required).toBeVisible();
 
-    await membersSection.guestTeamRow('first').teamNameInput.fill('Jakiś zespół');
-    await expect(membersSection.emptyGuestTeamNameMessage).toBeHidden();
+    await guestTeamRow.teamNameInput.fill('Jakiś zespół');
+    await expect(guestTeamRow.teamNameInput.errors.required).toBeHidden();
 
     await formBPage.submitForm({ expectedResult: 'invalid' });
-    await expect(membersSection.invalidGuestTeamCountMessage).toBeVisible();
+    await expect(guestTeamRow.noOfPeopleInput.errors.invalidValue).toBeVisible();
 
-    await membersSection.guestTeamRow('first').noOfPeopleInput.fill('1');
-    await expect(membersSection.invalidGuestTeamCountMessage).toBeHidden();
+    await guestTeamRow.noOfPeopleInput.fill('1');
+    await expect(guestTeamRow.noOfPeopleInput.errors.invalidValue).toBeHidden();
     await formBPage.submitForm({ expectedResult: 'valid' });
   });
 

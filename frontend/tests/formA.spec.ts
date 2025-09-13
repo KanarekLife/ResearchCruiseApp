@@ -212,44 +212,35 @@ test.describe('contracts section tests', () => {
   test('missing data', async ({ formAPage }) => {
     const contractsSection = formAPage.sections.contractsSection;
     await contractsSection.addNewContractDropdown.selectOption('Międzynarodowa');
+    const contractRow = contractsSection.contractRow('first');
 
     await formAPage.submitForm();
-    await expect(formAPage.submissionApprovedMessage, 'form should not be approved').toBeHidden();
+    await expect(formAPage.submissionApprovedMessage).toBeHidden();
 
     // for the 'empty' message to appear, the field must be detected as touched, so it is filled with some value at first
     const inputFields = [
-      contractsSection.institutionNameInput('first'),
-      contractsSection.institutionUnitInput('first'),
-      contractsSection.institutionLocationInput('first'),
-      contractsSection.descriptionInput('first'),
+      contractRow.institutionNameInput,
+      contractRow.institutionUnitInput,
+      contractRow.institutionLocationInput,
+      contractRow.descriptionInput
     ];
     for (const inputField of inputFields) {
       await touchInput(inputField);
+      await expect(inputField.errors.required).toBeVisible();
     }
 
-    await expect(contractsSection.emptyInstitutionNameMessage).toBeVisible();
-    await expect(contractsSection.emptyInstitutionUnitMessage).toBeVisible();
-    await expect(contractsSection.emptyInstitutionLocationMessage).toBeVisible();
-    await expect(contractsSection.emptyDescriptionMessage).toBeVisible();
-
-    await contractsSection.institutionNameInput('first').fill('Jakaś nazwa');
-    await expect(contractsSection.emptyInstitutionNameMessage).toBeHidden();
-
-    await contractsSection.institutionUnitInput('first').fill('Jakaś jednostka');
-    await expect(contractsSection.emptyInstitutionUnitMessage).toBeHidden();
-
-    await contractsSection.institutionLocationInput('first').fill('Jakaś lokalizacja');
-    await expect(contractsSection.emptyInstitutionLocationMessage).toBeHidden();
-
-    await contractsSection.descriptionInput('first').fill('Jakiś opis');
-    await expect(contractsSection.emptyDescriptionMessage).toBeHidden();
+    for (const inputField of inputFields) {
+      await expect(inputField.errors.required).toBeVisible();
+      await inputField.fill('Wartość');
+      await expect(inputField.errors.required).toBeHidden();
+    }
 
     await formAPage.submitForm({ expectedResult: 'invalid' });
 
-    await expect(contractsSection.missingFileMessage).toBeVisible();
+    await expect(contractRow.scanFileInput.errors.required).toBeVisible();
 
-    await contractsSection.sendScan('first', MOCK_PDF_FILEPATH);
-    await expect(contractsSection.missingFileMessage).toBeHidden();
+    await contractRow.scanFileInput.send(MOCK_PDF_FILEPATH);
+    await expect(contractRow.scanFileInput.errors.required).toBeHidden();
 
     await formAPage.submitForm({ expectedResult: 'valid' });
   });
@@ -373,22 +364,23 @@ test.describe('SPUB tasks section tests', () => {
   test('missing SPUB task data', async ({ formAPage }) => {
     const spubTasksSection = formAPage.sections.spubTasksSection;
     await spubTasksSection.addNewTaskButton.click();
+    const taskRow = spubTasksSection.taskRow('first');
 
-    await touchInput(spubTasksSection.taskNameInput('first'));
-    await expect(spubTasksSection.emptyTaskNameMessage).toBeVisible();
+    await touchInput(taskRow.nameInput);
+    await expect(taskRow.nameInput.errors.required).toBeVisible();
 
-    await spubTasksSection.taskNameInput('first').fill('Jakieś zadanie');
-    await expect(spubTasksSection.emptyTaskNameMessage).toBeHidden();
+    await taskRow.nameInput.fill('Jakieś zadanie');
+    await expect(taskRow.nameInput.errors.required).toBeHidden();
 
     await formAPage.submitForm({ expectedResult: 'invalid' });
-    await expect(spubTasksSection.misingStartYearMessage).toBeVisible();
-    await expect(spubTasksSection.misingEndYearMessage).toBeVisible();
+    await expect(taskRow.startYearDropdown.errors.required).toBeVisible();
+    await expect(taskRow.endYearDropdown.errors.required).toBeVisible();
 
-    await spubTasksSection.chooseStartYearDropdown('first').selectOption('2023');
-    await expect(spubTasksSection.misingStartYearMessage).toBeHidden();
+    await taskRow.startYearDropdown.selectOption('2023');
+    await expect(taskRow.startYearDropdown.errors.required).toBeHidden();
 
-    await spubTasksSection.chooseEndYearDropdown('first').selectOption('2025');
-    await expect(spubTasksSection.misingEndYearMessage).toBeHidden();
+    await taskRow.endYearDropdown.selectOption('2025');
+    await expect(taskRow.endYearDropdown.errors.required).toBeHidden();
 
     await formAPage.submitForm({ expectedResult: 'valid' });
   });

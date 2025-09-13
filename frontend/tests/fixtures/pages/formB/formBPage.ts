@@ -102,8 +102,8 @@ export class FormBPage {
     return formBPage;
   }
 
-  public async goto(mode: 'edit' | 'view' | undefined = 'edit') {
-    const modeParam = mode === undefined ? '' : `?mode=${mode}`;
+  public async goto(mode: 'edit' | 'view' | null = 'edit') {
+    const modeParam = mode === null ? '' : `?mode=${mode}`;
     await this.page.goto(`/applications/${this.formId}/formB${modeParam}`);
   }
 
@@ -142,10 +142,10 @@ export class FormBPage {
     for (const [key, section] of sections) {
       i++;
       if (except.includes(key as keyof FormBPage['sections'])) {
-        console.log(`Skipping ${key} (${i}/${sections.length})`);
+        // console.log(`Skipping ${key} (${i}/${sections.length})`);
         continue;
       }
-      console.log(`Filling ${key} (${i}/${sections.length})`);
+      // console.log(`Filling ${key} (${i}/${sections.length})`);
       await section.defaultFill();
     }
   }

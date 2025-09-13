@@ -1,5 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
-import { FormDropdown, locateSectionDiv } from '@tests/utils/form-filling-utils';
+import { FormDropdown, FormInput, locateSectionDiv } from '@tests/utils/form-filling-utils';
 
 import { FormAPage } from './formAPage';
 
@@ -9,10 +9,6 @@ export class FormASPUBTasksSection {
   public readonly sectionDiv: Locator;
   public readonly addNewTaskButton: Locator;
   public readonly addHistoricalTaskDropdown: FormDropdown;
-
-  public readonly misingStartYearMessage: Locator;
-  public readonly misingEndYearMessage: Locator;
-  public readonly emptyTaskNameMessage: Locator;
 
   constructor(formPage: FormAPage) {
     this.formPage = formPage;
@@ -25,29 +21,30 @@ export class FormASPUBTasksSection {
     this.addHistoricalTaskDropdown = new FormDropdown(
       this.sectionDiv.getByRole('button', { name: 'Dodaj historyczne zadanie' })
     );
-    this.misingStartYearMessage = this.sectionDiv.getByText('Rok rozpoczęcia jest wymagany');
-    this.misingEndYearMessage = this.sectionDiv.getByText('Rok zakończenia jest wymagany');
-    this.emptyTaskNameMessage = this.sectionDiv.getByText('Nazwa jest wymagana');
   }
 
-  public chooseStartYearDropdown(index: 'first' | 'last' | number) {
-    const allLocator = this.sectionDiv.locator('button:below(:text("Rok rozpoczęcia"))');
-    const singleLocator =
-      index === 'first' ? allLocator.first() : index === 'last' ? allLocator.last() : allLocator.nth(index);
-    return new FormDropdown(singleLocator, { variant: 'menu-with-buttons' });
+  public taskRowLocator(index: 'first' | 'last' | number) {
+    const rowsLocator = this.sectionDiv.locator('table').nth(0).getByRole('row');
+    return index === 'first' ? rowsLocator.nth(2) : index === 'last' ? rowsLocator.last() : rowsLocator.nth(2 + index);
   }
 
-  public chooseEndYearDropdown(index: 'first' | 'last' | number) {
-    const allLocator = this.sectionDiv.locator('button:below(:text("Rok zakończenia"))');
-    const singleLocator =
-      index === 'first' ? allLocator.first() : index === 'last' ? allLocator.last() : allLocator.nth(index);
-    return new FormDropdown(singleLocator, { variant: 'menu-with-buttons' });
+  public taskRow(index: 'first' | 'last' | number) {
+    const rowLocator = this.taskRowLocator(index);
+    return {
+      startYearDropdown: new FormDropdown(rowLocator.locator('td').nth(1).getByRole('button').first(), {
+        variant: 'menu-with-buttons',
+        errors: { required: rowLocator.getByText('Rok rozpoczęcia jest wymagany') },
+      }),
+      endYearDropdown: new FormDropdown(rowLocator.locator('td').nth(2).getByRole('button').first(), {
+        variant: 'menu-with-buttons',
+        errors: { required: rowLocator.getByText('Rok zakończenia jest wymagany') },
+      }),
+      nameInput: new FormInput(rowLocator.locator('td').nth(3).getByRole('textbox').first(), {
+        errors: { required: rowLocator.getByText('Nazwa jest wymagana') },
+      }),
+      deleteButton: rowLocator.locator('td').nth(4).getByRole('button'),
+    };
   }
 
-  public taskNameInput(index: 'first' | 'last' | number) {
-    const locator = this.sectionDiv.locator('input:below(:text("Nazwa zadania"))');
-    return index === 'first' ? locator.first() : index === 'last' ? locator.last() : locator.nth(index);
-  }
-
-  public async defaultFill() {} // Optional section
+  public async defaultFill() {}
 }
