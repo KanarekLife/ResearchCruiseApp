@@ -18,7 +18,7 @@ export class FormCMembersSection {
   constructor(formPage: FormCPage) {
     this.formPage = formPage;
     this.page = formPage.page;
-    this.sectionDiv = locateSectionDiv(formPage.page, '9. Zespoły badawcze, które miałyby uczestniczyć w rejsie');
+    this.sectionDiv = locateSectionDiv(formPage.page, '9. Zespoły badawcze, które uczestniczyły w rejsie');
     this.addUGUnitDropdown = new FormDropdown(this.sectionDiv.getByRole('button', { name: 'Dodaj jednostkę UG' }), {
       variant: 'menu-with-buttons',
     });

@@ -132,3 +132,45 @@ test.describe('contracts section tests', () => {
     await formCPage.submitForm({ expectedResult: 'valid' });
   });
 });
+
+test.describe('members section tests', () => {
+  test.beforeEach(async ({ formCPage }) => {
+    await formCPage.fillForm({ except: ['membersSection'] });
+  });
+
+  test('duplicate faculty', async ({ formCPage }) => {
+    const membersSection = formCPage.sections.membersSection;
+    await membersSection.addUGUnitDropdown.selectOption('Szkoły Doktorskie (0C00)');
+    await membersSection.ugUnitRow('last').noOfEmployeesInput.fill('1');
+    await membersSection.addUGUnitDropdown.selectOption('Szkoły Doktorskie (0C00)');
+    await membersSection.ugUnitRow('last').noOfEmployeesInput.fill('2');
+    await expect(membersSection.duplicateFacultyMessage).toBeVisible();
+
+    await formCPage.submitForm({ expectedResult: 'invalid' });
+
+    await membersSection.ugUnitRow('last').deleteButton.click();
+    await expect(membersSection.duplicateFacultyMessage).toBeHidden();
+
+    await formCPage.submitForm({ expectedResult: 'valid' });
+  });
+
+  test('guest team input', async ({ formCPage }) => {
+    const membersSection = formCPage.sections.membersSection;
+    await membersSection.addNewGuestTeamButton.click();
+    const guestTeamRow = membersSection.guestTeamRow('first');
+
+    // for the 'empty' message to appear, the field must be detected as touched, so it is filled with some value at first
+    await touchInput(guestTeamRow.teamNameInput);
+    await expect(guestTeamRow.teamNameInput.errors.required).toBeVisible();
+
+    await guestTeamRow.teamNameInput.fill('Jakiś zespół');
+    await expect(guestTeamRow.teamNameInput.errors.required).toBeHidden();
+
+    await formCPage.submitForm({ expectedResult: 'invalid' });
+    await expect(guestTeamRow.noOfPeopleInput.errors.invalidValue).toBeVisible();
+
+    await guestTeamRow.noOfPeopleInput.fill('1');
+    await expect(guestTeamRow.noOfPeopleInput.errors.invalidValue).toBeHidden();
+    await formCPage.submitForm({ expectedResult: 'valid' });
+  });
+});
