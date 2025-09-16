@@ -2,6 +2,7 @@ import { expect } from '@playwright/test';
 import { formTest as test } from '@tests/fixtures/fixtures';
 
 import { MOCK_PDF_FILEPATH } from './fixtures/consts';
+import { touchInput } from './utils/form-filling-utils';
 
 test('valid form C', async ({ formCPage }) => {
   await formCPage.fillForm(); // Fill the form with default values
@@ -83,5 +84,51 @@ test.describe('research tasks section tests', () => {
     await expect(taskRow.deputyConditionMetCheckbox).toBeDisabled();
     await expect(taskRow.managerConditionMetCheckbox).not.toBeChecked();
     await expect(taskRow.deputyConditionMetCheckbox).not.toBeChecked();
+  });
+});
+
+test.describe('contracts section tests', () => {
+  test.beforeEach(async ({ formCPage }) => {
+    await formCPage.fillForm({ except: ['contractsSection'] });
+  });
+
+  test('no contracts', async ({ formCPage }) => {
+    await formCPage.submitForm({ expectedResult: 'valid' });
+  });
+
+  test('missing data', async ({ formCPage }) => {
+    const contractsSection = formCPage.sections.contractsSection;
+    await contractsSection.addNewContractDropdown.selectOption('Międzynarodowa');
+    const contractRow = contractsSection.contractRow('first');
+
+    await formCPage.submitForm();
+    await expect(formCPage.submissionApprovedMessage).toBeHidden();
+
+    // for the 'empty' message to appear, the field must be detected as touched, so it is filled with some value at first
+    const inputFields = [
+      contractRow.institutionNameInput,
+      contractRow.institutionUnitInput,
+      contractRow.institutionLocationInput,
+      contractRow.descriptionInput,
+    ];
+    for (const inputField of inputFields) {
+      await touchInput(inputField);
+      await expect(inputField.errors.required).toBeVisible();
+    }
+
+    for (const inputField of inputFields) {
+      await expect(inputField.errors.required).toBeVisible();
+      await inputField.fill('Wartość');
+      await expect(inputField.errors.required).toBeHidden();
+    }
+
+    await formCPage.submitForm({ expectedResult: 'invalid' });
+
+    await expect(contractRow.scanFileInput.errors.required).toBeVisible();
+
+    await contractRow.scanFileInput.send(MOCK_PDF_FILEPATH);
+    await expect(contractRow.scanFileInput.errors.required).toBeHidden();
+
+    await formCPage.submitForm({ expectedResult: 'valid' });
   });
 });

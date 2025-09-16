@@ -15,7 +15,7 @@ export class FormCContractsSection {
     this.page = formPage.page;
     this.sectionDiv = locateSectionDiv(
       formPage.page,
-      '8. Umowy regulujące współpracę, w ramach której miałyby być realizowane zadania badawcze'
+      '8. Umowy regulujące współpracę, w ramach której zostały zrealizowane zadania badawcze'
     );
     this.addNewContractDropdown = new FormDropdown(
       this.sectionDiv.locator('button', { hasText: 'Dodaj nowy kontrakt' }),
