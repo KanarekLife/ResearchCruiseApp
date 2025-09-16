@@ -1,5 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
-import { locateSectionDiv } from '@tests/utils/form-filling-utils';
+import { FormInput, locateSectionDiv } from '@tests/utils/form-filling-utils';
 
 import { FormCPage } from './formCPage';
 
@@ -9,35 +9,39 @@ export class FormCAdditionalPermissionsSection {
   public readonly sectionDiv: Locator;
   public readonly addPermissionButton: Locator;
 
-  public readonly descriptionRequiredMessage: Locator;
-  public readonly executiveRequiredMessage: Locator;
-
   constructor(formPage: FormCPage) {
     this.formPage = formPage;
     this.page = formPage.page;
-    this.sectionDiv = locateSectionDiv(formPage.page, '4. Dodatkowe pozwolenia do planowanych podczas rejsu badań');
+    this.sectionDiv = locateSectionDiv(
+      formPage.page,
+      '4. Dodatkowe pozwolenia do przeprowadzonych w trakcie rejsu badań'
+    );
     this.addPermissionButton = this.sectionDiv.getByRole('button', { name: 'Dodaj pozwolenie' });
-    this.descriptionRequiredMessage = this.sectionDiv.getByText('Treść pozwolenia jest wymagany').first();
-    this.executiveRequiredMessage = this.sectionDiv.getByText('Organ wydający jest wymagany').first();
   }
 
-  public permissionRow(index: 'first' | 'last' | number) {
+  public permissionRowLocator(index: 'first' | 'last' | number) {
     const rowsLocator = this.sectionDiv.getByRole('row');
     return index === 'first' ? rowsLocator.nth(2) : index === 'last' ? rowsLocator.last() : rowsLocator.nth(2 + index);
   }
 
-  public descriptionInput(index: 'first' | 'last' | number) {
-    const rowLocator = this.permissionRow(index);
-    return rowLocator.getByRole('textbox').nth(0);
+  public permissionRow(index: 'first' | 'last' | number) {
+    const rowLocator = this.permissionRowLocator(index);
+    return {
+      descriptionInput: new FormInput(rowLocator.getByRole('textbox').nth(0), {
+        errors: { required: rowLocator.getByText('Treść pozwolenia jest wymagany') },
+      }),
+      executiveInput: new FormInput(rowLocator.getByRole('textbox').nth(1), {
+        errors: { required: rowLocator.getByText('Organ wydający jest wymagany') },
+      }),
+      scanFileInput: {
+        send: async (filePath: string) => this.sendScan(rowLocator, filePath),
+        errors: { required: rowLocator.getByText('Plik jest wymagany') },
+      },
+      deleteButton: rowLocator.locator('td').nth(4).getByRole('button').first(),
+    };
   }
 
-  public executiveInput(index: 'first' | 'last' | number) {
-    const rowLocator = this.permissionRow(index);
-    return rowLocator.getByRole('textbox').nth(1);
-  }
-
-  public async sendScan(index: 'first' | 'last' | number, filePath: string) {
-    const rowLocator = this.permissionRow(index);
+  async sendScan(rowLocator: Locator, filePath: string) {
     const sendButton = rowLocator.getByRole('cell', { name: 'Kliknij lub przeciągnij plik' });
 
     const fileChooserPromise = this.page.waitForEvent('filechooser');

@@ -14,28 +14,34 @@ test.describe('additional permissions section tests', () => {
     await formBPage.fillForm({ except: ['additionalPermissionsSection'] });
   });
 
+  test('no permissions added', async ({ formBPage }) => {
+    await formBPage.submitForm({ expectedResult: 'valid' });
+  });
+
   test('add permission', async ({ formBPage }) => {
     const additionalPermissionsSection = formBPage.sections.additionalPermissionsSection;
     await additionalPermissionsSection.addPermissionButton.click();
-    await additionalPermissionsSection.descriptionInput('first').fill('Jakiś opis');
-    await additionalPermissionsSection.executiveInput('first').fill('Jakiś organ');
-    await additionalPermissionsSection.sendScan('first', MOCK_PDF_FILEPATH);
+    const permissionRow = additionalPermissionsSection.permissionRow('last');
+    await permissionRow.descriptionInput.fill('Jakiś opis');
+    await permissionRow.executiveInput.fill('Jakiś organ');
+    await permissionRow.scanFileInput.send(MOCK_PDF_FILEPATH);
     await formBPage.submitForm({ expectedResult: 'valid' });
   });
 
   test('missing description and executive', async ({ formBPage }) => {
     const additionalPermissionsSection = formBPage.sections.additionalPermissionsSection;
     await additionalPermissionsSection.addPermissionButton.click();
-    await additionalPermissionsSection.sendScan('first', MOCK_PDF_FILEPATH);
+    const permissionRow = additionalPermissionsSection.permissionRow('last');
+    await permissionRow.scanFileInput.send(MOCK_PDF_FILEPATH);
     await formBPage.submitForm({ expectedResult: 'invalid' });
 
-    await expect(additionalPermissionsSection.descriptionRequiredMessage).toBeVisible();
-    await expect(additionalPermissionsSection.executiveRequiredMessage).toBeVisible();
+    await expect(permissionRow.descriptionInput.errors.required).toBeVisible();
+    await expect(permissionRow.executiveInput.errors.required).toBeVisible();
 
-    await additionalPermissionsSection.descriptionInput('first').fill('Jakiś opis');
-    await expect(additionalPermissionsSection.descriptionRequiredMessage).toBeHidden();
-    await additionalPermissionsSection.executiveInput('first').fill('Jakiś organ');
-    await expect(additionalPermissionsSection.executiveRequiredMessage).toBeHidden();
+    await permissionRow.descriptionInput.fill('Jakiś opis');
+    await expect(permissionRow.descriptionInput.errors.required).toBeHidden();
+    await permissionRow.executiveInput.fill('Jakiś organ');
+    await expect(permissionRow.executiveInput.errors.required).toBeHidden();
 
     await formBPage.submitForm({ expectedResult: 'valid' });
   });
@@ -43,11 +49,12 @@ test.describe('additional permissions section tests', () => {
   test('missing scan file', async ({ formBPage }) => {
     const additionalPermissionsSection = formBPage.sections.additionalPermissionsSection;
     await additionalPermissionsSection.addPermissionButton.click();
-    await additionalPermissionsSection.descriptionInput('first').fill('Jakiś opis');
-    await additionalPermissionsSection.executiveInput('first').fill('Jakiś organ');
+    const permissionRow = additionalPermissionsSection.permissionRow('last');
+    await permissionRow.descriptionInput.fill('Jakiś opis');
+    await permissionRow.executiveInput.fill('Jakiś organ');
     await formBPage.submitForm({ expectedResult: 'invalid' });
 
-    await additionalPermissionsSection.sendScan('first', MOCK_PDF_FILEPATH);
+    await expect(permissionRow.scanFileInput.errors.required).toBeVisible();
     await formBPage.submitForm({ expectedResult: 'valid' });
   });
 });
