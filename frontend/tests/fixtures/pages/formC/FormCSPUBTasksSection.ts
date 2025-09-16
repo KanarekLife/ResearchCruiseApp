@@ -15,7 +15,7 @@ export class FormCSPUBTasksSection {
     this.page = formPage.page;
     this.sectionDiv = locateSectionDiv(
       formPage.page,
-      '11. Zadania SPUB, z którymi pokrywają się zadania planowane do realizacji na rejsie'
+      '11. Zadania SPUB, z którymi pokrywają się zadania zrealizowane na rejsie'
     );
     this.addNewTaskButton = this.sectionDiv.getByRole('button', { name: 'Dodaj' }).first();
     this.addHistoricalTaskDropdown = new FormDropdown(

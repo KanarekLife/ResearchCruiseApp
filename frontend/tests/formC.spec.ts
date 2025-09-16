@@ -174,3 +174,37 @@ test.describe('members section tests', () => {
     await formCPage.submitForm({ expectedResult: 'valid' });
   });
 });
+
+test.describe('SPUB tasks section tests', () => {
+  test.beforeEach(async ({ formCPage }) => {
+    await formCPage.fillForm({ except: ['spubTasksSection'] });
+  });
+
+  test('no SPUB tasks', async ({ formCPage }) => {
+    await formCPage.submitForm({ expectedResult: 'valid' });
+  });
+
+  test('missing SPUB task data', async ({ formCPage }) => {
+    const spubTasksSection = formCPage.sections.spubTasksSection;
+    await spubTasksSection.addNewTaskButton.click();
+    const taskRow = spubTasksSection.taskRow('first');
+
+    await touchInput(taskRow.nameInput);
+    await expect(taskRow.nameInput.errors.required).toBeVisible();
+
+    await taskRow.nameInput.fill('Jakieś zadanie');
+    await expect(taskRow.nameInput.errors.required).toBeHidden();
+
+    await formCPage.submitForm({ expectedResult: 'invalid' });
+    await expect(taskRow.startYearDropdown.errors.required).toBeVisible();
+    await expect(taskRow.endYearDropdown.errors.required).toBeVisible();
+
+    await taskRow.startYearDropdown.selectOption('2023');
+    await expect(taskRow.startYearDropdown.errors.required).toBeHidden();
+
+    await taskRow.endYearDropdown.selectOption('2025');
+    await expect(taskRow.endYearDropdown.errors.required).toBeHidden();
+
+    await formCPage.submitForm({ expectedResult: 'valid' });
+  });
+});
