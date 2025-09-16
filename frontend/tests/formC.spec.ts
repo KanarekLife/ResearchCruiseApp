@@ -208,3 +208,82 @@ test.describe('SPUB tasks section tests', () => {
     await formCPage.submitForm({ expectedResult: 'valid' });
   });
 });
+
+test.describe('cruise details section tests', () => {
+  test.beforeEach(async ({ formCPage }) => {
+    await formCPage.fillForm({ except: ['cruiseDetailsSection'] });
+  });
+
+  test('equipment input', async ({ formCPage }) => {
+    const cruiseDetailsSection = formCPage.sections.cruiseDetailsSection;
+    await cruiseDetailsSection.addEquipmentButton.click();
+    const equipmentRow = cruiseDetailsSection.equipmentRow('first');
+
+    await formCPage.submitForm();
+    await expect(formCPage.submissionApprovedMessage).toBeHidden();
+
+    touchInput(equipmentRow.nameInput);
+    await expect(equipmentRow.nameInput.errors.required).toBeVisible();
+
+    await equipmentRow.nameInput.fill('Jakiś sprzęt');
+    await expect(equipmentRow.nameInput.errors.required).toBeHidden();
+
+    await formCPage.submitForm({ expectedResult: 'invalid' });
+    await expect(equipmentRow.fromDateDropdown.errors.required).toBeVisible();
+    await expect(equipmentRow.toDateDropdown.errors.required).toBeVisible();
+
+    await equipmentRow.fromDateDropdown.selectOption('11');
+    await expect(equipmentRow.fromDateDropdown.errors.required).toBeHidden();
+    await equipmentRow.toDateDropdown.selectOption('13');
+    await expect(equipmentRow.toDateDropdown.errors.required).toBeHidden();
+
+    await formCPage.submitForm({ expectedResult: 'valid' });
+  });
+
+  test('equipment action input', async ({ formCPage }) => {
+    const cruiseDetailsSection = formCPage.sections.cruiseDetailsSection;
+    await cruiseDetailsSection.addEquipmentActionDropdown.selectOption('Pozostawienie');
+    const actionRow = cruiseDetailsSection.equipmentActionRow('first');
+
+    await formCPage.submitForm();
+    await expect(formCPage.submissionApprovedMessage).toBeHidden();
+
+    touchInput(actionRow.timeInput);
+    await expect(actionRow.timeInput.errors.required).toBeVisible();
+    touchInput(actionRow.nameInput);
+    await expect(actionRow.nameInput.errors.required).toBeVisible();
+
+    await actionRow.timeInput.fill('10');
+    await expect(actionRow.timeInput.errors.required).toBeHidden();
+    await actionRow.nameInput.fill('Jakaś nazwa');
+    await expect(actionRow.nameInput.errors.required).toBeHidden();
+
+    await formCPage.submitForm({ expectedResult: 'valid' });
+  });
+
+  test('port input', async ({ formCPage }) => {
+    const cruiseDetailsSection = formCPage.sections.cruiseDetailsSection;
+    await cruiseDetailsSection.addPortButton.click();
+    const portRow = cruiseDetailsSection.portRow('first');
+
+    await formCPage.submitForm();
+    await expect(formCPage.submissionApprovedMessage).toBeHidden();
+
+    touchInput(portRow.nameInput);
+    await expect(portRow.nameInput.errors.required).toBeVisible();
+
+    await portRow.nameInput.fill('Jakaś nazwa');
+    await expect(portRow.nameInput.errors.required).toBeHidden();
+
+    await formCPage.submitForm({ expectedResult: 'invalid' });
+    await expect(portRow.fromDateDropdown.errors.required).toBeVisible();
+    await expect(portRow.toDateDropdown.errors.required).toBeVisible();
+
+    await portRow.fromDateDropdown.selectOption('11');
+    await expect(portRow.fromDateDropdown.errors.required).toBeHidden();
+    await portRow.toDateDropdown.selectOption('13');
+    await expect(portRow.toDateDropdown.errors.required).toBeHidden();
+
+    await formCPage.submitForm({ expectedResult: 'valid' });
+  });
+});
