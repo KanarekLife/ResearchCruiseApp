@@ -12,7 +12,7 @@ export class FormCCruiseDayDetailsSection {
   constructor(formPage: FormCPage) {
     this.formPage = formPage;
     this.page = formPage.page;
-    this.sectionDiv = locateSectionDiv(formPage.page, '13. Szczegółowy plan zadań do realizacji podczas rejsu');
+    this.sectionDiv = locateSectionDiv(formPage.page, '13. Szczegółowy plan zadań zrealizowanych podczas rejsu');
     this.addTaskButton = this.sectionDiv.getByRole('button', { name: 'Dodaj' });
   }
 
