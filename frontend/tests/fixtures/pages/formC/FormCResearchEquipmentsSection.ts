@@ -12,10 +12,7 @@ export class FormCResearchEquipmentsSection {
   constructor(formPage: FormCPage) {
     this.formPage = formPage;
     this.page = formPage.page;
-    this.sectionDiv = locateSectionDiv(
-      formPage.page,
-      '14. Lista sprzętu i aparatury badawczej planowanej do użycia podczas rejsu'
-    );
+    this.sectionDiv = locateSectionDiv(formPage.page, '14. Lista sprzętu i aparatury badawczej użytej podczas rejsu');
     this.addEquipmentButton = this.sectionDiv.getByRole('button', { name: 'Dodaj sprzęt / aparaturę' });
   }
 

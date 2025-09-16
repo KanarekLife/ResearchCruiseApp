@@ -135,7 +135,7 @@ export class FormCPage {
       spubTasksSection: new FormCSPUBTasksSection(this),
       cruiseDetailsSection: new FormCCruiseDetailsSection(this),
       cruiseDayDetailsSection: new FormCCruiseDayDetailsSection(this),
-      researchEquipment: new FormCResearchEquipmentsSection(this),
+      researchEquipmentsSection: new FormCResearchEquipmentsSection(this),
       shipEquipmentsSection: new FormCShipEquipmentsSection(this),
       collectedSamplesSection: new FormCCollectedSamplesSection(this),
       spubReportDataSection: new FormCSPUBReportDataSection(this),
