@@ -57,3 +57,31 @@ test.describe('additional permissions section tests', () => {
     await formCPage.submitForm({ expectedResult: 'valid' });
   });
 });
+
+test.describe('research tasks section tests', () => {
+  test.beforeEach(async ({ formCPage }) => {
+    await formCPage.fillForm({ except: ['researchTasksSection'] });
+  });
+
+  test('checkboxes available only after marked as done', async ({ formCPage }) => {
+    const researchTasksSection = formCPage.sections.researchTasksSection;
+    const taskRow = researchTasksSection.taskRow('first');
+
+    await expect(taskRow.managerConditionMetCheckbox).toBeDisabled();
+    await expect(taskRow.deputyConditionMetCheckbox).toBeDisabled();
+
+    await taskRow.doneCheckbox.check();
+
+    await expect(taskRow.managerConditionMetCheckbox).toBeEnabled();
+    await expect(taskRow.deputyConditionMetCheckbox).toBeEnabled();
+
+    await taskRow.managerConditionMetCheckbox.check();
+
+    await taskRow.doneCheckbox.uncheck();
+
+    await expect(taskRow.managerConditionMetCheckbox).toBeDisabled();
+    await expect(taskRow.deputyConditionMetCheckbox).toBeDisabled();
+    await expect(taskRow.managerConditionMetCheckbox).not.toBeChecked();
+    await expect(taskRow.deputyConditionMetCheckbox).not.toBeChecked();
+  });
+});

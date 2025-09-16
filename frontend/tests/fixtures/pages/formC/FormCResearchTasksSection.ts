@@ -14,5 +14,19 @@ export class FormCResearchTasksSection {
     this.sectionDiv = locateSectionDiv(formPage.page, '7. Zadania przypisane do rejsu - efekty rejsu');
   }
 
+  public taskRowLocator(index: 'first' | 'last' | number) {
+    const rowsLocator = this.sectionDiv.locator('table').nth(0).getByRole('row');
+    return index === 'first' ? rowsLocator.nth(1) : index === 'last' ? rowsLocator.last() : rowsLocator.nth(1 + index);
+  }
+
+  public taskRow(index: 'first' | 'last' | number) {
+    const rowLocator = this.taskRowLocator(index);
+    return {
+      doneCheckbox: rowLocator.locator('td').nth(3).getByText('Zrealizowane'),
+      managerConditionMetCheckbox: rowLocator.locator('td').nth(3).getByText('Czy naliczyć punkty kierownikowi?'),
+      deputyConditionMetCheckbox: rowLocator.locator('td').nth(3).getByText('Czy naliczyć punkty zastępcy?'),
+    };
+  }
+
   public async defaultFill() {}
 }
