@@ -44,5 +44,5 @@ jobs:
       if: ${{ !cancelled() }}
       with:
         name: test-results
-        path: test-results/
+        path: frontend/test-results/
         retention-days: 30
