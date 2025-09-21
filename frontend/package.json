@@ -13,9 +13,13 @@
     "stylelint:fix": "stylelint --fix 'src/**/*.{css,scss}'",
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write .",
+    "linters": "pnpm run eslint; pnpm run prettier",
+    "linters:fix": "pnpm run eslint:fix; pnpm run prettier:fix",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test": "pnpm playwright test",
+    "test:ui": "pnpm playwright test --ui"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.4",
