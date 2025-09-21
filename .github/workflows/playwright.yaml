@@ -10,6 +10,11 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
     steps:
     - uses: actions/checkout@v4
 
@@ -39,5 +44,5 @@ jobs:
       if: ${{ !cancelled() }}
       with:
         name: test-results
-        path: frontend/test-results/
+        path: test-results/
         retention-days: 30
