@@ -125,12 +125,38 @@ test.describe('research area section tests', () => {
     await formAPage.fillForm({ except: ['researchAreaSection'] });
   });
 
-  test('no research area chosen', async ({ formAPage }) => {
-    await formAPage.submitForm({ expectedResult: 'invalid' });
-    await expect(formAPage.sections.researchAreaSection.noResearchAreaChosenMessage).toBeVisible();
+  test('no research areas', async ({ formAPage }) => {
+    const researchAreaSection = formAPage.sections.researchAreaSection;
 
-    await formAPage.sections.researchAreaSection.researchAreaDropdown.selectOption('Ujście Wisły');
-    await expect(formAPage.sections.researchAreaSection.noResearchAreaChosenMessage).toBeHidden();
+    await formAPage.submitForm({ expectedResult: 'invalid' });
+    await expect(researchAreaSection.noResearchAreasMessage).toBeVisible();
+
+    await researchAreaSection.addResearchAreaDropdown.selectOption('Głębia Gdańska');
+    await expect(researchAreaSection.noResearchAreasMessage).toBeHidden();
+    await researchAreaSection.researchAreaRow('last').additionalInfoInput.fill('Dodatkowe informacje o rejonie badań');
+    await formAPage.submitForm({ expectedResult: 'valid' });
+  });
+
+  test('missing area name', async ({ formAPage }) => {
+    const researchAreaSection = formAPage.sections.researchAreaSection;
+    await researchAreaSection.addResearchAreaDropdown.selectOption('Głębia Gdańska');
+    const researchAreaRow = researchAreaSection.researchAreaRow('last');
+    await researchAreaRow.additionalInfoInput.fill('Dodatkowe informacje o rejonie badań');
+
+    await researchAreaRow.nameInput.fill(''); // make sure the input is empty
+    await expect(researchAreaRow.nameInput.errors.required).toBeVisible();
+    await formAPage.submitForm();
+    await expect(formAPage.submissionApprovedMessage, 'form should not be approved').toBeHidden();
+
+    await researchAreaRow.nameInput.fill('Jakaś strefa');
+    await expect(researchAreaRow.nameInput.errors.required).toBeHidden();
+    await formAPage.submitForm({ expectedResult: 'valid' });
+  });
+
+  test('missing additional info', async ({ formAPage }) => {
+    const researchAreaSection = formAPage.sections.researchAreaSection;
+    await researchAreaSection.addResearchAreaDropdown.selectOption('Głębia Gdańska');
+
     await formAPage.submitForm({ expectedResult: 'valid' });
   });
 });
