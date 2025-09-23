@@ -13,7 +13,6 @@ import { ShortResearchEquipmentDto } from '@/cruise-applications/models/ShortRes
 import { SpubTaskDto } from '@/cruise-applications/models/SpubTaskDto';
 import { UGTeamDto } from '@/cruise-applications/models/UGTeamDto';
 
-
 export type FormCDto = {
   shipUsage: string; // Max length 1
   differentUsage: string; // Max length 1024
