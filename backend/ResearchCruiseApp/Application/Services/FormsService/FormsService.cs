@@ -164,11 +164,11 @@ public class FormsService(
         foreach (var researchAreaDescription in formA.ResearchAreaDescriptions)
         {
             if (
-                await researchAreaDescriptionsRepository.CountDistinctFormsA(
+                await researchAreaDescriptionsRepository.CountFormsA(
                     researchAreaDescription,
                     cancellationToken
                 ) == 1 // The one to be deleted
-                && await researchAreaDescriptionsRepository.CountDistinctFormsC(
+                && await researchAreaDescriptionsRepository.CountFormsC(
                     researchAreaDescription,
                     cancellationToken
                 ) == 0
@@ -492,11 +492,11 @@ public class FormsService(
         foreach (var researchAreaDescription in formC.ResearchAreaDescriptions)
         {
             if (
-                await researchAreaDescriptionsRepository.CountDistinctFormsC(
+                await researchAreaDescriptionsRepository.CountFormsC(
                     researchAreaDescription,
                     cancellationToken
                 ) == 1 // The one to be deleted
-                && await researchAreaDescriptionsRepository.CountDistinctFormsA(
+                && await researchAreaDescriptionsRepository.CountFormsA(
                     researchAreaDescription,
                     cancellationToken
                 ) == 0

@@ -4,11 +4,11 @@ namespace ResearchCruiseApp.Application.ExternalServices.Persistence.Repositorie
 
 public interface IResearchAreaDescriptionsRepository : IRepository<ResearchAreaDescription>
 {
-    Task<int> CountDistinctFormsA(
+    Task<int> CountFormsA(
         ResearchAreaDescription researchAreaDescription,
         CancellationToken cancellationToken
     );
-    Task<int> CountDistinctFormsC(
+    Task<int> CountFormsC(
         ResearchAreaDescription researchAreaDescription,
         CancellationToken cancellationToken
     );

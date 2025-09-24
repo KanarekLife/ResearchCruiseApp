@@ -11,7 +11,7 @@ internal class ResearchAreaDescriptionsRepository
     public ResearchAreaDescriptionsRepository(ApplicationDbContext dbContext)
         : base(dbContext) { }
 
-    public async Task<int> CountDistinctFormsA(
+    public async Task<int> CountFormsA(
         ResearchAreaDescription researchAreaDescription,
         CancellationToken cancellationToken
     )
@@ -19,12 +19,10 @@ internal class ResearchAreaDescriptionsRepository
         return await DbContext
             .ResearchAreaDescriptions.Where(r => r.Id == researchAreaDescription.Id)
             .SelectMany(r => r.FormsA)
-            .Select(fr => fr.Id)
-            .Distinct()
             .CountAsync(cancellationToken);
     }
 
-    public async Task<int> CountDistinctFormsC(
+    public async Task<int> CountFormsC(
         ResearchAreaDescription researchAreaDescription,
         CancellationToken cancellationToken
     )
@@ -32,8 +30,6 @@ internal class ResearchAreaDescriptionsRepository
         return await DbContext
             .ResearchAreaDescriptions.Where(r => r.Id == researchAreaDescription.Id)
             .SelectMany(r => r.FormsC)
-            .Select(fr => fr.Id)
-            .Distinct()
             .CountAsync(cancellationToken);
     }
 }
