@@ -194,7 +194,7 @@ const OtherValidationSchema = (initValues: FormAInitValuesDto) =>
       precisePeriodEnd: z.string().or(literal('')),
       cruiseHours: z.string().refine((val) => {
         const parsed = parseInt(val, 10);
-        return !isNaN(parsed) && parsed > 0 && parsed < 1440;
+        return !isNaN(parsed) && parsed > 0 && parsed <= 1440;
       }, 'Rejs musi trwać co najmniej godzinę i nie dłużej niż 60 dni (1440 godzin)'),
       periodNotes: z.string(),
       permissions: PermissionDtoValidationSchema.array().refine(
