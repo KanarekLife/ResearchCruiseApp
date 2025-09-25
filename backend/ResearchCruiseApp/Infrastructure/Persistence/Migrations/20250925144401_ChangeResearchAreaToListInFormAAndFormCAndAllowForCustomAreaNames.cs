@@ -6,8 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangeResearchAreaToListInFormAAndFormCAndAllowForCustomAreaNames
-        : Migration
+    public partial class ChangeResearchAreaToListInFormAAndFormCAndAllowForCustomAreaNames : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,7 +25,7 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                     Info = table.Column<string>(
                         type: "nvarchar(max)",
                         maxLength: 10240,
-                        nullable: true
+                        nullable: false
                     ),
                 },
                 constraints: table =>
@@ -113,78 +112,77 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                 column: "ResearchAreaDescriptionsId"
             );
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_FormsC_ResearchAreas_ResearchAreaId",
-                table: "FormsC"
-            );
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_FormsC_ResearchAreas_ResearchAreaId",
-                table: "FormsC",
-                column: "ResearchAreaId",
-                principalTable: "ResearchAreas",
-                principalColumn: "Id"
-            );
-
             // Migrate existing FormsA and FormsC to use the new ResearchAreaDescriptions
             migrationBuilder.Sql(
                 @"
-                INSERT INTO ResearchAreaDescriptions (Id, AreaId, DifferentName, Info)
-                SELECT NEWID(), ResearchAreaId, NULL, ResearchAreaInfo
+                DECLARE @TempLinks TABLE (
+                    ResearchAreaDescriptionID UNIQUEIDENTIFIER,
+                    AreaId UNIQUEIDENTIFIER NULL,
+                    Info NVARCHAR(MAX),
+                    FormAID UNIQUEIDENTIFIER NULL,
+                    FormCID UNIQUEIDENTIFIER NULL
+                );
+
+                INSERT INTO @TempLinks (ResearchAreaDescriptionID, AreaId, Info, FormAID, FormCID)
+                SELECT NEWID(), ResearchAreaId, COALESCE(ResearchAreaInfo, ''), Id, NULL
                 FROM FormsA
                 WHERE ResearchAreaId IS NOT NULL;
-            "
-            );
 
-            migrationBuilder.Sql(
-                @"
-                INSERT INTO ResearchAreaDescriptions (Id, AreaId, DifferentName, Info)
-                SELECT NEWID(), ResearchAreaId, NULL, NULL
+                INSERT INTO @TempLinks (ResearchAreaDescriptionID, AreaId, Info, FormAID, FormCID)
+                SELECT NEWID(), ResearchAreaId, '', NULL, Id
                 FROM FormsC
                 WHERE ResearchAreaId IS NOT NULL;
-            "
-            );
 
-            migrationBuilder.Sql(
-                @"
+                INSERT INTO ResearchAreaDescriptions (Id, AreaId, DifferentName, Info)
+                SELECT DISTINCT ResearchAreaDescriptionID, AreaId, NULL, Info
+                FROM @TempLinks;
+
                 INSERT INTO FormAResearchAreaDescription (FormsAId, ResearchAreaDescriptionsId)
-                SELECT FormsA.Id, ResearchAreaDescriptions.Id
-                FROM FormsA
-                JOIN ResearchAreaDescriptions ON FormsA.ResearchAreaId = ResearchAreaDescriptions.AreaId
-                WHERE FormsA.ResearchAreaId IS NOT NULL;
-            "
-            );
+                SELECT FormAID, ResearchAreaDescriptionID
+                FROM @TempLinks
+                WHERE FormAID IS NOT NULL;
 
-            migrationBuilder.Sql(
-                @"
                 INSERT INTO FormCResearchAreaDescription (FormsCId, ResearchAreaDescriptionsId)
-                SELECT FormsC.Id, ResearchAreaDescriptions.Id
-                FROM FormsC
-                JOIN ResearchAreaDescriptions ON FormsC.ResearchAreaId = ResearchAreaDescriptions.AreaId
-                WHERE FormsC.ResearchAreaId IS NOT NULL;
+                SELECT FormCID, ResearchAreaDescriptionID
+                FROM @TempLinks
+                WHERE FormCID IS NOT NULL;
             "
             );
 
-            migrationBuilder.DropColumn(name: "ResearchAreaInfo", table: "FormsA");
+            // Drop old ResearchAreaId and ResearchAreaInfo columns from FormsA and FormsC
 
-            migrationBuilder.AlterColumn<Guid>(
+            migrationBuilder.DropForeignKey(
+                name: "FK_FormsA_ResearchAreas_ResearchAreaId",
+                table: "FormsA");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_FormsC_ResearchAreas_ResearchAreaId",
+                table: "FormsC");
+
+            migrationBuilder.DropIndex(
+                name: "IX_FormsC_ResearchAreaId",
+                table: "FormsC");
+
+            migrationBuilder.DropIndex(
+                name: "IX_FormsA_ResearchAreaId",
+                table: "FormsA");
+
+            migrationBuilder.DropColumn(
                 name: "ResearchAreaId",
-                table: "FormsC",
-                type: "uniqueidentifier",
-                nullable: true,
-                oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier"
-            );
+                table: "FormsC");
+
+            migrationBuilder.DropColumn(
+                name: "ResearchAreaId",
+                table: "FormsA");
+
+            migrationBuilder.DropColumn(
+                name: "ResearchAreaInfo",
+                table: "FormsA");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_FormsC_ResearchAreas_ResearchAreaId",
-                table: "FormsC"
-            );
-
             migrationBuilder.AddColumn<string>(
                 name: "ResearchAreaInfo",
                 table: "FormsA",
@@ -193,25 +191,41 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                 nullable: true
             );
 
+            migrationBuilder.AddColumn<Guid>(
+                name: "ResearchAreaId",
+                table: "FormsC",
+                type: "uniqueidentifier",
+                nullable: true);
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "ResearchAreaId",
+                table: "FormsA",
+                type: "uniqueidentifier",
+                nullable: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FormsC_ResearchAreaId",
+                table: "FormsC",
+                column: "ResearchAreaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FormsA_ResearchAreaId",
+                table: "FormsA",
+                column: "ResearchAreaId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_FormsA_ResearchAreas_ResearchAreaId",
+                table: "FormsA",
+                column: "ResearchAreaId",
+                principalTable: "ResearchAreas",
+                principalColumn: "Id");
+
             migrationBuilder.AddForeignKey(
                 name: "FK_FormsC_ResearchAreas_ResearchAreaId",
                 table: "FormsC",
                 column: "ResearchAreaId",
                 principalTable: "ResearchAreas",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade
-            );
-
-            migrationBuilder.AlterColumn<Guid>(
-                name: "ResearchAreaId",
-                table: "FormsC",
-                type: "uniqueidentifier",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"),
-                oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier",
-                oldNullable: true
-            );
+                principalColumn: "Id");
 
             // Migrate existing ResearchAreaDescriptions back to forms A and C (only the first area)
             migrationBuilder.Sql(
@@ -263,6 +277,16 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                 )
                 WHERE ResearchAreaId IS NULL;
             "
+            );
+
+            migrationBuilder.DropIndex(
+                name: "IX_FormCResearchAreaDescription_ResearchAreaDescriptionsId",
+                table: "FormCResearchAreaDescription"
+            );
+
+            migrationBuilder.DropIndex(
+                name: "IX_FormAResearchAreaDescription_ResearchAreaDescriptionsId",
+                table: "FormAResearchAreaDescription"
             );
 
             migrationBuilder.DropTable(name: "FormAResearchAreaDescription");

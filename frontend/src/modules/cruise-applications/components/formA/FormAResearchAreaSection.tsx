@@ -35,6 +35,9 @@ export function FormAResearchAreaSection() {
               children={(field) => <input type="hidden" name={field.name} value="" readOnly />}
             />
             <form.Field
+              listeners={{
+                onChange: () => { form.setFieldValue(`researchAreaDescriptions[${row.index}].areaId`, null); }
+              }}
               name={`researchAreaDescriptions[${row.index}].differentName`}
               children={(field) => (
                 <AppInput
@@ -110,8 +113,8 @@ export function FormAResearchAreaSection() {
                     value: area.name,
                     onClick: () => {
                       field.pushValue({
-                        areaId: '',
-                        differentName: area.id != '' ? area.name : '',
+                        areaId: area.id != '' ? area.id : null,
+                        differentName: area.id != '' ? null : '',
                         info: '',
                       });
                       field.handleChange((prev) => prev);

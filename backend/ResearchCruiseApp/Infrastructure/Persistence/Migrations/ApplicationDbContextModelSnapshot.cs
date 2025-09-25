@@ -699,8 +699,6 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ResearchAreaId");
-
                     b.ToTable("FormsA");
                 });
 
@@ -1070,9 +1068,6 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<Guid?>("ResearchAreaId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("ShipUsage")
                         .IsRequired()
                         .HasMaxLength(1024)
@@ -1083,8 +1078,6 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ResearchAreaId");
 
                     b.ToTable("FormsC");
                 });
@@ -2027,13 +2020,6 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                     b.Navigation("FormC");
                 });
 
-            modelBuilder.Entity("ResearchCruiseApp.Domain.Entities.FormA", b =>
-                {
-                    b.HasOne("ResearchCruiseApp.Domain.Entities.ResearchArea", null)
-                        .WithMany("FormsA")
-                        .HasForeignKey("ResearchAreaId");
-                });
-
             modelBuilder.Entity("ResearchCruiseApp.Domain.Entities.FormAContract", b =>
                 {
                     b.HasOne("ResearchCruiseApp.Domain.Entities.Contract", "Contract")
@@ -2260,13 +2246,6 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                     b.Navigation("FormB");
 
                     b.Navigation("UgUnit");
-                });
-
-            modelBuilder.Entity("ResearchCruiseApp.Domain.Entities.FormC", b =>
-                {
-                    b.HasOne("ResearchCruiseApp.Domain.Entities.ResearchArea", null)
-                        .WithMany("FormsC")
-                        .HasForeignKey("ResearchAreaId");
                 });
 
             modelBuilder.Entity("ResearchCruiseApp.Domain.Entities.FormCGuestUnit", b =>
@@ -2518,13 +2497,6 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                     b.Navigation("FormAPublications");
 
                     b.Navigation("UserPublications");
-                });
-
-            modelBuilder.Entity("ResearchCruiseApp.Domain.Entities.ResearchArea", b =>
-                {
-                    b.Navigation("FormsA");
-
-                    b.Navigation("FormsC");
                 });
 
             modelBuilder.Entity("ResearchCruiseApp.Domain.Entities.ResearchEquipment", b =>

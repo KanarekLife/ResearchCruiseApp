@@ -12,7 +12,7 @@ using ResearchCruiseApp.Infrastructure.Persistence;
 namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250923164539_ChangeResearchAreaToListInFormAAndFormCAndAllowForCustomAreaNames")]
+    [Migration("20250925144401_ChangeResearchAreaToListInFormAAndFormCAndAllowForCustomAreaNames")]
     partial class ChangeResearchAreaToListInFormAAndFormCAndAllowForCustomAreaNames
     {
         /// <inheritdoc />
@@ -346,26 +346,26 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Amount")
                         .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasMaxLength(10240)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Analysis")
                         .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasMaxLength(10240)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("FormCId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Publishing")
                         .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasMaxLength(10240)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasMaxLength(10240)
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -387,8 +387,8 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasMaxLength(10240)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("InstitutionLocalization")
                         .IsRequired()
@@ -405,18 +405,32 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<byte[]>("ScanContent")
-                        .IsRequired()
+                    b.HasKey("Id");
+
+                    b.ToTable("Contracts");
+                });
+
+            modelBuilder.Entity("ResearchCruiseApp.Domain.Entities.ContractFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ContractId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("FileContent")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<string>("ScanName")
-                        .IsRequired()
+                    b.Property<string>("FileName")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contracts");
+                    b.HasIndex("ContractId");
+
+                    b.ToTable("ContractFiles");
                 });
 
             modelBuilder.Entity("ResearchCruiseApp.Domain.Entities.CrewMember", b =>
@@ -492,6 +506,9 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
+                    b.Property<bool>("ShipUnavailable")
+                        .HasColumnType("bit");
+
                     b.Property<string>("StartDate")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -499,6 +516,10 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.HasKey("Id");
 
@@ -609,23 +630,21 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AcceptablePeriodBeg")
-                        .IsRequired()
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
                     b.Property<string>("AcceptablePeriodEnd")
-                        .IsRequired()
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
                     b.Property<string>("CruiseGoal")
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasMaxLength(10240)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CruiseGoalDescription")
                         .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasMaxLength(10240)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CruiseHours")
                         .IsRequired()
@@ -644,12 +663,10 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(1024)");
 
                     b.Property<string>("OptimalPeriodBeg")
-                        .IsRequired()
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
                     b.Property<string>("OptimalPeriodEnd")
-                        .IsRequired()
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
@@ -657,6 +674,12 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("PrecisePeriodEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("PrecisePeriodStart")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid?>("ResearchAreaId")
                         .HasColumnType("uniqueidentifier");
@@ -1045,8 +1068,8 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AdditionalDescription")
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasMaxLength(10240)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DifferentUsage")
                         .IsRequired()
@@ -1062,8 +1085,8 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(1024)");
 
                     b.Property<string>("SpubReportData")
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasMaxLength(10240)
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1278,8 +1301,8 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasMaxLength(10240)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Executive")
                         .IsRequired()
@@ -1418,8 +1441,8 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(1024)");
 
                     b.Property<string>("Info")
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasMaxLength(10240)
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1457,8 +1480,8 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(1024)");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasMaxLength(10240)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EndDate")
                         .HasMaxLength(1024)
@@ -1972,6 +1995,17 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                         .HasForeignKey("FormCId");
                 });
 
+            modelBuilder.Entity("ResearchCruiseApp.Domain.Entities.ContractFile", b =>
+                {
+                    b.HasOne("ResearchCruiseApp.Domain.Entities.Contract", "Contract")
+                        .WithMany("Files")
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contract");
+                });
+
             modelBuilder.Entity("ResearchCruiseApp.Domain.Entities.CruiseApplication", b =>
                 {
                     b.HasOne("ResearchCruiseApp.Domain.Entities.Cruise", "Cruise")
@@ -2405,6 +2439,8 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ResearchCruiseApp.Domain.Entities.Contract", b =>
                 {
+                    b.Navigation("Files");
+
                     b.Navigation("FormAContracts");
                 });
 
