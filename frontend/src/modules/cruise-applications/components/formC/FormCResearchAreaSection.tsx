@@ -36,7 +36,9 @@ export function FormCResearchAreaSection() {
             />
             <form.Field
               listeners={{
-                onChange: () => { form.setFieldValue(`researchAreaDescriptions[${row.index}].areaId`, null); }
+                onChange: () => {
+                  form.setFieldValue(`researchAreaDescriptions[${row.index}].areaId`, null);
+                },
               }}
               name={`researchAreaDescriptions[${row.index}].differentName`}
               children={(field) => (

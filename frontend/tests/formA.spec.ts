@@ -82,7 +82,7 @@ test.describe('cruise length section tests', () => {
 
         if (isValid) {
           await formAPage.submitForm({ expectedResult: 'valid' });
-        } else if(val < LOWER_HOUR_LIMIT) {
+        } else if (val < LOWER_HOUR_LIMIT) {
           await expect(formAPage.sections.cruiseLengthSection.invalidCruiseDurationMessage).toBeVisible();
           await formAPage.submitForm({ expectedResult: 'invalid' });
         } else if (val > UPPER_HOUR_LIMIT) {

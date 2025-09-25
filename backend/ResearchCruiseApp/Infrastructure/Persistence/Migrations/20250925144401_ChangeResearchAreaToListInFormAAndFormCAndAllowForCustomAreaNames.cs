@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangeResearchAreaToListInFormAAndFormCAndAllowForCustomAreaNames : Migration
+    public partial class ChangeResearchAreaToListInFormAAndFormCAndAllowForCustomAreaNames
+        : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -153,31 +154,23 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropForeignKey(
                 name: "FK_FormsA_ResearchAreas_ResearchAreaId",
-                table: "FormsA");
+                table: "FormsA"
+            );
 
             migrationBuilder.DropForeignKey(
                 name: "FK_FormsC_ResearchAreas_ResearchAreaId",
-                table: "FormsC");
+                table: "FormsC"
+            );
 
-            migrationBuilder.DropIndex(
-                name: "IX_FormsC_ResearchAreaId",
-                table: "FormsC");
+            migrationBuilder.DropIndex(name: "IX_FormsC_ResearchAreaId", table: "FormsC");
 
-            migrationBuilder.DropIndex(
-                name: "IX_FormsA_ResearchAreaId",
-                table: "FormsA");
+            migrationBuilder.DropIndex(name: "IX_FormsA_ResearchAreaId", table: "FormsA");
 
-            migrationBuilder.DropColumn(
-                name: "ResearchAreaId",
-                table: "FormsC");
+            migrationBuilder.DropColumn(name: "ResearchAreaId", table: "FormsC");
 
-            migrationBuilder.DropColumn(
-                name: "ResearchAreaId",
-                table: "FormsA");
+            migrationBuilder.DropColumn(name: "ResearchAreaId", table: "FormsA");
 
-            migrationBuilder.DropColumn(
-                name: "ResearchAreaInfo",
-                table: "FormsA");
+            migrationBuilder.DropColumn(name: "ResearchAreaInfo", table: "FormsA");
         }
 
         /// <inheritdoc />
@@ -195,37 +188,43 @@ namespace ResearchCruiseApp.Infrastructure.Persistence.Migrations
                 name: "ResearchAreaId",
                 table: "FormsC",
                 type: "uniqueidentifier",
-                nullable: true);
+                nullable: true
+            );
 
             migrationBuilder.AddColumn<Guid>(
                 name: "ResearchAreaId",
                 table: "FormsA",
                 type: "uniqueidentifier",
-                nullable: true);
+                nullable: true
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_FormsC_ResearchAreaId",
                 table: "FormsC",
-                column: "ResearchAreaId");
+                column: "ResearchAreaId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_FormsA_ResearchAreaId",
                 table: "FormsA",
-                column: "ResearchAreaId");
+                column: "ResearchAreaId"
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_FormsA_ResearchAreas_ResearchAreaId",
                 table: "FormsA",
                 column: "ResearchAreaId",
                 principalTable: "ResearchAreas",
-                principalColumn: "Id");
+                principalColumn: "Id"
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_FormsC_ResearchAreas_ResearchAreaId",
                 table: "FormsC",
                 column: "ResearchAreaId",
                 principalTable: "ResearchAreas",
-                principalColumn: "Id");
+                principalColumn: "Id"
+            );
 
             // Migrate existing ResearchAreaDescriptions back to forms A and C (only the first area)
             migrationBuilder.Sql(
