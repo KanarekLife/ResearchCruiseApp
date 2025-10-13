@@ -51,7 +51,7 @@ services:
 
   tempo:
     container_name: researchcruiseapp-tempo
-    image: grafana/tempo:2.7.1
+    image: grafana/tempo:2.9.0
     volumes:
       - ./config/tempo.yaml:/etc/tempo.yaml:ro
     command:
