@@ -71,7 +71,7 @@ services:
 
   grafana:
     container_name: researchcruiseapp-grafana
-    image: grafana/grafana:12.0.0
+    image: grafana/grafana:12.2.1
     volumes:
       - ./config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml:ro
       - ./config/grafana-dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml:ro
