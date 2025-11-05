@@ -47,7 +47,7 @@ services:
 
   loki:
     container_name: researchcruiseapp-loki
-    image: grafana/loki:3.4.2
+    image: grafana/loki:3.5.8
 
   tempo:
     container_name: researchcruiseapp-tempo
