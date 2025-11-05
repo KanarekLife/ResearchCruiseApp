@@ -36,7 +36,7 @@ services:
 
   alloy:
     container_name: researchcruiseapp-alloy
-    image: grafana/alloy:v1.8.3
+    image: grafana/alloy:v1.11.3
     volumes:
       - ./config/config.alloy:/etc/alloy/config.alloy:ro
     depends_on:
