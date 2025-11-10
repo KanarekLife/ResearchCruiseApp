@@ -36,8 +36,8 @@ importers:
         specifier: ^8.5.3
         version: 8.5.3(storybook@8.5.3(prettier@3.4.2))
       '@storybook/addon-styling-webpack':
-        specifier: ^1.0.1
-        version: 1.0.1(storybook@8.5.3(prettier@3.4.2))(webpack@5.97.1(esbuild@0.24.2))
+        specifier: ^2.0.0
+        version: 2.0.0(storybook@8.5.3(prettier@3.4.2))(webpack@5.97.1(esbuild@0.24.2))
       '@storybook/blocks':
         specifier: ^8.5.3
         version: 8.5.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.5.3(prettier@3.4.2))
@@ -1069,9 +1069,10 @@ packages:
     peerDependencies:
       storybook: ^8.5.3
 
-  '@storybook/addon-styling-webpack@1.0.1':
-    resolution: {integrity: sha512-5n+SXPfMTc4m7sWaJWPWjoHYWc6/B111M2Ia55toQ3GV4ON4vVlTgH9FX+EgCkDticElj99HLTMDJkHRj2yvkg==}
+  '@storybook/addon-styling-webpack@2.0.0':
+    resolution: {integrity: sha512-N8jWhWnk3/nbL4P9zl0OEV/47P0Cxn/kPzSHjdAClyDYnqj9jI6upeLsraZgIV9Ro3QSeqeIloeXb1zMasWpOw==}
     peerDependencies:
+      storybook: ^9.0.0
       webpack: ^5.0.0
 
   '@storybook/addon-toolbars@8.5.3':
@@ -1140,11 +1141,6 @@ packages:
 
   '@storybook/manager-api@8.5.3':
     resolution: {integrity: sha512-JtfuMgQpKIPU0ARn1jNPce8FmknpM0Ap0mppWl+KGAWWGadJPDaX/nrY/19dT1kRgIhyOnbX6tgJxII4E9dE5w==}
-    peerDependencies:
-      storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
-
-  '@storybook/node-logger@8.5.3':
-    resolution: {integrity: sha512-V9ZwL7SmXPtLB0uifr3c+HYm+nnEtGYrd5zw9zRF1NFm/3q71bo9++AqwTFW2hQjw711ZXosyw1A/UCt0MYA8g==}
     peerDependencies:
       storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
 
@@ -4818,12 +4814,10 @@ snapshots:
       storybook: 8.5.3(prettier@3.4.2)
       ts-dedent: 2.2.0
 
-  '@storybook/addon-styling-webpack@1.0.1(storybook@8.5.3(prettier@3.4.2))(webpack@5.97.1(esbuild@0.24.2))':
+  '@storybook/addon-styling-webpack@2.0.0(storybook@8.5.3(prettier@3.4.2))(webpack@5.97.1(esbuild@0.24.2))':
     dependencies:
-      '@storybook/node-logger': 8.5.3(storybook@8.5.3(prettier@3.4.2))
+      storybook: 8.5.3(prettier@3.4.2)
       webpack: 5.97.1(esbuild@0.24.2)
-    transitivePeerDependencies:
-      - storybook
 
   '@storybook/addon-toolbars@8.5.3(storybook@8.5.3(prettier@3.4.2))':
     dependencies:
@@ -4914,10 +4908,6 @@ snapshots:
       storybook: 8.5.3(prettier@3.4.2)
 
   '@storybook/manager-api@8.5.3(storybook@8.5.3(prettier@3.4.2))':
-    dependencies:
-      storybook: 8.5.3(prettier@3.4.2)
-
-  '@storybook/node-logger@8.5.3(storybook@8.5.3(prettier@3.4.2))':
     dependencies:
       storybook: 8.5.3(prettier@3.4.2)
 
