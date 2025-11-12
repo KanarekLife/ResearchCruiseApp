@@ -62,7 +62,7 @@ services:
 
   prometheus:
     container_name: researchcruiseapp-prometheus
-    image: prom/prometheus:v3.3.1
+    image: prom/prometheus:v3.7.3
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus
