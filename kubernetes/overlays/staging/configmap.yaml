@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-snippets
+data:
+  rybbit-subfilter.conf: |
+    sub_filter '</head>' '<script src="https://rybbit.nasus.dev/api/script.js" data-site-id="5" defer></script></head>';
+    sub_filter_once on;
+    sub_filter_types text/html;
