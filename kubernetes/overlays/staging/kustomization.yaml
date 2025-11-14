@@ -5,7 +5,9 @@ metadata:
 resources:
   - ../../base
   - ingress.yaml
+  - configmap.yaml
 
 patches:
   - path: backend/configmap-patch.yaml
   - path: frontend/configmap-patch.yaml
+  - path: frontend/deployment-patch.yaml
