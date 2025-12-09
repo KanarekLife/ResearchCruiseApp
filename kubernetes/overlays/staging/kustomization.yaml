@@ -6,6 +6,7 @@ resources:
   - ../../base
   - ingress.yaml
   - configmap.yaml
+  - pg-cluster.yaml
 
 patches:
   - path: backend/configmap-patch.yaml

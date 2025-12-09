@@ -1,0 +1,117 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: research-cruise-app-db
+  labels:
+    app: research-cruise-app-db
+spec:
+  instances: 1
+
+  imageName: ghcr.io/nasus20202/cloudnative-babelfish:17.6-5.3.0
+
+  # PostgreSQL configuration for Babelfish
+  postgresql:
+    shared_preload_libraries:
+      - babelfishpg_tds
+
+    pg_hba:
+      - host researchcruiseapp_babelfish researchcruiseapp 0.0.0.0/0 md5
+      - host researchcruiseapp_babelfish researchcruiseapp ::/0 md5
+
+    parameters:
+      # TDS listener configuration
+      babelfishpg_tds.listen_addresses: "*"
+      babelfishpg_tds.port: "1433"
+
+      # Babelfish settings
+      babelfishpg_tsql.database_name: "researchcruiseapp_babelfish"
+      babelfishpg_tsql.migration_mode: "single-db"
+      babelfishpg_tsql.default_locale: "en_US"
+      babelfishpg_tsql.isolation_level_serializable: "pg_isolation"
+
+      # Performance tuning
+      max_connections: "200"
+      shared_buffers: "256MB"
+      effective_cache_size: "768MB"
+      maintenance_work_mem: "128MB"
+      checkpoint_completion_target: "0.9"
+      wal_buffers: "16MB"
+      default_statistics_target: "100"
+      random_page_cost: "1.1"
+      effective_io_concurrency: "200"
+      work_mem: "4MB"
+      huge_pages: "off"
+      min_wal_size: "1GB"
+      max_wal_size: "4GB"
+
+  # Bootstrap configuration
+  bootstrap:
+    initdb:
+      database: researchcruiseapp_babelfish
+      owner: researchcruiseapp
+      encoding: UTF8
+      localeCType: en_US.UTF-8
+      localeCollate: en_US.UTF-8
+
+      # postInitTemplateSQL runs as superuser on template1 before app db is created
+      postInitTemplateSQL:
+        - CREATE EXTENSION IF NOT EXISTS babelfishpg_tds CASCADE
+
+      # postInitApplicationSQL runs as superuser on the application database (researchcruiseapp)
+      postInitApplicationSQL:
+        - GRANT ALL ON SCHEMA sys TO researchcruiseapp
+        - ALTER USER researchcruiseapp CREATEDB
+        - CALL sys.initialize_babelfish('researchcruiseapp')
+
+  # Storage configuration
+  storage:
+    size: 1Gi
+
+  # Resource limits
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "30m"
+    limits:
+      memory: "512Mi"
+
+  # Managed services - add TDS port (1433) services
+  managed:
+    services:
+      additional:
+        # TDS service for read-write (primary)
+        - selectorType: rw
+          serviceTemplate:
+            metadata:
+              name: research-cruise-app-db-tds-rw
+            spec:
+              type: ClusterIP
+              ports:
+                - name: tds
+                  port: 1433
+                  targetPort: 1433
+                  protocol: TCP
+        # TDS service for read (all instances)
+        - selectorType: r
+          serviceTemplate:
+            metadata:
+              name: research-cruise-app-db-tds-r
+            spec:
+              type: ClusterIP
+              ports:
+                - name: tds
+                  port: 1433
+                  targetPort: 1433
+                  protocol: TCP
+        # TDS service for read-only (replicas)
+        - selectorType: ro
+          serviceTemplate:
+            metadata:
+              name: research-cruise-app-db-tds-ro
+            spec:
+              type: ClusterIP
+              ports:
+                - name: tds
+                  port: 1433
+                  targetPort: 1433
+                  protocol: TCP
